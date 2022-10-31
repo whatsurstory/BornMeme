@@ -23,8 +23,4 @@
         android:label="@string/menu_camera"
         tools:layout="@layout/fragment_camera" />
 
-    <action
-        android:id="@+id/navigate_to_camera_fragment"  app:destination="@id/nav_camera"
-        app:popUpTo="@id/mobile_navigation"
-        app:popUpToInclusive="true"/>
 </navigation>

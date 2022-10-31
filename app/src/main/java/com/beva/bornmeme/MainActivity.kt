@@ -55,8 +55,8 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, "$imgUri",Toast.LENGTH_LONG).show()
     }
 
-//    private val CAMERA_REQUEST_CODE = 1
-//    private val GALLERY_REQUEST_CODE = 2
+    private val CAMERA_REQUEST_CODE = 1
+    private val GALLERY_REQUEST_CODE = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,6 +78,11 @@ class MainActivity : AppCompatActivity() {
 //            }
 //        )
 
+        binding.appBarMain.searchBar.setOnClickListener {
+            binding.appBarMain.searchBar.onActionViewExpanded()
+        }
+
+
         val fabOpen = AnimationUtils.loadAnimation(this, R.anim.fab_open)
         val fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_close)
         val fabRotate = AnimationUtils.loadAnimation(this, R.anim.rotate)
@@ -96,7 +101,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        imgUri = createImgUri()!!
+        imgUri = createImgUri()
 
         binding.appBarMain.fab.setOnClickListener { view ->
 
@@ -120,143 +125,142 @@ class MainActivity : AppCompatActivity() {
                 isOpen = true
             }
             binding.appBarMain.fabCamera.setOnClickListener {
-                contract.launch(imgUri)
-//                cameraCheckPermission()
+                cameraCheckPermission()
+                navController.navigate(R.id.nav_camera)
 //                Snackbar.make(view, "This is Camera Button", Snackbar.LENGTH_SHORT)
 //                    .setAction("Action", null).show()
             }
             binding.appBarMain.fabModule.setOnClickListener {
+                navController.navigate(R.id.nav_gallery)
                 Snackbar.make(view, "This is Module Button", Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show()
             }
             binding.appBarMain.fabPhoto.setOnClickListener {
-                val gallery =
-                    Intent(Intent.ACTION_PICK,MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-                startActivityForResult(gallery, PICTUREFROMGALLERY)
-//                galleryCheckPermission()
-//                Snackbar.make(view, "This is Photo Button", Snackbar.LENGTH_SHORT)
-//                    .setAction("Action", null).show()
+//                val gallery =
+//                    Intent(Intent.ACTION_PICK,MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+//                startActivityForResult(gallery, PICTUREFROMGALLERY)
+                galleryCheckPermission()
+                Snackbar.make(view, "This is Photo Button", Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null).show()
             }
         }
     }
 
-    private fun createImgUri(): Uri? {
+    private fun galleryCheckPermission() {
+        Dexter.withContext(this).withPermission(
+            android.Manifest.permission.READ_EXTERNAL_STORAGE
+        ).withListener(object : PermissionListener {
+            override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
+                gallery()
+            }
+
+            override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
+                Toast.makeText(
+                    this@MainActivity,
+                    "You have denied the storage permission to select image",
+                    Toast.LENGTH_SHORT
+                ).show()
+                showRotationDialogForPermission()
+            }
+
+            override fun onPermissionRationaleShouldBeShown(
+                p0: PermissionRequest?, p1: PermissionToken?) {
+                showRotationDialogForPermission()
+            }
+        }).onSameThread().check()
+    }
+
+    private fun gallery() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, GALLERY_REQUEST_CODE)
+    }
+
+    private fun cameraCheckPermission() {
+        Dexter.withContext(this).withPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.CAMERA).withListener(
+            object : MultiplePermissionsListener{
+                override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                    report.let {
+                        if (report != null) {
+                            if (report.areAllPermissionsGranted()){
+//                                camera()
+                                contract.launch(imgUri)
+                            }
+                        }
+                    }
+                }
+
+                override fun onPermissionRationaleShouldBeShown(
+                    p0: MutableList<PermissionRequest>?,
+                    p1: PermissionToken?
+                ) {
+                    showRotationDialogForPermission()
+                }
+
+            }
+        ).onSameThread().check()
+    }
+
+        private fun createImgUri(): Uri {
         val img = File(applicationContext.filesDir, "camera_photo.png")
         return FileProvider.getUriForFile(applicationContext, "com.beva.bornmeme.fileProvider",img)
     }
-//
-//    private fun galleryCheckPermission() {
-//        Dexter.withContext(this).withPermission(
-//            android.Manifest.permission.READ_EXTERNAL_STORAGE
-//        ).withListener(object : PermissionListener {
-//            override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
-//                gallery()
-//            }
-//
-//            override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
-//                Toast.makeText(
-//                    this@MainActivity,
-//                    "You have denied the storage permission to select image",
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//                showRotationDialogForPermission()
-//            }
-//
-//            override fun onPermissionRationaleShouldBeShown(
-//                p0: PermissionRequest?, p1: PermissionToken?) {
-//                showRotationDialogForPermission()
-//            }
-//        }).onSameThread().check()
-//    }
-//
-//    private fun gallery() {
-//        val intent = Intent(Intent.ACTION_PICK)
-//        intent.type = "image/*"
-//        startActivityForResult(intent, GALLERY_REQUEST_CODE)
-//    }
-//
-//    private fun cameraCheckPermission() {
-//        Dexter.withContext(this).withPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.CAMERA).withListener(
-//            object : MultiplePermissionsListener{
-//                override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-//                    report.let {
-//                        if (report != null) {
-//                            if (report.areAllPermissionsGranted()){
-//                                camera()
-//                            }
-//                        }
-//                    }
-//                }
-//
-//                override fun onPermissionRationaleShouldBeShown(
-//                    p0: MutableList<PermissionRequest>?,
-//                    p1: PermissionToken?
-//                ) {
-//                    showRotationDialogForPermission()
-//                }
-//
-//            }
-//        ).onSameThread().check()
-//    }
-//
+
 //    private fun camera() {
 //        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 //        startActivityForResult(intent, CAMERA_REQUEST_CODE)
+//
 //    }
 
     //Save Image Uri and send to CameraFragment to Show
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//
-//        if (requestCode == Activity.RESULT_OK) {
-//           when (resultCode) {
-//               CAMERA_REQUEST_CODE -> {
-//                   val bitmap = data?.extras?.get("data") as Bitmap
-//                   Log.d("Camera Photo Uri", "$bitmap")
-                   //we are using coroutine image loader (coil)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == Activity.RESULT_OK) {
+           when (resultCode) {
+               CAMERA_REQUEST_CODE -> {
+                   val bitmap = data?.extras?.get("data") as Bitmap
+                   Log.d("Camera Photo Uri", "$bitmap")
+//                   //we are using coroutine image loader (coil)
 //                   binding.imageView.load(bitmap) {
 //                       crossfade(true)
 //                       crossfade(1000)
 //                       transformations(CircleCropTransformation())
-//                   }
-//               GALLERY_REQUEST_CODE -> {
-//                   Log.d("Gallery Photo Uri", "${data?.data}")
+                   }
+               GALLERY_REQUEST_CODE -> {
+                       Log.d("Gallery Photo Uri", "${data?.data}")
 //                   binding.imageView.load(data?.data) {
 //                       crossfade(true)
 //                       crossfade(1000)
-//                       transformations(CircleCropTransformation())
-//                   }
-//               }
-//           }
-//        }
-//    }
-//
-//
-//    private fun showRotationDialogForPermission() {
-//        AlertDialog.Builder(this)
-//            .setMessage("It looks like you have turned off permissions"
-//                    + "required for this feature. It can be enable under App settings!!!")
-//
-//            .setPositiveButton("Go TO SETTINGS") { _, _ ->
-//
-//                try {
-//                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-//                    val uri = Uri.fromParts("package", packageName, null)
-//                    intent.data = uri
-//                    startActivity(intent)
-//
-//                } catch (e: ActivityNotFoundException) {
-//                    e.printStackTrace()
-//                }
-//            }
-//
-//            .setNegativeButton("CANCEL") { dialog, _ ->
-//                dialog.dismiss()
-//            }.show()
-//    }
-    companion object {
-        const val PICTUREFROMGALLERY = 1001
-        const val PICTUREFROMCAMERA = 1002
+//                       transformations(CircleCropTransformation())}
+                   }
+               }
+           }
+        }
+
+
+
+    private fun showRotationDialogForPermission() {
+        AlertDialog.Builder(this)
+            .setMessage("It looks like you have turned off permissions"
+                    + "required for this feature. It can be enable under App settings!!!")
+
+            .setPositiveButton("Go TO SETTINGS") { _, _ ->
+
+                try {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    val uri = Uri.fromParts("package", packageName, null)
+                    intent.data = uri
+                    startActivity(intent)
+
+                } catch (e: ActivityNotFoundException) {
+                    e.printStackTrace()
+                }
+            }
+
+            .setNegativeButton("CANCEL") { dialog, _ ->
+                dialog.dismiss()
+            }.show()
     }
 
     override fun onSupportNavigateUp(): Boolean {
