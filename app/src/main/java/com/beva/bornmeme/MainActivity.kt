@@ -149,7 +149,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun permission() {
+    private fun permission() {
         val permissionList = arrayListOf(
             android.Manifest.permission.CAMERA,
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
