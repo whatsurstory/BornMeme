@@ -21,6 +21,12 @@
         android:id="@+id/nav_camera"
         android:name="com.beva.bornmeme.ui.slideshow.OpenCameraFragment"
         android:label="@string/menu_camera"
-        tools:layout="@layout/fragment_camera" />
+        tools:layout="@layout/fragment_camera" >
 
+        <argument
+            android:name="uri"
+            app:argType="android.net.Uri" />
+    </fragment>
+
+    <action android:id="@+id/navigate_to_camera_fragment" app:destination="@id/nav_camera"/>
 </navigation>

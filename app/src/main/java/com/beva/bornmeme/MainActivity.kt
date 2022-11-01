@@ -3,12 +3,15 @@ package com.beva.bornmeme
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
+import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContract
@@ -24,16 +27,23 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.FileProvider
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.NavArgument
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import coil.transform.CircleCropTransformation
+import com.beva.bornmeme.MainActivity.Companion.PHOTO_FROM_CAMERA
+import com.beva.bornmeme.MainActivity.Companion.PHOTO_FROM_GALLERY
 import com.beva.bornmeme.databinding.ActivityMainBinding
+import com.beva.bornmeme.ui.slideshow.OpenCameraFragment
+import com.bumptech.glide.Glide
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -45,38 +55,33 @@ import com.karumi.dexter.listener.single.PermissionListener
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
+    private var saveUri: Uri? = null
 
     //TODO: ToolBar & ActionBar -> Stylish
     private var isOpen = false
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-    private lateinit var imgUri: Uri
-    private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
-        Toast.makeText(this, "$imgUri",Toast.LENGTH_LONG).show()
-    }
+//    private lateinit var navController: NavController
 
-    private val CAMERA_REQUEST_CODE = 1
-    private val GALLERY_REQUEST_CODE = 2
+
+    private companion object {
+        const val PHOTO_FROM_GALLERY = 0
+        const val PHOTO_FROM_CAMERA = 1
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
+        if (savedInstanceState != null) {
+            saveUri = Uri.parse(savedInstanceState.getString("saveUri"))
+        }
+        permission()
 //        val viewModel = MainViewModel()
 //        binding.lifecycleOwner = this
         setSupportActionBar(binding.appBarMain.toolbar)
-//        binding.appBarMain.viewModel = viewModel
-//        viewModel.nav2Camera.observe(
-//            this,
-//            Observer {
-//                Log.d("observe", "$it")
-//                it?.let {
-//                    findNavController(R.id.fab_camera).navigate(R.id.navigate_to_camera_fragment)
-//                    viewModel.onCameraNavigated()
-//                }
-//            }
-//        )
 
         binding.appBarMain.searchBar.setOnClickListener {
             binding.appBarMain.searchBar.onActionViewExpanded()
@@ -101,8 +106,6 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        imgUri = createImgUri()
-
         binding.appBarMain.fab.setOnClickListener { view ->
 
             if (isOpen) {
@@ -125,10 +128,7 @@ class MainActivity : AppCompatActivity() {
                 isOpen = true
             }
             binding.appBarMain.fabCamera.setOnClickListener {
-                cameraCheckPermission()
-                navController.navigate(R.id.nav_camera)
-//                Snackbar.make(view, "This is Camera Button", Snackbar.LENGTH_SHORT)
-//                    .setAction("Action", null).show()
+                toCamera()
             }
             binding.appBarMain.fabModule.setOnClickListener {
                 navController.navigate(R.id.nav_gallery)
@@ -136,131 +136,113 @@ class MainActivity : AppCompatActivity() {
                     .setAction("Action", null).show()
             }
             binding.appBarMain.fabPhoto.setOnClickListener {
-//                val gallery =
-//                    Intent(Intent.ACTION_PICK,MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-//                startActivityForResult(gallery, PICTUREFROMGALLERY)
-                galleryCheckPermission()
-                Snackbar.make(view, "This is Photo Button", Snackbar.LENGTH_SHORT)
-                    .setAction("Action", null).show()
+                toAlbum()
+            }
+        }
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.nav_home) {
+                binding.appBarMain.toolbar.visibility = View.VISIBLE
+            } else {
+                binding.appBarMain.toolbar.visibility = View.GONE
             }
         }
     }
 
-    private fun galleryCheckPermission() {
-        Dexter.withContext(this).withPermission(
+
+    fun permission() {
+        val permissionList = arrayListOf(
+            android.Manifest.permission.CAMERA,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
             android.Manifest.permission.READ_EXTERNAL_STORAGE
-        ).withListener(object : PermissionListener {
-            override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
-                gallery()
+        )
+        var size = permissionList.size
+        var i = 0
+        while (i < size) {
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    permissionList[i]
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                permissionList.removeAt(i)
+                i -= 1
+                size -= 1
             }
-
-            override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
-                Toast.makeText(
-                    this@MainActivity,
-                    "You have denied the storage permission to select image",
-                    Toast.LENGTH_SHORT
-                ).show()
-                showRotationDialogForPermission()
-            }
-
-            override fun onPermissionRationaleShouldBeShown(
-                p0: PermissionRequest?, p1: PermissionToken?) {
-                showRotationDialogForPermission()
-            }
-        }).onSameThread().check()
+            i += 1
+        }
+        val array = arrayOfNulls<String>(permissionList.size)
+        if (permissionList.isNotEmpty()) ActivityCompat.requestPermissions(
+            this,
+            permissionList.toArray(array),
+            0
+        )
     }
 
-    private fun gallery() {
-        val intent = Intent(Intent.ACTION_PICK)
+    private fun toAlbum() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
-        startActivityForResult(intent, GALLERY_REQUEST_CODE)
+        startActivityForResult(intent, PHOTO_FROM_GALLERY)
     }
 
-    private fun cameraCheckPermission() {
-        Dexter.withContext(this).withPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.CAMERA).withListener(
-            object : MultiplePermissionsListener{
-                override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                    report.let {
-                        if (report != null) {
-                            if (report.areAllPermissionsGranted()){
-//                                camera()
-                                contract.launch(imgUri)
-                            }
-                        }
-                    }
-                }
+    private fun toCamera() {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        val tmpFile = File(
+            Environment.getExternalStorageDirectory().toString(),
+            System.currentTimeMillis().toString() + ".jpg"
+        )
+        val uriForCamera =
+            FileProvider.getUriForFile(this, "com.beva.bornmeme.fileProvider", tmpFile)
 
-                override fun onPermissionRationaleShouldBeShown(
-                    p0: MutableList<PermissionRequest>?,
-                    p1: PermissionToken?
-                ) {
-                    showRotationDialogForPermission()
-                }
-
-            }
-        ).onSameThread().check()
+        saveUri = uriForCamera
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uriForCamera)
+        startActivityForResult(intent, PHOTO_FROM_CAMERA)
     }
 
-        private fun createImgUri(): Uri {
-        val img = File(applicationContext.filesDir, "camera_photo.png")
-        return FileProvider.getUriForFile(applicationContext, "com.beva.bornmeme.fileProvider",img)
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        if (saveUri != null) {
+            val uriString = saveUri.toString()
+            outState.putString("saveUri", uriString)
+        }
     }
 
-//    private fun camera() {
-//        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-//        startActivityForResult(intent, CAMERA_REQUEST_CODE)
-//
-//    }
 
-    //Save Image Uri and send to CameraFragment to Show
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == Activity.RESULT_OK) {
-           when (resultCode) {
-               CAMERA_REQUEST_CODE -> {
-                   val bitmap = data?.extras?.get("data") as Bitmap
-                   Log.d("Camera Photo Uri", "$bitmap")
-//                   //we are using coroutine image loader (coil)
-//                   binding.imageView.load(bitmap) {
-//                       crossfade(true)
-//                       crossfade(1000)
-//                       transformations(CircleCropTransformation())
-                   }
-               GALLERY_REQUEST_CODE -> {
-                       Log.d("Gallery Photo Uri", "${data?.data}")
-//                   binding.imageView.load(data?.data) {
-//                       crossfade(true)
-//                       crossfade(1000)
-//                       transformations(CircleCropTransformation())}
-                   }
-               }
-           }
-        }
-
-
-
-    private fun showRotationDialogForPermission() {
-        AlertDialog.Builder(this)
-            .setMessage("It looks like you have turned off permissions"
-                    + "required for this feature. It can be enable under App settings!!!")
-
-            .setPositiveButton("Go TO SETTINGS") { _, _ ->
-
-                try {
-                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    val uri = Uri.fromParts("package", packageName, null)
-                    intent.data = uri
-                    startActivity(intent)
-
-                } catch (e: ActivityNotFoundException) {
-                    e.printStackTrace()
+        Log.d("uri", "onActivityResult, requestCode=$requestCode, resultCode=$resultCode")
+        when (requestCode) {
+            PHOTO_FROM_GALLERY -> {
+                when (resultCode) {
+                    Activity.RESULT_OK -> {
+                        val uri = data!!.data
+//                        Log.d("uri", "$uri")
+                        navigateToEditor(uri)
+                    }
+                    Activity.RESULT_CANCELED -> {
+                        Log.d("getImageResult", resultCode.toString())
+                    }
                 }
             }
 
-            .setNegativeButton("CANCEL") { dialog, _ ->
-                dialog.dismiss()
-            }.show()
+            PHOTO_FROM_CAMERA -> {
+                when (resultCode) {
+                    Activity.RESULT_OK -> {
+//                        Glide.with(this).load(saveUri).into(binding.originPhoto)
+                        Log.d("camera saveUri", "$saveUri")
+//                        navigateToEditor(saveUri)
+                    }
+                    Activity.RESULT_CANCELED -> {
+                        Log.d("getImageResult", resultCode.toString())
+                    }
+                }
+            }
+        }
+    }
+
+    private fun navigateToEditor(uri: Uri?) {
+        uri?.let {
+            findNavController(R.id.nav_host_fragment_content_main)
+                .navigate(MobileNavigationDirections.navigateToCameraFragment(it))
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
