@@ -9,13 +9,24 @@
         android:id="@+id/nav_home"
         android:name="com.beva.bornmeme.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+<!--doesn't have to set arguments, when the navigation done
+the current fragment will call the user data to render the view
+        <argument-->
+<!--            android:name="photoKey"-->
+<!--            app:argType="android.graphics.Bitmap"-->
+<!--            app:nullable="true" />-->
+    </fragment>
 
-    <fragment
+    <dialog
         android:id="@+id/nav_gallery"
         android:name="com.beva.bornmeme.ui.gallery.GalleryFragment"
         android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        tools:layout="@layout/fragment_gallery">
+    <argument
+        android:name="bitmap"
+        app:argType="android.graphics.Bitmap" />
+    </dialog>
 
     <fragment
         android:id="@+id/nav_camera"
@@ -29,4 +40,9 @@
     </fragment>
 
     <action android:id="@+id/navigate_to_camera_fragment" app:destination="@id/nav_camera"/>
+    <action android:id="@+id/navigate_to_gallery_dialog" app:destination="@id/nav_gallery"/>
+    <action android:id="@+id/navigate_to_home_fragment" app:destination="@id/nav_home"
+        app:popUpTo="@id/mobile_navigation"
+        app:popUpToInclusive="true"/>
+
 </navigation>

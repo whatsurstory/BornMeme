@@ -131,7 +131,6 @@ class MainActivity : AppCompatActivity() {
                 toCamera()
             }
             binding.appBarMain.fabModule.setOnClickListener {
-                navController.navigate(R.id.nav_gallery)
                 Snackbar.make(view, "This is Module Button", Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show()
             }
@@ -214,7 +213,7 @@ class MainActivity : AppCompatActivity() {
                 when (resultCode) {
                     Activity.RESULT_OK -> {
                         val uri = data!!.data
-//                        Log.d("uri", "$uri")
+                        Log.d("uri", "$uri")
                         navigateToEditor(uri)
                     }
                     Activity.RESULT_CANCELED -> {
@@ -231,7 +230,7 @@ class MainActivity : AppCompatActivity() {
 //                        navigateToEditor(saveUri)
                     }
                     Activity.RESULT_CANCELED -> {
-                        Log.d("getImageResult", resultCode.toString())
+                        Log.d("getPhotoResult", resultCode.toString())
                     }
                 }
             }
