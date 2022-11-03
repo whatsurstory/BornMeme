@@ -9,7 +9,7 @@
 
         <variable
             name="dialog"
-            type="com.beva.bornmeme.ui.gallery.GalleryFragment"/>
+            type="com.beva.bornmeme.ui.gallery.PreviewDialog"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

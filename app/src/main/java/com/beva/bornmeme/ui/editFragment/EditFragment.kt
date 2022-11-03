@@ -1,27 +1,29 @@
-package com.beva.bornmeme.ui.slideshow
+package com.beva.bornmeme.ui.editFragment
 
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
+import android.icu.util.Calendar
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.beva.bornmeme.MobileNavigationDirections
-import com.beva.bornmeme.databinding.FragmentCameraBinding
+import com.beva.bornmeme.databinding.FragmentEditFixmodeBinding
+import com.google.firebase.firestore.FirebaseFirestore
 
 
-class OpenCameraFragment : Fragment() {
+class EditFragment : Fragment() {
 
-    private lateinit var binding: FragmentCameraBinding
+    private lateinit var binding: FragmentEditFixmodeBinding
     private lateinit var uri: Uri
     private lateinit var bgBitmap: Bitmap
 
@@ -29,6 +31,7 @@ class OpenCameraFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let { bundle ->
             uri = bundle.getParcelable("uri")!!
+            Log.d("From Gallery","get uri= $uri")
         }
     }
 
@@ -37,11 +40,17 @@ class OpenCameraFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val viewModel = ViewModelProvider(this).get(OpenCameraViewModel::class.java)
-        binding = FragmentCameraBinding.inflate(inflater, container, false)
+        val viewModel = ViewModelProvider(this).get(EditViewModel::class.java)
+        binding = FragmentEditFixmodeBinding.inflate(inflater, container, false)
         val photo = binding.originPhoto
         val upperText = binding.upperText
         val bottomText = binding.bottomText
+        val user = FirebaseFirestore.getInstance().collection("User")
+        val document = user.document()
+        val beva = hashMapOf(
+            "id" to "whaturstory2016",
+            "name" to "AKA Peace Farmer")
+
 
         binding.previewBtn.setOnClickListener {
             //transfer to bitmap
@@ -53,6 +62,7 @@ class OpenCameraFragment : Fragment() {
             photo.setImageBitmap(bgBitmap)
             photo.setImageBitmap(binding.upperText.drawingCache)
             photo.setImageBitmap(binding.bottomText.drawingCache)
+            //For Preview, so we need to put arguments to show the image
             binding.originPhoto.setImageBitmap(mergeBitmap(bgBitmap, binding.upperText.drawingCache,binding.bottomText.drawingCache))
 //            mergeBitmap(bgBitmap, binding.upperText.drawingCache,binding.bottomText.drawingCache)
         }
@@ -60,13 +70,17 @@ class OpenCameraFragment : Fragment() {
         binding.publishBtn.setOnClickListener {
             it?.let {
                 findNavController().navigate(
+                    //For navigation
                     MobileNavigationDirections.navigateToHomeFragment())
-//                        mergeBitmap(
-//                            bgBitmap,
-//                            binding.upperText.drawingCache,
-//                            binding.bottomText.drawingCache
-//                )
             }
+            //For Saving Post
+            val post = hashMapOf(
+                "user" to beva,
+                "createdTime" to Calendar.getInstance().timeInMillis,
+                "id" to document.id,
+                "image" to mergeBitmap(bgBitmap, binding.upperText.drawingCache,binding.bottomText.drawingCache)
+            )
+            document.set(post)
         }
 
         return binding.root
@@ -91,7 +105,7 @@ class OpenCameraFragment : Fragment() {
 //        Log.d("secondImageLeft","secondImageLeft = $secondImageLeft")
 //        Log.d("thirdImageLeft","thirdImageLeft = $thirdImageLeft")
 //        Log.d("thirdImageTop","thirdImageTop = $thirdImageTop")
-        findNavController().navigate(MobileNavigationDirections.navigateToGalleryDialog(result))
+        findNavController().navigate(MobileNavigationDirections.navigateToPreviewDialog(result))
         return result
     }
 
@@ -134,8 +148,8 @@ class OpenCameraFragment : Fragment() {
         //Gallery Image origin Width &Height
         val oriWidth = options.outWidth
         val oriHeight = options.outHeight
-//        Log.w("oriWidth", "oriWidth=${oriWidth}")
-//        Log.w("oriHeight", "oriHeight=${oriHeight}")
+        Log.w("oriWidth", "oriWidth=${oriWidth}")
+        Log.w("oriHeight", "oriHeight=${oriHeight}")
 
         //Screen ViewWidth & Height
         val screenWidth = resources.displayMetrics.widthPixels
@@ -148,8 +162,8 @@ class OpenCameraFragment : Fragment() {
         //螢幕寬 除以 圖片寬 乘以 圖片高 = 符合畫面比例高
         val height = (screenWidth.toFloat() / oriWidth.toFloat() * oriHeight.toFloat()).toInt()
         //our image will fit the screen width
-//        Log.d("final width", "width = $screenWidth")
-//        Log.d("final height", "height = $height")
+        Log.d("final width", "width = $screenWidth")
+        Log.d("final height", "height = $height")
 
         val layoutParam = ConstraintLayout.LayoutParams(
             screenWidth,
@@ -163,6 +177,5 @@ class OpenCameraFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding
     }
 }

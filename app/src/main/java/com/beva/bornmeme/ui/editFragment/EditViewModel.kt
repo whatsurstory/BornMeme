@@ -1,10 +1,9 @@
-package com.beva.bornmeme
+package com.beva.bornmeme.ui.editFragment
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class MainViewModel: ViewModel() {
+class EditViewModel : ViewModel() {
 
 }

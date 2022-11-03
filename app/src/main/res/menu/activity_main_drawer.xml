@@ -3,18 +3,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/ic_baseline_add_to_photos_24"
-            android:title="@string/menu_home" />
-        <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_baseline_add_photo_alternate_24"
-            android:title="@string/menu_gallery" />
-        <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="@string/menu_camera" />
-    </group>
+    <item android:title="Menu">
+        <menu>
+            <item
+                android:id="@+id/nav_awaiting_payment"
+                android:icon="@drawable/ic_baseline_settings_24"
+                android:title="Setting" />
+            <item
+                android:id="@+id/nav_awaiting_shipment"
+                android:icon="@drawable/ic_baseline_edit_24"
+                android:title="Editing" />
+            <item
+                android:id="@+id/nav_shipped"
+                android:title="待" />
+<!--                android:icon=""-->
+            <item
+                android:id="@+id/nav_awaiting_review"
+                android:title="待" />
+<!--            android:icon=""-->
+            <item
+                android:id="@+id/nav_exchange"
+                android:title="待" />
+<!--          android:icon=""  -->
+        </menu>
+    </item>
 </menu>

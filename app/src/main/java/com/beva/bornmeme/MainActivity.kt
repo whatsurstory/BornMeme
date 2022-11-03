@@ -1,23 +1,15 @@
 package com.beva.bornmeme
 
 import android.app.Activity
-import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContract
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
@@ -28,30 +20,8 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.FileProvider
-import androidx.core.os.bundleOf
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.navigation.NavArgument
-import androidx.navigation.NavController
-import androidx.navigation.NavDirections
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
-import coil.transform.CircleCropTransformation
-import com.beva.bornmeme.MainActivity.Companion.PHOTO_FROM_CAMERA
-import com.beva.bornmeme.MainActivity.Companion.PHOTO_FROM_GALLERY
 import com.beva.bornmeme.databinding.ActivityMainBinding
-import com.beva.bornmeme.ui.slideshow.OpenCameraFragment
-import com.bumptech.glide.Glide
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionDeniedResponse
-import com.karumi.dexter.listener.PermissionGrantedResponse
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-import com.karumi.dexter.listener.single.PermissionListener
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
@@ -61,13 +31,10 @@ class MainActivity : AppCompatActivity() {
     private var isOpen = false
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-//    private lateinit var navController: NavController
-
 
     private companion object {
         const val PHOTO_FROM_GALLERY = 0
         const val PHOTO_FROM_CAMERA = 1
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,65 +46,69 @@ class MainActivity : AppCompatActivity() {
             saveUri = Uri.parse(savedInstanceState.getString("saveUri"))
         }
         permission()
-//        val viewModel = MainViewModel()
-//        binding.lifecycleOwner = this
+
         setSupportActionBar(binding.appBarMain.toolbar)
 
+        //let the search view expend
         binding.appBarMain.searchBar.setOnClickListener {
             binding.appBarMain.searchBar.onActionViewExpanded()
         }
 
-
+        //Animation of fab
         val fabOpen = AnimationUtils.loadAnimation(this, R.anim.fab_open)
         val fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_close)
         val fabRotate = AnimationUtils.loadAnimation(this, R.anim.rotate)
         val fabRotateAnti = AnimationUtils.loadAnimation(this, R.anim.rotate_anti)
+
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
+        //TODO: changing R.id.fragment
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_camera
+                R.id.nav_home, R.id.nav_home, R.id.fragmentEditFixmode
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+        //fab expending animation
         binding.appBarMain.fab.setOnClickListener { view ->
 
             if (isOpen) {
-                binding.appBarMain.fabCamera.startAnimation(fabClose)
-                binding.appBarMain.fabModule.startAnimation(fabClose)
-                binding.appBarMain.fabPhoto.startAnimation(fabClose)
+                binding.appBarMain.fabCameraEdit.startAnimation(fabClose)
+                binding.appBarMain.fabModuleEdit.startAnimation(fabClose)
+                binding.appBarMain.fabGalleryEdit.startAnimation(fabClose)
                 binding.appBarMain.fab.startAnimation(fabRotate)
 
                 isOpen = false
             } else {
-                binding.appBarMain.fabCamera.startAnimation(fabOpen)
-                binding.appBarMain.fabModule.startAnimation(fabOpen)
-                binding.appBarMain.fabPhoto.startAnimation(fabOpen)
+                binding.appBarMain.fabCameraEdit.startAnimation(fabOpen)
+                binding.appBarMain.fabModuleEdit.startAnimation(fabOpen)
+                binding.appBarMain.fabGalleryEdit.startAnimation(fabOpen)
                 binding.appBarMain.fab.startAnimation(fabRotateAnti)
 
-                binding.appBarMain.fabCamera.isClickable
-                binding.appBarMain.fabModule.isClickable
-                binding.appBarMain.fabPhoto.isClickable
+                binding.appBarMain.fabCameraEdit.isClickable
+                binding.appBarMain.fabModuleEdit.isClickable
+                binding.appBarMain.fabGalleryEdit.isClickable
 
                 isOpen = true
             }
-            binding.appBarMain.fabCamera.setOnClickListener {
+            binding.appBarMain.fabCameraEdit.setOnClickListener {
                 toCamera()
             }
-            binding.appBarMain.fabModule.setOnClickListener {
+            binding.appBarMain.fabModuleEdit.setOnClickListener {
                 Snackbar.make(view, "This is Module Button", Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show()
             }
-            binding.appBarMain.fabPhoto.setOnClickListener {
+            binding.appBarMain.fabGalleryEdit.setOnClickListener {
                 toAlbum()
             }
         }
+        //the tool bar showing only in the home fragment
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id == R.id.nav_home) {
                 binding.appBarMain.toolbar.visibility = View.VISIBLE
@@ -147,7 +118,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
+    //permission fun
     private fun permission() {
         val permissionList = arrayListOf(
             android.Manifest.permission.CAMERA,
@@ -237,10 +208,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //if we got the photo from camera/gallery, we'll take the arguments of image complete the navigate
     private fun navigateToEditor(uri: Uri?) {
         uri?.let {
             findNavController(R.id.nav_host_fragment_content_main)
-                .navigate(MobileNavigationDirections.navigateToCameraFragment(it))
+                .navigate(MobileNavigationDirections.navigateToEditFragment(it))
         }
     }
 

@@ -1,34 +1,55 @@
 package com.beva.bornmeme.ui.home
 
-import android.provider.ContactsContract
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.navigation.findNavController
-import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.constraintlayout.widget.Constraints
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.beva.bornmeme.databinding.FragmentHomeBinding
+import coil.loadAny
+import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.ItemHomeImgBinding
-import com.beva.bornmeme.model.ImgResource
-import com.beva.bornmeme.model.PhotoInformation
+import com.beva.bornmeme.model.Post
 
-class HomeAdapter: ListAdapter<ImgResource, HomeAdapter.ViewHolder>(DiffCallback) {
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 
-    class ViewHolder(val binding: ItemHomeImgBinding) :
+class HomeAdapter : ListAdapter<Post, HomeAdapter.ViewHolder>(DiffCallback) {
+
+    class ViewHolder(private val binding: ItemHomeImgBinding) :
         RecyclerView.ViewHolder(binding.root) {
-            fun bind (item: ImgResource){
-                binding.userName.text = item.text
-                binding.userImg.setImageBitmap(item.url)
-            }
+
+        fun bind(item: Post) {
+            //random pick a number to make the different height
+            val height = (5..7).shuffled()[0] * 100
+            Log.d("Bevaaaaa", "position=$adapterPosition, height=$height")
+
+            val layoutParams = Constraints.LayoutParams(
+                Constraints.LayoutParams.MATCH_PARENT,
+                height
+            )
+            binding.homeImg.layoutParams = layoutParams
+
+            Glide.with(binding.homeImg.context)
+                .load(item.url)
+                .centerCrop()
+                .apply(
+                    RequestOptions()
+                        .placeholder(R.drawable.ic_launcher_background)
+                        .error(R.drawable.ic_launcher_background)
+                ).into(binding.homeImg)
+            //databinding
+            //binding.executePendingBindings()
+        }
+    }
+
+    companion object DiffCallback : DiffUtil.ItemCallback<Post>() {
+        override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
+            return (oldItem == newItem)
         }
 
-    companion object DiffCallback : DiffUtil.ItemCallback<ImgResource>() {
-        override fun areItemsTheSame(oldItem: ImgResource, newItem: ImgResource): Boolean {
-            return (oldItem === newItem)
-        }
-
-        override fun areContentsTheSame(oldItem: ImgResource, newItem: ImgResource): Boolean {
+        override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
             return oldItem == newItem
         }
     }

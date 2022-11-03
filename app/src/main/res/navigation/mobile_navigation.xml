@@ -19,28 +19,28 @@ the current fragment will call the user data to render the view
     </fragment>
 
     <dialog
-        android:id="@+id/nav_gallery"
-        android:name="com.beva.bornmeme.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery">
+        android:id="@+id/dialogPreview"
+        android:name="com.beva.bornmeme.ui.gallery.PreviewDialog"
+        android:label=" "
+        tools:layout="@layout/dialog_preview">
     <argument
         android:name="bitmap"
         app:argType="android.graphics.Bitmap" />
     </dialog>
 
     <fragment
-        android:id="@+id/nav_camera"
-        android:name="com.beva.bornmeme.ui.slideshow.OpenCameraFragment"
-        android:label="@string/menu_camera"
-        tools:layout="@layout/fragment_camera" >
+        android:id="@+id/fragmentEditFixmode"
+        android:name="com.beva.bornmeme.ui.editFragment.EditFragment"
+        android:label="@string/menu_edit"
+        tools:layout="@layout/fragment_edit_fixmode" >
 
         <argument
             android:name="uri"
             app:argType="android.net.Uri" />
     </fragment>
 
-    <action android:id="@+id/navigate_to_camera_fragment" app:destination="@id/nav_camera"/>
-    <action android:id="@+id/navigate_to_gallery_dialog" app:destination="@id/nav_gallery"/>
+    <action android:id="@+id/navigate_to_edit_fragment" app:destination="@id/fragmentEditFixmode"/>
+    <action android:id="@+id/navigate_to_preview_dialog" app:destination="@id/dialogPreview"/>
     <action android:id="@+id/navigate_to_home_fragment" app:destination="@id/nav_home"
         app:popUpTo="@id/mobile_navigation"
         app:popUpToInclusive="true"/>

@@ -3,17 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-
+    <data></data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.slideshow.OpenCameraFragment">
+        tools:context=".ui.editFragment.EditFragment">
 <!--    android:background="@color/material_dynamic_neutral70"    -->
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/photo_area"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@+id/preview_btn"
             app:layout_constraintEnd_toEndOf="parent"
@@ -31,7 +32,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:srcCompat="@tools:sample/avatars">
-                <requestFocus/>
+
             </ImageView>
 
             <EditText

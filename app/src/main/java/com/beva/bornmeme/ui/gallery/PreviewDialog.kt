@@ -15,12 +15,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.beva.bornmeme.R
-import com.beva.bornmeme.databinding.FragmentGalleryBinding
-import com.bumptech.glide.Glide.init
+import com.beva.bornmeme.databinding.DialogPreviewBinding
 
-class GalleryFragment : AppCompatDialogFragment() {
 
-    private lateinit var binding: FragmentGalleryBinding
+class PreviewDialog : AppCompatDialogFragment() {
+
+    private lateinit var binding: DialogPreviewBinding
 //    private lateinit var uri: Uri
     private lateinit var bitmap: Bitmap
 
@@ -29,7 +29,7 @@ class GalleryFragment : AppCompatDialogFragment() {
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.PreviewDialog)
                 arguments?.let { bundle ->
             bitmap = bundle.getParcelable("bitmap")!!
-            Log.d("Gallery","get bitmap= $bitmap")
+            Log.d("From Gallery","get bitmap= $bitmap")
         }
 //        arguments?.let { bundle ->
 //            uri = bundle.getParcelable("uri")!!
@@ -45,7 +45,7 @@ class GalleryFragment : AppCompatDialogFragment() {
         val galleryViewModel =
             ViewModelProvider(this).get(GalleryViewModel::class.java)
 
-        binding = FragmentGalleryBinding.inflate(inflater, container, false)
+        binding = DialogPreviewBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.dialog = this
 //        binding.previewImg.setImageURI(uri)

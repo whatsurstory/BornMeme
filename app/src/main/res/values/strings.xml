@@ -9,7 +9,7 @@
 
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
-    <string name="menu_camera">Camera</string>
+    <string name="menu_edit">Edit</string>
     <string name="text_click">Click to add some text</string>
     <string name="preview_btn">Preview</string>
     <string name="publish_btn">Publish</string>
