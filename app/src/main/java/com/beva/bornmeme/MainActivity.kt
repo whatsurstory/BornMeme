@@ -27,7 +27,6 @@ import java.io.File
 class MainActivity : AppCompatActivity() {
     private var saveUri: Uri? = null
 
-    //TODO: ToolBar & ActionBar -> Stylish
     private var isOpen = false
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
@@ -50,9 +49,9 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.appBarMain.toolbar)
 
         //let the search view expend
-        binding.appBarMain.searchBar.setOnClickListener {
-            binding.appBarMain.searchBar.onActionViewExpanded()
-        }
+//        binding.appBarMain.searchBar.setOnClickListener {
+////            binding.appBarMain.searchBar.onActionViewExpanded()
+//        }
 
         //Animation of fab
         val fabOpen = AnimationUtils.loadAnimation(this, R.anim.fab_open)
