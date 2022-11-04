@@ -1,11 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
+
+<!--  lightgren  -->
+    <color name="purple_200">#d9d9f3</color>
+    <color name="rice">#f4f0e6</color>
+    <color name="light_tiffany">#ceefe4</color>
+    <color name="green">#9dd3a8</color>
+
+<!--  darkred  -->
+    <color name="purple_500">#947B89</color>
+    <color name="purple_700">#4E0E2E</color>
+    <color name="old_gray">#AEB8C3</color>
+    <color name="light_gray">#E1E7EB</color>
+
+<!--  littleboy  -->
+    <color name="teal_200">#08ffc8</color>
+    <color name="thick_pink">#fff7f7</color>
+    <color name="gray">#dadada</color>
+    <color name="teal_700">#204969</color>
+
     <color name="black">#FF000000</color>
+    <color name="whit_alpha">#10ffffff</color>
     <color name="white">#FFFFFFFF</color>
     <color name="translucent_80">#cccccccc</color>
+
+<!--  Gentle  -->
+    <color name="pinkpink">#ffb6b9</color>
+    <color name="skin_pink">#fae3d9</color>
+    <color name="tiffany">#bbded6</color>
+    <color name="light_blue">#8ac6d1</color>
+
+<!--growup-->
+    <color name="dark_blue">#17223b</color>
+    <color name="tian_ching">#263859</color>
+    <color name="blua_gray">#6b778d</color>
+    <color name="light_orange_pink">#ff6768</color>
 </resources>

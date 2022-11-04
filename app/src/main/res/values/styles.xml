@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+        <style name="PreviewDialog">
+            <item name="android:windowBackground">@color/translucent_80</item>
+        </style>
 
-    <style name="PreviewDialog"> <item name="android:windowBackground">@color/translucent_80</item></style>
+    <style name="CustomChipStyle" parent="Widget.MaterialComponents.Chip.Filter">
+        <item name="chipBackgroundColor">@color/chip_bg_style</item>
+        <item name="android:textColor">@color/chip_fg_style</item>
+        <item name="checkedIcon">@null</item>
+        <item name="rippleColor">@color/rice</item>
+    </style>
 </resources>

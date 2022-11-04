@@ -17,6 +17,8 @@ class HomeViewModel : ViewModel() {
         getData()
     }
 
+
+    //Post All Photo in Fragment
     private fun getData(): MutableLiveData<List<Post>> {
         val postData = FirebaseFirestore.getInstance()
             .collection("Posts")
@@ -30,11 +32,8 @@ class HomeViewModel : ViewModel() {
             val list = mutableListOf<Post>()
             for (document in snapshot!!) {
                 Log.d("Bevaaaaa", document.id + " => " + document.data)
-
                 val post = document.toObject(Post::class.java)
-                for (i in 0..9) {
                 list.add(post)
-                }
             }
 
             liveData.value = list

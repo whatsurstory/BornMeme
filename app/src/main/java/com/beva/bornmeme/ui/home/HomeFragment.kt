@@ -27,12 +27,6 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var adapter: HomeAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -53,7 +47,11 @@ class HomeFragment : Fragment() {
         }
 
 
-        adapter = HomeAdapter()
+        adapter = HomeAdapter(
+//            HomeAdapter.OnClickListener {
+//                viewModel.navigateToDetail(it)
+//            }
+        )
         binding.recyclerHome.adapter = adapter
 
         viewModel.liveData.observe(viewLifecycleOwner, Observer {
@@ -63,19 +61,7 @@ class HomeFragment : Fragment() {
             }
         })
 
-        return binding.root
-    }
-
-}
-
-//        binding.recyclerHome.adapter = HomeAdapter(
-//            HomeAdapter.OnClickListener {
-//                viewModel.navigateToDetail(it)
-//            }
-//        )
-
-
-//click to detail
+        //click to detail
 //        viewModel.navigateToDetail.observe(
 //            viewLifecycleOwner,
 //            Observer {
@@ -86,17 +72,12 @@ class HomeFragment : Fragment() {
 //            }
 //        )
 
-//check if more item
-//        binding.recyclerHome.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-//                if (dy > 0) {
-//                    // 成功滑到bottom
-//                    if (recyclerView.canScrollVertically(-1) && dy > 0) {
-//                        if (args != null) {
-//                            viewModel.getPostResult(args)
-//                        }
-//                    }
-//                }
-//                super.onScrolled(recyclerView, dx, dy)
-//            }
-//        })
+        return binding.root
+    }
+}
+
+
+
+
+
+

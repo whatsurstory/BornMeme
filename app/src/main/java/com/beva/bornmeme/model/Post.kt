@@ -1,9 +1,12 @@
 package com.beva.bornmeme.model
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Parcelable
+import android.renderscript.ScriptGroup
 import com.google.firebase.Timestamp
 import kotlinx.parcelize.Parcelize
+import java.io.InputStream
 
 
 @Parcelize
@@ -14,31 +17,12 @@ data class Post(
     val title: String = "",
     val catalog: String = "",
     val url: String? = null,
-    val like: List<String> = emptyList(),
-    val resources: List<Resource>? = null,
+    val like: List<String>? = null,
+    val resources: List<Resource> = emptyList(),
     val collection: List<String> = emptyList(),
     val createdTime: Timestamp? = null,
 ) : Parcelable
-
-//data class FeedPost(
-//    val uid: String = "",
-//    val username: String = "",
-//    val image: String = "",
-//    val caption: String = "",
-//    val comments: List<Comment> = emptyList(),
-//    val timestamp: Any = ServerValue.TIMESTAMP,
-//    val photo: String? = null,
-//    @get:Exclude
-//    val id: String = "",
-//    @get:Exclude
-//    val commentsCount: Int = 0
-//) {
-//    fun timestampDate(): Date = Date(timestamp as Long)
+//{
+//    val newUrl: Bitmap
+//        get() = BitmapFactory.decodeFile(url)
 //}
-
-//data class SearchPost(
-//    val image: String = "",
-//    val caption: String = "",
-//    val postId: String = "",
-//    @get:Exclude
-//    val id: String = "")

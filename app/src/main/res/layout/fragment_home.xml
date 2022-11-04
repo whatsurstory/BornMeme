@@ -16,48 +16,50 @@
         app:layout_constraintEnd_toEndOf="@id/recycler_home"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/recycler_home"
-        app:singleSelection="true">
+        app:singleSelection="true"
+        >
 
         <com.google.android.material.chip.Chip
+            style="@style/CustomChipStyle"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_marginHorizontal="1dp"
-            android:gravity="center"
             android:text="catalog"/>
         <com.google.android.material.chip.Chip
+            style="@style/CustomChipStyle"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:layout_marginHorizontal="1dp"
-            android:gravity="center"
-            android:text="Tag"/>
-        <com.google.android.material.chip.Chip
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_marginHorizontal="1dp"
-            android:gravity="center"
-            android:text="catalog"/>
-        <com.google.android.material.chip.Chip
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:gravity="center"
             android:layout_marginHorizontal="1dp"
             android:text="Tag"/>
         <com.google.android.material.chip.Chip
+            style="@style/CustomChipStyle"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginHorizontal="1dp"
+            android:text="catalog"/>
+        <com.google.android.material.chip.Chip
+            style="@style/CustomChipStyle"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginHorizontal="1dp"
+            android:text="Tag"/>
+        <com.google.android.material.chip.Chip
+            style="@style/CustomChipStyle"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:gravity="center"
             android:layout_marginHorizontal="1dp"
         android:text="catalog"/>
+
     </com.google.android.material.chip.ChipGroup>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_home"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/chip_group"
-
             tools:listitem="@layout/item_home_img">
 
         </androidx.recyclerview.widget.RecyclerView>

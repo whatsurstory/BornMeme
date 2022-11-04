@@ -1,17 +1,20 @@
 package com.beva.bornmeme.ui.editFragment
 
 
+import android.app.Application
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.icu.util.Calendar
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.collection.arrayMapOf
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -19,6 +22,8 @@ import androidx.navigation.fragment.findNavController
 import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.databinding.FragmentEditFixmodeBinding
 import com.google.firebase.firestore.FirebaseFirestore
+import java.io.ByteArrayOutputStream
+import java.util.*
 
 
 class EditFragment : Fragment() {
@@ -45,13 +50,12 @@ class EditFragment : Fragment() {
         val photo = binding.originPhoto
         val upperText = binding.upperText
         val bottomText = binding.bottomText
-        val user = FirebaseFirestore.getInstance().collection("User")
-        val document = user.document()
-        val beva = hashMapOf(
-            "id" to "whaturstory2016",
-            "name" to "AKA Peace Farmer")
+        //complete the publish will input the photo to firebase, Using  Path -> Posts
+        val fireStore = FirebaseFirestore.getInstance().collection("Posts")
+        val document = fireStore.document()
 
 
+        //to preview
         binding.previewBtn.setOnClickListener {
             //transfer to bitmap
             upperText.toString()
@@ -63,33 +67,60 @@ class EditFragment : Fragment() {
             photo.setImageBitmap(binding.upperText.drawingCache)
             photo.setImageBitmap(binding.bottomText.drawingCache)
             //For Preview, so we need to put arguments to show the image
-            binding.originPhoto.setImageBitmap(mergeBitmap(bgBitmap, binding.upperText.drawingCache,binding.bottomText.drawingCache))
-//            mergeBitmap(bgBitmap, binding.upperText.drawingCache,binding.bottomText.drawingCache)
+            binding.originPhoto.setImageBitmap(mergeBitmap(bgBitmap, binding.upperText.drawingCache,binding.bottomText.drawingCache, true))
+            //TODO: User flow
         }
 
+        //to publish
         binding.publishBtn.setOnClickListener {
-            it?.let {
-                findNavController().navigate(
-                    //For navigation
-                    MobileNavigationDirections.navigateToHomeFragment())
-            }
+
+            upperText.toString()
+            bottomText.toString()
+            upperText.buildDrawingCache()
+            bottomText.buildDrawingCache()
+            bgBitmap = BitmapFactory.decodeStream(activity?.contentResolver?.openInputStream(uri))
+            photo.setImageBitmap(bgBitmap)
+            photo.setImageBitmap(binding.upperText.drawingCache)
+            photo.setImageBitmap(binding.bottomText.drawingCache)
+
+            val postData = mergeBitmap(
+                bgBitmap,
+                binding.upperText.drawingCache,
+                binding.bottomText.drawingCache,
+                false)
+
+
+
+            val res = listOf(arrayMapOf("type" to "base", "url" to uri),(arrayMapOf("type" to "text", "url" to upperText.toString() + bottomText.toString())))
             //For Saving Post
             val post = hashMapOf(
-                "user" to beva,
-                "createdTime" to Calendar.getInstance().timeInMillis,
                 "id" to document.id,
-                "image" to mergeBitmap(bgBitmap, binding.upperText.drawingCache,binding.bottomText.drawingCache)
-            )
+                "photoId" to "photo_id",
+                "ownerId" to "Beva9487",
+                "title" to "test title",
+                "catalog" to "test tag",
+                "like" to null,
+                "resources" to res,
+                "collection" to null,
+                "createdTime" to Date(Calendar.getInstance().timeInMillis),
+                "url" to getImageUri(activity?.application,postData))
             document.set(post)
+                .addOnCompleteListener {
+                        Log.i("Bevaaaaa","Publish Done: $post")
+                        Log.i("Bevaaaaa","Res -> $res")
+                    findNavController().navigate(MobileNavigationDirections.navigateToHomeFragment())
+                }
+                .addOnFailureListener { e ->
+                    Log.w("ERROR", "Error adding document", e)
+                }
         }
-
         return binding.root
     }
 
     private fun mergeBitmap(
         firstImage: Bitmap,
         secondImage: Bitmap,
-        thirdImage: Bitmap
+        thirdImage: Bitmap, preview: Boolean
     ): Bitmap {
         val result = Bitmap.createBitmap(firstImage.width, firstImage.height, firstImage.config)
         val canvas = Canvas(result)
@@ -105,8 +136,20 @@ class EditFragment : Fragment() {
 //        Log.d("secondImageLeft","secondImageLeft = $secondImageLeft")
 //        Log.d("thirdImageLeft","thirdImageLeft = $thirdImageLeft")
 //        Log.d("thirdImageTop","thirdImageTop = $thirdImageTop")
-        findNavController().navigate(MobileNavigationDirections.navigateToPreviewDialog(result))
+        if (preview) findNavController().navigate(MobileNavigationDirections.navigateToPreviewDialog(result))
         return result
+    }
+
+    private fun getImageUri(inContext: Application?, inImage: Bitmap): Uri? {
+        val bytes = ByteArrayOutputStream()
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path = MediaStore.Images.Media.insertImage(
+            inContext?.contentResolver,
+            inImage,
+            "Title",
+            null
+        )
+        return Uri.parse(path)
     }
 
     //Put the bitmap into local gallery

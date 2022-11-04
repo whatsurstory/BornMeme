@@ -1,8 +1,12 @@
 package com.beva.bornmeme.ui.home
 
+import android.annotation.SuppressLint
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.Constraints
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -14,16 +18,19 @@ import com.beva.bornmeme.model.Post
 
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.common.base.Strings.isNullOrEmpty
 
 class HomeAdapter : ListAdapter<Post, HomeAdapter.ViewHolder>(DiffCallback) {
 
     class ViewHolder(private val binding: ItemHomeImgBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        //TODO: BUG頂部會持續新增照片
+        @SuppressLint("SetTextI18n")
         fun bind(item: Post) {
             //random pick a number to make the different height
-            val height = (5..7).shuffled()[0] * 100
-            Log.d("Bevaaaaa", "position=$adapterPosition, height=$height")
+            val height = (3..8).shuffled()[0] * 100
+            Log.d("Bevaaaaa", "position=$layoutPosition, height=$height")
 
             val layoutParams = Constraints.LayoutParams(
                 Constraints.LayoutParams.MATCH_PARENT,
@@ -39,8 +46,14 @@ class HomeAdapter : ListAdapter<Post, HomeAdapter.ViewHolder>(DiffCallback) {
                         .placeholder(R.drawable.ic_launcher_background)
                         .error(R.drawable.ic_launcher_background)
                 ).into(binding.homeImg)
+            binding.userName.text = item.ownerId
+            if (item.like.isNullOrEmpty()){
+                binding.likeNum.text = "0"
+            }else {
+                binding.likeNum.text = item.like.size.toString()
             //databinding
             //binding.executePendingBindings()
+            }
         }
     }
 

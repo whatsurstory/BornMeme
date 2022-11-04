@@ -22,7 +22,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#bbded6"
+            android:background="@color/white"
             >
 
             <ImageView
@@ -36,14 +36,12 @@
 
             <ImageView
                 android:id="@+id/user_img"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_baseline_self_improvement_24"
-                app:layout_constraintBottom_toBottomOf="@+id/user_name"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/home_img" />
+                android:layout_width="50dp"
+                android:layout_height="0dp"
+                android:src="@drawable/ic_launcher_foreground"
+                app:layout_constraintStart_toStartOf="@id/home_img"
+                app:layout_constraintTop_toBottomOf="@+id/home_img"
+                app:layout_constraintBottom_toTopOf="@+id/like_btn"/>
 
             <TextView
                 android:id="@+id/user_name"
@@ -51,20 +49,22 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:gravity="left|center_vertical"
-                android:text="Beva Lin"
+                tools:text="Beva Lin"
                 android:textSize="16sp"
                 app:layout_constraintStart_toEndOf="@+id/user_img"
                 app:layout_constraintTop_toBottomOf="@+id/home_img" />
 
             <ImageView
                 android:id="@+id/like_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scaleType="fitCenter"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:padding="1dp"
+                android:layout_marginBottom="8dp"
                 android:src="@drawable/ic_baseline_thumb_up_24"
                 app:layout_constraintEnd_toEndOf="@+id/user_img"
                 app:layout_constraintStart_toStartOf="@+id/user_img"
-                app:layout_constraintTop_toBottomOf="@+id/user_img" />
+                app:layout_constraintTop_toBottomOf="@+id/user_img"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
             <TextView
                 android:id="@+id/like_num"

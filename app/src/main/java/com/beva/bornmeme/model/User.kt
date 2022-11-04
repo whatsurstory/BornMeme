@@ -18,16 +18,3 @@ data class User(
     val blockList: List<String> = emptyList(),
     val followList: List<String> = emptyList()
 ) : Parcelable
-
-//data class User(
-//    val name: String = "",
-//    val username: String = "",
-//    val email: String = "",
-//    val follows: Map<String, Boolean> = emptyMap(),
-//    val followers: Map<String, Boolean> = emptyMap(),
-//    val website: String? = null,
-//    val bio: String? = null,
-//    val phone: Long? = null,
-//    val photo: String? = null,
-//    @Exclude val uid: String = ""
-//)
