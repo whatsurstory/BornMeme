@@ -10,6 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/dark_blue"
         tools:context=".MainActivity">
 
         <androidx.appcompat.widget.Toolbar
@@ -19,6 +20,8 @@
             android:elevation="4dp"
             android:paddingEnd="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginBottom="4dp"
+            android:background="@color/dark_blue"
             app:layout_constraintBottom_toBottomOf="@+id/content_main"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

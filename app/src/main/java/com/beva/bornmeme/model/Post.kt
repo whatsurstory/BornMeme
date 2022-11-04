@@ -22,7 +22,4 @@ data class Post(
     val collection: List<String> = emptyList(),
     val createdTime: Timestamp? = null,
 ) : Parcelable
-//{
-//    val newUrl: Bitmap
-//        get() = BitmapFactory.decodeFile(url)
-//}
+
