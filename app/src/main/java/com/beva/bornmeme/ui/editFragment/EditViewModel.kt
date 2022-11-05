@@ -4,9 +4,13 @@ import android.app.Application
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
+import android.icu.util.Calendar
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.EditText
+import androidx.collection.ArrayMap
+import androidx.collection.arrayMapOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,6 +20,7 @@ import com.beva.bornmeme.MobileNavigationDirections
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import java.io.ByteArrayOutputStream
+import java.util.*
 
 class EditViewModel : ViewModel() {
 
@@ -23,7 +28,7 @@ class EditViewModel : ViewModel() {
     fun mergeBitmap(
         firstImage: Bitmap,
         secondImage: Bitmap,
-        thirdImage: Bitmap, preview: Boolean, fragment: EditFragment
+        thirdImage: Bitmap
     ): Bitmap {
         val result = Bitmap.createBitmap(firstImage.width, firstImage.height, firstImage.config)
         val canvas = Canvas(result)
@@ -39,17 +44,17 @@ class EditViewModel : ViewModel() {
 //        Log.d("secondImageLeft","secondImageLeft = $secondImageLeft")
 //        Log.d("thirdImageLeft","thirdImageLeft = $thirdImageLeft")
 //        Log.d("thirdImageTop","thirdImageTop = $thirdImageTop")
-        if (preview) findNavController(fragment).navigate(MobileNavigationDirections.navigateToPreviewDialog(result))
         return result
     }
 
     fun getImageUri(inContext: Application?, inImage: Bitmap): Uri? {
         val bytes = ByteArrayOutputStream()
+        val title = Calendar.getInstance().timeInMillis.toString()
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
         val path = MediaStore.Images.Media.insertImage(
             inContext?.contentResolver,
             inImage,
-            "Title",
+            title,
             null
         )
         return Uri.parse(path)
@@ -78,17 +83,35 @@ class EditViewModel : ViewModel() {
 //        }
 //    }
 
-    fun getNewPost(uri: Uri){
+    fun getNewPost(uri: Uri, res: List<Any>) {
         val fireStore = FirebaseFirestore.getInstance().collection("Posts")
         val document = fireStore.document()
         val ref = FirebaseStorage.getInstance().reference
+
         ref.child("img_edited/" + document.id + ".jpg")
             .putFile(uri)
             .addOnSuccessListener {
                 it.metadata?.reference?.downloadUrl?.addOnSuccessListener {
                     //這層的it才會帶到firebase return 的 Uri
                     Log.d("edit =>", "downloadUrl = $it")
-                    Log.d("edit =>", "edit uri = $uri")
+                    Log.d("edit =>", "edit uri = $it => take it to Posts:url")
+
+                    val post = hashMapOf(
+                        "id" to document.id,
+                        "photoId" to "photo_id",
+                        "ownerId" to "Beva9487",
+                        "title" to "test title",
+                        "catalog" to "test tag",
+                        "like" to null,
+                        "resources" to res,
+                        "collection" to null,
+                        "createdTime" to Date(Calendar.getInstance().timeInMillis),
+                        "url" to it
+                    )
+                    //put into firebase_storage
+                    document.set(post)
+                    Log.i("tofirebase =>", "Publish Done: $post")
+                    //  Log.d("test","test uri = ${Uri.parse(uri.toString())}")
                 }
             }
             .addOnFailureListener {

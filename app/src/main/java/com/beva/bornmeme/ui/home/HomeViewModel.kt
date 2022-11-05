@@ -13,6 +13,12 @@ class HomeViewModel : ViewModel() {
 
      val liveData = MutableLiveData<List<Post>>()
 
+    // Handle navigation to detail
+    private val _navigateToDetail = MutableLiveData<Post>()
+
+    val navigateToDetail: LiveData<Post>
+        get() = _navigateToDetail
+
     init {
         getData()
     }
@@ -39,6 +45,14 @@ class HomeViewModel : ViewModel() {
             liveData.value = list
         }
         return liveData
+    }
+
+    fun navigateToDetail(item: Post) {
+        _navigateToDetail.value = item
+    }
+
+    fun onDetailNavigated() {
+        _navigateToDetail.value = null
     }
 
     }

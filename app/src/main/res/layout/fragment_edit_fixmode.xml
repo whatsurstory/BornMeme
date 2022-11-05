@@ -3,8 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data></data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,6 +14,7 @@
             android:id="@+id/photo_area"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="16dp"
             app:layout_constraintBottom_toTopOf="@+id/preview_btn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -65,7 +64,7 @@
                 android:inputType="text"
                 android:maxLines="1"
                 android:padding="4dp"
-                android:textColor="@color/purple_200"
+                android:textColor="@color/rice"
                 android:textStyle="bold"
                 android:cursorVisible="false"
                 app:layout_constraintEnd_toEndOf="@+id/origin_photo"
@@ -83,25 +82,25 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:background="@color/purple_200"
+            android:background="@color/light_orange_pink"
             android:gravity="center"
             android:text="@string/preview_btn"
-            android:textColor="@color/white"
+            android:textColor="@color/rice"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/publish_btn"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintEnd_toEndOf="@+id/photo_area"
+            app:layout_constraintStart_toStartOf="@+id/photo_area" />
 
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/publish_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/purple_200"
+            android:background="@color/light_orange_pink"
             android:layout_marginBottom="16dp"
             android:gravity="center"
             android:text="@string/publish_btn"
-            android:textColor="@color/white"
+            android:textColor="@color/rice"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@+id/preview_btn"
             app:layout_constraintStart_toStartOf="@+id/preview_btn"

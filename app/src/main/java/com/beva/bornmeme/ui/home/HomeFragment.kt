@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentHomeBinding
 
@@ -48,9 +49,9 @@ class HomeFragment : Fragment() {
 
 
         adapter = HomeAdapter(
-//            HomeAdapter.OnClickListener {
-//                viewModel.navigateToDetail(it)
-//            }
+            HomeAdapter.OnClickListener {
+                viewModel.navigateToDetail(it)
+            }
         )
         binding.recyclerHome.adapter = adapter
 
@@ -62,15 +63,15 @@ class HomeFragment : Fragment() {
         })
 
         //click to detail
-//        viewModel.navigateToDetail.observe(
-//            viewLifecycleOwner,
-//            Observer {
-//                it?.let {
-//                    findNavController().navigate(NavigationDirections.navigateToDetailFragment(it))
-//                    viewModel.onDetailNavigated()
-//                }
-//            }
-//        )
+        viewModel.navigateToDetail.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    findNavController().navigate(MobileNavigationDirections.navigateToImgDetailFragment(it))
+                    viewModel.onDetailNavigated()
+                }
+            }
+        )
 
         return binding.root
     }

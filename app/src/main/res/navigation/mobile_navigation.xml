@@ -39,10 +39,30 @@ the current fragment will call the user data to render the view
             app:argType="android.net.Uri" />
     </fragment>
 
+    <fragment
+        android:id="@+id/img_detail_fragment"
+        android:name="com.beva.bornmeme.ui.detail.img.ImgDetailFragment"
+        android:label=""
+        tools:layout="@layout/fragment_img_detail">
+        <argument
+            android:name="postKey"
+            app:argType="com.beva.bornmeme.model.Post" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/user_detail_fragment"
+        android:name="com.beva.bornmeme.ui.detail.user.UserDetailFragment"
+        android:label=""
+        tools:layout="@layout/fragment_user_detail">
+    </fragment>
+
+
+
     <action android:id="@+id/navigate_to_edit_fragment" app:destination="@id/fragmentEditFixmode"/>
     <action android:id="@+id/navigate_to_preview_dialog" app:destination="@id/dialogPreview"/>
     <action android:id="@+id/navigate_to_home_fragment" app:destination="@id/nav_home"
         app:popUpTo="@id/mobile_navigation"
         app:popUpToInclusive="true"/>
-
+    <action android:id="@+id/navigate_to_img_detail_fragment" app:destination="@+id/img_detail_fragment"/>
+    <action android:id="@+id/navigate_to_user_detail_fragment" app:destination="@+id/user_detail_fragment"/>
 </navigation>

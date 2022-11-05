@@ -1,22 +1,15 @@
 package com.beva.bornmeme.ui.editFragment
 
 
-import android.app.Application
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.icu.util.Calendar
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.MimeTypeMap
-import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.collection.arrayMapOf
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
@@ -24,18 +17,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.databinding.FragmentEditFixmodeBinding
-import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import java.io.ByteArrayOutputStream
-import java.util.*
 
 
 class EditFragment : Fragment() {
 
     private lateinit var binding: FragmentEditFixmodeBinding
     private lateinit var uri: Uri
-    private lateinit var bgBitmap: Bitmap
 
     //complete the publish will input the photo to firebase, Using  Path -> Posts
     private val fireStore = FirebaseFirestore.getInstance().collection("Posts")
@@ -49,7 +38,7 @@ class EditFragment : Fragment() {
             uri = bundle.getParcelable("uri")!!
             Log.d("From Gallery", "get uri= $uri")
         }
-        layoutPrams()
+        getLayoutPrams()
     }
 
     override fun onCreateView(
@@ -58,25 +47,34 @@ class EditFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val viewModel = ViewModelProvider(this).get(EditViewModel::class.java)
-        val photo = binding.originPhoto
         val upperText = binding.upperText
         val bottomText = binding.bottomText
-        //toString put out side can make empty success
-        upperText.toString()
-        bottomText.toString()
 
 
         //to preview
         binding.previewBtn.setOnClickListener {
-            transfer2Bitmap(upperText, bottomText, photo)
-            //For Preview, so we put arguments to show the image
-            binding.originPhoto.setImageBitmap(
-                viewModel.mergeBitmap(
-                    bgBitmap,
-                    binding.upperText.drawingCache,
-                    binding.bottomText.drawingCache,
-                    true,
-                    this
+        //TODO: the image in preview will catch the hint
+            //if (upperText.text.toString().isEmpty()) {
+            //                upperText.setText("")
+            //            }
+            //For Preview, so we put uri to show the image
+            val baseBitmap = getBitmapByUri(uri)
+            upperText.buildDrawingCache()
+            val upperBitmap = upperText.drawingCache
+            bottomText.buildDrawingCache()
+            val bottomBitmap = bottomText.drawingCache
+            val previewBitmap = viewModel
+                .mergeBitmap(baseBitmap, upperBitmap, bottomBitmap)
+
+            //buidDrawingCache() only catch the first time data
+            //only to destroy the origin data to render new view
+            upperText.destroyDrawingCache()
+            bottomText.destroyDrawingCache()
+//            Log.d("Bevaaaaa", "previewBitmap is $previewBitmap")
+
+            findNavController().navigate(
+                MobileNavigationDirections.navigateToPreviewDialog(
+                    previewBitmap
                 )
             )
         }
@@ -84,66 +82,62 @@ class EditFragment : Fragment() {
         //to publish
         binding.publishBtn.setOnClickListener {
             val ref = FirebaseStorage.getInstance().reference
-
             ref.child("img_origin/" + document.id + ".jpg")
                 .putFile(uri)
                 .addOnSuccessListener {
                     it.metadata?.reference?.downloadUrl?.addOnSuccessListener {
                         //這層的it才會帶到firebase return 的 Uri
                         Log.d("origin =>", "downloadUrl = $it")
-                        Log.d("origin =>", "origin uri = $uri")
-                        transfer2Bitmap(upperText, bottomText, photo)
-                        val postData = viewModel.mergeBitmap(
-                            bgBitmap,
-                            binding.upperText.drawingCache,
-                            binding.bottomText.drawingCache,
-                            false, this
-                        )
+                        Log.d("origin =>", "origin uri = $it => take it to base:url")
 
-                        val newUri = viewModel.getImageUri(activity?.application, postData)
-                        //the data need uploading to firebase which will storage and share on different devise
-                        //val res = listOf(arrayMapOf("type" to "base", "url" to uri),(arrayMapOf("type" to "text", "url" to upperText.toString() + bottomText.toString())))
-                        //For Saving Post
-                        val post = hashMapOf(
-                            "id" to document.id,
-                            "photoId" to "photo_id",
-                            "ownerId" to "Beva9487",
-                            "title" to "test title",
-                            "catalog" to "test tag",
-                            "like" to null,
-                            "resources" to null,
-                            "collection" to null,
-                            "createdTime" to Date(Calendar.getInstance().timeInMillis),
-                            "url" to newUri
+                        val res = listOf(
+                            arrayMapOf("type" to "base", "url" to it),
+                            (arrayMapOf(
+                                "type" to "text",
+                                "url" to upperText.text.toString() + bottomText.text.toString()
+                            ))
                         )
+//                          Log.d("check res","res $res")
+//                          Log.d("Upper Text", "upperText -> ${upperText.text.toString()}")
+//                          Log.d("Bottom Text", "BottomText -> ${bottomText.text.toString()}")
 
-                        //put into firebase_storage
-                        document.set(post)
-                        Log.i("tofirebase =>", "Publish Done: $post")
-                        //  Log.d("test","test uri = ${Uri.parse(uri.toString())}")
+                        val baseBitmap = getBitmapByUri(uri)
+                        upperText.buildDrawingCache()
+                        val upperBitmap = upperText.drawingCache
+                        bottomText.buildDrawingCache()
+                        val bottomBitmap = bottomText.drawingCache
+
+                        val publishBitmap = viewModel.mergeBitmap(
+                            baseBitmap,
+                            upperBitmap,
+                            bottomBitmap
+                        )
+                        //saving to gallery and return the path(uri)
+                        val newUri = viewModel.getImageUri(activity?.application, publishBitmap)
+                        Log.d("check newUri", "newUri $newUri")
                         if (newUri != null) {
-                            viewModel.getNewPost(newUri)
+                            viewModel.getNewPost(newUri, res)
                         }
                         findNavController().navigate(MobileNavigationDirections.navigateToHomeFragment())
+
+                    }?.addOnFailureListener {
+                        Log.d("Get Url Error", "${it.message}")
                     }
+
                 }.addOnFailureListener {
-                    Log.d("Error", "${it.message}")
+                    Log.d("Upload Task Snapshot Error", "${it.message}")
                 }
         }
         return binding.root
     }
 
 
-    private fun transfer2Bitmap(upperText: EditText, bottomText: EditText, photo: ImageView) {
-        upperText.buildDrawingCache()
-        bottomText.buildDrawingCache()
-        bgBitmap = BitmapFactory.decodeStream(activity?.contentResolver?.openInputStream(uri))
-        photo.setImageBitmap(bgBitmap)
-        photo.setImageBitmap(binding.upperText.drawingCache)
-        photo.setImageBitmap(binding.bottomText.drawingCache)
+
+    private fun getBitmapByUri(bitmapUri: Uri): Bitmap {
+        return BitmapFactory.decodeStream(activity?.contentResolver?.openInputStream(bitmapUri))
     }
 
-    private fun layoutPrams() {
+    private fun getLayoutPrams() {
         //TODO: Fixed the Text Size not same
         val options = BitmapFactory.Options()
         options.inJustDecodeBounds = true

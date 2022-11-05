@@ -41,7 +41,6 @@
                     android:layout_height="wrap_content"
                     app:iconifiedByDefault="false"
                     android:gravity="center"
-                    app:queryBackground="@android:color/transparent"
                     android:background="@drawable/search_corner"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

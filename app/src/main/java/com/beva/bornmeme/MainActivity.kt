@@ -68,9 +68,10 @@ class MainActivity : AppCompatActivity() {
         //TODO: changing R.id.fragment
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_home, R.id.fragmentEditFixmode
+                R.id.nav_home, R.id.img_detail_fragment, R.id.user_detail_fragment
             ), drawerLayout
         )
+
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
@@ -107,12 +108,12 @@ class MainActivity : AppCompatActivity() {
                 toAlbum()
             }
         }
-        //the tool bar showing only in the home fragment
+        //the tool bar showing or not
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id == R.id.nav_home) {
-                binding.appBarMain.toolbar.visibility = View.VISIBLE
-            } else {
+            if (destination.id == R.id.fragmentEditFixmode || destination.id == R.id.dialogPreview) {
                 binding.appBarMain.toolbar.visibility = View.GONE
+            } else {
+                binding.appBarMain.toolbar.visibility = View.VISIBLE
             }
         }
     }

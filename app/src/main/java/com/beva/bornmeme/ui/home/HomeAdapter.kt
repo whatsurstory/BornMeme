@@ -1,26 +1,21 @@
 package com.beva.bornmeme.ui.home
 
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.Constraints
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import coil.loadAny
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.ItemHomeImgBinding
 import com.beva.bornmeme.model.Post
 
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.google.common.base.Strings.isNullOrEmpty
 
-class HomeAdapter : ListAdapter<Post, HomeAdapter.ViewHolder>(DiffCallback) {
+class HomeAdapter(private val onClickListener: OnClickListener) : ListAdapter<Post, HomeAdapter.ViewHolder>(DiffCallback) {
 
     class ViewHolder(private val binding: ItemHomeImgBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -76,7 +71,18 @@ class HomeAdapter : ListAdapter<Post, HomeAdapter.ViewHolder>(DiffCallback) {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        val item =getItem(position)
+        item?.let {
+
+            holder.itemView.setOnClickListener {
+                onClickListener.onClick(item)
+            }
+            holder.bind(item)
+        }
+    }
+
+    class OnClickListener(val clickListener: (item: Post) -> Unit) {
+        fun onClick(item: Post) = clickListener(item)
     }
 
 }
