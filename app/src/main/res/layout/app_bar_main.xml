@@ -14,14 +14,13 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="4dp"
-            android:paddingEnd="16dp"
             app:contentInsetStartWithNavigation="0dp"
-            android:paddingTop="16dp"
+            app:contentInsetEndWithActions="0dp"
+            android:paddingTop="8dp"
             android:paddingBottom="8dp"
-            android:layout_marginBottom="4dp"
             android:background="@color/dark_blue"
             app:layout_constraintBottom_toBottomOf="@+id/content_main"
             app:layout_constraintStart_toStartOf="parent"

@@ -14,7 +14,7 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="drawerArrowStyle">@style/CustomMenuStyle</item>
-        <item name="searchViewStyle">@style/SearchViewMy</item>
+
     </style>
 
     <style name="Theme.BornMeme.NoActionBar">
@@ -25,7 +25,6 @@
     <style name="Theme.BornMeme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="Theme.BornMeme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="SearchViewMy" parent="Widget.AppCompat.Light.SearchView">
-        <item name="searchIcon">@null</item>
-    </style>
+
+
 </resources>

@@ -44,6 +44,9 @@ class EditViewModel : ViewModel() {
 //        Log.d("secondImageLeft","secondImageLeft = $secondImageLeft")
 //        Log.d("thirdImageLeft","thirdImageLeft = $thirdImageLeft")
 //        Log.d("thirdImageTop","thirdImageTop = $thirdImageTop")
+
+        
+
         return result
     }
 

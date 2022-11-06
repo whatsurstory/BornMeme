@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory
 import android.os.Parcelable
 import android.renderscript.ScriptGroup
 import com.google.firebase.Timestamp
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import java.io.InputStream
 
@@ -21,5 +22,8 @@ data class Post(
     val resources: List<Resource> = emptyList(),
     val collection: List<String> = emptyList(),
     val createdTime: Timestamp? = null,
-) : Parcelable
+) : Parcelable {
+    @IgnoredOnParcel
+    val user: List<User> = emptyList()
+}
 

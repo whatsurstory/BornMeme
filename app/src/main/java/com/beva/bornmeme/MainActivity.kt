@@ -8,8 +8,13 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
@@ -30,6 +35,12 @@ class MainActivity : AppCompatActivity() {
     private var isOpen = false
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+
+    //Animation of fab
+    private lateinit var fabOpen: Animation
+    private lateinit var fabClose: Animation
+    private lateinit var fabRotate: Animation
+    private lateinit var fabRotateAnti: Animation
 
     private companion object {
         const val PHOTO_FROM_GALLERY = 0
@@ -54,10 +65,10 @@ class MainActivity : AppCompatActivity() {
 //        }
 
         //Animation of fab
-        val fabOpen = AnimationUtils.loadAnimation(this, R.anim.fab_open)
-        val fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_close)
-        val fabRotate = AnimationUtils.loadAnimation(this, R.anim.rotate)
-        val fabRotateAnti = AnimationUtils.loadAnimation(this, R.anim.rotate_anti)
+        fabOpen = AnimationUtils.loadAnimation(this, R.anim.fab_open)
+        fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_close)
+        fabRotate = AnimationUtils.loadAnimation(this, R.anim.rotate)
+        fabRotateAnti = AnimationUtils.loadAnimation(this, R.anim.rotate_anti)
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
@@ -66,14 +77,14 @@ class MainActivity : AppCompatActivity() {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         //TODO: changing R.id.fragment
-        appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.nav_home, R.id.img_detail_fragment, R.id.user_detail_fragment
-            ), drawerLayout
-        )
 
-        setupActionBarWithNavController(navController, appBarConfiguration)
+//            setOf(
+//                R.id.nav_home, R.id.img_detail_fragment, R.id.user_detail_fragment
+//            ), drawerLayout)
         navView.setupWithNavController(navController)
+        appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
+        setupActionBarWithNavController(navController, appBarConfiguration)
+
 
         //fab expending animation
         binding.appBarMain.fab.setOnClickListener { view ->
@@ -86,6 +97,7 @@ class MainActivity : AppCompatActivity() {
 
                 isOpen = false
             } else {
+
                 binding.appBarMain.fabCameraEdit.startAnimation(fabOpen)
                 binding.appBarMain.fabModuleEdit.startAnimation(fabOpen)
                 binding.appBarMain.fabGalleryEdit.startAnimation(fabOpen)
@@ -112,8 +124,14 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id == R.id.fragmentEditFixmode || destination.id == R.id.dialogPreview) {
                 binding.appBarMain.toolbar.visibility = View.GONE
+
             } else {
                 binding.appBarMain.toolbar.visibility = View.VISIBLE
+                if (destination.id == R.id.nav_home){
+                    binding.appBarMain.searchBar.visibility = View.VISIBLE
+                } else {
+                    binding.appBarMain.searchBar.visibility = View.GONE
+                }
             }
         }
     }
@@ -155,17 +173,24 @@ class MainActivity : AppCompatActivity() {
 
     private fun toCamera() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        val tmpFile = File(
-            Environment.getExternalStorageDirectory().toString(),
-            System.currentTimeMillis().toString() + ".jpg"
-        )
+        val tmpFile = File(applicationContext.filesDir,
+            System.currentTimeMillis().toString() + ".jpg")
+//        File(
+//            Environment.getExternalStorageDirectory().toString(),
+//            System.currentTimeMillis().toString() + ".jpg"
+//        )
+
         val uriForCamera =
-            FileProvider.getUriForFile(this, "com.beva.bornmeme.fileProvider", tmpFile)
+            FileProvider.getUriForFile(applicationContext, "com.beva.bornmeme.fileProvider", tmpFile)
 
         saveUri = uriForCamera
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uriForCamera)
         startActivityForResult(intent, PHOTO_FROM_CAMERA)
     }
+//        private fun createImgUri(): Uri {
+//        val img = File(applicationContext.filesDir, "camera_photo.png")
+//        return FileProvider.getUriForFile(applicationContext, "com.beva.bornmeme.fileProvider",img)
+//    }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -185,6 +210,7 @@ class MainActivity : AppCompatActivity() {
                     Activity.RESULT_OK -> {
                         val uri = data!!.data
                         Log.d("uri", "$uri")
+
                         navigateToEditor(uri)
                     }
                     Activity.RESULT_CANCELED -> {
@@ -197,20 +223,42 @@ class MainActivity : AppCompatActivity() {
                 when (resultCode) {
                     Activity.RESULT_OK -> {
 //                        Glide.with(this).load(saveUri).into(binding.originPhoto)
-                        Log.d("camera saveUri", "$saveUri")
-//                        navigateToEditor(saveUri)
+                        Log.d("camera saveUri", "camera saveUri -> $saveUri")
+                        navigateToEditor(saveUri)
                     }
                     Activity.RESULT_CANCELED -> {
-                        Log.d("getPhotoResult", resultCode.toString())
+                        Log.d("getPhotoResult", "getPhotoResult -> $resultCode")
                     }
                 }
             }
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.custom_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.sort -> {
+                Toast.makeText(this, "Sort Button is clicked", Toast.LENGTH_SHORT).show()
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     //if we got the photo from camera/gallery, we'll take the arguments of image complete the navigate
     private fun navigateToEditor(uri: Uri?) {
         uri?.let {
+            fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_close)
+            fabRotate = AnimationUtils.loadAnimation(this, R.anim.rotate)
+            binding.appBarMain.fabCameraEdit.startAnimation(fabClose)
+            binding.appBarMain.fabModuleEdit.startAnimation(fabClose)
+            binding.appBarMain.fabGalleryEdit.startAnimation(fabClose)
+            binding.appBarMain.fab.startAnimation(fabRotate)
+            isOpen = false
             findNavController(R.id.nav_host_fragment_content_main)
                 .navigate(MobileNavigationDirections.navigateToEditFragment(it))
         }
