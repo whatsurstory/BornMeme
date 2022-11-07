@@ -27,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import com.beva.bornmeme.databinding.ActivityMainBinding
+import timber.log.Timber
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
@@ -47,8 +48,11 @@ class MainActivity : AppCompatActivity() {
         const val PHOTO_FROM_CAMERA = 1
     }
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Timber.plant(Timber.DebugTree())
         binding = ActivityMainBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
@@ -69,13 +73,6 @@ class MainActivity : AppCompatActivity() {
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
 
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        //TODO: changing R.id.fragment
-
-//            setOf(
-//                R.id.nav_home, R.id.img_detail_fragment, R.id.user_detail_fragment
-//            ), drawerLayout)
         navView.setupWithNavController(navController)
         appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -198,18 +195,17 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.d("uri", "onActivityResult, requestCode=$requestCode, resultCode=$resultCode")
+        Timber.d("onActivityResult requestCode => $requestCode resultCode => $resultCode")
         when (requestCode) {
             PHOTO_FROM_GALLERY -> {
                 when (resultCode) {
                     Activity.RESULT_OK -> {
                         val uri = data!!.data
-                        Log.d("uri", "$uri")
-
+                        Timber.d("PHOTO_FROM_GALLERY uri => $uri")
                         navigateToEditor(uri)
                     }
                     Activity.RESULT_CANCELED -> {
-                        Log.d("getImageResult", resultCode.toString())
+                        Timber.d("getImageResult cancel $resultCode")
                     }
                 }
             }
@@ -217,12 +213,11 @@ class MainActivity : AppCompatActivity() {
             PHOTO_FROM_CAMERA -> {
                 when (resultCode) {
                     Activity.RESULT_OK -> {
-//                        Glide.with(this).load(saveUri).into(binding.originPhoto)
-                        Log.d("camera saveUri", "camera saveUri -> $saveUri")
+                        Timber.d("PHOTO_FROM_CAMERA uri => $saveUri")
                         navigateToEditor(saveUri)
                     }
                     Activity.RESULT_CANCELED -> {
-                        Log.d("getPhotoResult", "getPhotoResult -> $resultCode")
+                        Timber.d("getPhotoResult cancel $resultCode")
                     }
                 }
             }

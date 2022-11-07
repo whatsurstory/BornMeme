@@ -16,11 +16,8 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentHomeBinding
+import timber.log.Timber
 
-import com.beva.bornmeme.model.Post
-import com.google.firebase.firestore.*
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 
 class HomeFragment : Fragment() {
 
@@ -36,8 +33,7 @@ class HomeFragment : Fragment() {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         viewModel = HomeViewModel()
-        //lifecycle is works in databinding
-        //binding.lifecycleOwner = viewLifecycleOwner
+
 
         binding.recyclerHome.apply {
             layoutManager = StaggeredGridLayoutManager(
@@ -56,7 +52,7 @@ class HomeFragment : Fragment() {
         binding.recyclerHome.adapter = adapter
 
         viewModel.liveData.observe(viewLifecycleOwner, Observer {
-            Log.d("viewModel.liveArticles.observe"," it= $it")
+
             it?.let {
                 adapter.submitList(it)
             }
@@ -66,6 +62,7 @@ class HomeFragment : Fragment() {
         viewModel.navigateToDetail.observe(
             viewLifecycleOwner,
             Observer {
+                Timber.i("viewModel.navigateToDetail.observe, it=$it")
                 it?.let {
                     findNavController().navigate(MobileNavigationDirections.navigateToImgDetailFragment(it))
                     viewModel.onDetailNavigated()

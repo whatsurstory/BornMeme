@@ -19,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import com.beva.bornmeme.MobileNavigationDirections
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.util.*
 
@@ -34,19 +35,11 @@ class EditViewModel : ViewModel() {
         val canvas = Canvas(result)
         canvas.drawBitmap(firstImage, 0f, 0f, null)
         val secondImageLeft = (firstImage.width - secondImage.width).toFloat() / 2
-        Log.d("secondImageLeft","secondImageLeft = $secondImageLeft")
         canvas.drawBitmap(secondImage, secondImageLeft, 0f, null)
         val thirdImageLeft = (firstImage.width - thirdImage.width).toFloat() / 2
-        Log.d("thirdImageLeft","thirdImageLeft = $thirdImageLeft")
         val thirdImageTop = (firstImage.height - thirdImage.height).toFloat()
-        Log.d("thirdImageTop","thirdImageTop = $thirdImageTop")
         canvas.drawBitmap(thirdImage, thirdImageLeft, thirdImageTop, null)
-        Log.d("座標", "$thirdImage $thirdImageLeft $thirdImageTop")
-        //圖片中心點放置座標(resource, left, top,(may be null)): (背景寬 - 內容寬) / 2
-        //**require parameter type is float
-//        Log.d("secondImageLeft","secondImageLeft = $secondImageLeft")
-//        Log.d("thirdImageLeft","thirdImageLeft = $thirdImageLeft")
-//        Log.d("thirdImageTop","thirdImageTop = $thirdImageTop")
+
         return result
     }
 
@@ -96,8 +89,7 @@ class EditViewModel : ViewModel() {
             .addOnSuccessListener {
                 it.metadata?.reference?.downloadUrl?.addOnSuccessListener {
                     //這層的it才會帶到firebase return 的 Uri
-                    Log.d("edit =>", "downloadUrl = $it")
-                    Log.d("edit =>", "edit uri = $it => take it to Posts:url")
+                    Timber.d("edited uri: $it => take it to upload url")
 
                     val post = hashMapOf(
                         "id" to document.id,
@@ -113,12 +105,12 @@ class EditViewModel : ViewModel() {
                     )
                     //put into firebase_storage
                     document.set(post)
-                    Log.i("tofirebase =>", "Publish Done: $post")
+                    Timber.d("to firebase => Publish Done: $post")
                     //  Log.d("test","test uri = ${Uri.parse(uri.toString())}")
                 }
             }
             .addOnFailureListener {
-                Log.d("Error", "${it.message}")
+                Timber.d("Error-> ${it.message}")
             }
     }
 }

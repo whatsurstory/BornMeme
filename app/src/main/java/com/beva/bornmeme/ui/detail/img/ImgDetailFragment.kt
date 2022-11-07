@@ -18,6 +18,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.load.resource.bitmap.TransformationUtils.circleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.imageview.ShapeableImageView
+import timber.log.Timber
 
 class ImgDetailFragment : Fragment() {
 
@@ -31,7 +32,7 @@ class ImgDetailFragment : Fragment() {
 
                 arguments?.let { bundle ->
             post = bundle.getParcelable("postKey")!!
-            Log.d("Gallery", "get key = $post")
+            Timber.d("detail get key from home= $post")
         }
 
 //        Glide.with(binding.imgDetailUserImg.context)
@@ -47,7 +48,10 @@ class ImgDetailFragment : Fragment() {
                 .placeholder(R.drawable._50)
                 .error(R.drawable.dino)
         ).into(binding.imgDetailImage)
-        binding.imgDetailDescription.text = post.resources[1].text
+        binding.imgDetailDescription.text = post.resources[1].url
+        Timber.d("index 1 => ${post.resources[1].url}")
+        //原圖做為模板按鈕帶下面這個
+        Timber.d(("index 0 => ${post.resources[0].url}"))
     }
 
     override fun onCreateView(

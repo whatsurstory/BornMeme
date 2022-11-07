@@ -2,20 +2,27 @@ package com.beva.bornmeme.ui.editFragment
 
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.hardware.input.InputManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.IBinder
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.collection.arrayMapOf
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -24,6 +31,7 @@ import com.beva.bornmeme.databinding.FragmentEditFixmodeBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import timber.log.Timber
 
 
 class EditFragment : Fragment() {
@@ -42,7 +50,7 @@ class EditFragment : Fragment() {
 
         arguments?.let { bundle ->
             uri = bundle.getParcelable("uri")!!
-            Log.d("From Gallery", "get uri= $uri")
+            Timber.d("From Album uri => $uri")
         }
         getLayoutPrams()
     }
@@ -61,7 +69,7 @@ class EditFragment : Fragment() {
         binding.previewBtn.setOnClickListener {
 
             if (upperText.text.isNullOrEmpty() || bottomText.text.isNullOrEmpty()){
-//                Toast.makeText(context,"Adding Text Plz", Toast.LENGTH_SHORT).show()
+
                 Snackbar.make(it, "Not Adding Text Yet", Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show()
             } else {
@@ -78,7 +86,7 @@ class EditFragment : Fragment() {
                 //only to destroy the origin data to render new view
                 upperText.destroyDrawingCache()
                 bottomText.destroyDrawingCache()
-//            Log.d("Bevaaaaa", "previewBitmap is $previewBitmap")
+
 
                 findNavController().navigate(
                     MobileNavigationDirections.navigateToPreviewDialog(
@@ -92,7 +100,6 @@ class EditFragment : Fragment() {
         binding.publishBtn.setOnClickListener {
 
             if (upperText.text.isNullOrEmpty() || bottomText.text.isNullOrEmpty()) {
-//                Toast.makeText(context, "Adding Text Plz", Toast.LENGTH_SHORT).show()
             Snackbar.make(it, "Not Adding Text Yet", Snackbar.LENGTH_SHORT)
                 .setAction("Action", null).show()
 
@@ -104,8 +111,7 @@ class EditFragment : Fragment() {
                     .addOnSuccessListener {
                         it.metadata?.reference?.downloadUrl?.addOnSuccessListener {
                             //這層的it才會帶到firebase return 的 Uri
-                            Log.d("origin =>", "downloadUrl = $it")
-                            Log.d("origin =>", "origin uri = $it => take it to base:url")
+                            Timber.d("origin uri: $it => take it to base url")
 
                             val res = listOf(
                                 arrayMapOf("type" to "base", "url" to it),
@@ -114,9 +120,6 @@ class EditFragment : Fragment() {
                                     "url" to upperText.text.toString() + bottomText.text.toString()
                                 ))
                             )
-//                          Log.d("check res","res $res")
-//                          Log.d("Upper Text", "upperText -> ${upperText.text.toString()}")
-//                          Log.d("Bottom Text", "BottomText -> ${bottomText.text.toString()}")
 
                             val baseBitmap = getBitmapByUri(uri)
                             upperText.buildDrawingCache()
@@ -131,25 +134,24 @@ class EditFragment : Fragment() {
                             )
                             //saving to gallery and return the path(uri)
                             val newUri = viewModel.getImageUri(activity?.application, publishBitmap)
-                            Log.d("check newUri", "newUri $newUri")
+                                Timber.d("newUri => $newUri")
                             if (newUri != null) {
                                 viewModel.getNewPost(newUri, res)
+                                Timber.d("check upload type => ${viewModel.getNewPost(newUri, res)}")
                             }
                             findNavController().navigate(MobileNavigationDirections.navigateToHomeFragment())
 
                         }?.addOnFailureListener {
-                            Log.d("Get Url Error", "${it.message}")
+                            Timber.d("upload uri Error => $it")
                         }
 
                     }.addOnFailureListener {
-                        Log.d("Upload Task Snapshot Error", "${it.message}")
+                        Timber.d("TaskSnapshot Error => $it")
                     }
             }
         }
         return binding.root
     }
-
-
 
     private fun getBitmapByUri(bitmapUri: Uri): Bitmap {
         return BitmapFactory.decodeStream(activity?.contentResolver?.openInputStream(bitmapUri))
@@ -169,12 +171,12 @@ class EditFragment : Fragment() {
         //Gallery Image origin Width &Height
         val oriWidth = options.outWidth
         val oriHeight = options.outHeight
-        Log.w("oriWidth", "oriWidth=${oriWidth}")
-        Log.w("oriHeight", "oriHeight=${oriHeight}")
+        Timber.w("oriWidth => $oriWidth")
+        Timber.w("oriHeight => $oriHeight")
 
         //Screen ViewWidth & Height
         val screenWidth = resources.displayMetrics.widthPixels
-        val screenHeight = resources.displayMetrics.heightPixels
+//        val screenHeight = resources.displayMetrics.heightPixels
 //        Log.i("screenWidth", "screenWidth = $screenWidth")
 //        Log.i("screenHeight", "screenHeight = $screenHeight")
 
@@ -183,8 +185,8 @@ class EditFragment : Fragment() {
         //螢幕寬 除以 圖片寬 乘以 圖片高 = 符合畫面比例高
         val height = (screenWidth.toFloat() / oriWidth.toFloat() * oriHeight.toFloat()).toInt()
         //our image will fit the screen width
-        Log.d("final width", "width = $screenWidth")
-        Log.d("final height", "height = $height")
+        Timber.d("final width => $screenWidth")
+        Timber.d("final height => $height")
 
         val layoutParam = ConstraintLayout.LayoutParams(
             screenWidth,
