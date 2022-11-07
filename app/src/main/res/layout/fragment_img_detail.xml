@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_margin="16dp">
+
+
+    <ImageView
+        android:id="@+id/img_detail_user_img"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/dino"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/img_detail_user_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Beva9487"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/follow_btn"
+        app:layout_constraintEnd_toStartOf="@+id/img_detail_guideline"
+        app:layout_constraintStart_toEndOf="@id/img_detail_user_img"
+        app:layout_constraintTop_toTopOf="@+id/img_detail_user_img" />
+
+    <TextView
+        android:id="@+id/follow_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="follow˙"
+        app:layout_constraintBottom_toBottomOf="@id/img_detail_user_img"
+        app:layout_constraintStart_toStartOf="@+id/img_detail_user_name" />
+
+    <ImageButton
+        android:id="@+id/like_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/whit_alpha"
+        android:src="@drawable/ic_baseline_thumb_up_24"
+        app:layout_constraintBottom_toBottomOf="@+id/follow_btn"
+        app:layout_constraintEnd_toStartOf="@+id/collection_btn"
+        app:layout_constraintStart_toEndOf="@+id/img_detail_guideline" />
+
+    <ImageButton
+        android:id="@+id/collection_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/whit_alpha"
+        android:src="@drawable/ic_baseline_collections_bookmark_24"
+        app:layout_constraintBottom_toBottomOf="@+id/like_btn"
+        app:layout_constraintEnd_toStartOf="@+id/share_btn"
+        app:layout_constraintStart_toEndOf="@+id/like_btn"
+        app:layout_constraintTop_toTopOf="@+id/like_btn" />
+
+    <ImageButton
+        android:id="@+id/share_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/whit_alpha"
+        android:src="@drawable/ic_baseline_share_24"
+        app:layout_constraintBottom_toBottomOf="@+id/collection_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/collection_btn"
+        app:layout_constraintTop_toTopOf="@+id/collection_btn" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/img_detail_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.6" />
+
+    <ImageView
+        android:id="@+id/img_detail_image"
+        tools:srcCompat="@tools:sample/avatars"
+        android:layout_height="600dp"
+        android:layout_width="0dp"
+        android:layout_marginVertical="16dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_detail_user_img"/>
+
+        <TextView
+            android:id="@+id/img_detail_description"
+            android:layout_height="50dp"
+            android:layout_width="0dp"
+            android:text="Picture Descrption Text"
+            app:layout_constraintTop_toBottomOf="@+id/img_detail_image"
+            app:layout_constraintStart_toStartOf="@id/img_detail_image"
+            app:layout_constraintEnd_toEndOf="@+id/img_detail_image"
+            android:maxLines="4"
+            />
+
+        <TextView
+            android:id="@+id/view_text"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="9527 views"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_detail_description"
+            />
+
+        <View
+            android:id="@+id/img_detail_line"
+            android:layout_height="1dp"
+            android:layout_width="match_parent"
+            android:background="@color/green"
+            app:layout_constraintTop_toBottomOf="@+id/view_text"/>
+
+        <TextView
+            android:id="@+id/comments_zone_title"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="Comments"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:layout_marginVertical="8dp"
+            android:textColor="@color/green"
+            app:layout_constraintTop_toBottomOf="@id/img_detail_line"
+            app:layout_constraintStart_toStartOf="@id/img_detail_line"/>
+
+        <ImageButton
+            android:layout_height="0dp"
+            android:layout_width="wrap_content"
+            android:src="@drawable/ic_baseline_add_comment_24"
+            android:background="@color/whit_alpha"
+            app:layout_constraintEnd_toEndOf="@id/img_detail_line"
+            app:layout_constraintTop_toTopOf="@+id/comments_zone_title"
+            app:layout_constraintBottom_toBottomOf="@id/comments_zone_title"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/comments_recycler"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_marginVertical="8dp"
+            tools:listitem="@layout/item_comment"
+            app:layout_constraintTop_toBottomOf="@id/comments_zone_title"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+        </androidx.recyclerview.widget.RecyclerView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
@@ -9,22 +10,62 @@
         android:id="@+id/nav_home"
         android:name="com.beva.bornmeme.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+<!--doesn't have to set arguments, when the navigation done
+the current fragment will call the user data to render the view
+        <argument-->
+<!--            android:name="photoKey"-->
+<!--            app:argType="android.graphics.Bitmap"-->
+<!--            app:nullable="true" />-->
+    </fragment>
+
+    <dialog
+        android:id="@+id/dialogPreview"
+        android:name="com.beva.bornmeme.ui.gallery.PreviewDialog"
+        android:label=" "
+        tools:layout="@layout/dialog_preview">
+    <argument
+        android:name="bitmap"
+        app:argType="android.graphics.Bitmap" />
+    </dialog>
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.beva.bornmeme.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/fragmentEditFixmode"
+        android:name="com.beva.bornmeme.ui.editFragment.EditFragment"
+        android:label="@string/menu_edit"
+        tools:layout="@layout/fragment_edit_fixmode">
+
+        <argument
+            android:name="uri"
+            app:argType="android.net.Uri" />
+    </fragment>
 
     <fragment
-        android:id="@+id/nav_camera"
-        android:name="com.beva.bornmeme.ui.slideshow.OpenCameraFragment"
-        android:label="@string/menu_camera"
-        tools:layout="@layout/fragment_camera" />
+        android:id="@+id/img_detail_fragment"
+        android:name="com.beva.bornmeme.ui.detail.img.ImgDetailFragment"
+        android:label=""
+        tools:layout="@layout/fragment_img_detail">
+        <argument
+            android:name="postKey"
+            app:argType="com.beva.bornmeme.model.Post" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/user_detail_fragment"
+        android:name="com.beva.bornmeme.ui.detail.user.UserDetailFragment"
+        android:label=""
+        tools:layout="@layout/fragment_user_detail">
+    </fragment>
+
 
     <action
-        android:id="@+id/navigate_to_camera_fragment"  app:destination="@id/nav_camera"
-        app:popUpTo="@id/mobile_navigation"
+        android:id="@+id/navigate_to_edit_fragment"
+        app:destination="@+id/fragmentEditFixmode"/>
+    <action android:id="@+id/navigate_to_preview_dialog" app:destination="@+id/dialogPreview"/>
+    <action android:id="@+id/navigate_to_home_fragment" app:destination="@+id/nav_home"
+        app:popUpTo="@+id/mobile_navigation"
         app:popUpToInclusive="true"/>
+    <action android:id="@+id/navigate_to_img_detail_fragment" app:destination="@+id/img_detail_fragment"/>
+    <action android:id="@+id/navigate_to_user_detail_fragment" app:destination="@+id/user_detail_fragment"/>
+
 </navigation>

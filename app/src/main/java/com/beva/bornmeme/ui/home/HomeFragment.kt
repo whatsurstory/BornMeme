@@ -1,42 +1,84 @@
 package com.beva.bornmeme.ui.home
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.beva.bornmeme.MobileNavigationDirections
+import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentHomeBinding
+
+import com.beva.bornmeme.model.Post
+import com.google.firebase.firestore.*
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class HomeFragment : Fragment() {
 
-    private var _binding: FragmentHomeBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+    private lateinit var viewModel: HomeViewModel
+    private lateinit var binding: FragmentHomeBinding
+    private lateinit var adapter: HomeAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+    ): View? {
 
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        viewModel = HomeViewModel()
+        //lifecycle is works in databinding
+        //binding.lifecycleOwner = viewLifecycleOwner
 
-        val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+        binding.recyclerHome.apply {
+            layoutManager = StaggeredGridLayoutManager(
+                2,
+                StaggeredGridLayoutManager.VERTICAL
+            )
+            setHasFixedSize(true)
         }
-        return root
-    }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+
+        adapter = HomeAdapter(
+            HomeAdapter.OnClickListener {
+                viewModel.navigateToDetail(it)
+            }
+        )
+        binding.recyclerHome.adapter = adapter
+
+        viewModel.liveData.observe(viewLifecycleOwner, Observer {
+            Log.d("viewModel.liveArticles.observe"," it= $it")
+            it?.let {
+                adapter.submitList(it)
+            }
+        })
+
+        //click to detail
+        viewModel.navigateToDetail.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    findNavController().navigate(MobileNavigationDirections.navigateToImgDetailFragment(it))
+                    viewModel.onDetailNavigated()
+                }
+            }
+        )
+
+        return binding.root
     }
 }
+
+
+
+
+
+

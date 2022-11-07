@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/user_detail_img"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/dino"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/user_detail_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Beva9527"
+            android:layout_marginStart="12dp"
+            android:textColor="@color/rice"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/user_detail_img"
+            app:layout_constraintTop_toTopOf="@+id/user_detail_img" />
+
+        <ImageView
+            android:id="@+id/user_followers_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="2dp"
+            android:src="@drawable/ic_baseline_people_outline_24"
+            app:layout_constraintBottom_toBottomOf="@+id/followers_text"
+            app:layout_constraintEnd_toStartOf="@id/followers_text"
+            app:layout_constraintTop_toTopOf="@+id/followers_text"
+            app:tint="@color/tiffany" />
+
+        <TextView
+            android:id="@+id/followers_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10000 followers"
+            android:textColor="@color/tiffany"
+            app:layout_constraintBottom_toTopOf="@+id/introduce_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/user_detail_name" />
+
+        <TextView
+            android:id="@+id/introduce_text"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="introduce Zone"
+            android:textColor="@color/rice"
+            android:layout_marginStart="12dp"
+            app:layout_constraintBottom_toBottomOf="@id/user_detail_img"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/user_detail_img"
+            app:layout_constraintTop_toBottomOf="@+id/user_detail_name" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.tabs.TabLayout
+        android:background="@color/dark_blue"
+        android:id="@+id/user_tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:tabIndicatorColor="@color/light_orange_pink"
+        app:tabSelectedTextColor="@color/light_orange_pink"
+        app:tabTextColor="@color/tiffany"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/constraintLayout"
+        />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/user_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_tabs"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
