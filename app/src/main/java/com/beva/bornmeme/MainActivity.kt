@@ -59,11 +59,6 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
-        //let the search view expend
-//        binding.appBarMain.searchBar.setOnClickListener {
-////            binding.appBarMain.searchBar.onActionViewExpanded()
-//        }
-
         //Animation of fab
         fabOpen = AnimationUtils.loadAnimation(this, R.anim.fab_open)
         fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_close)
@@ -85,49 +80,50 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-
-        //fab expending animation
-        binding.appBarMain.fab.setOnClickListener { view ->
-
-            if (isOpen) {
-                binding.appBarMain.fabCameraEdit.startAnimation(fabClose)
-                binding.appBarMain.fabModuleEdit.startAnimation(fabClose)
-                binding.appBarMain.fabGalleryEdit.startAnimation(fabClose)
-                binding.appBarMain.fab.startAnimation(fabRotate)
-
-                isOpen = false
-            } else {
-
-                binding.appBarMain.fabCameraEdit.startAnimation(fabOpen)
-                binding.appBarMain.fabModuleEdit.startAnimation(fabOpen)
-                binding.appBarMain.fabGalleryEdit.startAnimation(fabOpen)
-                binding.appBarMain.fab.startAnimation(fabRotateAnti)
-
-                binding.appBarMain.fabCameraEdit.isClickable
-                binding.appBarMain.fabModuleEdit.isClickable
-                binding.appBarMain.fabGalleryEdit.isClickable
-
-                isOpen = true
-            }
-            binding.appBarMain.fabCameraEdit.setOnClickListener {
-                toCamera()
-            }
-            binding.appBarMain.fabModuleEdit.setOnClickListener {
-                Snackbar.make(view, "This is Module Button", Snackbar.LENGTH_SHORT)
-                    .setAction("Action", null).show()
-            }
-            binding.appBarMain.fabGalleryEdit.setOnClickListener {
-                toAlbum()
-            }
-        }
         //the tool bar showing or not
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id == R.id.fragmentEditFixmode || destination.id == R.id.dialogPreview) {
                 binding.appBarMain.toolbar.visibility = View.GONE
-
+                binding.appBarMain.fab.visibility = View.GONE
+                binding.appBarMain.fab.setOnClickListener { toAlbum() }
             } else {
                 binding.appBarMain.toolbar.visibility = View.VISIBLE
-                if (destination.id == R.id.nav_home){
+                binding.appBarMain.fab.visibility = View.VISIBLE
+                //fab expending animation
+                binding.appBarMain.fab.setOnClickListener { view ->
+
+                    if (isOpen) {
+                        binding.appBarMain.fabCameraEdit.startAnimation(fabClose)
+                        binding.appBarMain.fabModuleEdit.startAnimation(fabClose)
+                        binding.appBarMain.fabGalleryEdit.startAnimation(fabClose)
+                        binding.appBarMain.fab.startAnimation(fabRotate)
+
+                        isOpen = false
+                    } else {
+
+                        binding.appBarMain.fabCameraEdit.startAnimation(fabOpen)
+                        binding.appBarMain.fabModuleEdit.startAnimation(fabOpen)
+                        binding.appBarMain.fabGalleryEdit.startAnimation(fabOpen)
+                        binding.appBarMain.fab.startAnimation(fabRotateAnti)
+
+                        binding.appBarMain.fabCameraEdit.isClickable
+                        binding.appBarMain.fabModuleEdit.isClickable
+                        binding.appBarMain.fabGalleryEdit.isClickable
+
+                        isOpen = true
+                    }
+                    binding.appBarMain.fabCameraEdit.setOnClickListener {
+                        toCamera()
+                    }
+                    binding.appBarMain.fabModuleEdit.setOnClickListener {
+                        Snackbar.make(view, "This is Module Button", Snackbar.LENGTH_SHORT)
+                            .setAction("Action", null).show()
+                    }
+                    binding.appBarMain.fabGalleryEdit.setOnClickListener {
+                        toAlbum()
+                    }
+                }
+                if (destination.id == R.id.nav_home) {
                     binding.appBarMain.searchBar.visibility = View.VISIBLE
                 } else {
                     binding.appBarMain.searchBar.visibility = View.GONE
@@ -173,24 +169,23 @@ class MainActivity : AppCompatActivity() {
 
     private fun toCamera() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        val tmpFile = File(applicationContext.filesDir,
-            System.currentTimeMillis().toString() + ".jpg")
-//        File(
-//            Environment.getExternalStorageDirectory().toString(),
-//            System.currentTimeMillis().toString() + ".jpg"
-//        )
+        val tmpFile = File(
+            applicationContext.filesDir,
+            System.currentTimeMillis().toString() + ".jpg"
+        )
 
         val uriForCamera =
-            FileProvider.getUriForFile(applicationContext, "com.beva.bornmeme.fileProvider", tmpFile)
+            FileProvider.getUriForFile(
+                applicationContext,
+                "com.beva.bornmeme.fileProvider",
+                tmpFile
+            )
 
         saveUri = uriForCamera
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uriForCamera)
         startActivityForResult(intent, PHOTO_FROM_CAMERA)
     }
-//        private fun createImgUri(): Uri {
-//        val img = File(applicationContext.filesDir, "camera_photo.png")
-//        return FileProvider.getUriForFile(applicationContext, "com.beva.bornmeme.fileProvider",img)
-//    }
+
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -240,7 +235,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId){
+        return when (item.itemId) {
             R.id.sort -> {
                 Toast.makeText(this, "Sort Button is clicked", Toast.LENGTH_SHORT).show()
                 return true
@@ -259,6 +254,7 @@ class MainActivity : AppCompatActivity() {
             binding.appBarMain.fabGalleryEdit.startAnimation(fabClose)
             binding.appBarMain.fab.startAnimation(fabRotate)
             isOpen = false
+
             findNavController(R.id.nav_host_fragment_content_main)
                 .navigate(MobileNavigationDirections.navigateToEditFragment(it))
         }

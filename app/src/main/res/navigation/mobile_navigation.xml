@@ -58,8 +58,9 @@ the current fragment will call the user data to render the view
     </fragment>
 
 
-
-    <action android:id="@+id/navigate_to_edit_fragment" app:destination="@+id/fragmentEditFixmode"/>
+    <action
+        android:id="@+id/navigate_to_edit_fragment"
+        app:destination="@+id/fragmentEditFixmode"/>
     <action android:id="@+id/navigate_to_preview_dialog" app:destination="@+id/dialogPreview"/>
     <action android:id="@+id/navigate_to_home_fragment" app:destination="@+id/nav_home"
         app:popUpTo="@+id/mobile_navigation"

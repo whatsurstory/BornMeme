@@ -10,15 +10,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.collection.arrayMapOf
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.databinding.FragmentEditFixmodeBinding
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 
@@ -27,7 +30,8 @@ class EditFragment : Fragment() {
 
     private lateinit var binding: FragmentEditFixmodeBinding
     private lateinit var uri: Uri
-
+    private lateinit var upperText: EditText
+    private lateinit var bottomText: EditText
     //complete the publish will input the photo to firebase, Using  Path -> Posts
     private val fireStore = FirebaseFirestore.getInstance().collection("Posts")
     private val document = fireStore.document()
@@ -49,22 +53,22 @@ class EditFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val viewModel = ViewModelProvider(this).get(EditViewModel::class.java)
-        val upperText = binding.upperText
-        val bottomText = binding.bottomText
+        upperText = binding.upperText
+        bottomText = binding.bottomText
 
 
         //to preview
         binding.previewBtn.setOnClickListener {
 
             if (upperText.text.isNullOrEmpty() || bottomText.text.isNullOrEmpty()){
-                Toast.makeText(context,"Adding Text Plz", Toast.LENGTH_SHORT).show()
-
+//                Toast.makeText(context,"Adding Text Plz", Toast.LENGTH_SHORT).show()
+                Snackbar.make(it, "Not Adding Text Yet", Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null).show()
             } else {
 
                 val baseBitmap = getBitmapByUri(uri)
                 upperText.buildDrawingCache()
                 val upperBitmap = upperText.drawingCache
-                Log.d("upperBitmap","$upperText")
                 bottomText.buildDrawingCache()
                 val bottomBitmap = bottomText.drawingCache
                 val previewBitmap = viewModel
@@ -81,7 +85,6 @@ class EditFragment : Fragment() {
                         previewBitmap
                     )
                 )
-
             }
         }
 
@@ -89,7 +92,9 @@ class EditFragment : Fragment() {
         binding.publishBtn.setOnClickListener {
 
             if (upperText.text.isNullOrEmpty() || bottomText.text.isNullOrEmpty()) {
-                Toast.makeText(context, "Adding Text Plz", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(context, "Adding Text Plz", Toast.LENGTH_SHORT).show()
+            Snackbar.make(it, "Not Adding Text Yet", Snackbar.LENGTH_SHORT)
+                .setAction("Action", null).show()
 
             } else {
 
@@ -141,8 +146,6 @@ class EditFragment : Fragment() {
                     }
             }
         }
-
-
         return binding.root
     }
 

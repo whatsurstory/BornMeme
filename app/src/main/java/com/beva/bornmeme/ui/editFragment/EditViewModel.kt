@@ -34,19 +34,19 @@ class EditViewModel : ViewModel() {
         val canvas = Canvas(result)
         canvas.drawBitmap(firstImage, 0f, 0f, null)
         val secondImageLeft = (firstImage.width - secondImage.width).toFloat() / 2
+        Log.d("secondImageLeft","secondImageLeft = $secondImageLeft")
         canvas.drawBitmap(secondImage, secondImageLeft, 0f, null)
         val thirdImageLeft = (firstImage.width - thirdImage.width).toFloat() / 2
+        Log.d("thirdImageLeft","thirdImageLeft = $thirdImageLeft")
         val thirdImageTop = (firstImage.height - thirdImage.height).toFloat()
+        Log.d("thirdImageTop","thirdImageTop = $thirdImageTop")
         canvas.drawBitmap(thirdImage, thirdImageLeft, thirdImageTop, null)
-
+        Log.d("座標", "$thirdImage $thirdImageLeft $thirdImageTop")
         //圖片中心點放置座標(resource, left, top,(may be null)): (背景寬 - 內容寬) / 2
         //**require parameter type is float
 //        Log.d("secondImageLeft","secondImageLeft = $secondImageLeft")
 //        Log.d("thirdImageLeft","thirdImageLeft = $thirdImageLeft")
 //        Log.d("thirdImageTop","thirdImageTop = $thirdImageTop")
-
-        
-
         return result
     }
 
