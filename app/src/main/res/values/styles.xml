@@ -24,4 +24,8 @@
         <item name="searchIcon">@null</item>
     </style>
 
+    <style name="PublishDialog">
+        <item name="android:windowBackground">@color/transparent</item>
+    </style>
+
 </resources>

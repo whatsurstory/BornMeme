@@ -37,7 +37,6 @@ class HomeViewModel : ViewModel() {
 
             val list = mutableListOf<Post>()
             for (document in snapshot!!) {
-                Log.d("Bevaaaaa", document.id + " => " + document.data)
                 val post = document.toObject(Post::class.java)
                 list.add(post)
             }

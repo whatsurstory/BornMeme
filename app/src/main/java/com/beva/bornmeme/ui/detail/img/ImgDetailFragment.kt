@@ -29,17 +29,13 @@ class ImgDetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = FragmentImgDetailBinding.inflate(layoutInflater)
-
                 arguments?.let { bundle ->
             post = bundle.getParcelable("postKey")!!
             Timber.d("detail get key from home= $post")
         }
 
-//        Glide.with(binding.imgDetailUserImg.context)
-//            .load(post.user[1].profilePhoto)
-//            .circleCrop()
-//            .into(binding.imgDetailUserImg)
-//        binding.imgDetailUserName.text = post.ownerId
+        binding.imgDetailUserName.text = post.ownerId
+
         Glide.with(this)
             .load(post.url)
             .transform(CenterInside(), RoundedCorners(50))
@@ -50,8 +46,16 @@ class ImgDetailFragment : Fragment() {
         ).into(binding.imgDetailImage)
         binding.imgDetailDescription.text = post.resources[1].url
         Timber.d("index 1 => ${post.resources[1].url}")
-        //原圖做為模板按鈕帶下面這個
+        //TODO: Navigate use this image as a Module
+//        binding.imgDetailImage.setOnClickListener {
+//            findNavController().navigate(MobileNavigationDirections.navigateToEditFragment(post.resources[0].url))
+//        }
         Timber.d(("index 0 => ${post.resources[0].url}"))
+
+        binding.commentBtn.setOnClickListener {
+            findNavController().navigate(MobileNavigationDirections.navigateToCommentDialog())
+        }
+
     }
 
     override fun onCreateView(
@@ -60,6 +64,8 @@ class ImgDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewModel = ImgDetailViewModel()
+        val adapter = CommentAdapter()
+        binding.commentsRecycler.adapter =CommentAdapter()
 
         binding.imgDetailUserImg.setOnClickListener {
             findNavController().navigate(MobileNavigationDirections.navigateToUserDetailFragment())

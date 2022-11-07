@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/rice"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -138,13 +139,11 @@
             app:layout_constraintTop_toBottomOf="@+id/img_detail_description"
             />
 
-        <EditText
+        <View
             android:id="@+id/img_detail_line"
-            android:layout_height="match_parent"
+            android:layout_height="1dp"
             android:layout_width="0dp"
-            android:hint="adding your reply"
-            android:background="@drawable/search_corner"
-            android:padding="8dp"
+            android:background="@color/dark_blue"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view_text"

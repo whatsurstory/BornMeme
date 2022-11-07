@@ -1,31 +1,25 @@
 package com.beva.bornmeme.model
 
 import android.os.Parcelable
+import com.google.firebase.Timestamp
 import com.google.firebase.database.ServerValue
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import java.util.*
 
 @Parcelize
 data class Comments(
-    val commentId: Int,
-    val userId: String,
-    val username: String = "",
-    val photoId: String,
-    var createdTime: Long? = null,
-    val content: String,
-    val like: User,
-    val dislike: User,
-    val photoUrl: String = ""
-) : Parcelable
+    val commentId: String = "",
+    val userId: String = "",
+    val postId: String = "",
+    var time: Long? = null,
+    val content: String = "",
+    val like: List<String> = emptyList(),
+    val dislike: List<String> = emptyList(),
+    val photoUrl: String = "",
+    val parentId:String =""
+) : Parcelable {
+    @IgnoredOnParcel
+    val user: List<User> = emptyList()
+}
 
-//data class Comment(
-//    val uid: String = "",
-//    val username: String = "",
-//    val photo: String? = null,
-//    val text: String = "",
-//    val timestamp: Any = ServerValue.TIMESTAMP,
-//    @get:Exclude
-//    val id: String = ""
-//) {
-//    fun timestampDate() = Date(timestamp as Long)
-//}

@@ -23,6 +23,7 @@
     <color name="whit_alpha">#10ffffff</color>
     <color name="white">#FFFFFFFF</color>
     <color name="translucent_80">#cccccccc</color>
+    <color name="transparent">#cc000000</color>
 
 <!--  Gentle  -->
     <color name="pinkpink">#ffb6b9</color>

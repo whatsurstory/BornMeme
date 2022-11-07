@@ -27,3 +27,5 @@ data class Post(
     val user: List<User> = emptyList()
 }
 
+//photoId is for the extension feature
+

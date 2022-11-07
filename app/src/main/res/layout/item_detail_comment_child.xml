@@ -81,8 +81,7 @@
                 android:layout_marginEnd="8dp"
                 android:src="@drawable/ic_baseline_thumb_down_off_alt_24"
                 app:layout_constraintEnd_toStartOf="@+id/child_dislike_num"
-                app:layout_constraintTop_toTopOf="@id/child_dislike_num"
-                tools:layout_editor_absoluteY="80dp" />
+                app:layout_constraintTop_toTopOf="@id/child_dislike_num" />
 
             <TextView
                 android:id="@+id/child_dislike_num"
