@@ -16,50 +16,55 @@ class CommentAdapter(private val uiState: ImgDetailViewModel.UiState): ListAdapt
 
     class ParentViewHolder(private var binding: ItemDetailCommentParentBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: CommentCell.ParentComment, uiState: ImgDetailViewModel.UiState) {
-            //binding.seeMoreBtn.visibility = View.VISIBLE
+            if (item.hasChild) {
+                binding.seeMoreBtn.visibility = View.VISIBLE
+                binding.backBtn.visibility = View.GONE
+            } else {
+                binding.seeMoreBtn.visibility = View.GONE
+                binding.backBtn.visibility = View.VISIBLE
+            }
             binding.seeMoreBtn.setOnClickListener {
                 uiState.onClickToSeeMore(item)
             }
-            // binding.backBtn.visibility = View.VISIBLE
+
             binding.backBtn.setOnClickListener {
                 uiState.onClickToBack(item.id)
+                item.hasChild = true
             }
 
             binding.replyBtn.setOnClickListener {
-                uiState.onClickToReply
+                uiState.onClickToReply()
             }
             binding.commentLikeBtn.setOnClickListener {
-                uiState.onClickToLike
+                uiState.onClickToLike(item)
             }
             binding.commentDislikeBtn.setOnClickListener {
-                uiState.onClickToDislike
+                uiState.onClickToDislike(item)
             }
             binding.commentLikeNum.text = item.parent.like.size.toString()
             binding.commentZoneText.text = item.parent.content
             binding.commentDislikeNum.text = item.parent.dislike.size.toString()
-            binding.commentUserName.text = item.parent.parentId
-//            binding.commentUserImg //Glide
-
+            binding.commentUserName.text = item.parent.userId
+            //TODO: user data need query to show the image and name
         }
     }
 
     class ChildViewHolder(private var binding: ItemDetailCommentChildBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: CommentCell.ChildComment) {
+        fun bind(item: CommentCell.ChildComment, uiState: ImgDetailViewModel.UiState) {
 
             Timber.d("ChildViewHolder $adapterPosition")
             binding.childDislikeBtn.setOnClickListener {
-                //回傳點擊的userId
+                uiState.onClickToDislike
             }
             binding.childLikeBtn.setOnClickListener {
-                //回傳點擊的userId
+                uiState.onClickToLike
             }
             binding.childDislikeNum.text = item.child.dislike.size.toString()
             binding.childLikeNum.text = item.child.like.size.toString()
             binding.childZoneText.text = item.child.content
-            binding.childUserName.text = item.child.commentId
-
-
+            binding.childUserName.text = item.child.userId
+            //TODO: user data need query to show the image and name
         }
     }
 
@@ -99,14 +104,14 @@ class CommentAdapter(private val uiState: ImgDetailViewModel.UiState): ListAdapt
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         when (holder) {
-            is CommentAdapter.ParentViewHolder -> {
+            is ParentViewHolder -> {
                 val data = getItem(position) as CommentCell.ParentComment
                 holder.bind(data, uiState)
                 Timber.d("data $data position $position")
             }
             is ChildViewHolder -> {
                 val data = getItem(position) as CommentCell.ChildComment
-                holder.bind(data)
+                holder.bind(data, uiState)
                 Timber.d("data $data position $position")
             }
         }

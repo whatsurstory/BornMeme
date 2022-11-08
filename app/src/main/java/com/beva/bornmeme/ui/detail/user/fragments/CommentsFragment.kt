@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import com.beva.bornmeme.R
 
 class CommentsFragment : Fragment() {
-
+    //TODO: Single Recycler onClick to "the post" view
     companion object {
         fun newInstance() = CommentsFragment()
     }

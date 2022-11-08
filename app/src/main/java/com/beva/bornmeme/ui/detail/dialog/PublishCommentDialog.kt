@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.fragment.app.DialogFragment
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.DialogCommentBinding
+import com.beva.bornmeme.model.Post
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -18,23 +19,19 @@ import timber.log.Timber
 import java.util.*
 
 class PublishCommentDialog: AppCompatDialogFragment() {
+//TODO: take the data to viewModel -> observe the argument -> complete the post comment with taking user data
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.PublishDialog)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val binding = DialogCommentBinding.inflate(inflater, container, false)
+
         binding.layoutPublish.startAnimation(AnimationUtils.loadAnimation(context, R.anim.slide))
-
-
-//        Firebase.firestore.collection("Posts")
-//            .addSnapshotListener {  querySnapshot, firebaseFirestoreException ->
-//                for (document in querySnapshot!!) {
-//                    Timber.d(document.id + " => " + document.data)
-//                }
-//            }
+        binding.dialog = this
         
         binding.buttonPublish.setOnClickListener {
             if (binding.editPublishContent.text.isNullOrEmpty()) {

@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.beva.bornmeme.model.Post
 import com.beva.bornmeme.model.Resource
 import com.google.firebase.firestore.FirebaseFirestore
+import timber.log.Timber
 
 class HomeViewModel : ViewModel() {
 
@@ -29,10 +30,10 @@ class HomeViewModel : ViewModel() {
         val postData = FirebaseFirestore.getInstance()
             .collection("Posts")
         postData.addSnapshotListener { snapshot, exception ->
-            Log.i("Bevaaaaa", "addSnapshotListener detect")
+            Timber.d("You are in HomeViewModel")
 
             exception?.let {
-                Log.w("Bevaaaaa", "[${this::class.simpleName}] Error getting documents. ${it.message}")
+                Timber.d("Exception ${it.message}")
             }
 
             val list = mutableListOf<Post>()

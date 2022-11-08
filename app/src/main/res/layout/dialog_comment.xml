@@ -24,7 +24,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            >
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0">
 
             <TextView
                 android:id="@+id/edit_publish_title"
@@ -48,10 +49,10 @@
                 android:layout_height="300dp"
                 android:layout_margin="16dp"
                 android:background="@color/rice"
-                android:padding="8dp"
                 android:gravity="top|start"
                 android:hint="Content"
                 android:letterSpacing="0.15"
+                android:padding="8dp"
                 android:textColor="@color/dark_blue"
                 android:textColorHint="@color/tian_ching"
                 android:textSize="14sp"
@@ -67,10 +68,10 @@
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginBottom="16dp"
                 android:background="@color/rice"
+                android:gravity="center"
                 android:text="Publish"
                 android:textColor="@color/tian_ching"
                 android:textSize="14sp"
-                android:gravity="center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

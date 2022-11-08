@@ -35,7 +35,9 @@ the current fragment will call the user data to render the view
         android:name="com.beva.bornmeme.ui.detail.dialog.PublishCommentDialog"
         android:label=""
         tools:layout="@layout/dialog_comment">
-
+<!--        <argument-->
+<!--            android:name="postId"-->
+<!--            app:argType="string" />-->
     </dialog>
 
     <fragment

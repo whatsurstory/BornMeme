@@ -42,9 +42,7 @@ class PreviewDialog : AppCompatDialogFragment() {
         binding = DialogPreviewBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.dialog = this
-
         binding.previewImg.setImageBitmap(bitmap)
-
         return binding.root
     }
 }

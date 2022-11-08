@@ -31,6 +31,8 @@ import timber.log.Timber
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
+
+//    TODO: Move data to viewModel
     private var saveUri: Uri? = null
 
     private var isOpen = false
@@ -224,20 +226,20 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.custom_menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.sort -> {
-                Toast.makeText(this, "Sort Button is clicked", Toast.LENGTH_SHORT).show()
-                return true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
+//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+//        menuInflater.inflate(R.menu.custom_menu, menu)
+//        return true
+//    }
+//
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        return when (item.itemId) {
+//            R.id.sort -> {
+//                Toast.makeText(this, "Sort Button is clicked", Toast.LENGTH_SHORT).show()
+//                return true
+//            }
+//            else -> super.onOptionsItemSelected(item)
+//        }
+//    }
 
     //if we got the photo from camera/gallery, we'll take the arguments of image complete the navigate
     private fun navigateToEditor(uri: Uri?) {

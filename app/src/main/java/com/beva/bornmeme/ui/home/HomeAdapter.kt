@@ -17,11 +17,11 @@ import com.bumptech.glide.request.RequestOptions
 import timber.log.Timber
 
 class HomeAdapter(private val onClickListener: OnClickListener) : ListAdapter<Post, HomeAdapter.ViewHolder>(DiffCallback) {
-
+    //TODO: MENU drawer (navigate), chipview(onClick to change view), sortbutton(to change...)
     class ViewHolder(private val binding: ItemHomeImgBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        //TODO: BUG頂部會持續新增照片、圖片高度不能用隨機高
+        //BUG: the post image height
         //用MATCH_PARENT高度不對、WRAP_CONTENT沒有畫面
         @SuppressLint("SetTextI18n")
         fun bind(item: Post) {

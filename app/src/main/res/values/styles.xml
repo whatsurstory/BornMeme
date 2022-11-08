@@ -21,7 +21,7 @@
 
 
     <style name="SearchViewMy" parent="Widget.AppCompat.Light.SearchView">
-        <item name="searchIcon">@null</item>
+        <item name="tint">@color/white</item>
     </style>
 
     <style name="PublishDialog">

@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import com.beva.bornmeme.R
 
 class PostsFragment : Fragment() {
-
+    //TODO: Instagram view
     companion object {
         fun newInstance() = PostsFragment()
     }

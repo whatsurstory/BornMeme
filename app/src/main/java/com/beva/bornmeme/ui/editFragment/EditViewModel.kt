@@ -25,7 +25,6 @@ import java.util.*
 
 class EditViewModel : ViewModel() {
 
-
     fun mergeBitmap(
         firstImage: Bitmap,
         secondImage: Bitmap,
@@ -55,29 +54,6 @@ class EditViewModel : ViewModel() {
         )
         return Uri.parse(path)
     }
-
-    //Put the bitmap into local gallery
-//    private fun merge(view: View) {
-//        val contentValues = ContentValues()
-//        contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, System.currentTimeMillis())
-//        contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-//        val uri =
-//            activity?.contentResolver?.insert(
-//                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-//                contentValues
-//            )
-//        Log.d("uri","$uri")
-//        Log.d("contentValues" , "$contentValues")
-//        uri?.apply {
-//            val ops = activity?.contentResolver?.openOutputStream(this)
-//            mergeBitmap(
-//                bgBitmap,
-//                binding.upperText.drawingCache,
-//                binding.bottomText.drawingCache
-//            )?.compress(Bitmap.CompressFormat.JPEG, 100, ops)
-//            ops?.close()
-//        }
-//    }
 
     fun getNewPost(uri: Uri, res: List<Any>) {
         val fireStore = FirebaseFirestore.getInstance().collection("Posts")

@@ -29,7 +29,7 @@
 
 <!-- app:contentInsetLeft="0dp"
       app:contentInsetStart="0dp"        -->
-
+<!--this is the perfect width for toolbar-->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -40,22 +40,30 @@
                     android:layout_height="wrap_content"
                     app:iconifiedByDefault="false"
                     android:gravity="center"
+                    android:backgroundTint="@color/rice"
+                    app:queryHint="Searching"
+                    android:pointerIcon="vertical_text"
+                    app:searchIcon="@drawable/ic_baseline_self_improvement_24"
                     android:background="@drawable/search_corner"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/sort_btn"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"/>
 
-<!--                <ImageView-->
-<!--                    android:id="@+id/sort_btn"-->
-<!--                    android:layout_width="30dp"-->
-<!--                    android:layout_height="0dp"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:src="@drawable/icons8_sort_36___"-->
-<!--                    app:layout_constraintBottom_toBottomOf="@+id/search_bar"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintStart_toEndOf="@+id/search_bar"-->
-<!--                    app:layout_constraintTop_toTopOf="@+id/search_bar" />-->
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/sort_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    app:srcCompat="@drawable/icons8_sort_36___"
+                    android:scaleType="centerCrop"
+                    android:tint="@color/light_orange_pink"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/search_bar"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/search_bar"
+                    app:layout_constraintTop_toTopOf="@+id/search_bar" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.appcompat.widget.Toolbar>
 

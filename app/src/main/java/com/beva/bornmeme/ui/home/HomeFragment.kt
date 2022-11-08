@@ -20,7 +20,6 @@ import timber.log.Timber
 
 
 class HomeFragment : Fragment() {
-
     private lateinit var viewModel: HomeViewModel
     private lateinit var binding: FragmentHomeBinding
     private lateinit var adapter: HomeAdapter

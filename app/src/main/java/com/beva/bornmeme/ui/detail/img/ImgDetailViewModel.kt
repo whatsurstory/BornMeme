@@ -16,41 +16,25 @@ class ImgDetailViewModel : ViewModel() {
 
 data class UiState (
     val onClickToReply: () -> Unit,
-    val onClickToLike: (userId: String) -> Unit,
-    val onClickToDislike: (userId: String) -> Unit,
+    val onClickToLike: (comment: CommentCell.ParentComment) -> Unit,
+    val onClickToDislike: (comment: CommentCell.ParentComment) -> Unit,
     val onClickToSeeMore: (comment: CommentCell.ParentComment) -> Unit,
-    val onClickToBack: (commentId: String)->Unit
+    val onClickToBack: (commentId: String)-> Unit
 
 )
     val liveData = MutableLiveData<List<Comment>>()
-    val db = Firebase.firestore.collection("Comments")
 
     val uiState = UiState(
         {
-
-        },
-        { userId ->
-
-        },
-        { userId ->
-            Timber.d("Do I Touch the like button?")
-            Firebase.firestore.collection("Comments")
-                .whereEqualTo("userId", userId)
-                .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-                    Timber.d("check Data $userId")
-                    firebaseFirestoreException?.let {
-                        Timber.w("[${this::class.simpleName}] Error getting documents. ${it.message}")
-                    }
-
-                    for (document in querySnapshot!!) {
-                        Timber.d("check data  ${document.id} => ${document.data}")
-
-                    }
-                }
-
+            //TODO:navigate to comment dialog
         },
         { comment ->
-            Timber.d("uiState 3")
+            //TODO:saving userId render the view of like
+        },
+        { comment ->
+            //TODO:saving userId render the view of dislike
+        },
+        { comment ->
             val children = liveData.value?.filter {
                 it.parentId == comment.parent.commentId
             }
@@ -66,7 +50,7 @@ data class UiState (
                 }
             }
             commentCells.value = commentCells.value
-
+            comment.hasChild = false
         },
         { parentId ->
             //using filter: let the element condition which is fit to display
@@ -81,24 +65,7 @@ data class UiState (
     val commentCells = MutableLiveData<MutableList<CommentCell>>(mutableListOf())
 
     fun initCells(comments: List<Comment>) {
-        val children = comments.filter { !it.parentId.isNullOrEmpty() }
-        val parents = comments.filter { it.parentId.isNullOrEmpty() }
-        val cells = mutableListOf<CommentCell>()
-        for (item in parents) {
-            val parent = CommentCell.ParentComment(item)
-            cells.add(parent)
-            Timber.d("Check viewModel $cells")
-            //here is query all comments
-            val subComments = comments.filter { it.parentId == item.commentId }
-            parent.hasChild = subComments.isNotEmpty()
-//                for (childItem in children){
-//                    val child = CommentCell.ChildComment(childItem)
-//                    if (childItem.parentId == parent.id){
-//                        cells.add(child)
-//                    }
-//                }
-        }
-        commentCells.value = cells
+//using condition classify comments cell is parent or not
 //        for (item in it) {
 //            if (item.parentId.isEmpty()) {
 //                val parent = CommentCell.ParentComment(item)
@@ -110,6 +77,27 @@ data class UiState (
 //                Timber.d("child cells $cells")
 //                }
 //            }
+//using the filter to classify
+//        val children = comments.filter { !it.parentId.isNullOrEmpty() }
+        val parents = comments.filter { it.parentId.isNullOrEmpty() }
+        val cells = mutableListOf<CommentCell>()
+        for (item in parents) {
+            val parent = CommentCell.ParentComment(item)
+            cells.add(parent)
+            Timber.d("Check viewModel $cells")
+
+            //we get the comments has parent or not from here
+            val subComments = comments.filter { it.parentId == item.commentId }
+            parent.hasChild = subComments.isNotEmpty()
+//                for (childItem in children){
+//                    val child = CommentCell.ChildComment(childItem)
+//                    if (childItem.parentId == parent.id){
+//                        cells.add(child)
+//                    }
+//                }
+        }
+        commentCells.value = cells
+
             }
 
     fun getComments(postId: String): MutableLiveData<List<Comment>> {

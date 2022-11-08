@@ -35,7 +35,7 @@ import timber.log.Timber
 
 
 class EditFragment : Fragment() {
-
+//TODO: REPOSITORY to be complete
     private lateinit var binding: FragmentEditFixmodeBinding
     private lateinit var uri: Uri
     private lateinit var upperText: EditText

@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import com.beva.bornmeme.R
 
 class CollectionFragment : Fragment() {
-
+    //TODO: single recycle onClick to folder detail
     companion object {
         fun newInstance() = CollectionFragment()
     }
