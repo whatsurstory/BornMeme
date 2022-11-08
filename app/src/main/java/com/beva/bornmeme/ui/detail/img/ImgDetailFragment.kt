@@ -1,6 +1,8 @@
 package com.beva.bornmeme.ui.detail.img
 
 
+import android.annotation.SuppressLint
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,6 +19,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterInside
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import timber.log.Timber
+import java.util.Comparator
 
 class ImgDetailFragment : Fragment() {
 
@@ -56,6 +59,7 @@ class ImgDetailFragment : Fragment() {
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -63,15 +67,22 @@ class ImgDetailFragment : Fragment() {
     ): View? {
         viewModel = ImgDetailViewModel()
         viewModel.getComments(post.id)
-        val adapter = CommentAdapter()
-        binding.commentsRecycler.adapter =CommentAdapter()
+        val adapter = CommentAdapter(viewModel.uiState)
+        binding.commentsRecycler.adapter = adapter
         viewModel.commentCells.observe(viewLifecycleOwner, Observer {
             it?.let {
                 Timber.d(("Observe comment cell : $it"))
                 adapter.submitList(it)
+                adapter.notifyDataSetChanged()
             }
         })
 
+        viewModel.liveData.observe(viewLifecycleOwner) {
+            it?.let {
+                Timber.d(("Observe liveData : $it"))
+                viewModel.initCells(it)
+            }
+        }
 
         binding.imgDetailUserImg.setOnClickListener {
             findNavController().navigate(MobileNavigationDirections.navigateToUserDetailFragment())
