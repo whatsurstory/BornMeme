@@ -43,7 +43,6 @@ class HomeFragment : Fragment() {
             setHasFixedSize(true)
         }
 
-
         adapter = HomeAdapter(
             HomeAdapter.OnClickListener {
                 viewModel.navigateToDetail(it)
@@ -62,7 +61,6 @@ class HomeFragment : Fragment() {
         viewModel.navigateToDetail.observe(
             viewLifecycleOwner,
             Observer {
-                Timber.i("viewModel.navigateToDetail.observe, it=$it")
                 it?.let {
                     findNavController().navigate(MobileNavigationDirections.navigateToImgDetailFragment(it))
                     viewModel.onDetailNavigated()

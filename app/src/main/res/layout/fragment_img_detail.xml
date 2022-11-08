@@ -151,12 +151,12 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/comments_recycler"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_width="wr"
             android:layout_marginTop="8dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_detail_comment_parent"
             app:layout_constraintTop_toBottomOf="@id/img_detail_line"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
         </androidx.recyclerview.widget.RecyclerView>

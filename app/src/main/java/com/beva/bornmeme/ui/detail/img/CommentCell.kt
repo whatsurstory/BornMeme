@@ -1,16 +1,16 @@
 package com.beva.bornmeme.ui.detail.img
 
-import com.beva.bornmeme.model.Comments
+import com.beva.bornmeme.model.Comment
 
 sealed class CommentCell{
 
     abstract val id:String
 
-    data class ParentComment(val parent: Comments) : CommentCell() {
+    data class ParentComment(val parent: Comment) : CommentCell() {
         override val id: String
             get() = parent.commentId
     }
-    data class ChildComment(val child: Comments) : CommentCell() {
+    data class ChildComment(val child: Comment) : CommentCell() {
         override val id: String
             get() = child.commentId
     }

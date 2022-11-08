@@ -158,7 +158,7 @@ class EditFragment : Fragment() {
     }
 
     private fun getLayoutPrams() {
-        //TODO: Fixed the Text Size not same
+
         val options = BitmapFactory.Options()
         options.inJustDecodeBounds = true
 

@@ -8,11 +8,11 @@ import kotlinx.parcelize.Parcelize
 import java.util.*
 
 @Parcelize
-data class Comments(
+data class Comment(
     val commentId: String = "",
     val userId: String = "",
     val postId: String = "",
-    var time: Long? = null,
+    var time: Timestamp? = null,
     val content: String = "",
     val like: List<String> = emptyList(),
     val dislike: List<String> = emptyList(),

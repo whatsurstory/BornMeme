@@ -7,13 +7,12 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.beva.bornmeme.databinding.ItemDetailCommentChildBinding
 import com.beva.bornmeme.databinding.ItemDetailCommentParentBinding
-import com.beva.bornmeme.model.Comments
-import java.sql.Date
+import com.beva.bornmeme.model.Comment
 
 class CommentAdapter: ListAdapter<CommentCell, RecyclerView.ViewHolder>(DiffCallback) {
 
     class ParentViewHolder(private var binding: ItemDetailCommentParentBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Comments) {
+        fun bind(item: CommentCell.ParentComment) {
             binding.commentLikeBtn.setOnClickListener {
                 //回傳點擊的userId
             }
@@ -23,11 +22,9 @@ class CommentAdapter: ListAdapter<CommentCell, RecyclerView.ViewHolder>(DiffCall
             binding.seeMoreBtn.setOnClickListener {
                 //call 有parentID的comment
             }
-            binding.commentLikeNum.text = item.like.size.toString()
-            binding.commentTime.text = Date(item.time!!).toString()
-
-            binding.commentZoneText.text = item.content
-            binding.commentDislikeNum.text = item.dislike.size.toString()
+            binding.commentLikeNum.text = item.parent.like.size.toString()
+            binding.commentZoneText.text = item.parent.content
+            binding.commentDislikeNum.text = item.parent.dislike.size.toString()
 
             binding.commentUserImg //Glide
             binding.commentUserName//
@@ -37,19 +34,19 @@ class CommentAdapter: ListAdapter<CommentCell, RecyclerView.ViewHolder>(DiffCall
 
     class ChildViewHolder(private var binding: ItemDetailCommentChildBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Comments) {
+        fun bind(item: CommentCell.ChildComment) {
             binding.childDislikeBtn.setOnClickListener {
                 //回傳點擊的userId
             }
             binding.childLikeBtn.setOnClickListener {
                 //回傳點擊的userId
             }
-            binding.childDislikeNum.text = item.dislike.size.toString()
-            binding.childLikeNum.text = item.like.size.toString()
+            binding.childDislikeNum.text = item.child.dislike.size.toString()
+            binding.childLikeNum.text = item.child.like.size.toString()
+            binding.childZoneText.text = item.child.content
+
             binding.childUserImg
             binding.childUserName
-            binding.childZoneText.text = item.content
-            binding.childTime.text = Date(item.time!!).toString()
         }
     }
 
@@ -59,7 +56,7 @@ class CommentAdapter: ListAdapter<CommentCell, RecyclerView.ViewHolder>(DiffCall
             return oldItem === newItem
         }
         override fun areContentsTheSame(oldItem: CommentCell, newItem: CommentCell): Boolean {
-            return oldItem.id == newItem.id
+            return oldItem == newItem
         }
 
         private const val ITEM_VIEW_TYPE_PARENT = 0x00
@@ -90,10 +87,12 @@ class CommentAdapter: ListAdapter<CommentCell, RecyclerView.ViewHolder>(DiffCall
 
         when (holder) {
             is ParentViewHolder -> {
-                holder.bind((getItem(position) as CommentCell.ParentComment).parent)
+                val data = getItem(position) as CommentCell.ParentComment
+                holder.bind(data)
             }
             is ChildViewHolder -> {
-                holder.bind((getItem(position) as CommentCell.ChildComment).child)
+                val data = getItem(position) as CommentCell.ChildComment
+                holder.bind(data)
             }
         }
     }

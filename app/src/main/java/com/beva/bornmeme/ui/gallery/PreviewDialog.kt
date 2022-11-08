@@ -39,9 +39,6 @@ class PreviewDialog : AppCompatDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val galleryViewModel =
-            ViewModelProvider(this).get(GalleryViewModel::class.java)
-
         binding = DialogPreviewBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.dialog = this

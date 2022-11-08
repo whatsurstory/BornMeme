@@ -2,11 +2,11 @@ package com.beva.bornmeme.ui.detail.img
 
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
@@ -15,9 +15,7 @@ import com.beva.bornmeme.model.Post
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterInside
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.load.resource.bitmap.TransformationUtils.circleCrop
 import com.bumptech.glide.request.RequestOptions
-import com.google.android.material.imageview.ShapeableImageView
 import timber.log.Timber
 
 class ImgDetailFragment : Fragment() {
@@ -64,8 +62,16 @@ class ImgDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewModel = ImgDetailViewModel()
+        viewModel.getComments(post.id)
         val adapter = CommentAdapter()
         binding.commentsRecycler.adapter =CommentAdapter()
+        viewModel.commentCells.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                Timber.d(("Observe comment cell : $it"))
+                adapter.submitList(it)
+            }
+        })
+
 
         binding.imgDetailUserImg.setOnClickListener {
             findNavController().navigate(MobileNavigationDirections.navigateToUserDetailFragment())

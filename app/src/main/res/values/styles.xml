@@ -28,4 +28,9 @@
         <item name="android:windowBackground">@color/transparent</item>
     </style>
 
+    <style name="circle" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
 </resources>
