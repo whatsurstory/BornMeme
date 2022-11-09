@@ -1,4 +1,4 @@
-package com.beva.bornmeme.ui.detail.user.fragments
+package com.beva.bornmeme.ui.detail.user.fragments.favorite
 
 import androidx.lifecycle.ViewModel
 

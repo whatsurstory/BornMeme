@@ -1,4 +1,4 @@
-package com.beva.bornmeme.ui.detail.user.fragments
+package com.beva.bornmeme.ui.detail.user.fragments.favorite
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -8,24 +8,24 @@ import android.view.View
 import android.view.ViewGroup
 import com.beva.bornmeme.R
 
-class CollectionFragment : Fragment() {
-    //TODO: single recycle onClick to folder detail
+class FavoriteFragment : Fragment() {
+    //TODO: Instagram view
     companion object {
-        fun newInstance() = CollectionFragment()
+        fun newInstance() = FavoriteFragment()
     }
 
-    private lateinit var viewModel: CollectionViewModel
+    private lateinit var viewModel: FavoriteViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_collection, container, false)
+        return inflater.inflate(R.layout.fragment_favorite, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(CollectionViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(FavoriteViewModel::class.java)
         // TODO: Use the ViewModel
     }
 

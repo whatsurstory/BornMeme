@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.detail.user.fragments.FavoriteFragment">
+    tools:context=".ui.detail.user.fragments.favorite.FavoriteFragment">
 
     <ImageButton
         android:id="@+id/favorite_sort_btn"

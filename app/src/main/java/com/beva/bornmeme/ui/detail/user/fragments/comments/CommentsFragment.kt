@@ -1,4 +1,4 @@
-package com.beva.bornmeme.ui.detail.user.fragments
+package com.beva.bornmeme.ui.detail.user.fragments.comments
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -8,24 +8,24 @@ import android.view.View
 import android.view.ViewGroup
 import com.beva.bornmeme.R
 
-class PostsFragment : Fragment() {
-    //TODO: Instagram view
+class CommentsFragment : Fragment() {
+    //TODO: Single Recycler onClick to "the post" view
     companion object {
-        fun newInstance() = PostsFragment()
+        fun newInstance() = CommentsFragment()
     }
 
-    private lateinit var viewModel: PostsViewModel
+    private lateinit var viewModel: CommentsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_posts, container, false)
+        return inflater.inflate(R.layout.fragment_comments, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(PostsViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(CommentsViewModel::class.java)
         // TODO: Use the ViewModel
     }
 

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.detail.user.fragments.CollectionFragment"
+    tools:context=".ui.detail.user.fragments.collection.CollectionFragment"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <ImageButton
         android:id="@+id/collection_sort_btn"

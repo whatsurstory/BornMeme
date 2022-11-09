@@ -1,4 +1,4 @@
-package com.beva.bornmeme.ui.detail.user.fragments
+package com.beva.bornmeme.ui.detail.user.fragments.collection
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -8,24 +8,24 @@ import android.view.View
 import android.view.ViewGroup
 import com.beva.bornmeme.R
 
-class CommentsFragment : Fragment() {
-    //TODO: Single Recycler onClick to "the post" view
+class CollectionFragment : Fragment() {
+    //TODO: single recycle onClick to folder detail
     companion object {
-        fun newInstance() = CommentsFragment()
+        fun newInstance() = CollectionFragment()
     }
 
-    private lateinit var viewModel: CommentsViewModel
+    private lateinit var viewModel: CollectionViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_comments, container, false)
+        return inflater.inflate(R.layout.fragment_collection, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(CommentsViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(CollectionViewModel::class.java)
         // TODO: Use the ViewModel
     }
 

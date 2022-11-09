@@ -1,11 +1,13 @@
 package com.beva.bornmeme.ui.detail.user
 
+import android.annotation.SuppressLint
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.beva.bornmeme.ui.detail.user.fragments.CollectionFragment
-import com.beva.bornmeme.ui.detail.user.fragments.CommentsFragment
-import com.beva.bornmeme.ui.detail.user.fragments.FavoriteFragment
-import com.beva.bornmeme.ui.detail.user.fragments.PostsFragment
+import com.beva.bornmeme.model.User
+import com.beva.bornmeme.ui.detail.user.fragments.collection.CollectionFragment
+import com.beva.bornmeme.ui.detail.user.fragments.comments.CommentsFragment
+import com.beva.bornmeme.ui.detail.user.fragments.favorite.FavoriteFragment
+import com.beva.bornmeme.ui.detail.user.fragments.posts.PostsFragment
 
 class TabViewPagerAdapter(fragment: Fragment): FragmentStateAdapter(fragment) {
 
