@@ -1,5 +1,6 @@
 package com.beva.bornmeme.ui.detail.img
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import timber.log.Timber
 class CommentAdapter(private val uiState: ImgDetailViewModel.UiState): ListAdapter<CommentCell, RecyclerView.ViewHolder>(DiffCallback) {
 
     class ParentViewHolder(private var binding: ItemDetailCommentParentBinding) : RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
         fun bind(item: CommentCell.ParentComment, uiState: ImgDetailViewModel.UiState) {
             if (item.hasChild) {
                 binding.seeMoreBtn.visibility = View.VISIBLE
@@ -46,11 +48,21 @@ class CommentAdapter(private val uiState: ImgDetailViewModel.UiState): ListAdapt
             binding.commentDislikeNum.text = item.parent.dislike.size.toString()
             binding.commentUserName.text = item.parent.userId
             //TODO: user data need query to show the image and name
+            val timeString = item.parent.time?.toDate()?.toString()
+            val commentTime = item.parent.time?.toDate()?.time
+            val currentTime = System.currentTimeMillis()
+            val seconds = (currentTime - commentTime!!)/1000
+            val minutes = seconds / 60
+            val hour = minutes / 60
+            val day = hour / 24
+            Timber.d("秒 $seconds 分 $minutes 時 $hour 天 $day")
+            binding.commentTime.text = "$day days ago"
         }
     }
 
     class ChildViewHolder(private var binding: ItemDetailCommentChildBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
         fun bind(item: CommentCell.ChildComment, uiState: ImgDetailViewModel.UiState) {
 
             Timber.d("ChildViewHolder $adapterPosition")
@@ -65,6 +77,16 @@ class CommentAdapter(private val uiState: ImgDetailViewModel.UiState): ListAdapt
             binding.childZoneText.text = item.child.content
             binding.childUserName.text = item.child.userId
             //TODO: user data need query to show the image and name
+            //error handle: the time need checking day or hours or minute
+            val timeString = item.child.time?.toDate()?.toString()
+            val commentTime = item.child.time?.toDate()?.time
+            val currentTime = System.currentTimeMillis()
+            val seconds = (currentTime - commentTime!!)/1000
+            val minutes = seconds / 60
+            val hour = minutes / 60
+            val day = hour / 24
+            Timber.d("秒 $seconds 分 $minutes 時 $hour 天 $day")
+            binding.childTime.text = "$day days ago"
         }
     }
 

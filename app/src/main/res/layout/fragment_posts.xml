@@ -8,15 +8,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <ImageButton
         android:id="@+id/post_sort_btn"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_width="30dp"
         android:layout_margin="8dp"
-        android:scaleType="centerCrop"
+        android:scaleType="center"
         android:src="@drawable/ic_baseline_sort_24"
-        android:background="@color/whit_alpha"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/post_recycler"/>
+        app:layout_constraintBottom_toTopOf="@id/post_recycler"
+        android:background="@color/rice"
+        app:tint="@color/dark_blue"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/post_recycler"

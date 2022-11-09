@@ -22,8 +22,13 @@ import com.google.firebase.storage.FirebaseStorage
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.util.*
-
+enum class WHO(val value: String) {
+    BEVA("cNXUG5FShzYesEOltXUZ"),
+    MINDY("uPpAnxXzhoj37e6uIG84")
+}
 class EditViewModel : ViewModel() {
+
+
 
     fun mergeBitmap(
         firstImage: Bitmap,
@@ -57,8 +62,10 @@ class EditViewModel : ViewModel() {
 
     fun addNewPost(uri: Uri, res: List<Any>) {
         Timber.d("getNewPost")
-        val fireStore = FirebaseFirestore.getInstance().collection("Posts")
-        val document = fireStore.document()
+
+        val document = FirebaseFirestore.getInstance().collection("Posts").document()
+        val ownerId = FirebaseFirestore.getInstance()
+            .collection("Users").document("cNXUG5FShzYesEOltXUZ")
         val ref = FirebaseStorage.getInstance().reference
 
         ref.child("img_edited/" + document.id + ".jpg")
@@ -71,7 +78,7 @@ class EditViewModel : ViewModel() {
                     val post = hashMapOf(
                         "id" to document.id,
                         "photoId" to "photo_id",
-                        "ownerId" to "Beva9487",
+                        "ownerId" to ownerId,
                         "title" to "test title",
                         "catalog" to "test tag",
                         "like" to null,

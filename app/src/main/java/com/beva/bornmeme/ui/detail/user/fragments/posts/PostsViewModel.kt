@@ -18,7 +18,7 @@ class PostsViewModel : ViewModel() {
     private fun getData(): MutableLiveData<List<Post>> {
         val collection =FirebaseFirestore.getInstance().collection("Posts")
 
-        collection.whereEqualTo("ownerId", "beva9487")
+        collection.whereEqualTo("ownerId", "cNXUG5FShzYesEOltXUZ")
             .addSnapshotListener { snapshot, e ->
                 val list = mutableListOf<Post>()
                 for (document in snapshot!!){
@@ -28,17 +28,6 @@ class PostsViewModel : ViewModel() {
                 }
                 postData.value = list
             }
-//        collection.whereEqualTo("ownerId", "beva9487")
-//            .get()
-//            .addOnSuccessListener {
-//                for (id in it){
-//
-//                }
-//            }
-//            .addOnFailureListener {
-//                Timber.d("Error $it")
-//            }
-
-        return postData
+         return postData
     }
 }
