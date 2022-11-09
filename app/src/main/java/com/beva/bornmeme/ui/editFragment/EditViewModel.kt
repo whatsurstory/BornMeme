@@ -55,7 +55,8 @@ class EditViewModel : ViewModel() {
         return Uri.parse(path)
     }
 
-    fun getNewPost(uri: Uri, res: List<Any>) {
+    fun addNewPost(uri: Uri, res: List<Any>) {
+        Timber.d("getNewPost")
         val fireStore = FirebaseFirestore.getInstance().collection("Posts")
         val document = fireStore.document()
         val ref = FirebaseStorage.getInstance().reference

@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.beva.bornmeme.model.Post
 import com.beva.bornmeme.model.Resource
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import timber.log.Timber
 
 class HomeViewModel : ViewModel() {
@@ -29,6 +30,7 @@ class HomeViewModel : ViewModel() {
     private fun getData(): MutableLiveData<List<Post>> {
         val postData = FirebaseFirestore.getInstance()
             .collection("Posts")
+            .orderBy("createdTime", Query.Direction.DESCENDING)
         postData.addSnapshotListener { snapshot, exception ->
             Timber.d("You are in HomeViewModel")
 

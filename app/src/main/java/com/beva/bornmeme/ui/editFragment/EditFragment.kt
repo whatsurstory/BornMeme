@@ -1,28 +1,17 @@
 package com.beva.bornmeme.ui.editFragment
 
 
-import android.app.Activity
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.hardware.input.InputManager
 import android.net.Uri
 import android.os.Bundle
-import android.os.IBinder
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.collection.arrayMapOf
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -36,6 +25,7 @@ import timber.log.Timber
 
 class EditFragment : Fragment() {
 //TODO: REPOSITORY to be complete
+
     private lateinit var binding: FragmentEditFixmodeBinding
     private lateinit var uri: Uri
     private lateinit var upperText: EditText
@@ -67,6 +57,7 @@ class EditFragment : Fragment() {
 
         //to preview
         binding.previewBtn.setOnClickListener {
+            Timber.d("onClick Preview")
 
             if (upperText.text.isNullOrEmpty() || bottomText.text.isNullOrEmpty()){
 
@@ -98,7 +89,7 @@ class EditFragment : Fragment() {
 
         //to publish
         binding.publishBtn.setOnClickListener {
-
+            Timber.d("onClick publish")
             if (upperText.text.isNullOrEmpty() || bottomText.text.isNullOrEmpty()) {
             Snackbar.make(it, "Not Adding Text Yet", Snackbar.LENGTH_SHORT)
                 .setAction("Action", null).show()
@@ -136,8 +127,7 @@ class EditFragment : Fragment() {
                             val newUri = viewModel.getImageUri(activity?.application, publishBitmap)
                                 Timber.d("newUri => $newUri")
                             if (newUri != null) {
-                                viewModel.getNewPost(newUri, res)
-                                Timber.d("check upload type => ${viewModel.getNewPost(newUri, res)}")
+                                viewModel.addNewPost(newUri, res)
                             }
                             findNavController().navigate(MobileNavigationDirections.navigateToHomeFragment())
 
