@@ -18,12 +18,13 @@ class UserDetailFragment : Fragment() {
 
     lateinit var binding : FragmentUserDetailBinding
     lateinit var viewModel:UserDetailViewModel
+
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        val binding = FragmentUserDetailBinding.inflate(inflater, container, false)
+        binding = FragmentUserDetailBinding.inflate(inflater, container, false)
         viewModel = UserDetailViewModel()
         val adapter = TabViewPagerAdapter(this)
         binding.userViewpager.adapter = adapter
@@ -50,6 +51,7 @@ class UserDetailFragment : Fragment() {
     private fun updateUi(user: User) {
         Glide.with(binding.userDetailImg)
             .load(user.profilePhoto)
+            .centerCrop()
             .placeholder(R.drawable._50)
             .into(binding.userDetailImg)
         binding.userDetailName.text = user.userName

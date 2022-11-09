@@ -9,24 +9,24 @@ import android.view.ViewGroup
 import com.beva.bornmeme.R
 
 class CommentsFragment : Fragment() {
-    //TODO: Single Recycler onClick to "the post" view
-    companion object {
-        fun newInstance() = CommentsFragment()
-    }
-
-    private lateinit var viewModel: CommentsViewModel
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_comments, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(CommentsViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
+//    //TODO: Single Recycler onClick to "the post" view
+//    companion object {
+//        fun newInstance() = CommentsFragment()
+//    }
+//
+//    private lateinit var viewModel: CommentsViewModel
+//
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//        return inflater.inflate(R.layout.fragment_comments, container, false)
+//    }
+//
+//    override fun onActivityCreated(savedInstanceState: Bundle?) {
+//        super.onActivityCreated(savedInstanceState)
+//        viewModel = ViewModelProvider(this).get(CommentsViewModel::class.java)
+//        // TODO: Use the ViewModel
+//    }
 
 }
