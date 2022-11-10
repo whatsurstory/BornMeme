@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.beva.bornmeme.databinding.ItemDetailCommentChildBinding
 import com.beva.bornmeme.databinding.ItemDetailCommentParentBinding
+import com.google.common.base.Strings.isNullOrEmpty
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import timber.log.Timber
@@ -43,11 +44,19 @@ class CommentAdapter(private val uiState: ImgDetailViewModel.UiState): ListAdapt
             binding.commentDislikeBtn.setOnClickListener {
                 uiState.onClickToDislike(item)
             }
-            binding.commentLikeNum.text = item.parent.like.size.toString()
+            if (item.parent.like.isNullOrEmpty()){
+                binding.commentLikeNum.text = "0"
+            } else {
+                binding.commentLikeNum.text = item.parent.like.size.toString()
+            }
+            if (item.parent.dislike.isNullOrEmpty()){
+                binding.commentDislikeNum.text = "0"
+            } else {
+                binding.commentDislikeNum.text = item.parent.dislike.size.toString()
+            }
+
             binding.commentZoneText.text = item.parent.content
-            binding.commentDislikeNum.text = item.parent.dislike.size.toString()
             binding.commentUserName.text = item.parent.userId
-            //TODO: user data need query to show the image and name
             val timeString = item.parent.time?.toDate()?.toString()
             val commentTime = item.parent.time?.toDate()?.time
             val currentTime = System.currentTimeMillis()
@@ -72,8 +81,16 @@ class CommentAdapter(private val uiState: ImgDetailViewModel.UiState): ListAdapt
             binding.childLikeBtn.setOnClickListener {
                 uiState.onClickToLike
             }
-            binding.childDislikeNum.text = item.child.dislike.size.toString()
-            binding.childLikeNum.text = item.child.like.size.toString()
+            if (item.child.like.isNullOrEmpty()) {
+                binding.childLikeNum.text = "0"
+            } else {
+                binding.childLikeNum.text = item.child.like.size.toString()
+            }
+            if (item.child.dislike.isNullOrEmpty()){
+                binding.childDislikeNum.text = "0"
+            } else {
+                binding.childDislikeNum.text = item.child.dislike.size.toString()
+            }
             binding.childZoneText.text = item.child.content
             binding.childUserName.text = item.child.userId
             //TODO: user data need query to show the image and name

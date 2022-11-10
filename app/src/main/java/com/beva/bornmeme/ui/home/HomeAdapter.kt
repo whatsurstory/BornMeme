@@ -41,7 +41,7 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import kotlin.math.roundToInt
 
-class HomeAdapter(private val onClickListener: OnClickListener ) : ListAdapter<Post, HomeAdapter.ViewHolder>(
+class HomeAdapter(private val onClickListener: OnClickListener) : ListAdapter<Post, HomeAdapter.ViewHolder>(
     DiffCallback
 ) {
     //TODO: MENU drawer (navigate), chipview(onClick to change view), sortbutton(to change...)
@@ -139,7 +139,6 @@ class HomeAdapter(private val onClickListener: OnClickListener ) : ListAdapter<P
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item =getItem(position)
-        holder.itemView.requestLayout()
         item?.let {
             holder.itemView.setOnClickListener {
                 onClickListener.onClick(item)
@@ -151,6 +150,4 @@ class HomeAdapter(private val onClickListener: OnClickListener ) : ListAdapter<P
     class OnClickListener(val clickListener: (item: Post) -> Unit) {
         fun onClick(item: Post) = clickListener(item)
     }
-
-
 }

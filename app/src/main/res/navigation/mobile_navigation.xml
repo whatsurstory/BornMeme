@@ -11,12 +11,6 @@
         android:name="com.beva.bornmeme.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home">
-<!--doesn't have to set arguments, when the navigation done
-the current fragment will call the user data to render the view
-        <argument-->
-<!--            android:name="photoKey"-->
-<!--            app:argType="android.graphics.Bitmap"-->
-<!--            app:nullable="true" />-->
     </fragment>
 
     <dialog
@@ -35,9 +29,9 @@ the current fragment will call the user data to render the view
         android:name="com.beva.bornmeme.ui.detail.dialog.PublishCommentDialog"
         android:label=""
         tools:layout="@layout/dialog_comment">
-<!--        <argument-->
-<!--            android:name="postId"-->
-<!--            app:argType="string" />-->
+        <argument
+            android:name="postId"
+            app:argType="string" />
     </dialog>
 
     <fragment

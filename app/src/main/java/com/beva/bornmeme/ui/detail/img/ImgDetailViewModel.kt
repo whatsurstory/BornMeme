@@ -58,6 +58,7 @@ data class UiState (
                 it is CommentCell.ParentComment
                         || (it is CommentCell.ChildComment && it.child.parentId != parentId)
             }?.toMutableList()
+
         }
     )
 

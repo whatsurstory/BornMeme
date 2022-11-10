@@ -52,7 +52,6 @@ class HomeFragment : Fragment() {
             HomeAdapter.OnClickListener {
                 viewModel.navigateToDetail(it)
             }
-
         )
         binding.recyclerHome.adapter = adapter
 

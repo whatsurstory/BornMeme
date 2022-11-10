@@ -6,27 +6,48 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
+import com.beva.bornmeme.databinding.FragmentFavoriteBinding
 
 class FavoriteFragment : Fragment() {
-    //TODO: Instagram view
-    companion object {
-        fun newInstance() = FavoriteFragment()
-    }
+
 
     private lateinit var viewModel: FavoriteViewModel
-
+    private lateinit var binding: FragmentFavoriteBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_favorite, container, false)
-    }
+        binding = FragmentFavoriteBinding.inflate(inflater,container,false)
+        viewModel = FavoriteViewModel()
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(FavoriteViewModel::class.java)
-        // TODO: Use the ViewModel
+        binding.favoriteRecycler.layoutManager = GridLayoutManager(context,3)
+        val adapter = FavoriteAdapter(
+            FavoriteAdapter.OnClickListener {
+                viewModel.navigateToDetail(it)
+            }
+        )
+        binding.favoriteRecycler.adapter = adapter
+
+        viewModel.likeData.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
+
+        viewModel.navigateToDetail.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    findNavController().navigate(MobileNavigationDirections.navigateToImgDetailFragment(it))
+                    viewModel.onDetailNavigated()
+                }
+            }
+        )
+
+        return binding.root
     }
 
 }

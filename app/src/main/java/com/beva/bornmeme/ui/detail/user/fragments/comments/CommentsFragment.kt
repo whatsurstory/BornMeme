@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentCommentsBinding
-import com.beva.bornmeme.ui.detail.user.fragments.posts.PostAdapter
+
 
 class CommentsFragment : Fragment() {
 

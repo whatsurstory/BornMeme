@@ -57,4 +57,4 @@ class HomeViewModel : ViewModel() {
         _navigateToDetail.value = null
     }
 
-    }
+}
