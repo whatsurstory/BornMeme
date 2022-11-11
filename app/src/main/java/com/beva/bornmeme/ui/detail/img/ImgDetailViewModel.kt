@@ -1,5 +1,6 @@
 package com.beva.bornmeme.ui.detail.img
 
+import androidx.collection.arrayMapOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -164,7 +165,7 @@ data class UiState (
     fun onDetailNavigated() {
         _navigate2Comment.value = null
     }
-    
+
     fun doneCollection(postId: String){
         Firebase.firestore.collection("Posts")
             .document(postId)
@@ -178,24 +179,35 @@ data class UiState (
 
 
 
-    fun onClickCollection(title:String, postId: String) {
-        Timber.d("into function")
-        val db = Firebase.firestore
+    fun onClickCollection(title:String, postId: String, url: String) {
+        val ref = Firebase.firestore
             .collection("Users")
             .document("cNXUG5FShzYesEOltXUZ")
-            .collection("Folders").document(title)
-        val id = db.id
-            db.set(
-                hashMapOf(
-                    "FolderTitle" to id,
-                    "createdTime" to Timestamp.now()
+            .collection("Folders")
+            .document(title)
+
+        Firebase.firestore.runTransaction { transaction ->
+            val snapshot = transaction.get(ref)
+            val list = arrayMapOf("id" to postId, "url" to url)
+            Timber.d("snapshot ??? $snapshot")
+            if (snapshot.data != null) {
+                Timber.d("snapshot.data != null")
+                transaction.update(ref,
+                    "posts", FieldValue.arrayUnion(list))
+            } else {
+                Timber.d("snapshot.data == null")
+                transaction.set(ref, hashMapOf(
+                    "name" to ref.id,
+                    "createTime" to Timestamp.now(),
+                    "posts" to FieldValue.arrayUnion(list))
                 )
-            ).addOnSuccessListener {
-                Timber.d("Success to adding")
-            }.addOnFailureListener {
-                Timber.d("ERROR ${it.message}")
             }
-        db.update("postId",FieldValue.arrayUnion(postId))
+        }.addOnSuccessListener {
+            Timber.d("Success to adding $ref")
+
+        }.addOnFailureListener {
+            Timber.d("ERROR ${it.message}")
+        }
     }
 
 

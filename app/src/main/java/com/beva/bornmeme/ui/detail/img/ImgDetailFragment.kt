@@ -2,9 +2,13 @@ package com.beva.bornmeme.ui.detail.img
 
 
 import android.annotation.SuppressLint
+import android.content.ContentResolver
 import android.content.DialogInterface
+import android.content.Intent
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +16,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.FrameLayout
+import android.widget.MediaController
 import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
 import androidx.lifecycle.Observer
@@ -128,13 +133,13 @@ class ImgDetailFragment : Fragment() {
             layout.setPaddingRelative(45,15,45,0)
             layout.addView(edittext)
             alert.setView(layout)
-            alert.setTitle("WEWEWEEEE~~~")
+            alert.setTitle("Name your Folder")
 
             alert.setPositiveButton("SAVE",
                 DialogInterface.OnClickListener { dialog, which ->
                 run {
                     val title = edittext.text.toString()
-                    viewModel.onClickCollection(title, post.id)
+                    viewModel.onClickCollection(title, post.id, post.url.toString())
                     viewModel.doneCollection(post.id)
                 }
             })
@@ -142,6 +147,18 @@ class ImgDetailFragment : Fragment() {
             ) { _, _ ->
             }
             alert.show()
+        }
+
+        binding.shareBtn.setOnClickListener {
+            val bitmapDrawable = binding.imgDetailImage.drawable as BitmapDrawable
+            val bitmap = bitmapDrawable.bitmap
+            val bitmapPath = MediaStore.Images.Media.insertImage(requireContext().contentResolver, bitmap, "",null)
+            val bitmapUri = Uri.parse(bitmapPath)
+
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.type = "image/*"
+            intent.putExtra(Intent.EXTRA_STREAM, bitmapUri)
+            startActivity(Intent.createChooser(intent, ""))
         }
 
 

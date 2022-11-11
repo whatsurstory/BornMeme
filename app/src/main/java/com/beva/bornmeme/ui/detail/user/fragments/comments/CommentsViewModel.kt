@@ -17,7 +17,8 @@ class CommentsViewModel : ViewModel() {
 
     //Post All Photo in Fragment
     private fun getData(): MutableLiveData<List<Comment>> {
-        val collection = FirebaseFirestore.getInstance().collection("Comments")
+        val collection = FirebaseFirestore.getInstance()
+            .collection("Comments")
 
         collection.whereEqualTo("userId", "cNXUG5FShzYesEOltXUZ")
             .addSnapshotListener { snapshot, e ->

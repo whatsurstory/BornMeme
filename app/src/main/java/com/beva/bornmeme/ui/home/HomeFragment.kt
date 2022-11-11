@@ -44,7 +44,6 @@ class HomeFragment : Fragment() {
 //                .apply {
 //                 gapStrategy = GAP_HANDLING_NONE
 //            }
-            itemAnimator = null
             setHasFixedSize(false)
         }
 

@@ -59,7 +59,7 @@
         tools:layout="@layout/fragment_img_detail">
         <argument
             android:name="postKey"
-            app:argType="com.beva.bornmeme.model.Post" />
+            app:argType="com.beva.bornmeme.model.Post"/>
     </fragment>
 
     <fragment
