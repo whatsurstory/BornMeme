@@ -9,9 +9,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.beva.bornmeme.databinding.ItemDetailCommentChildBinding
 import com.beva.bornmeme.databinding.ItemDetailCommentParentBinding
-import com.google.common.base.Strings.isNullOrEmpty
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import timber.log.Timber
 
 class CommentAdapter(private val uiState: ImgDetailViewModel.UiState): ListAdapter<CommentCell, RecyclerView.ViewHolder>(DiffCallback) {
@@ -36,29 +33,30 @@ class CommentAdapter(private val uiState: ImgDetailViewModel.UiState): ListAdapt
             }
 
             binding.replyBtn.setOnClickListener {
-                uiState.onClickToReply()
+                uiState.onClickToReply(item)
+                Timber.d("Observe replybtn ${item.comment.commentId}")
             }
             binding.commentLikeBtn.setOnClickListener {
-                uiState.onClickToLike(item)
+                uiState.onClickToLike(item.comment.commentId)
             }
             binding.commentDislikeBtn.setOnClickListener {
-                uiState.onClickToDislike(item)
+                uiState.onClickToDislike(item.comment.commentId)
             }
-            if (item.parent.like.isNullOrEmpty()){
+            if (item.comment.like.isNullOrEmpty()){
                 binding.commentLikeNum.text = "0"
             } else {
-                binding.commentLikeNum.text = item.parent.like.size.toString()
+                binding.commentLikeNum.text = item.comment.like.size.toString()
             }
-            if (item.parent.dislike.isNullOrEmpty()){
+            if (item.comment.dislike.isNullOrEmpty()){
                 binding.commentDislikeNum.text = "0"
             } else {
-                binding.commentDislikeNum.text = item.parent.dislike.size.toString()
+                binding.commentDislikeNum.text = item.comment.dislike.size.toString()
             }
 
-            binding.commentZoneText.text = item.parent.content
-            binding.commentUserName.text = item.parent.userId
-            val timeString = item.parent.time?.toDate()?.toString()
-            val commentTime = item.parent.time?.toDate()?.time
+            binding.commentZoneText.text = item.comment.content
+            binding.commentUserName.text = item.comment.userId
+            val timeString = item.comment.time?.toDate()?.toString()
+            val commentTime = item.comment.time?.toDate()?.time
             val currentTime = System.currentTimeMillis()
             val seconds = (currentTime - commentTime!!)/1000
             val minutes = seconds / 60
@@ -76,27 +74,27 @@ class CommentAdapter(private val uiState: ImgDetailViewModel.UiState): ListAdapt
 
             Timber.d("ChildViewHolder $adapterPosition")
             binding.childDislikeBtn.setOnClickListener {
-                uiState.onClickToDislike
+                uiState.onClickToDislike(item.comment.commentId)
             }
             binding.childLikeBtn.setOnClickListener {
-                uiState.onClickToLike
+                uiState.onClickToLike(item.comment.commentId)
             }
-            if (item.child.like.isNullOrEmpty()) {
+            if (item.comment.like.isNullOrEmpty()) {
                 binding.childLikeNum.text = "0"
             } else {
-                binding.childLikeNum.text = item.child.like.size.toString()
+                binding.childLikeNum.text = item.comment.like.size.toString()
             }
-            if (item.child.dislike.isNullOrEmpty()){
+            if (item.comment.dislike.isNullOrEmpty()){
                 binding.childDislikeNum.text = "0"
             } else {
-                binding.childDislikeNum.text = item.child.dislike.size.toString()
+                binding.childDislikeNum.text = item.comment.dislike.size.toString()
             }
-            binding.childZoneText.text = item.child.content
-            binding.childUserName.text = item.child.userId
+            binding.childZoneText.text = item.comment.content
+            binding.childUserName.text = item.comment.userId
             //TODO: user data need query to show the image and name
             //error handle: the time need checking day or hours or minute
-            val timeString = item.child.time?.toDate()?.toString()
-            val commentTime = item.child.time?.toDate()?.time
+            val timeString = item.comment.time?.toDate()?.toString()
+            val commentTime = item.comment.time?.toDate()?.time
             val currentTime = System.currentTimeMillis()
             val seconds = (currentTime - commentTime!!)/1000
             val minutes = seconds / 60

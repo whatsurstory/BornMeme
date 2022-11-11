@@ -13,21 +13,22 @@ import java.util.*
 
 class PublishViewModel: ViewModel() {
 
-    fun publishComment(postId: String, binding: DialogCommentBinding) {
+    fun publishComment(postId: String,parentId:String, binding: DialogCommentBinding) {
         val fireStore = FirebaseFirestore.getInstance().collection("Comments")
+        val document = fireStore.document()
         val publish = hashMapOf(
-            "commentId" to fireStore.document().id,
+            "commentId" to document.id,
             "content" to binding.editPublishContent.text.toString(),
             "dislike" to null,
             "like" to null,
-            "parentId" to "",
+            "parentId" to parentId,
             "photoUrl" to "",
             "postId" to postId,
             "time" to Date(Calendar.getInstance().timeInMillis),
             "userId" to "cNXUG5FShzYesEOltXUZ"
         )
 
-        fireStore.document().set(publish).addOnSuccessListener {
+        document.set(publish).addOnSuccessListener {
             Timber.d("Publish Done")
             FirebaseFirestore.getInstance()
                 .collection("Posts").document(postId)

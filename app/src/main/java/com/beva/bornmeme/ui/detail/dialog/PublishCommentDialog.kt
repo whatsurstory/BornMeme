@@ -17,6 +17,7 @@ class PublishCommentDialog: AppCompatDialogFragment() {
     lateinit var binding: DialogCommentBinding
     lateinit var viewModel: PublishViewModel
     private lateinit var postId: String
+    private lateinit var parentId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,16 +34,18 @@ class PublishCommentDialog: AppCompatDialogFragment() {
         arguments?.let { bundle ->
             postId = bundle.getString("postId").toString()
             Timber.d("get postId from post $postId")
+            parentId = bundle.getString("parentId").toString()
+            Timber.d("get parentId from post $parentId")
         }
 
-        binding.buttonPublish.setOnClickListener() {
+        binding.buttonPublish.setOnClickListener {
 
             if (binding.editPublishContent.text.isNullOrEmpty()) {
                 Snackbar.make(it, "Not Adding Text Yet", Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show()
 
             } else {
-                viewModel.publishComment(postId, binding)
+                viewModel.publishComment(postId, parentId ,binding)
                 dismiss()
             }
         }

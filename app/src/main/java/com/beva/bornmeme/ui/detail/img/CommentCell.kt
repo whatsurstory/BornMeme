@@ -6,13 +6,13 @@ sealed class CommentCell{
 
     abstract val id:String
 
-    data class ParentComment(val parent: Comment) : CommentCell() {
+    data class ParentComment(val comment: Comment) : CommentCell() {
         override val id: String
-            get() = parent.commentId
+            get() = comment.commentId
             var hasChild = false
     }
-    data class ChildComment(val child: Comment) : CommentCell() {
+    data class ChildComment(val comment: Comment) : CommentCell() {
         override val id: String
-            get() = child.commentId
+            get() = comment.commentId
     }
 }

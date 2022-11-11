@@ -31,7 +31,14 @@
         tools:layout="@layout/dialog_comment">
         <argument
             android:name="postId"
-            app:argType="string" />
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="parentId"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="" />
     </dialog>
 
     <fragment

@@ -1,13 +1,14 @@
 package com.beva.bornmeme.ui.detail.img
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.beva.bornmeme.model.Comment
-import com.google.firebase.firestore.Query
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import org.checkerframework.checker.units.qual.C
 import timber.log.Timber
 
 
@@ -15,28 +16,63 @@ import timber.log.Timber
 class ImgDetailViewModel : ViewModel() {
 
 data class UiState (
-    val onClickToReply: () -> Unit,
-    val onClickToLike: (comment: CommentCell.ParentComment) -> Unit,
-    val onClickToDislike: (comment: CommentCell.ParentComment) -> Unit,
+    val onClickToReply: (comment:CommentCell.ParentComment) -> String,
+    val onClickToLike: (comment: String) -> Unit,
+    val onClickToDislike: (comment: String) -> Unit,
     val onClickToSeeMore: (comment: CommentCell.ParentComment) -> Unit,
     val onClickToBack: (commentId: String)-> Unit
 
 )
     val liveData = MutableLiveData<List<Comment>>()
 
+    private val _navigate2Comment = MutableLiveData<CommentCell.ParentComment>()
+    val navigate2Comment: LiveData<CommentCell.ParentComment>
+        get() = _navigate2Comment
+
     val uiState = UiState(
-        {
-            //TODO:navigate to comment dialog
+
+        onClickToReply = {
+            return@UiState navigate2Comment(it).toString()
         },
         { comment ->
-            //TODO:saving userId render the view of like
+            val collection =FirebaseFirestore.getInstance().collection("Comments")
+
+            collection.whereEqualTo("like", "cNXUG5FShzYesEOltXUZ")
+                .addSnapshotListener { snapshot, e ->
+                    Timber.d("wewewewewe $comment")
+                    collection.document(comment).update("dislike", FieldValue.arrayRemove("cNXUG5FShzYesEOltXUZ"))
+                        .addOnSuccessListener {
+                            collection.document(comment)
+                                .update("like", FieldValue.arrayUnion("cNXUG5FShzYesEOltXUZ"))
+                                .addOnSuccessListener {
+                                    Timber.d("Success add comment like $comment")
+                                }.addOnFailureListener {
+                                    Timber.d("Error ${it.message}")
+                                }
+                        }
+                }
         },
         { comment ->
-            //TODO:saving userId render the view of dislike
+            val collection =FirebaseFirestore.getInstance().collection("Comments")
+
+            collection.whereEqualTo("like", "cNXUG5FShzYesEOltXUZ")
+                .addSnapshotListener { snapshot, e ->
+                    Timber.d("wewewewewe $comment")
+                    collection.document(comment).update("like", FieldValue.arrayRemove("cNXUG5FShzYesEOltXUZ"))
+                        .addOnSuccessListener {
+                        collection.document(comment)
+                            .update("dislike", FieldValue.arrayUnion("cNXUG5FShzYesEOltXUZ"))
+                            .addOnSuccessListener {
+                                Timber.d("Success add comment dislike $comment")
+                            }.addOnFailureListener {
+                                Timber.d("Error ${it.message}")
+                            }
+                    }
+                }
         },
         { comment ->
             val children = liveData.value?.filter {
-                it.parentId == comment.parent.commentId
+                it.parentId == comment.comment.commentId
             }
 
             var index = commentCells.value?.indexOf(comment) ?: 0
@@ -56,7 +92,7 @@ data class UiState (
             //using filter: let the element condition which is fit to display
             commentCells.value = commentCells.value?.filter {
                 it is CommentCell.ParentComment
-                        || (it is CommentCell.ChildComment && it.child.parentId != parentId)
+                        || (it is CommentCell.ChildComment && it.comment.parentId != parentId)
             }?.toMutableList()
 
         }
@@ -120,6 +156,63 @@ data class UiState (
                 liveData.value = list
             }
         return liveData
+    }
+    private fun navigate2Comment(id: CommentCell.ParentComment) {
+        _navigate2Comment.value = id
+    }
+
+    fun onDetailNavigated() {
+        _navigate2Comment.value = null
+    }
+    
+    fun doneCollection(postId: String){
+        Firebase.firestore.collection("Posts")
+            .document(postId)
+            .update("collection",FieldValue.arrayUnion("cNXUG5FShzYesEOltXUZ"))
+            .addOnSuccessListener {
+                Timber.d("Success Posts adding User ID")
+            }.addOnFailureListener {
+                Timber.d("ERROR ${it.message}")
+            }
+    }
+
+
+
+    fun onClickCollection(title:String, postId: String) {
+        Timber.d("into function")
+        val db = Firebase.firestore
+            .collection("Users")
+            .document("cNXUG5FShzYesEOltXUZ")
+            .collection("Folders").document(title)
+        val id = db.id
+            db.set(
+                hashMapOf(
+                    "FolderTitle" to id,
+                    "createdTime" to Timestamp.now()
+                )
+            ).addOnSuccessListener {
+                Timber.d("Success to adding")
+            }.addOnFailureListener {
+                Timber.d("ERROR ${it.message}")
+            }
+        db.update("postId",FieldValue.arrayUnion(postId))
+    }
+
+
+
+    fun onClickToFollow(userId: String){
+        Timber.d("UserID $userId")
+        val db = Firebase.firestore.collection("Users")
+
+        db.document("K6oAzJP3DN2sBcAmbu6r")
+            .update("followList", FieldValue.arrayUnion(userId))
+            .addOnSuccessListener {
+                db.document(userId)
+                    .update("followers", FieldValue.arrayUnion("K6oAzJP3DN2sBcAmbu6r"))
+            }
+            .addOnFailureListener {
+                Timber.d("ERROR ${it.message}")
+            }
     }
 
 }
