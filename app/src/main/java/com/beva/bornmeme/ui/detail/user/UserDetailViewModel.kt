@@ -11,24 +11,22 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import timber.log.Timber
 
-class UserDetailViewModel : ViewModel() {
+class UserDetailViewModel(userId: String) : ViewModel() {
 
     private val _user = MutableLiveData<User>()
     val user: LiveData<User>
         get() = _user
 
     init {
-        getData()
+        getData(userId)
     }
 
-    //documentPath -> 帶參數 去看自己跟別人的頁面
-    private fun getData() {
+    private fun getData(userId: String) {
         val data = FirebaseFirestore.getInstance()
             .collection("Users")
-            .document("cNXUG5FShzYesEOltXUZ")
+            .document(userId)
         data.addSnapshotListener { snapshot, exception ->
             val user = snapshot?.toObject(User::class.java)
-//            Timber.d("user $user")
             exception?.let {
                 Timber.d("Exception ${it.message}")
             }

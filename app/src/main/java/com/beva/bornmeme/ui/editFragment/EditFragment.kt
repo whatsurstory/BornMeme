@@ -104,6 +104,9 @@ class EditFragment : Fragment() {
                             //這層的it才會帶到firebase return 的 Uri
                             Timber.d("origin uri: $it => take it to base url")
 
+                            val title = binding.editTextTitle.text.toString()
+                            val tag = binding.editTextCatalog.text.toString()
+
                             val res = listOf(
                                 arrayMapOf("type" to "base", "url" to it),
                                 (arrayMapOf(
@@ -127,7 +130,7 @@ class EditFragment : Fragment() {
                             val newUri = viewModel.getImageUri(activity?.application, publishBitmap)
                                 Timber.d("newUri => $newUri")
                             if (newUri != null) {
-                                viewModel.addNewPost(newUri, res)
+                                viewModel.addNewPost(newUri, res, title, tag)
                             }
                             findNavController().navigate(MobileNavigationDirections.navigateToHomeFragment())
 

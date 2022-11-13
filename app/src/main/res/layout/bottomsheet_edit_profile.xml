@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/profile_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Personal Information"
+        android:textColor="@color/teal_700"
+        android:textSize="30sp"
+        android:layout_margin="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/TextAppearance.AppCompat.Title"/>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/shapeableImageView"
+        android:layout_width="0dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        app:shapeAppearanceOverlay="@style/roundedCorner"
+        android:background="@drawable/_50"
+        app:layout_constraintEnd_toEndOf="@id/profile_id"
+        app:layout_constraintStart_toStartOf="@id/profile_id"
+        app:layout_constraintTop_toBottomOf="@id/profile_id">
+
+    </com.google.android.material.imageview.ShapeableImageView>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:shapeAppearanceOverlay="@style/circle"
+        android:src="@drawable/dino"
+        app:layout_constraintBottom_toBottomOf="@+id/shapeableImageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toStartOf="@+id/shapeableImageView"
+        app:layout_constraintTop_toTopOf="@+id/shapeableImageView" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/name_box"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
+        app:boxBackgroundMode="none"
+        app:boxStrokeColor="@color/tian_ching"
+        app:boxStrokeErrorColor="@color/purple_700"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shapeableImageView">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="name"
+            android:text="Defalt Name" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/desc_box"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxStrokeErrorColor="@color/purple_700"
+        app:boxStrokeColor="@color/tian_ching"
+        app:boxBackgroundMode="none"
+        android:layout_marginVertical="10dp"
+        android:layout_marginHorizontal="20dp"
+        app:layout_constraintStart_toStartOf="@id/email_box"
+        app:layout_constraintEnd_toEndOf="@id/email_box"
+        app:layout_constraintTop_toBottomOf="@id/email_box">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/desc"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Introduce">
+
+        </com.google.android.material.textfield.TextInputEditText>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/email_box"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="10dp"
+        app:boxStrokeErrorColor="@color/purple_700"
+        app:boxStrokeColor="@color/tian_ching"
+        app:boxBackgroundMode="none"
+        android:layout_marginHorizontal="20dp"
+        app:layout_constraintStart_toStartOf="@+id/name_box"
+        app:layout_constraintEnd_toEndOf="@+id/name_box"
+        app:layout_constraintTop_toBottomOf="@id/name_box">
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/email"
+            android:hint="email"
+            android:text="Defalt Email" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/block_list"
+        app:layout_constraintStart_toStartOf="@id/desc_box"
+        app:layout_constraintEnd_toEndOf="@id/desc_box"
+        app:layout_constraintTop_toBottomOf="@id/desc_box"
+        android:text="Mute List"
+        android:padding="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"/>
+    <ImageButton
+        android:id="@+id/block_btn"
+        android:src="@drawable/ic_baseline_account_box_24"
+        android:layout_height="0dp"
+        android:layout_width="30dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="@id/block_list"
+        app:layout_constraintTop_toTopOf="@id/block_list"
+        app:layout_constraintBottom_toBottomOf="@id/block_list"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/saveButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="16dp"
+        android:text="Save"
+        android:textColor="@color/teal_700"
+        android:backgroundTint="@color/rice"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/block_list"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

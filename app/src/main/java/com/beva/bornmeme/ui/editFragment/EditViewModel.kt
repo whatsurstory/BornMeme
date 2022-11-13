@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.navigation.fragment.findNavController
 import com.beva.bornmeme.MobileNavigationDirections
+import com.beva.bornmeme.model.UserManager
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import timber.log.Timber
@@ -60,11 +61,10 @@ class EditViewModel : ViewModel() {
         return Uri.parse(path)
     }
 
-    fun addNewPost(uri: Uri, res: List<Any>) {
+    fun addNewPost(uri: Uri, res: List<Any>, title:String, tag:String) {
         Timber.d("getNewPost")
 
         val document = FirebaseFirestore.getInstance().collection("Posts").document()
-        val ownerId = "cNXUG5FShzYesEOltXUZ"
         val ref = FirebaseStorage.getInstance().reference
 
         ref.child("img_edited/" + document.id + ".jpg")
@@ -77,9 +77,9 @@ class EditViewModel : ViewModel() {
                     val post = hashMapOf(
                         "id" to document.id,
                         "photoId" to "photo_id",
-                        "ownerId" to ownerId,
-                        "title" to "test title",
-                        "catalog" to "test tag",
+                        "ownerId" to UserManager.user.userId,
+                        "title" to title,
+                        "catalog" to tag,
                         "like" to null,
                         "resources" to res,
                         "collection" to null,

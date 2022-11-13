@@ -9,14 +9,9 @@ import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.*
+import android.widget.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
-import android.widget.EditText
-import android.widget.FrameLayout
-import android.widget.MediaController
 import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
 import androidx.lifecycle.Observer
@@ -45,7 +40,7 @@ class ImgDetailFragment : Fragment() {
             post = bundle.getParcelable("postKey")!!
             Timber.d("WelCome to Img Detail: arg -> ${post.id}")
         }
-
+//        Timber.d("check User data ${post.user}")
         binding.imgDetailUserName.text = post.ownerId
 
         Glide.with(this)
@@ -87,7 +82,8 @@ class ImgDetailFragment : Fragment() {
         }
         //OKです
         binding.imgDetailUserImg.setOnClickListener {
-            findNavController().navigate(MobileNavigationDirections.navigateToUserDetailFragment())
+            findNavController().navigate(MobileNavigationDirections
+                .navigateToUserDetailFragment(post.ownerId))
         }
         //OKです
         binding.likeBtn.setOnClickListener {
@@ -149,16 +145,37 @@ class ImgDetailFragment : Fragment() {
             alert.show()
         }
 
+        val popupMenu = PopupMenu(context,
+        binding.reportBtn)
+        popupMenu.menu.add(Menu.NONE, 0,0,"Report the Image")
+        popupMenu.menu.add(Menu.NONE,1,1,"Report the User")
+        popupMenu.menu.add(Menu.NONE,2,2,"test")
+
+        popupMenu.setOnMenuItemClickListener {
+            when(val id = it.itemId) {
+                0 -> Toast.makeText(context, "ID $id -> Report the Image",Toast.LENGTH_SHORT).show()
+                1 -> Toast.makeText(context, "ID $id -> Report the User",Toast.LENGTH_SHORT).show()
+                2 -> Toast.makeText(context, "ID $id -> Report the test",Toast.LENGTH_SHORT).show()
+            }
+            false
+        }
+        binding.reportBtn.setOnClickListener {
+            popupMenu.show()
+        }
+
+
+        //the permission problem
         binding.shareBtn.setOnClickListener {
             val bitmapDrawable = binding.imgDetailImage.drawable as BitmapDrawable
             val bitmap = bitmapDrawable.bitmap
-            val bitmapPath = MediaStore.Images.Media.insertImage(requireContext().contentResolver, bitmap, "",null)
+            val bitmapPath = MediaStore.Images.Media.insertImage(requireContext()
+                .contentResolver, bitmap, "Description",null)
             val bitmapUri = Uri.parse(bitmapPath)
 
             val intent = Intent(Intent.ACTION_SEND)
             intent.type = "image/*"
             intent.putExtra(Intent.EXTRA_STREAM, bitmapUri)
-            startActivity(Intent.createChooser(intent, ""))
+            startActivity(Intent.createChooser(intent, "Description"))
         }
 
 

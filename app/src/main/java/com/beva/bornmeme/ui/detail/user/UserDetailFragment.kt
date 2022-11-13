@@ -18,6 +18,7 @@ class UserDetailFragment : Fragment() {
 
     lateinit var binding : FragmentUserDetailBinding
     lateinit var viewModel:UserDetailViewModel
+    lateinit var userId: String
 
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
@@ -25,7 +26,12 @@ class UserDetailFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View? {
         binding = FragmentUserDetailBinding.inflate(inflater, container, false)
-        viewModel = UserDetailViewModel()
+        arguments?.let { bundle ->
+            userId = bundle.getString("userId").toString()
+            Timber.d("get postId from post $userId")
+        }
+
+        viewModel = UserDetailViewModel(userId)
         val adapter = TabViewPagerAdapter(this)
         binding.userViewpager.adapter = adapter
 

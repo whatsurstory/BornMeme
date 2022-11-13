@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
 import androidx.recyclerview.widget.StaggeredGridLayoutManager.GAP_HANDLING_NONE
 import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
@@ -35,17 +36,8 @@ class HomeFragment : Fragment() {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         viewModel = HomeViewModel()
-
-        binding.recyclerHome.apply {
-            layoutManager = StaggeredGridLayoutManager(
-                2,
-                StaggeredGridLayoutManager.VERTICAL
-            )
-//                .apply {
-//                 gapStrategy = GAP_HANDLING_NONE
-//            }
-            setHasFixedSize(false)
-        }
+        val layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
+        binding.recyclerHome.layoutManager = layoutManager
 
         adapter = HomeAdapter(
             HomeAdapter.OnClickListener {
@@ -53,6 +45,7 @@ class HomeFragment : Fragment() {
             }
         )
         binding.recyclerHome.adapter = adapter
+        layoutManager.gapStrategy = GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
 
         viewModel.liveData.observe(viewLifecycleOwner, Observer {
 

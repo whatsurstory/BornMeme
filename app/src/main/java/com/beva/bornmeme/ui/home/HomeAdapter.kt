@@ -92,7 +92,7 @@ class HomeAdapter(private val onClickListener: OnClickListener) : ListAdapter<Po
                     }
                 })
 
-            binding.userName.text = item.ownerId
+            binding.userName.text = item.title
             if (item.like.isNullOrEmpty()) {
                 binding.likeNum.text = "0"
             } else {

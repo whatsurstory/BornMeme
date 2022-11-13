@@ -67,8 +67,15 @@
         android:name="com.beva.bornmeme.ui.detail.user.UserDetailFragment"
         android:label=""
         tools:layout="@layout/fragment_user_detail">
+        <argument
+            android:name="userId"
+            app:argType="string"/>
     </fragment>
 
+    <dialog
+        android:id="@+id/bottomsheet_edit_profile"
+        android:name="com.beva.bornmeme.ui.detail.dialog.EditProfileBottomSheet"
+        tools:layout="@layout/bottomsheet_edit_profile"/>
 
     <action
         android:id="@+id/navigate_to_edit_fragment"

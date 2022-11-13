@@ -88,7 +88,7 @@
             app:tint="@color/dark_blue"
             android:backgroundTint="@color/rice"
             android:src="@drawable/ic_baseline_add_to_photos_24"
-            android:visibility="invisible" />
+            android:visibility="gone" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_camera_edit"
@@ -102,7 +102,7 @@
             app:tint="@color/dark_blue"
             android:backgroundTint="@color/rice"
             android:src="@drawable/ic_baseline_add_a_photo_24"
-            android:visibility="invisible" />
+            android:visibility="gone" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_gallery_edit"
@@ -116,7 +116,7 @@
             app:tint="@color/dark_blue"
             android:backgroundTint="@color/rice"
             android:src="@drawable/ic_baseline_add_photo_alternate_24"
-            android:visibility="invisible" />
+            android:visibility="gone" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"

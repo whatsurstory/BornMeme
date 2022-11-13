@@ -20,7 +20,7 @@ class PostsViewModel : ViewModel() {
         getData()
     }
 
-    //Post All Photo in Fragment
+
     private fun getData(): MutableLiveData<List<Post>> {
         val collection =FirebaseFirestore.getInstance().collection("Posts")
 
