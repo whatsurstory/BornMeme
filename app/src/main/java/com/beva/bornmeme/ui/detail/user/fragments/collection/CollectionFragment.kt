@@ -49,7 +49,7 @@ class CollectionFragment : Fragment() {
             Observer {
                 it?.let {
                     findNavController().navigate(MobileNavigationDirections
-                    .navigateToSlideDialog())
+                    .navigateToSlideDialog(it))
                     viewModel.onDetailNavigated()
                 }
             }

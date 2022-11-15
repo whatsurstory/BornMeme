@@ -80,12 +80,12 @@ class ImgDetailFragment : Fragment() {
                 viewModel.initCells(it)
             }
         }
-        //OKです
+        //the button to see user information
         binding.imgDetailUserImg.setOnClickListener {
             findNavController().navigate(MobileNavigationDirections
                 .navigateToUserDetailFragment(post.ownerId))
         }
-        //OKです
+        //the button to like post
         binding.likeBtn.setOnClickListener {
             FirebaseFirestore.getInstance()
                 .collection("Posts").document(post.id)
@@ -98,12 +98,12 @@ class ImgDetailFragment : Fragment() {
                     Timber.d("Error ${it.message}")
                 }
         }
-        //OKです
+        //the button to post comments
         binding.commentBtn.setOnClickListener {
             findNavController().navigate(MobileNavigationDirections
                 .navigateToCommentDialog(postId = post.id))
         }
-        //OKです
+
         viewModel.navigate2Comment.observe(viewLifecycleOwner) {
             Timber.d("Observe navigate $it")
             it?.let {
@@ -113,11 +113,13 @@ class ImgDetailFragment : Fragment() {
                 Timber.d("navigate end")
             }
         }
-        //OKです
+
+        //the button to follow other users
         binding.followBtn.setOnClickListener {
             viewModel.onClickToFollow(post.ownerId, binding)
         }
 
+        //the button to take post to collection
         binding.collectionBtn.setOnClickListener {
             val alert =  AlertDialog.Builder(requireContext())
             val edittext = EditText(requireContext())
@@ -145,7 +147,7 @@ class ImgDetailFragment : Fragment() {
             alert.show()
         }
 
-        //report button and others
+        //the menu button to report and other feature
         val popupMenu = PopupMenu(context,
         binding.reportBtn)
         popupMenu.menu.add(Menu.NONE, 0,0,"Report the Image")
@@ -165,7 +167,7 @@ class ImgDetailFragment : Fragment() {
         }
 
 
-        //the permission problem
+        //the permission problem in samsung, maybe due to the version of android
         binding.shareBtn.setOnClickListener {
             val bitmapDrawable = binding.imgDetailImage.drawable as BitmapDrawable
             val bitmap = bitmapDrawable.bitmap

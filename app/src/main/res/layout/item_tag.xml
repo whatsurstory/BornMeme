@@ -8,11 +8,11 @@
         android:id="@+id/chip_card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="14dp"
-        android:layout_marginVertical="8dp"
-        android:layout_marginHorizontal="4dp"
+        app:cardCornerRadius="16dp"
+        android:layout_marginVertical="4dp"
+        android:layout_marginEnd="10dp"
         android:elevation="8dp"
-        android:backgroundTint="@color/tian_ching"
+        android:backgroundTint="@color/whit_alpha"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -24,7 +24,9 @@
             android:layout_height="wrap_content"
             android:textColor="@color/light_orange_pink"
             android:textStyle="bold"
-            android:padding="6dp"
+            android:padding="8dp"
+            android:textSize="16sp"
+            android:gravity="center"
             android:text="chip chip" />
 
     </androidx.cardview.widget.CardView>

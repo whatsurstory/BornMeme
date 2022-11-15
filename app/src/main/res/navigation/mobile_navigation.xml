@@ -87,7 +87,11 @@
     <dialog
         android:id="@+id/dialogSlide"
         android:name="com.beva.bornmeme.ui.detail.dialog.SlideImageDialog"
-        tools:layout="@layout/dialog_slide_collection"/>
+        tools:layout="@layout/dialog_slide_collection">
+        <argument
+            android:name="folder"
+            app:argType="com.beva.bornmeme.model.Folder" />
+    </dialog>
 
     <action
         android:id="@+id/navigate_to_edit_fragment"
