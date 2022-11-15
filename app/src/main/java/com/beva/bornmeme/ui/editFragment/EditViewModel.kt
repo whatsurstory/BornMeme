@@ -73,7 +73,7 @@ class EditViewModel : ViewModel() {
                 it.metadata?.reference?.downloadUrl?.addOnSuccessListener {
                     //這層的it才會帶到firebase return 的 Uri
                     Timber.d("edited uri: $it => take it to upload url")
-
+                    Timber.d("newTag $tag")
                     val post = hashMapOf(
                         "id" to document.id,
                         "photoId" to "photo_id",

@@ -42,7 +42,7 @@ class ImgDetailFragment : Fragment() {
         }
 //        Timber.d("check User data ${post.user}")
         binding.imgDetailUserName.text = post.ownerId
-
+        binding.imgDetailTitle.text = post.title
         Glide.with(this)
             .load(post.url)
             .apply(
@@ -115,7 +115,7 @@ class ImgDetailFragment : Fragment() {
         }
         //OKです
         binding.followBtn.setOnClickListener {
-            viewModel.onClickToFollow(post.ownerId)
+            viewModel.onClickToFollow(post.ownerId, binding)
         }
 
         binding.collectionBtn.setOnClickListener {
@@ -145,6 +145,7 @@ class ImgDetailFragment : Fragment() {
             alert.show()
         }
 
+        //report button and others
         val popupMenu = PopupMenu(context,
         binding.reportBtn)
         popupMenu.menu.add(Menu.NONE, 0,0,"Report the Image")

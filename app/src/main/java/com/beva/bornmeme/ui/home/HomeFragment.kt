@@ -2,22 +2,16 @@ package com.beva.bornmeme.ui.home
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
-import androidx.recyclerview.widget.StaggeredGridLayoutManager.GAP_HANDLING_NONE
 import com.beva.bornmeme.MobileNavigationDirections
-import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentHomeBinding
 import timber.log.Timber
 
@@ -35,8 +29,11 @@ class HomeFragment : Fragment() {
     ): View? {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+
         viewModel = HomeViewModel()
+
         val layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
+
         binding.recyclerHome.layoutManager = layoutManager
 
         adapter = HomeAdapter(
@@ -44,16 +41,39 @@ class HomeFragment : Fragment() {
                 viewModel.navigateToDetail(it)
             }
         )
+
         binding.recyclerHome.adapter = adapter
+
         layoutManager.gapStrategy = GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
 
-        viewModel.liveData.observe(viewLifecycleOwner, Observer {
-
+        viewModel.display.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.submitList(it)
                 adapter.notifyDataSetChanged()
             }
         })
+
+//        viewModel.display.observe(viewLifecycleOwner, Observer {
+//            Timber.d("viewModel display value $it")
+//          先藉由obeserve知道拿的資料是什麼
+//        })
+
+        val tagAdapter = TagAdapter (
+            TagAdapter.OnClickListener {
+                Timber.d("observe the click item $it")
+                viewModel.changeTag(it)
+            }
+        )
+        binding.chipRecycler.adapter = tagAdapter
+
+        viewModel.tagCell.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                Timber.d(("Observe cell : $it"))
+                tagAdapter.submitList(it)
+                tagAdapter.notifyDataSetChanged()
+            }
+        })
+
 
         //click to detail
         viewModel.navigateToDetail.observe(
@@ -65,8 +85,6 @@ class HomeFragment : Fragment() {
                 }
             }
         )
-
-
         return binding.root
     }
 }

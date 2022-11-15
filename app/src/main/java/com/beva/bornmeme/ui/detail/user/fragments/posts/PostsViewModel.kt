@@ -4,10 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.beva.bornmeme.model.Post
+import com.beva.bornmeme.model.UserManager
 import com.google.firebase.firestore.FirebaseFirestore
 import timber.log.Timber
 
-class PostsViewModel : ViewModel() {
+class PostsViewModel(private val userId: String): ViewModel() {
 
     val postData = MutableLiveData<List<Post>>()
 
@@ -16,15 +17,16 @@ class PostsViewModel : ViewModel() {
     val navigateToDetail: LiveData<Post>
         get() = _navigateToDetail
 
+
     init {
-        getData()
+        getData(userId)
     }
 
 
-    private fun getData(): MutableLiveData<List<Post>> {
+    fun getData(userId: String): MutableLiveData<List<Post>> {
         val collection =FirebaseFirestore.getInstance().collection("Posts")
-
-        collection.whereEqualTo("ownerId", "cNXUG5FShzYesEOltXUZ")
+        Timber.d("post ViewModel $userId")
+        collection.whereEqualTo("ownerId", userId)
             .addSnapshotListener { snapshot, e ->
                 val list = mutableListOf<Post>()
                 for (document in snapshot!!){

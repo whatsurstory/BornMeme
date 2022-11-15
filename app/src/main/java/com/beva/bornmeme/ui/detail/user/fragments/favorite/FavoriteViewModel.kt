@@ -7,7 +7,7 @@ import com.beva.bornmeme.model.Post
 import com.google.firebase.firestore.FirebaseFirestore
 import timber.log.Timber
 
-class FavoriteViewModel : ViewModel() {
+class FavoriteViewModel(private val userId: String) : ViewModel() {
 
     val likeData = MutableLiveData<List<Post>>()
 
@@ -17,14 +17,14 @@ class FavoriteViewModel : ViewModel() {
         get() = _navigateToDetail
 
     init {
-        getData()
+        getData(userId)
     }
 
-    private fun getData():MutableLiveData<List<Post>> {
+    private fun getData(userId: String):MutableLiveData<List<Post>> {
 
         val collection = FirebaseFirestore.getInstance().collection("Posts")
 
-        collection.whereArrayContains("like", "cNXUG5FShzYesEOltXUZ")
+        collection.whereArrayContains("like", userId)
             .addSnapshotListener { snapshot, e ->
                 val list = mutableListOf<Post>()
                 for (document in snapshot!!){

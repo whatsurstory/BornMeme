@@ -1,10 +1,14 @@
 package com.beva.bornmeme.ui.detail.img
 
+import android.view.View
 import androidx.collection.arrayMapOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.ViewModelFactoryDsl
+import com.beva.bornmeme.databinding.FragmentImgDetailBinding
 import com.beva.bornmeme.model.Comment
+import com.beva.bornmeme.model.UserManager
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -212,19 +216,22 @@ data class UiState (
 
 
 
-    fun onClickToFollow(userId: String){
+    fun onClickToFollow(userId: String, binding: FragmentImgDetailBinding){
         Timber.d("UserID $userId")
         val db = Firebase.firestore.collection("Users")
-
-        db.document("K6oAzJP3DN2sBcAmbu6r")
+        if (userId != UserManager.user.userId){
+        db.document(UserManager.user.userId)
             .update("followList", FieldValue.arrayUnion(userId))
             .addOnSuccessListener {
                 db.document(userId)
-                    .update("followers", FieldValue.arrayUnion("K6oAzJP3DN2sBcAmbu6r"))
+                    .update("followers", FieldValue.arrayUnion(UserManager.user.userId))
+                binding.followBtn.visibility = View.INVISIBLE
+                binding.unfollowBtn.visibility = View.VISIBLE
             }
             .addOnFailureListener {
                 Timber.d("ERROR ${it.message}")
             }
+        }
     }
 
 }

@@ -11,9 +11,20 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.databinding.FragmentPostsBinding
+import com.beva.bornmeme.ui.detail.user.UserDetailFragment
+import timber.log.Timber
 
-class PostsFragment : Fragment() {
+class PostsFragment: Fragment() {
 
+    companion object {
+        fun newInstance(userId: String): PostsFragment {
+            val fragment = PostsFragment()
+            val args = Bundle()
+            args.putString("userIdKey", userId)
+            fragment.arguments = args
+            return fragment
+        }
+    }
 
     private lateinit var viewModel: PostsViewModel
     private lateinit var binding: FragmentPostsBinding
@@ -22,8 +33,9 @@ class PostsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentPostsBinding.inflate(inflater,container,false)
-        viewModel = PostsViewModel()
-
+        val userId = requireArguments().getString("userIdKey") ?: ""
+        Timber.d("UserId $userId")
+        viewModel = PostsViewModel(userId)
         binding.postRecycler.layoutManager = GridLayoutManager(context,3)
         val adapter = PostAdapter(
             PostAdapter.OnClickListener {
@@ -48,6 +60,5 @@ class PostsFragment : Fragment() {
 
         return binding.root
     }
-
 
 }

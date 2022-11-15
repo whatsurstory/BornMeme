@@ -14,11 +14,11 @@ class CollectionViewModel : ViewModel() {
 
     val liveData = MutableLiveData<List<Folder>>()
 
-    // Handle navigation to detail
-//    private val _navigateToDetail = MutableLiveData<Folder>()
-//
-//    val navigateToDetail: LiveData<Folder>
-//        get() = _navigateToDetail
+    //Handle navigation to dialog
+    private val _navigateToDetail = MutableLiveData<Folder>()
+
+    val navigateToDetail: LiveData<Folder>
+        get() = _navigateToDetail
 
     init {
         getData()
@@ -48,11 +48,11 @@ class CollectionViewModel : ViewModel() {
         return liveData
     }
 
-//    fun navigateToDetail(item: Folder) {
-//        _navigateToDetail.value = item
-//    }
-//
-//    fun onDetailNavigated() {
-//        _navigateToDetail.value = null
-//    }
+    fun navigateToDetail(item: Folder) {
+        _navigateToDetail.value = item
+    }
+
+    fun onDetailNavigated() {
+        _navigateToDetail.value = null
+    }
 }

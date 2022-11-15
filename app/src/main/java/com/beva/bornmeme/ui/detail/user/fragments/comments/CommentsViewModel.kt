@@ -7,24 +7,27 @@ import com.beva.bornmeme.model.Post
 import com.google.firebase.firestore.FirebaseFirestore
 import timber.log.Timber
 
-class CommentsViewModel : ViewModel() {
+class CommentsViewModel(userId: String) : ViewModel() {
 
     val postData = MutableLiveData<List<Comment>>()
 
     init {
-        getData()
+        getData(userId)
     }
 
     //Post All Photo in Fragment
-    private fun getData(): MutableLiveData<List<Comment>> {
+    private fun getData(userId: String): MutableLiveData<List<Comment>> {
+        Timber.d("user $userId")
         val collection = FirebaseFirestore.getInstance()
             .collection("Comments")
 
-        collection.whereEqualTo("userId", "cNXUG5FShzYesEOltXUZ")
+        collection.whereEqualTo("userId", userId)
             .addSnapshotListener { snapshot, e ->
+                Timber.d("comment e ->${e?.message}")
                 val list = mutableListOf<Comment>()
                 for (document in snapshot!!){
-                    Timber.d("comment snapshot ID ->${document.id} list -> ${document.data}")
+                    Timber.d("comment snapshot ID ->${document.id} " +
+                            "list -> ${document.data}")
                     val post = document.toObject(Comment::class.java)
                     list.add(post)
                 }

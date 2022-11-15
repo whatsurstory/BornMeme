@@ -1,12 +1,12 @@
 package com.beva.bornmeme.ui.home
 
 import android.graphics.Bitmap
+import android.os.Build.VERSION_CODES.M
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.beva.bornmeme.model.Post
 import com.beva.bornmeme.model.Resource
+import com.beva.bornmeme.ui.detail.img.CommentCell
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import timber.log.Timber
@@ -15,18 +15,54 @@ class HomeViewModel : ViewModel() {
 
      val liveData = MutableLiveData<List<Post>>()
 
+    private var _tagSet = MutableLiveData<String>()
+    private val tagSet: MutableLiveData<String>
+        get() = _tagSet
+
     // Handle navigation to detail
     private val _navigateToDetail = MutableLiveData<Post>()
 
     val navigateToDetail: LiveData<Post>
         get() = _navigateToDetail
 
+
+
     init {
         getData()
     }
 
+        val tagCell = Transformations.map(liveData) {
+            val cells = mutableListOf<String>()
+            for (item in it) {
+                val tag = item.catalog
+                //包含了相同的字串就不加入list
+                if (!cells.contains(tag)) {
+                    cells.add(tag)
+                }
+//                Timber.d("Post cells $cells")
+            }
+            cells
+        }
 
-    //Post All Photo in Fragment
+
+//    fun getFilterData(item:String) {
+//
+//        FirebaseFirestore.getInstance()
+//            .collection("Posts").whereEqualTo("catalog", item)
+//            .addSnapshotListener { snapshot, exception ->
+//                Timber.d("You are in HomeViewModel")
+//
+//                exception?.let {
+//                    Timber.d("Exception ${it.message}")
+//                }
+//                for (document in snapshot!!){
+//                    Timber.d("check Data${document.id} ${document.data}")
+//                }
+//            }
+//
+//    }
+
+    //單獨處理snapshotlistener的方式
     private fun getData(): MutableLiveData<List<Post>> {
         val postData = FirebaseFirestore.getInstance()
             .collection("Posts")
@@ -48,6 +84,39 @@ class HomeViewModel : ViewModel() {
         }
         return liveData
     }
+
+    val display = MediatorLiveData<List<Post>>().apply {
+        addSource(liveData) {
+            it.let { posts ->
+                if (tagSet.value == null) {
+                    Timber.d("1 初始觀察到的所有貼文數量 ${posts?.size}")
+                    value = posts
+                } else {
+                    val dataList = posts.filter {
+                        it.catalog == tagSet.value
+                    }
+                    Timber.d("2 透過tagSet篩選之後給livedata資料 ${dataList?.size}")
+                    value = dataList
+                }
+            }
+        }
+        addSource(tagSet) {
+            it.let { tag ->
+                Timber.d("this is tagcell $tag")
+                val dataList = liveData.value?.filter { it ->
+                    it.catalog == tag
+                }
+                Timber.d("3  ${dataList?.size}")
+                value = dataList
+            }
+        }
+    }
+
+    fun changeTag (tagSet: String) {
+        Timber.d("changeTag $tagSet")
+        _tagSet.value = tagSet
+    }
+
 
     fun navigateToDetail(item: Post) {
         _navigateToDetail.value = item

@@ -106,7 +106,7 @@ class EditFragment : Fragment() {
 
                             val title = binding.editTextTitle.text.toString()
                             val tag = binding.editTextCatalog.text.toString()
-
+//                            Timber.d("newTag $newTag")
                             val res = listOf(
                                 arrayMapOf("type" to "base", "url" to it),
                                 (arrayMapOf(

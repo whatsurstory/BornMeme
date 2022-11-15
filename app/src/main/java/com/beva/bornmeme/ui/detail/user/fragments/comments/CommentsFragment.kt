@@ -10,9 +10,20 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentCommentsBinding
+import timber.log.Timber
 
 
 class CommentsFragment : Fragment() {
+
+    companion object {
+        fun newInstance(userId: String): CommentsFragment {
+            val fragment = CommentsFragment()
+            val arg = Bundle()
+            arg.putString("userIdKey", userId)
+            fragment.arguments = arg
+            return fragment
+        }
+    }
 
     lateinit var binding: FragmentCommentsBinding
     private lateinit var viewModel: CommentsViewModel
@@ -23,15 +34,19 @@ class CommentsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentCommentsBinding.inflate(inflater, container, false)
-        viewModel = CommentsViewModel()
+
+        val userId = requireArguments().getString("userIdKey") ?: ""
+        viewModel = CommentsViewModel(userId)
+
         val adapter = UserCommentAdapter()
+
         binding.commentRecycler.adapter = adapter
+
         viewModel.postData.observe(viewLifecycleOwner) {
+            Timber.d("observe comment $it")
             adapter.submitList(it)
         }
 
         return binding.root
     }
-
-
 }

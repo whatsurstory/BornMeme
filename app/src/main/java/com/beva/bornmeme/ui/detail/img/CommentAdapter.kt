@@ -42,12 +42,12 @@ class CommentAdapter(private val uiState: ImgDetailViewModel.UiState): ListAdapt
             binding.commentDislikeBtn.setOnClickListener {
                 uiState.onClickToDislike(item.comment.commentId)
             }
-            if (item.comment.like.isNullOrEmpty()){
+            if (item.comment.like.isNullOrEmpty()) {
                 binding.commentLikeNum.text = "0"
             } else {
                 binding.commentLikeNum.text = item.comment.like.size.toString()
             }
-            if (item.comment.dislike.isNullOrEmpty()){
+            if (item.comment.dislike.isNullOrEmpty()) {
                 binding.commentDislikeNum.text = "0"
             } else {
                 binding.commentDislikeNum.text = item.comment.dislike.size.toString()
@@ -58,12 +58,21 @@ class CommentAdapter(private val uiState: ImgDetailViewModel.UiState): ListAdapt
             val timeString = item.comment.time?.toDate()?.toString()
             val commentTime = item.comment.time?.toDate()?.time
             val currentTime = System.currentTimeMillis()
-            val seconds = (currentTime - commentTime!!)/1000
+            Timber.d("currentTime $currentTime")
+            val seconds = (currentTime - commentTime!!) / 1000
             val minutes = seconds / 60
             val hour = minutes / 60
             val day = hour / 24
+            if (seconds <= 50) {
+                binding.commentTime.text = "$seconds seconds ago"
+            } else if (seconds in 60..3600 ) {
+                binding.commentTime.text = "$minutes minutes ago"
+            } else if (seconds in 3600..86400) {
+                binding.commentTime.text = "$hour hour ago"
+            } else if (seconds >= 86400) {
+                binding.commentTime.text = "$day days ago"
+            }
             Timber.d("秒 $seconds 分 $minutes 時 $hour 天 $day")
-            binding.commentTime.text = "$day days ago"
         }
     }
 
@@ -100,8 +109,16 @@ class CommentAdapter(private val uiState: ImgDetailViewModel.UiState): ListAdapt
             val minutes = seconds / 60
             val hour = minutes / 60
             val day = hour / 24
+            if (seconds <= 50) {
+                binding.childTime.text = "$seconds seconds ago"
+            } else if (seconds in 60..3600 ) {
+                binding.childTime.text = "$minutes minutes ago"
+            } else if (seconds in 3600..86400) {
+                binding.childTime.text = "$hour hour ago"
+            } else if (seconds >= 86400) {
+                binding.childTime.text = "$day days ago"
+            }
             Timber.d("秒 $seconds 分 $minutes 時 $hour 天 $day")
-            binding.childTime.text = "$day days ago"
         }
     }
 

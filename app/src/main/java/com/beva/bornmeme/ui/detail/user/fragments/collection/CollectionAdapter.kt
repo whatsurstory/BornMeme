@@ -11,8 +11,8 @@ import com.beva.bornmeme.model.Folder
 import com.beva.bornmeme.model.Post
 import com.bumptech.glide.Glide
 
-//(private val onClickListener: OnClickListener)
-class CollectionAdapter: ListAdapter<Folder, CollectionAdapter.ViewHolder>(DiffCallback) {
+//
+class CollectionAdapter(private val onClickListener: OnClickListener): ListAdapter<Folder, CollectionAdapter.ViewHolder>(DiffCallback) {
 
     class ViewHolder(private val binding: ItemUserCollectionBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -40,15 +40,15 @@ class CollectionAdapter: ListAdapter<Folder, CollectionAdapter.ViewHolder>(DiffC
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
-//    item?.let {
-//        holder.itemView.setOnClickListener {
-//            onClickListener.onClick(item)
-//        }
-//        holder.bind(item)
-//    }
+        val item = getItem(position)
+        item?.let {
+        holder.itemView.setOnClickListener {
+            onClickListener.onClick(item)
+        }
+        holder.bind(item)
     }
-//    class OnClickListener(val clickListener: (item: Folder) -> Unit) {
-//        fun onClick(item: Folder) = clickListener(item)
-//    }
+    }
+    class OnClickListener(val clickListener: (item: Folder) -> Unit) {
+        fun onClick(item: Folder) = clickListener(item)
+    }
 }

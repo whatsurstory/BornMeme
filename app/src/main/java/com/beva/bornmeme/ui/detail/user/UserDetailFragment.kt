@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentUserDetailBinding
 import com.beva.bornmeme.model.User
@@ -32,15 +34,15 @@ class UserDetailFragment : Fragment() {
         }
 
         viewModel = UserDetailViewModel(userId)
-        val adapter = TabViewPagerAdapter(this)
+        val adapter = TabViewPagerAdapter(this, userId)
         binding.userViewpager.adapter = adapter
 
-        TabLayoutMediator(binding.userTabs,binding.userViewpager){tab,position ->
+        TabLayoutMediator(binding.userTabs,binding.userViewpager) { tab,position ->
             when(position){
-                0 -> {tab.text = "Favorite"}
-                1 -> {tab.text = "Posts"}
-                2 -> {tab.text = "Comment"}
-                3 -> {tab.text = "Collect"}
+                0 -> {tab.text = "喜歡"}
+                1 -> {tab.text = "創作"}
+                2 -> {tab.text = "留言"}
+                3 -> {tab.text = "收藏"}
             }
         }.attach()
 
@@ -61,7 +63,12 @@ class UserDetailFragment : Fragment() {
             .placeholder(R.drawable._50)
             .into(binding.userDetailImg)
         binding.userDetailName.text = user.userName
-        binding.followersText.text = "${user.followers.size} followers"
+        binding.followersText.text = "${user.followers.size}"
         binding.introduceText.text = user.introduce
+        binding.likesText.text = ""
+        binding.postsText.text = "${user.postQuantity.size}"
+        binding.editIcon.setOnClickListener {
+            findNavController().navigate(MobileNavigationDirections.navigateToEditProfileDialog())
+        }
     }
 }

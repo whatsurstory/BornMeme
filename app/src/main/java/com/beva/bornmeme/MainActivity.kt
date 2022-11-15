@@ -31,7 +31,6 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
-import com.yarolegovich.slidingrootnav.SlidingRootNav
 import com.beva.bornmeme.databinding.ActivityMainBinding
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
@@ -41,7 +40,6 @@ import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.karumi.dexter.listener.single.PermissionListener
-import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder
 import timber.log.Timber
 import java.io.File
 
@@ -98,6 +96,9 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+        binding.appBarMain.sortBtn.setOnClickListener {
+            navController.navigate(MobileNavigationDirections.navigateToDragEditFragment())
+        }
         //this is need to adding new layout view not really menu
 //        slidingNav = SlidingRootNavBuilder(this)
 //            .withMenuLayout(R.layout.nav_header_main)

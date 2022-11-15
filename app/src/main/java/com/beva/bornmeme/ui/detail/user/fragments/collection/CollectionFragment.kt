@@ -31,9 +31,9 @@ class CollectionFragment : Fragment() {
         viewModel = CollectionViewModel()
 
         adapter = CollectionAdapter(
-//            CollectionAdapter.OnClickListener {
-//                viewModel.navigateToDetail(it)
-//            }
+            CollectionAdapter.OnClickListener {
+                viewModel.navigateToDetail(it)
+            }
         )
         binding.collectionRecycler.adapter = adapter
 
@@ -44,16 +44,16 @@ class CollectionFragment : Fragment() {
             }
         })
 
-//        viewModel.navigateToDetail.observe(
-//            viewLifecycleOwner,
-//            Observer {
-//                it?.let {
-//                    findNavController().navigate(MobileNavigationDirections
-//                    .navigateToCollectionDetailFragment())
-//                    viewModel.onDetailNavigated()
-//                }
-//            }
-//        )
+        viewModel.navigateToDetail.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    findNavController().navigate(MobileNavigationDirections
+                    .navigateToSlideDialog())
+                    viewModel.onDetailNavigated()
+                }
+            }
+        )
 
         return binding.root
 

@@ -15,6 +15,15 @@ import com.beva.bornmeme.databinding.FragmentFavoriteBinding
 
 class FavoriteFragment : Fragment() {
 
+    companion object {
+         fun newInstance(userId: String): FavoriteFragment {
+            val fragment = FavoriteFragment()
+            val arg = Bundle()
+            arg.putString("userIdKey", userId)
+            fragment.arguments = arg
+            return fragment
+        }
+    }
 
     private lateinit var viewModel: FavoriteViewModel
     private lateinit var binding: FragmentFavoriteBinding
@@ -23,7 +32,8 @@ class FavoriteFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentFavoriteBinding.inflate(inflater,container,false)
-        viewModel = FavoriteViewModel()
+        val userId = requireArguments().getString("userIdKey") ?: ""
+        viewModel = FavoriteViewModel(userId)
 
         binding.favoriteRecycler.layoutManager = GridLayoutManager(context,3)
         val adapter = FavoriteAdapter(

@@ -53,6 +53,13 @@
     </fragment>
 
     <fragment
+        android:id="@+id/fragmentEditDrag"
+        android:name="com.beva.bornmeme.ui.editFragment.EditDragFragment"
+        tools:layout="@layout/fragment_drag_edit">
+
+    </fragment>
+
+    <fragment
         android:id="@+id/img_detail_fragment"
         android:name="com.beva.bornmeme.ui.detail.img.ImgDetailFragment"
         android:label=""
@@ -77,11 +84,21 @@
         android:name="com.beva.bornmeme.ui.detail.dialog.EditProfileBottomSheet"
         tools:layout="@layout/bottomsheet_edit_profile"/>
 
+    <dialog
+        android:id="@+id/dialogSlide"
+        android:name="com.beva.bornmeme.ui.detail.dialog.SlideImageDialog"
+        tools:layout="@layout/dialog_slide_collection"/>
+
     <action
         android:id="@+id/navigate_to_edit_fragment"
         app:destination="@+id/fragmentEditFixmode"/>
+    <action
+        android:id="@+id/navigate_to_drag_edit_fragment"
+        app:destination="@+id/fragmentEditDrag"/>
+    <action android:id="@+id/navigate_to_edit_profile_dialog" app:destination="@+id/bottomsheet_edit_profile"/>
     <action android:id="@+id/navigate_to_preview_dialog" app:destination="@+id/dialogPreview"/>
     <action android:id="@+id/navigate_to_comment_dialog" app:destination="@+id/dialogComment"/>
+    <action android:id="@+id/navigate_to_slide_dialog" app:destination="@+id/dialogSlide"/>
     <action android:id="@+id/navigate_to_home_fragment" app:destination="@+id/nav_home"
         app:popUpTo="@+id/mobile_navigation"
         app:popUpToInclusive="true"/>
