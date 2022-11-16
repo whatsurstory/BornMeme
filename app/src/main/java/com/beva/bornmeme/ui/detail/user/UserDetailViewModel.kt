@@ -32,4 +32,5 @@ class UserDetailViewModel(userId: String) : ViewModel() {
             _user.value = user
         }
     }
+
 }

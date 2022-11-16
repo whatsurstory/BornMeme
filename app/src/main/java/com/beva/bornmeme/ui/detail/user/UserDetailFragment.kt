@@ -12,6 +12,7 @@ import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentUserDetailBinding
 import com.beva.bornmeme.model.User
+import com.beva.bornmeme.model.UserManager
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
 import timber.log.Timber
@@ -67,8 +68,17 @@ class UserDetailFragment : Fragment() {
         binding.introduceText.text = user.introduce
         binding.likesText.text = ""
         binding.postsText.text = "${user.postQuantity.size}"
-        binding.editIcon.setOnClickListener {
-            findNavController().navigate(MobileNavigationDirections.navigateToEditProfileDialog())
+        if (user.userId != UserManager.user.userId) {
+            binding.editIcon.visibility = View.GONE
+            binding.add2follow.visibility = View.VISIBLE
+            binding.add2follow.setOnClickListener {
+                //adding to follow
+            }
+        } else {
+            binding.editIcon.visibility = View.VISIBLE
+            binding.editIcon.setOnClickListener {
+                findNavController().navigate(MobileNavigationDirections.navigateToEditProfileDialog())
+            }
         }
     }
 }

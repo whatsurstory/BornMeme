@@ -71,15 +71,15 @@ class HomeViewModel : ViewModel() {
     val display = MediatorLiveData<List<Post>>().apply {
         addSource(liveData) {
             it.let { posts ->
-                if (tagSet.value == null) {
+                value = if (tagSet.value == null) {
                     Timber.d("1 初始觀察到的所有貼文數量 ${posts?.size}")
-                    value = posts
+                    posts
                 } else {
-                    val dataList = posts.filter {
-                        it.catalog == tagSet.value
+                    val dataList = posts.filter { it ->
+                        it.catalog == tagSet.value || it.catalog.isEmpty() || it.catalog.isBlank()
                     }
-                    Timber.d("2 透過tagSet篩選之後給livedata資料 ${dataList?.size}")
-                    value = dataList
+                    Timber.d("2 透過tagSet篩選之後給livedata資料 ${dataList.size}")
+                    dataList
                 }
             }
         }
@@ -89,10 +89,10 @@ class HomeViewModel : ViewModel() {
                     it.catalog == tag
                 }
                 Timber.d("3 按下 $tag ${dataList?.size}")
-                if (tag != null) {
-                    value = dataList
+                value = if (tag != null) {
+                    dataList
                 } else {
-                    value = liveData.value
+                    liveData.value
                 }
             }
         }

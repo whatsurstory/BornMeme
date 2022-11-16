@@ -11,6 +11,7 @@ import com.beva.bornmeme.model.UserManager
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.google.rpc.BadRequest
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.util.*
@@ -53,7 +54,7 @@ class EditViewModel : ViewModel() {
         Timber.d("getNewPost")
 
         val postPath = FirebaseFirestore.getInstance().collection("Posts").document()
-        val userPath = FirebaseFirestore.getInstance().collection("Users").document()
+        val userPath = FirebaseFirestore.getInstance().collection("Users").document(UserManager.user.userId)
         val ref = FirebaseStorage.getInstance().reference
 
         ref.child("img_edited/" + postPath.id + ".jpg")
@@ -61,8 +62,8 @@ class EditViewModel : ViewModel() {
             .addOnSuccessListener {
                 it.metadata?.reference?.downloadUrl?.addOnSuccessListener {
                     //這層的it才會帶到firebase return 的 Uri
-                    Timber.d("edited uri: $it => take it to upload url")
-                    Timber.d("newTag $tag")
+//                    Timber.d("edited uri: $it => take it to upload url")
+//                    Timber.d("newTag $tag")
                     val post = hashMapOf(
                         "id" to postPath.id,
                         "photoId" to "photo_id",

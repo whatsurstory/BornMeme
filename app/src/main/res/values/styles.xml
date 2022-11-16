@@ -42,9 +42,8 @@
         <item name="android:windowBackground">@color/translucent_80</item>
     </style>
 
-    <style name="ShapeAppearanceOverlay.MyApp.Dialog.Rounded" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">18dp</item>
+    <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:textColor">@color/dark_blue</item>
     </style>
 
 </resources>

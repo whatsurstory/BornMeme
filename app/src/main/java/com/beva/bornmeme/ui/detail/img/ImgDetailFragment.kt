@@ -2,16 +2,20 @@ package com.beva.bornmeme.ui.detail.img
 
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color.blue
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.InputType
 import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.beva.bornmeme.MobileNavigationDirections
@@ -149,6 +153,7 @@ class ImgDetailFragment : Fragment() {
         })
         //the button to take post to collection
         binding.collectionBtn.setOnClickListener {
+            Toast.makeText(context,"let's relax a moment ...",Toast.LENGTH_SHORT).show()
             viewModel.getFolder()
         }
 
@@ -196,41 +201,45 @@ class ImgDetailFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("ResourceAsColor")
     private fun showAlert(folderNames: List<String>) {
-        val alert =  AlertDialog.Builder(requireContext())
-        val edittext = EditText(requireContext())
-        edittext.hint = "Enter Title Of Collection"
-        edittext.maxLines = 1
-        val layout = FrameLayout(requireContext())
+        val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+        // Get the layout inflater
+        val inflater = requireActivity().layoutInflater
         val isCheckedIndex = ArrayList<Int>()
-        //set padding in parent layout
-        layout.setPaddingRelative(45,15,45,0)
-        layout.addView(edittext)
-        alert.setView(layout)
-        alert.setTitle("Name your Folder")
-        alert.setMultiChoiceItems(
+        builder.setTitle("Name your Folder")
+        val view = inflater.inflate(R.layout.diaolog_collection, null)
+        builder.setView(view)
+        val input = view.findViewById<EditText>(R.id.folder_name)
+
+        builder.setMultiChoiceItems(
             folderNames.toTypedArray(),null,
             DialogInterface.OnMultiChoiceClickListener { dialog, index, isChecked ->
+                //the dialog is interface, which is int, isChecked is boolean
                 if (isChecked) {
                     isCheckedIndex.add(index)
-                    Timber.d("check add index -> $isCheckedIndex \n $index")
+                    Toast.makeText(context, "You Choose The ${folderNames.toTypedArray()[index]}",Toast.LENGTH_SHORT).show()
+
                 } else if (isCheckedIndex.contains(index)) {
                     isCheckedIndex.remove(index)
-                    Timber.d("check remove index -> $isCheckedIndex \n $index")
+                    Toast.makeText(context, "You Cancel The ${folderNames.toTypedArray()[index]}",Toast.LENGTH_SHORT).show()
                 }
             })
 
-        alert.setPositiveButton("SAVE",
+        builder.setPositiveButton("SAVE",
             DialogInterface.OnClickListener { dialog, which ->
                 run {
-                    val title = edittext.text.toString()
+                    val title = input.text.toString()
+                    Toast.makeText(context, "New Created $input Folder", Toast.LENGTH_SHORT).show()
                     viewModel.onClickCollection(title, post.id, post.url.toString())
                     viewModel.doneCollection(post.id)
                 }
             })
-        alert.setNegativeButton("CANCEL"
+        builder.setNegativeButton("CANCEL"
         ) { _, _ ->
         }
-        alert.show()
+
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.show()
     }
 }

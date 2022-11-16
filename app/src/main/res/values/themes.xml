@@ -25,9 +25,5 @@
     <style name="Theme.BornMeme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="Theme.BornMeme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <!-- Alert Dialog -->
-    <style name="MyThemeOverlayAlertDialog" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
-        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.MyApp.Dialog.Rounded</item>
-    </style>
 
 </resources>
