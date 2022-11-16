@@ -2,31 +2,19 @@ package com.beva.bornmeme.ui.editFragment
 
 import android.app.Application
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.icu.util.Calendar
 import android.net.Uri
 import android.provider.MediaStore
-import android.util.Log
-import android.widget.EditText
-import androidx.collection.ArrayMap
-import androidx.collection.arrayMapOf
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
-import androidx.navigation.fragment.findNavController
-import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.model.UserManager
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.util.*
-enum class WHO(val value: String) {
-    BEVA("cNXUG5FShzYesEOltXUZ"),
-    MINDY("uPpAnxXzhoj37e6uIG84")
-}
+
 class EditViewModel : ViewModel() {
 
 
@@ -64,10 +52,11 @@ class EditViewModel : ViewModel() {
     fun addNewPost(uri: Uri, res: List<Any>, title:String, tag:String) {
         Timber.d("getNewPost")
 
-        val document = FirebaseFirestore.getInstance().collection("Posts").document()
+        val postPath = FirebaseFirestore.getInstance().collection("Posts").document()
+        val userPath = FirebaseFirestore.getInstance().collection("Users").document()
         val ref = FirebaseStorage.getInstance().reference
 
-        ref.child("img_edited/" + document.id + ".jpg")
+        ref.child("img_edited/" + postPath.id + ".jpg")
             .putFile(uri)
             .addOnSuccessListener {
                 it.metadata?.reference?.downloadUrl?.addOnSuccessListener {
@@ -75,7 +64,7 @@ class EditViewModel : ViewModel() {
                     Timber.d("edited uri: $it => take it to upload url")
                     Timber.d("newTag $tag")
                     val post = hashMapOf(
-                        "id" to document.id,
+                        "id" to postPath.id,
                         "photoId" to "photo_id",
                         "ownerId" to UserManager.user.userId,
                         "title" to title,
@@ -87,8 +76,9 @@ class EditViewModel : ViewModel() {
                         "url" to it
                     )
                     //put into firebase_storage
-                    document.set(post)
-                    Timber.d("to firebase => Publish Done: $post")
+                    postPath.set(post)
+                    userPath.update("postQuantity", FieldValue.arrayUnion(postPath.id))
+                    Timber.d("to firebase => Publish Done: POST ${postPath.id} \n USER ${userPath.id}")
                     //  Log.d("test","test uri = ${Uri.parse(uri.toString())}")
                 }
             }

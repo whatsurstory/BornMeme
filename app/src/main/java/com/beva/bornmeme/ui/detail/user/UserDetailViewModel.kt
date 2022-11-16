@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.beva.bornmeme.model.Post
 import com.beva.bornmeme.model.User
-import com.beva.bornmeme.ui.editFragment.WHO
 import com.bumptech.glide.Glide.init
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query

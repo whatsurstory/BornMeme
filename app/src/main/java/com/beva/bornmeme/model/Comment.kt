@@ -18,8 +18,5 @@ data class Comment(
     val dislike: List<String> = emptyList(),
     val photoUrl: String = "",
     val parentId:String =""
-) : Parcelable {
-    @IgnoredOnParcel
-    val user: List<User> = emptyList()
-}
+) : Parcelable
 

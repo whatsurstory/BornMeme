@@ -18,6 +18,16 @@ import org.checkerframework.checker.units.qual.C
 
 class CollectionFragment : Fragment() {
 
+    companion object {
+        fun newInstance(userId: String): CollectionFragment {
+            val fragment = CollectionFragment()
+            val arg = Bundle()
+            arg.putString("userIdKey", userId)
+            fragment.arguments = arg
+            return fragment
+        }
+    }
+
     private lateinit var viewModel: CollectionViewModel
     private lateinit var binding:FragmentCollectionBinding
     private lateinit var adapter: CollectionAdapter
@@ -28,7 +38,9 @@ class CollectionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentCollectionBinding.inflate(inflater, container, false)
-        viewModel = CollectionViewModel()
+
+        val userId = requireArguments().getString("userIdKey") ?:""
+        viewModel = CollectionViewModel(userId)
 
         adapter = CollectionAdapter(
             CollectionAdapter.OnClickListener {
@@ -54,9 +66,7 @@ class CollectionFragment : Fragment() {
                 }
             }
         )
-
         return binding.root
-
     }
 
 }

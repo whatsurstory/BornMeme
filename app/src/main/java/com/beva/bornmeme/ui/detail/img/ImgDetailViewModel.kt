@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.ViewModelFactoryDsl
 import com.beva.bornmeme.databinding.FragmentImgDetailBinding
 import com.beva.bornmeme.model.Comment
+import com.beva.bornmeme.model.Folder
+import com.beva.bornmeme.model.User
 import com.beva.bornmeme.model.UserManager
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
@@ -18,7 +20,7 @@ import timber.log.Timber
 
 
 
-class ImgDetailViewModel : ViewModel() {
+class ImgDetailViewModel(postOwnerId: String) : ViewModel() {
 
 data class UiState (
     val onClickToReply: (comment:CommentCell.ParentComment) -> String,
@@ -181,12 +183,10 @@ data class UiState (
             }
     }
 
-
-
     fun onClickCollection(title:String, postId: String, url: String) {
         val ref = Firebase.firestore
             .collection("Users")
-            .document("cNXUG5FShzYesEOltXUZ")
+            .document(UserManager.user.userId)
             .collection("Folders")
             .document(title)
 
@@ -214,8 +214,6 @@ data class UiState (
         }
     }
 
-
-
     fun onClickToFollow(userId: String, binding: FragmentImgDetailBinding){
         Timber.d("UserID $userId")
         val db = Firebase.firestore.collection("Users")
@@ -234,4 +232,51 @@ data class UiState (
         }
     }
 
-}
+    init {
+        getUser(postOwnerId)
+    }
+
+    val userData = MutableLiveData<List<User>>()
+
+    private fun getUser(postOwnerId: String): MutableLiveData<List<User>> {
+        Firebase.firestore.collection("Users")
+            .whereEqualTo("userId", postOwnerId)
+            .addSnapshotListener {  querySnapshot, firebaseFirestoreException ->
+
+                firebaseFirestoreException?.let {
+                    Timber.w("[${this::class.simpleName}] Error getting documents. ${it.message}")
+                }
+
+                val list = mutableListOf<User>()
+                for (document in querySnapshot!!) {
+                    Timber.d("check User in Post -> ${document.id} => ${document.data}")
+                    val userData = document.toObject(User::class.java)
+                    list.add(userData)
+                    Timber.d("check $list")
+                }
+                userData.value = list
+            }
+        return userData
+    }
+//
+    val folderData = MutableLiveData<List<String>>()
+
+    fun getFolder() {
+        Firebase.firestore.collection("Users")
+            .document(UserManager.user.userId)
+            .collection("Folders")
+            .get()
+            .addOnCompleteListener { task ->
+                val list = mutableListOf<String>()
+                if (task.isSuccessful) {
+                    for (document in task.result!!) {
+                        list.add(document.id)
+                        Timber.d("data ${document.id}")
+                    }
+                    folderData.value = list
+                    } else {
+                    Timber.d(task.exception?.message!!)
+                    }
+                }
+            }
+    }

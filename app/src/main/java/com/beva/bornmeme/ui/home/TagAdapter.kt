@@ -19,15 +19,17 @@ class TagAdapter(private val onClickListener: OnClickListener): ListAdapter<Stri
     private var selectItem = -1
 
     class ViewHolder (private val binding: ItemTagBinding): RecyclerView.ViewHolder(binding.root) {
+
+        val chipCard = binding.chipCard
         @SuppressLint("ResourceAsColor")
         fun bind(item: String, selectedItem:Int){
-            binding.chipText.text = item
+            binding.chipCard.text = item
             if (adapterPosition == selectedItem) {
                 //recycler reuse if else condition
                 Timber.d("adapterPosition $adapterPosition")
-                binding.chipText.alpha = 0.4F
+                binding.chipCard.isChecked = true
             } else {
-                binding.chipText.alpha = 1F
+                binding.chipCard.isChecked = false
             }
         }
     }
@@ -50,18 +52,25 @@ class TagAdapter(private val onClickListener: OnClickListener): ListAdapter<Stri
     override fun onBindViewHolder(holder: ViewHolder, @SuppressLint("RecyclerView") position: Int) {
         val item = getItem(position)
         item?.let {
-            holder.itemView.setOnClickListener {
+            holder.chipCard.setOnClickListener {
                 onClickListener.onClick(item)
                 selectItem = position
                 Timber.d("selectItem $selectItem position $position")
                 notifyDataSetChanged()
             }
-            selectItem != -1
+//            selectItem != -1
             holder.bind(item, selectItem)
         }
     }
 
     class OnClickListener(val clickListener: (item: String) -> Unit) {
         fun onClick(item: String) = clickListener(item)
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun reset() {
+        Timber.d(("reset function"))
+        selectItem = -1
+        notifyDataSetChanged()
     }
 }

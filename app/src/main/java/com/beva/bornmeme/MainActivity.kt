@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.os.UserManager
 import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
@@ -31,7 +32,11 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import com.beva.bornmeme.databinding.ActivityMainBinding
+import com.beva.bornmeme.model.UserManager.user
+import com.bumptech.glide.Glide
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -49,9 +54,8 @@ class MainActivity : AppCompatActivity() {
     private var saveUri: Uri? = null
 
     private var isOpen = false
-    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-//    private var slidingNav: SlidingRootNav? = null
+    private lateinit var viewModel: MainViewModel
 
     //Animation of fab
     private lateinit var fabOpen: Animation
@@ -69,12 +73,26 @@ class MainActivity : AppCompatActivity() {
         Timber.plant(Timber.DebugTree())
         binding = ActivityMainBinding.inflate(layoutInflater)
 
+        val userId = com.beva.bornmeme.model.UserManager.user.userId
+        viewModel = MainViewModel(userId)
+
+        viewModel.userData.observe(this, Observer{
+            it?.let {
+                Timber.d(("Observe User cell : $it"))
+            Glide.with(this)
+                .load(it[0].profilePhoto)
+                .placeholder(R.drawable._50)
+                .into(binding.profileBtn)
+            }
+        })
+
+
         setContentView(binding.root)
         if (savedInstanceState != null) {
             saveUri = Uri.parse(savedInstanceState.getString("saveUri"))
         }
 
-        setSupportActionBar(binding.appBarMain.toolbar)
+        setSupportActionBar(binding.toolbar)
 
         //Animation of fab
         fabOpen = AnimationUtils.loadAnimation(this, R.anim.fab_open)
@@ -82,88 +100,69 @@ class MainActivity : AppCompatActivity() {
         fabRotate = AnimationUtils.loadAnimation(this, R.anim.rotate)
         fabRotateAnti = AnimationUtils.loadAnimation(this, R.anim.rotate_anti)
 
-        val drawerLayout: DrawerLayout = binding.drawerLayout
-        val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
 
-        // Passing each menu ID as a set of Ids because each menu should be considered as top level destinations.
-        //if creating new menu must adding the id in navigation and menu
-        appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.nav_home,R.id.bottomsheet_edit_profile ,R.id.user_detail_fragment
-            ), drawerLayout
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+        setupActionBarWithNavController(navController)
 
-        binding.appBarMain.sortBtn.setOnClickListener {
-            navController.navigate(MobileNavigationDirections.navigateToDragEditFragment())
+        binding.profileBtn.setOnClickListener {
+            navController.navigate(MobileNavigationDirections.navigateToUserDetailFragment(userId))
         }
-        //this is need to adding new layout view not really menu
-//        slidingNav = SlidingRootNavBuilder(this)
-//            .withMenuLayout(R.layout.nav_header_main)
-//            .withToolbarMenuToggle(binding.appBarMain.toolbar)
-//            .withMenuOpened(false)
-//            .withContentClickableWhenMenuOpened(true)
-//            .withSavedState(savedInstanceState)
-//            .inject()
-
         //the tool bar showing or not
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id == R.id.fragmentEditFixmode || destination.id == R.id.dialogPreview) {
-                binding.appBarMain.toolbar.visibility = View.GONE
-                binding.appBarMain.fab.visibility = View.GONE
-                binding.appBarMain.fab.setOnClickListener { galleryCheckPermission() }
+                binding.toolbar.visibility = View.GONE
+                binding.fab.visibility = View.GONE
+                binding.fab.setOnClickListener { galleryCheckPermission() }
             } else {
-                binding.appBarMain.toolbar.visibility = View.VISIBLE
-                binding.appBarMain.fab.visibility = View.VISIBLE
+                binding.toolbar.visibility = View.VISIBLE
+                binding.fab.visibility = View.VISIBLE
                 //fab expending animation
-                binding.appBarMain.fab.setOnClickListener { view ->
+                binding.fab.setOnClickListener { view ->
 
                     if (isOpen) {
-                        binding.appBarMain.fabCameraEdit.startAnimation(fabClose)
-                        binding.appBarMain.fabModuleEdit.startAnimation(fabClose)
-                        binding.appBarMain.fabGalleryEdit.startAnimation(fabClose)
-                        binding.appBarMain.fab.startAnimation(fabRotate)
+                        binding.fabCameraEdit.startAnimation(fabClose)
+                        binding.fabModuleEdit.startAnimation(fabClose)
+                        binding.fabGalleryEdit.startAnimation(fabClose)
+                        binding.fab.startAnimation(fabRotate)
 
-                        binding.appBarMain.fabCameraEdit.isEnabled = false
-                        binding.appBarMain.fabModuleEdit.isEnabled = false
-                        binding.appBarMain.fabGalleryEdit.isEnabled = false
+                        binding.fabCameraEdit.isEnabled = false
+                        binding.fabModuleEdit.isEnabled = false
+                        binding.fabGalleryEdit.isEnabled = false
 
                         isOpen = false
                     } else {
 
-                        binding.appBarMain.fabCameraEdit.startAnimation(fabOpen)
-                        binding.appBarMain.fabModuleEdit.startAnimation(fabOpen)
-                        binding.appBarMain.fabGalleryEdit.startAnimation(fabOpen)
-                        binding.appBarMain.fab.startAnimation(fabRotateAnti)
+                        binding.fabCameraEdit.startAnimation(fabOpen)
+                        binding.fabModuleEdit.startAnimation(fabOpen)
+                        binding.fabGalleryEdit.startAnimation(fabOpen)
+                        binding.fab.startAnimation(fabRotateAnti)
 
-                        binding.appBarMain.fabCameraEdit.visibility = View.VISIBLE
-                        binding.appBarMain.fabModuleEdit.visibility = View.VISIBLE
-                        binding.appBarMain.fabGalleryEdit.visibility = View.VISIBLE
+                        binding.fabCameraEdit.visibility = View.VISIBLE
+                        binding.fabModuleEdit.visibility = View.VISIBLE
+                        binding.fabGalleryEdit.visibility = View.VISIBLE
 
-                        binding.appBarMain.fabCameraEdit.isEnabled = true
-                        binding.appBarMain.fabModuleEdit.isEnabled = true
-                        binding.appBarMain.fabGalleryEdit.isEnabled = true
+                        binding.fabCameraEdit.isEnabled = true
+                        binding.fabModuleEdit.isEnabled = true
+                        binding.fabGalleryEdit.isEnabled = true
 
                         isOpen = true
                     }
-                    binding.appBarMain.fabCameraEdit.setOnClickListener {
+                    binding.fabCameraEdit.setOnClickListener {
                         cameraCheckPermission()
                     }
-                    binding.appBarMain.fabModuleEdit.setOnClickListener {
+                    binding.fabModuleEdit.setOnClickListener {
                         Snackbar.make(view, "This is Module Button", Snackbar.LENGTH_SHORT)
                             .setAction("Action", null).show()
                     }
-                    binding.appBarMain.fabGalleryEdit.setOnClickListener {
+                    binding.fabGalleryEdit.setOnClickListener {
                         galleryCheckPermission()
 
                     }
                 }
                 if (destination.id == R.id.nav_home) {
-                    binding.appBarMain.searchBar.visibility = View.VISIBLE
+                    binding.searchBar.visibility = View.VISIBLE
                 } else {
-                    binding.appBarMain.searchBar.visibility = View.GONE
+                    binding.searchBar.visibility = View.GONE
                 }
             }
         }
@@ -287,10 +286,10 @@ class MainActivity : AppCompatActivity() {
         uri?.let {
             fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_close)
             fabRotate = AnimationUtils.loadAnimation(this, R.anim.rotate)
-            binding.appBarMain.fabCameraEdit.startAnimation(fabClose)
-            binding.appBarMain.fabModuleEdit.startAnimation(fabClose)
-            binding.appBarMain.fabGalleryEdit.startAnimation(fabClose)
-            binding.appBarMain.fab.startAnimation(fabRotate)
+            binding.fabCameraEdit.startAnimation(fabClose)
+            binding.fabModuleEdit.startAnimation(fabClose)
+            binding.fabGalleryEdit.startAnimation(fabClose)
+            binding.fab.startAnimation(fabRotate)
             isOpen = false
 
             findNavController(R.id.nav_host_fragment_content_main)
@@ -300,7 +299,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+        return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
     private fun showRotationDialogForPermission() {

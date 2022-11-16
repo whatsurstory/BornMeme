@@ -35,7 +35,16 @@
 
     <style name="roundedCorner" parent="">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">10%</item>
+        <item name="cornerSize">5%</item>
+    </style>
+
+    <style name="SlideDialog">
+        <item name="android:windowBackground">@color/translucent_80</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.MyApp.Dialog.Rounded" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">18dp</item>
     </style>
 
 </resources>

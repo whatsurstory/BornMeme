@@ -41,6 +41,7 @@ class UserCommentAdapter: ListAdapter<Comment, UserCommentAdapter.ViewHolder>(Di
             }
             Timber.d("秒 $seconds 分 $minutes 時 $hour 天 $day")
 //            binding.timeText.text = "$day days ago"
+            
         }
     }
 

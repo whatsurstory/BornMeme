@@ -22,10 +22,5 @@ data class Post(
     val resources: List<Resource> = emptyList(),
     val collection: List<String>? =null,
     val createdTime: Timestamp? = null,
-) : Parcelable {
-    @IgnoredOnParcel
-    val user: List<User> = emptyList()
-}
-
-//photoId is for the extension feature
+) : Parcelable
 

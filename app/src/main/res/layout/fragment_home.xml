@@ -6,101 +6,70 @@
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/reset_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="16dp"
-        android:elevation="8dp"
-        android:layout_marginHorizontal="10dp"
-        app:cardBackgroundColor="@color/whit_alpha"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/chipRecycler"
-        app:layout_constraintEnd_toStartOf="@id/chipRecycler"
-        app:layout_constraintBottom_toBottomOf="@id/chipRecycler">
-
-        <TextView
-            android:id="@+id/chip_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:gravity="center"
-            android:text="All Tag"
-            android:textColor="@color/light_orange_pink"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-    </androidx.cardview.widget.CardView>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/chipRecycler"
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chip_group"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="8dp"
         android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@id/recycler_home"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/reset_btn"
+        app:layout_constraintEnd_toStartOf="@id/sort_btn"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/item_tag" />
+        app:singleSelection="true"
+        >
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        >
 
-<!--    <com.google.android.material.chip.ChipGroup-->
-<!--        android:id="@+id/chip_group"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:orientation="horizontal"-->
-<!--        android:layout_marginHorizontal="8dp"-->
-<!--        app:layout_constraintStart_toStartOf="@id/recycler_home"-->
-<!--        app:layout_constraintEnd_toEndOf="@id/recycler_home"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintBottom_toTopOf="@id/recycler_home"-->
-<!--        app:singleSelection="true"-->
-<!--        >-->
-
-<!--        <com.google.android.material.chip.Chip-->
-<!--            style="@style/CustomChipStyle"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_marginHorizontal="1dp"-->
-<!--            android:text="catalog"/>-->
-<!--        <com.google.android.material.chip.Chip-->
-<!--            style="@style/CustomChipStyle"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_marginHorizontal="1dp"-->
-<!--            android:text="Tag"/>-->
-<!--        <com.google.android.material.chip.Chip-->
-<!--            style="@style/CustomChipStyle"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_marginHorizontal="1dp"-->
-<!--            android:text="catalog"/>-->
-<!--        <com.google.android.material.chip.Chip-->
-<!--            style="@style/CustomChipStyle"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_marginHorizontal="1dp"-->
-<!--            android:text="Tag"/>-->
-<!--        <com.google.android.material.chip.Chip-->
-<!--            style="@style/CustomChipStyle"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_width="wrap_content"-->
-<!--            android:layout_marginHorizontal="1dp"-->
-<!--        android:text="catalog"/>-->
-
-<!--    </com.google.android.material.chip.ChipGroup>-->
+        <com.google.android.material.chip.Chip
+            android:id="@+id/reset_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="All Tag"
+            style="@style/CustomChipStyle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/chipRecycler"/>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chipRecycler"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toEndOf="@+id/reset_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/reset_btn"
+            app:layout_constraintBottom_toBottomOf="@id/reset_btn"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_tag" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.chip.ChipGroup>
+
+    <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_home"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginHorizontal="4dp"
+            android:layout_marginBottom="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chipRecycler"
+            app:layout_constraintTop_toBottomOf="@+id/chip_group"
             tools:listitem="@layout/item_home_img"/>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/sort_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:scaleType="center"
+        android:tint="@color/light_orange_pink"
+        app:layout_constraintBottom_toBottomOf="@+id/chip_group"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/chip_group"
+        app:srcCompat="@drawable/ic_baseline_sort_24" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

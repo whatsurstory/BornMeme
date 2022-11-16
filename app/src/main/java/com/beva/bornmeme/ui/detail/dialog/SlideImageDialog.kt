@@ -12,9 +12,12 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.constraintlayout.widget.ConstraintAttribute.setAttributes
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearSnapHelper
+import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.SnapHelper
+import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.DialogSlideCollectionBinding
 import com.beva.bornmeme.model.Folder
 import timber.log.Timber
@@ -26,7 +29,11 @@ class SlideImageDialog: AppCompatDialogFragment() {
     private lateinit var viewModel: SlideViewModel
     private lateinit var folder: Folder
 
-    @RequiresApi(Build.VERSION_CODES.S)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(DialogFragment.STYLE_NO_FRAME, R.style.SlideDialog)
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,14 +44,24 @@ class SlideImageDialog: AppCompatDialogFragment() {
             folder = bundle.getParcelable("folder")!!
             Timber.d("WelCome to FOLDERRR: arg -> $folder")
         }
-        dialog?.setTransparentBackground()
+//        dialog?.setTransparentBackground()
         viewModel = SlideViewModel(folder)
         binding = DialogSlideCollectionBinding.inflate(layoutInflater)
+        binding.dialog = this
 
         val adapter = SlideAdapter()
         binding.slideImgRecycler.adapter = adapter
-        val snapHelper: SnapHelper = LinearSnapHelper()
-        snapHelper.attachToRecyclerView(binding.slideImgRecycler)
+//        val snapHelper: SnapHelper = LinearSnapHelper()
+//        snapHelper.attachToRecyclerView(binding.slideImgRecycler)
+
+        val pagerSnapHelper = PagerSnapHelper()
+        pagerSnapHelper.attachToRecyclerView(binding.slideImgRecycler)
+
+        val indicator2 = binding.indicator
+        indicator2.attachToRecyclerView(binding.slideImgRecycler, pagerSnapHelper)
+
+        adapter.registerAdapterDataObserver(indicator2.adapterDataObserver)
+
         viewModel.imageItem.observe(viewLifecycleOwner, Observer {
             Timber.d("observe -> $it")
             adapter.submitList(it)
@@ -53,9 +70,9 @@ class SlideImageDialog: AppCompatDialogFragment() {
 
         return binding.root
     }
-    @RequiresApi(Build.VERSION_CODES.S)
-    private fun Dialog.setTransparentBackground() {
-        window?.setBackgroundDrawableResource(android.R.color.transparent)
-        window?.setTitle("FOLDER_NAME")
-    }
+//    @RequiresApi(Build.VERSION_CODES.S)
+//    private fun Dialog.setTransparentBackground() {
+//        window?.setBackgroundDrawableResource(android.R.color.transparent)
+//
+//    }
 }

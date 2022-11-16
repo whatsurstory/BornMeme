@@ -45,23 +45,6 @@ class HomeViewModel : ViewModel() {
         }
 
 
-//    fun getFilterData(item:String) {
-//
-//        FirebaseFirestore.getInstance()
-//            .collection("Posts").whereEqualTo("catalog", item)
-//            .addSnapshotListener { snapshot, exception ->
-//                Timber.d("You are in HomeViewModel")
-//
-//                exception?.let {
-//                    Timber.d("Exception ${it.message}")
-//                }
-//                for (document in snapshot!!){
-//                    Timber.d("check Data${document.id} ${document.data}")
-//                }
-//            }
-//
-//    }
-
     //單獨處理snapshotlistener的方式
     private fun getData(): MutableLiveData<List<Post>> {
         val postData = FirebaseFirestore.getInstance()
@@ -102,12 +85,15 @@ class HomeViewModel : ViewModel() {
         }
         addSource(tagSet) {
             it.let { tag ->
-                Timber.d("this is tagcell $tag")
                 val dataList = liveData.value?.filter { it ->
                     it.catalog == tag
                 }
-                Timber.d("3  ${dataList?.size}")
-                value = dataList
+                Timber.d("3 按下 $tag ${dataList?.size}")
+                if (tag != null) {
+                    value = dataList
+                } else {
+                    value = liveData.value
+                }
             }
         }
     }
@@ -117,6 +103,9 @@ class HomeViewModel : ViewModel() {
         _tagSet.value = tagSet
     }
 
+    fun resetTag () {
+        _tagSet.value = null
+    }
 
     fun navigateToDetail(item: Post) {
         _navigateToDetail.value = item

@@ -21,6 +21,8 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var adapter: HomeAdapter
 
+
+
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,6 +31,9 @@ class HomeFragment : Fragment() {
     ): View? {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        //The Logic of Tag clicked
+        setAllTagEnabled(false)
 
         viewModel = HomeViewModel()
 
@@ -53,6 +58,8 @@ class HomeFragment : Fragment() {
             }
         })
 
+
+
 //        viewModel.display.observe(viewLifecycleOwner, Observer {
 //            Timber.d("viewModel display value $it")
 //          先藉由obeserve知道拿的資料是什麼
@@ -62,9 +69,17 @@ class HomeFragment : Fragment() {
             TagAdapter.OnClickListener {
                 Timber.d("observe the click item $it")
                 viewModel.changeTag(it)
+                setAllTagEnabled(true)
             }
         )
         binding.chipRecycler.adapter = tagAdapter
+
+        binding.resetBtn.setOnClickListener {
+
+            tagAdapter.reset()
+            viewModel.resetTag()
+
+        }
 
         viewModel.tagCell.observe(viewLifecycleOwner, Observer {
             it?.let {
@@ -85,7 +100,19 @@ class HomeFragment : Fragment() {
                 }
             }
         )
+
+        binding.sortBtn.setOnClickListener {
+            findNavController().navigate(MobileNavigationDirections.navigateToDragEditFragment())
+        }
+
+
+
         return binding.root
+    }
+
+    private fun setAllTagEnabled(isEnabled: Boolean) {
+        binding.resetBtn.isEnabled = isEnabled
+        binding.resetBtn.isChecked = !isEnabled
     }
 }
 

@@ -1,25 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/slide_img_recycler"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:orientation="horizontal"
-        android:layout_gravity="fill"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/item_slide_image"
-        android:background="@color/whit_alpha"/>
+    <data>
+        <import type="android.view.View"/>
+        <variable name="dialog" type="com.beva.bornmeme.ui.detail.dialog.SlideImageDialog"/>
+        <variable name="viewModel" type="com.beva.bornmeme.ui.detail.dialog.SlideViewModel"/>
+    </data>
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:onClick="@{() -> dialog.dismiss()}">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/slide_img_recycler"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:orientation="horizontal"
+            android:layout_marginVertical="40dp"
+            android:layout_marginHorizontal="2dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/item_slide_image"
+            />
+
+        <me.relex.circleindicator.CircleIndicator2
+            android:id="@+id/indicator"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            app:layout_constraintStart_toStartOf="@id/slide_img_recycler"
+            app:layout_constraintEnd_toEndOf="@id/slide_img_recycler"
+            app:layout_constraintTop_toBottomOf="@id/slide_img_recycler"
+            app:ci_drawable="@drawable/white_radius"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

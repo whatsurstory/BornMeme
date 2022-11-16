@@ -81,6 +81,7 @@ dependencies {
 //    implementation 'com.yarolegovich:sliding-root-nav:1.1.1'
 
 //    implementation "com.hootsuite.android:nachos:1.1.1"
+    implementation 'me.relex:circleindicator:2.1.6'
 }
 
 ktlint {

@@ -2,7 +2,6 @@ package com.beva.bornmeme.ui.detail.img
 
 
 import android.annotation.SuppressLint
-import android.content.ContentResolver
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
@@ -13,12 +12,12 @@ import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AlertDialog
-import androidx.core.net.toUri
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentImgDetailBinding
+import com.beva.bornmeme.model.Folder
 import com.beva.bornmeme.model.Post
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -59,8 +58,32 @@ class ImgDetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ImgDetailViewModel()
+        viewModel = ImgDetailViewModel(post.ownerId)
         viewModel.getComments(post.id)
+
+        viewModel.userData.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                Glide.with(this)
+                    .load(it[0].profilePhoto)
+                    .apply(
+                        RequestOptions()
+                            .placeholder(R.drawable._50)
+                            .error(R.drawable.dino)
+                    ).into(binding.imgDetailUserImg)
+                binding.imgDetailUserName.text = it[0].userName
+            }
+        })
+
+        binding.imgDetailTitle.text = post.title
+        Glide.with(this)
+            .load(post.url)
+            .apply(
+                RequestOptions()
+                    .placeholder(R.drawable._50)
+                    .error(R.drawable.dino)
+            ).into(binding.imgDetailImage)
+        binding.imgDetailDescription.text = post.resources[1].url
+
         val adapter = CommentAdapter(viewModel.uiState)
         binding.commentsRecycler.adapter = adapter
 
@@ -119,32 +142,14 @@ class ImgDetailFragment : Fragment() {
             viewModel.onClickToFollow(post.ownerId, binding)
         }
 
+        viewModel.folderData.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                showAlert(it)
+            }
+        })
         //the button to take post to collection
         binding.collectionBtn.setOnClickListener {
-            val alert =  AlertDialog.Builder(requireContext())
-            val edittext = EditText(requireContext())
-            edittext.hint = "Enter Title Of Collection"
-            edittext.maxLines = 1
-            val layout = FrameLayout(requireContext())
-
-            //set padding in parent layout
-            layout.setPaddingRelative(45,15,45,0)
-            layout.addView(edittext)
-            alert.setView(layout)
-            alert.setTitle("Name your Folder")
-
-            alert.setPositiveButton("SAVE",
-                DialogInterface.OnClickListener { dialog, which ->
-                run {
-                    val title = edittext.text.toString()
-                    viewModel.onClickCollection(title, post.id, post.url.toString())
-                    viewModel.doneCollection(post.id)
-                }
-            })
-            alert.setNegativeButton("CANCEL"
-            ) { _, _ ->
-            }
-            alert.show()
+            viewModel.getFolder()
         }
 
         //the menu button to report and other feature
@@ -189,5 +194,43 @@ class ImgDetailFragment : Fragment() {
 //            findNavController().navigate(MobileNavigationDirections.navigateToEditFragment(uri))
 //        }
         return binding.root
+    }
+
+    private fun showAlert(folderNames: List<String>) {
+        val alert =  AlertDialog.Builder(requireContext())
+        val edittext = EditText(requireContext())
+        edittext.hint = "Enter Title Of Collection"
+        edittext.maxLines = 1
+        val layout = FrameLayout(requireContext())
+        val isCheckedIndex = ArrayList<Int>()
+        //set padding in parent layout
+        layout.setPaddingRelative(45,15,45,0)
+        layout.addView(edittext)
+        alert.setView(layout)
+        alert.setTitle("Name your Folder")
+        alert.setMultiChoiceItems(
+            folderNames.toTypedArray(),null,
+            DialogInterface.OnMultiChoiceClickListener { dialog, index, isChecked ->
+                if (isChecked) {
+                    isCheckedIndex.add(index)
+                    Timber.d("check add index -> $isCheckedIndex \n $index")
+                } else if (isCheckedIndex.contains(index)) {
+                    isCheckedIndex.remove(index)
+                    Timber.d("check remove index -> $isCheckedIndex \n $index")
+                }
+            })
+
+        alert.setPositiveButton("SAVE",
+            DialogInterface.OnClickListener { dialog, which ->
+                run {
+                    val title = edittext.text.toString()
+                    viewModel.onClickCollection(title, post.id, post.url.toString())
+                    viewModel.doneCollection(post.id)
+                }
+            })
+        alert.setNegativeButton("CANCEL"
+        ) { _, _ ->
+        }
+        alert.show()
     }
 }

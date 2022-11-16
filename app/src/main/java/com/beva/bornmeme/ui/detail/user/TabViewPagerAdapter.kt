@@ -20,7 +20,7 @@ class TabViewPagerAdapter(fragment: Fragment, val userId: String): FragmentState
             0 -> FavoriteFragment.newInstance(userId)
             1 -> PostsFragment.newInstance(userId)
             2 -> CommentsFragment.newInstance(userId)
-            3 -> CollectionFragment()
+            3 -> CollectionFragment.newInstance(userId)
             else -> throw IllegalArgumentException("Don't Know")
         }
     }
