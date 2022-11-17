@@ -53,34 +53,33 @@
                 android:layout_height="0dp"
                 android:gravity="center"
                 android:text="follow"
-                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="@+id/img_detail_user_name"
                 app:layout_constraintEnd_toStartOf="@+id/report_btn"
                 app:layout_constraintStart_toEndOf="@+id/detail_guideline"
                 app:layout_constraintTop_toTopOf="@+id/img_detail_user_name" />
 
-            <TextView
-                android:id="@+id/unfollow_btn"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:text="following"
-                android:gravity="center"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@+id/img_detail_user_name"
-                app:layout_constraintEnd_toStartOf="@+id/report_btn"
-                app:layout_constraintStart_toEndOf="@+id/detail_guideline"
-                app:layout_constraintTop_toTopOf="@+id/img_detail_user_name" />
+<!--            <TextView-->
+<!--                android:id="@+id/unfollow_btn"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="following"-->
+<!--                android:gravity="center"-->
+<!--                android:visibility="gone"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/img_detail_user_name"-->
+<!--                app:layout_constraintEnd_toStartOf="@+id/report_btn"-->
+<!--                app:layout_constraintStart_toEndOf="@+id/detail_guideline"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/img_detail_user_name" />-->
 
             <ImageButton
                 android:id="@+id/report_btn"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:background="@color/whit_alpha"
                 android:rotation="90"
+                android:layout_marginEnd="16dp"
                 android:src="@drawable/ic_baseline_more_vert_24"
                 app:layout_constraintBottom_toBottomOf="@+id/follow_btn"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/follow_btn"
                 app:layout_constraintTop_toTopOf="@id/follow_btn" />
 
             <ImageButton

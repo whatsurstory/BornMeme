@@ -11,11 +11,13 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.InputType
+import android.text.TextUtils.indexOf
 import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.databinding.adapters.ViewBindingAdapter.setPadding
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.beva.bornmeme.MobileNavigationDirections
@@ -23,11 +25,16 @@ import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentImgDetailBinding
 import com.beva.bornmeme.model.Folder
 import com.beva.bornmeme.model.Post
+import com.beva.bornmeme.model.User
+import com.beva.bornmeme.model.UserManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.getField
+import com.google.firebase.ktx.Firebase
 import timber.log.Timber
 
 class ImgDetailFragment : Fragment() {
@@ -39,7 +46,7 @@ class ImgDetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = FragmentImgDetailBinding.inflate(layoutInflater)
-                arguments?.let { bundle ->
+        arguments?.let { bundle ->
             post = bundle.getParcelable("postKey")!!
             Timber.d("WelCome to Img Detail: arg -> ${post.id}")
         }
@@ -49,10 +56,10 @@ class ImgDetailFragment : Fragment() {
         Glide.with(this)
             .load(post.url)
             .apply(
-            RequestOptions()
-                .placeholder(R.drawable._50)
-                .error(R.drawable.dino)
-        ).into(binding.imgDetailImage)
+                RequestOptions()
+                    .placeholder(R.drawable._50)
+                    .error(R.drawable.dino)
+            ).into(binding.imgDetailImage)
         binding.imgDetailDescription.text = post.resources[1].url
     }
 
@@ -75,8 +82,27 @@ class ImgDetailFragment : Fragment() {
                             .error(R.drawable.dino)
                     ).into(binding.imgDetailUserImg)
                 binding.imgDetailUserName.text = it[0].userName
+                if (post.ownerId == UserManager.user.userId) {
+                    binding.followBtn.visibility = View.GONE
+                } else {
+                    for (item in it[0].followers) {
+                        if (item == UserManager.user.userId) {
+                            binding.followBtn.text = "Following"
+                            binding.followBtn.setOnClickListener {
+                                Toast.makeText(context, "你已經追蹤該作者", Toast.LENGTH_SHORT).show()
+                            }
+                        } else {
+                            binding.followBtn.text = "Follow"
+                            //the button to follow other users
+                            binding.followBtn.setOnClickListener {
+                                viewModel.onClickToFollow(post.ownerId, binding)
+                            }
+                        }
+                    }
+                }
             }
         })
+
 
         binding.imgDetailTitle.text = post.title
         Glide.with(this)
@@ -109,8 +135,10 @@ class ImgDetailFragment : Fragment() {
         }
         //the button to see user information
         binding.imgDetailUserImg.setOnClickListener {
-            findNavController().navigate(MobileNavigationDirections
-                .navigateToUserDetailFragment(post.ownerId))
+            findNavController().navigate(
+                MobileNavigationDirections
+                    .navigateToUserDetailFragment(post.ownerId)
+            )
         }
         //the button to like post
         binding.likeBtn.setOnClickListener {
@@ -127,23 +155,25 @@ class ImgDetailFragment : Fragment() {
         }
         //the button to post comments
         binding.commentBtn.setOnClickListener {
-            findNavController().navigate(MobileNavigationDirections
-                .navigateToCommentDialog(postId = post.id))
+            findNavController().navigate(
+                MobileNavigationDirections
+                    .navigateToCommentDialog(postId = post.id)
+            )
         }
 
         viewModel.navigate2Comment.observe(viewLifecycleOwner) {
             Timber.d("Observe navigate $it")
             it?.let {
-                findNavController().navigate(MobileNavigationDirections
-                    .navigateToCommentDialog(postId = it.comment.postId, parentId = it.comment.commentId))
+                findNavController().navigate(
+                    MobileNavigationDirections
+                        .navigateToCommentDialog(
+                            postId = it.comment.postId,
+                            parentId = it.comment.commentId
+                        )
+                )
                 viewModel.onDetailNavigated()
                 Timber.d("navigate end")
             }
-        }
-
-        //the button to follow other users
-        binding.followBtn.setOnClickListener {
-            viewModel.onClickToFollow(post.ownerId, binding)
         }
 
         viewModel.folderData.observe(viewLifecycleOwner, Observer {
@@ -153,22 +183,25 @@ class ImgDetailFragment : Fragment() {
         })
         //the button to take post to collection
         binding.collectionBtn.setOnClickListener {
-            Toast.makeText(context,"let's relax a moment ...",Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "let's relax a moment ...", Toast.LENGTH_SHORT).show()
             viewModel.getFolder()
         }
 
         //the menu button to report and other feature
-        val popupMenu = PopupMenu(context,
-        binding.reportBtn)
-        popupMenu.menu.add(Menu.NONE, 0,0,"Report the Image")
-        popupMenu.menu.add(Menu.NONE,1,1,"Report the User")
-        popupMenu.menu.add(Menu.NONE,2,2,"test")
+        val popupMenu = PopupMenu(
+            context,
+            binding.reportBtn
+        )
+        popupMenu.menu.add(Menu.NONE, 0, 0, "Report the Image")
+        popupMenu.menu.add(Menu.NONE, 1, 1, "Report the User")
+        popupMenu.menu.add(Menu.NONE, 2, 2, "test")
 
         popupMenu.setOnMenuItemClickListener {
-            when(val id = it.itemId) {
-                0 -> Toast.makeText(context, "ID $id -> Report the Image",Toast.LENGTH_SHORT).show()
-                1 -> Toast.makeText(context, "ID $id -> Report the User",Toast.LENGTH_SHORT).show()
-                2 -> Toast.makeText(context, "ID $id -> Report the test",Toast.LENGTH_SHORT).show()
+            when (val id = it.itemId) {
+                0 -> Toast.makeText(context, "ID $id -> Report the Image", Toast.LENGTH_SHORT)
+                    .show()
+                1 -> Toast.makeText(context, "ID $id -> Report the User", Toast.LENGTH_SHORT).show()
+                2 -> Toast.makeText(context, "ID $id -> Report the test", Toast.LENGTH_SHORT).show()
             }
             false
         }
@@ -181,8 +214,10 @@ class ImgDetailFragment : Fragment() {
         binding.shareBtn.setOnClickListener {
             val bitmapDrawable = binding.imgDetailImage.drawable as BitmapDrawable
             val bitmap = bitmapDrawable.bitmap
-            val bitmapPath = MediaStore.Images.Media.insertImage(requireContext()
-                .contentResolver, bitmap, "Description",null)
+            val bitmapPath = MediaStore.Images.Media.insertImage(
+                requireContext()
+                    .contentResolver, bitmap, "Description", null
+            )
             val bitmapUri = Uri.parse(bitmapPath)
 
             val intent = Intent(Intent.ACTION_SEND)
@@ -203,43 +238,99 @@ class ImgDetailFragment : Fragment() {
 
     @SuppressLint("ResourceAsColor")
     private fun showAlert(folderNames: List<String>) {
-        val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+        val builder: AlertDialog.Builder =
+            AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
+        builder.setCancelable(false)
         // Get the layout inflater
         val inflater = requireActivity().layoutInflater
         val isCheckedIndex = ArrayList<Int>()
+        val list = ArrayList<String>()
+
         builder.setTitle("Name your Folder")
         val view = inflater.inflate(R.layout.diaolog_collection, null)
         builder.setView(view)
         val input = view.findViewById<EditText>(R.id.folder_name)
 
+
         builder.setMultiChoiceItems(
-            folderNames.toTypedArray(),null,
+            folderNames.toTypedArray(), null,
             DialogInterface.OnMultiChoiceClickListener { dialog, index, isChecked ->
                 //the dialog is interface, which is int, isChecked is boolean
                 if (isChecked) {
                     isCheckedIndex.add(index)
-                    Toast.makeText(context, "You Choose The ${folderNames.toTypedArray()[index]}",Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(context, "You Choose The ${folderNames.toTypedArray()[index]}",Toast.LENGTH_SHORT).show()
+                    list.add(folderNames.toTypedArray()[index])
+
+//                    Timber.d("check index list $isCheckedIndex")
+//                    Timber.d("check selected item $list")
 
                 } else if (isCheckedIndex.contains(index)) {
                     isCheckedIndex.remove(index)
-                    Toast.makeText(context, "You Cancel The ${folderNames.toTypedArray()[index]}",Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(context, "You Cancel The ${folderNames.toTypedArray()[index]}",Toast.LENGTH_SHORT).show()
+                    list.remove(folderNames.toTypedArray()[index])
+
                 }
             })
 
-        builder.setPositiveButton("SAVE",
+        builder.setNeutralButton("SAVE",
             DialogInterface.OnClickListener { dialog, which ->
                 run {
-                    val title = input.text.toString()
-                    Toast.makeText(context, "New Created $input Folder", Toast.LENGTH_SHORT).show()
-                    viewModel.onClickCollection(title, post.id, post.url.toString())
-                    viewModel.doneCollection(post.id)
+                    var title: String
+                    if (list.isNotEmpty() && input.text.toString().isEmpty()) {
+                        for (i in 0 until list.size) {
+                            title = list[i]
+                            Timber.d("title $title")
+                            viewModel.onClickCollection(title, post.id, post.url.toString())
+                            viewModel.doneCollection(post.id)
+//                        Toast.makeText(context, "New Created $input Folder", Toast.LENGTH_SHORT).show()
+                        }
+                    } else if (list.isEmpty() && input.text.toString().isNotEmpty()) {
+                        title = input.text.toString()
+                        viewModel.onClickCollection(title, post.id, post.url.toString())
+                        viewModel.doneCollection(post.id)
+
+                    } else if (list.isNotEmpty() && input.text.toString().isNotEmpty()) {
+                        list.add(input.text.toString())
+                        for (i in 0 until list.size) {
+                            title = list[i]
+                            Timber.d("title $title")
+                            viewModel.onClickCollection(title, post.id, post.url.toString())
+                            viewModel.doneCollection(post.id)
+//                            Toast.makeText(context, "New Created $input Folder", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+//                        Toast.makeText(context, "Must Enter One Letter",Toast.LENGTH_SHORT).show()
+                        input.error = "Please fill this"
+
+                    }
                 }
             })
-        builder.setNegativeButton("CANCEL"
-        ) { _, _ ->
-        }
+        builder.setNegativeButton("CANCEL",
+            DialogInterface.OnClickListener { _, _ ->
+//            Timber.d("check the selected item -> list size:${list.size} int size: ${isCheckedIndex.size}")
+            })
 
         val alertDialog: AlertDialog = builder.create()
         alertDialog.show()
+
+        val saveButton = alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL)
+        with(saveButton) {
+            setBackgroundColor(R.color.black)
+            setPadding(0, 0, 20, 0)
+            setTextColor(R.color.light_blue)
+
+        }
+
+//        if (list.isNotEmpty() && input.text.toString().isNotEmpty()) {
+//            saveButton.isEnabled = true
+//        }
+
+        val cancelButton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+        with(cancelButton) {
+            setBackgroundColor(R.color.black)
+            setPadding(0, 0, 20, 0)
+            setTextColor(R.color.light_blue)
+        }
+
     }
 }

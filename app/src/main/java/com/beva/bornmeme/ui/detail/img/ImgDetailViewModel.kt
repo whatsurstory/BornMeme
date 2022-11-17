@@ -223,8 +223,7 @@ data class UiState (
             .addOnSuccessListener {
                 db.document(userId)
                     .update("followers", FieldValue.arrayUnion(UserManager.user.userId))
-                binding.followBtn.visibility = View.INVISIBLE
-                binding.unfollowBtn.visibility = View.VISIBLE
+                binding.followBtn.text = "Following"
             }
             .addOnFailureListener {
                 Timber.d("ERROR ${it.message}")

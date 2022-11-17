@@ -42,8 +42,11 @@
         <item name="android:windowBackground">@color/translucent_80</item>
     </style>
 
+
+<!-- setting the item in multiChoice list -->
     <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:textColor">@color/dark_blue</item>
+        <item name="colorAccent">@color/dark_blue</item>
     </style>
 
 </resources>
