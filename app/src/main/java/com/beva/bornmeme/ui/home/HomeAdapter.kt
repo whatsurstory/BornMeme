@@ -99,25 +99,6 @@ class HomeAdapter(private val onClickListener: OnClickListener) : ListAdapter<Po
                 binding.likeNum.text = item.like.size.toString()
             }
 
-            //delete for short
-            binding.likeBtn.setOnClickListener{
-
-                val builder = AlertDialog.Builder(it.context)
-                builder.setMessage("Delete ${item.id}")
-                builder.setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, which ->
-                FirebaseFirestore.getInstance()
-                    .collection("Posts")
-                    .document(item.id)
-                    .delete()
-                    .addOnSuccessListener { Timber.d("DocumentSnapshot successfully deleted!") }
-                    .addOnFailureListener { e -> Timber.w( "Error deleting document", e) }
-                })
-                builder.setNegativeButton("No", DialogInterface.OnClickListener{ dialog, which ->
-
-                })
-                val alertDialog: AlertDialog = builder.create()
-                alertDialog.show()
-            }
         }
     }
 

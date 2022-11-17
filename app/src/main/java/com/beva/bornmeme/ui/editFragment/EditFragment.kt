@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.appcompat.widget.AppCompatEditText
 import androidx.collection.arrayMapOf
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
@@ -18,6 +19,8 @@ import androidx.navigation.fragment.findNavController
 import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.databinding.FragmentEditFixmodeBinding
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import timber.log.Timber
@@ -28,8 +31,8 @@ class EditFragment : Fragment() {
 
     private lateinit var binding: FragmentEditFixmodeBinding
     private lateinit var uri: Uri
-    private lateinit var upperText: EditText
-    private lateinit var bottomText: EditText
+    private lateinit var upperText: AppCompatEditText
+    private lateinit var bottomText: AppCompatEditText
     //complete the publish will input the photo to firebase, Using  Path -> Posts
     private val fireStore = FirebaseFirestore.getInstance().collection("Posts")
     private val document = fireStore.document()

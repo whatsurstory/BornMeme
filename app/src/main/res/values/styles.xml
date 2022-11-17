@@ -13,15 +13,22 @@
 
     <style name="CustomMenuStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">true</item>
-        <item name="color">@color/rice</item>
+        <item name="color">@color/dark_blue</item>
         <item name="gapBetweenBars">8dp</item>
         <item name="barLength">24dp</item>
         <item name="thickness">2dp</item>
     </style>
 
 
-    <style name="SearchViewMy" parent="Widget.AppCompat.Light.SearchView">
-        <item name="tint">@color/white</item>
+    <style name="AppSearchView" parent="Widget.AppCompat.SearchView" >
+        <!-- Text Size -->
+<!--        <item name="android:textSize">@dimen/textSizePrimary</item>-->
+        <!-- Query Text Color -->
+        <item name="android:textColorPrimary">@color/green</item>
+        <!-- Hint Color -->
+        <item name="android:textColorHint">@color/pinkpink</item>
+        <!-- Icon Color -->
+        <item name="android:tint">@color/tian_ching</item>
     </style>
 
     <style name="PublishDialog">
@@ -35,7 +42,7 @@
 
     <style name="roundedCorner" parent="">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">5%</item>
+        <item name="cornerSize">2%</item>
     </style>
 
     <style name="SlideDialog">
@@ -48,5 +55,6 @@
         <item name="android:textColor">@color/dark_blue</item>
         <item name="colorAccent">@color/dark_blue</item>
     </style>
+
 
 </resources>

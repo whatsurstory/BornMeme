@@ -15,8 +15,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:spanCount="2"
-        android:layout_margin="4dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="6dp"
+        android:layout_marginVertical="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 

@@ -120,10 +120,16 @@ class ImgDetailFragment : Fragment() {
         //Observe the view of comments recycler
         viewModel.commentCells.observe(viewLifecycleOwner, Observer {
             it?.let {
-                Timber.d(("Observe comment cell : $it"))
-                adapter.submitList(it)
-                adapter.notifyDataSetChanged()
+                if (it.isEmpty()) {
+                    binding.noSeeText.visibility = View.VISIBLE
+                } else {
+                    binding.noSeeText.visibility = View.GONE
+                    Timber.d(("Observe comment cell : $it"))
+                    adapter.submitList(it)
+                    adapter.notifyDataSetChanged()
+                }
             }
+
         })
 
         //Query All Comments
@@ -192,19 +198,30 @@ class ImgDetailFragment : Fragment() {
             context,
             binding.reportBtn
         )
-        popupMenu.menu.add(Menu.NONE, 0, 0, "Report the Image")
-        popupMenu.menu.add(Menu.NONE, 1, 1, "Report the User")
-        popupMenu.menu.add(Menu.NONE, 2, 2, "test")
-
-        popupMenu.setOnMenuItemClickListener {
-            when (val id = it.itemId) {
-                0 -> Toast.makeText(context, "ID $id -> Report the Image", Toast.LENGTH_SHORT)
-                    .show()
-                1 -> Toast.makeText(context, "ID $id -> Report the User", Toast.LENGTH_SHORT).show()
-                2 -> Toast.makeText(context, "ID $id -> Report the test", Toast.LENGTH_SHORT).show()
+        if (post.ownerId != UserManager.user.userId) {
+            popupMenu.menu.add(Menu.NONE, 0, 0, "Report the Image")
+            popupMenu.menu.add(Menu.NONE, 1, 1, "Report the User")
+            popupMenu.setOnMenuItemClickListener {
+                when (val id = it.itemId) {
+                    0 -> Toast.makeText(context, "ID $id -> Report the Image", Toast.LENGTH_SHORT)
+                        .show()
+                    1 -> Toast.makeText(context, "ID $id -> Report the User", Toast.LENGTH_SHORT).show()
+                }
+                false
             }
-            false
+        } else {
+            popupMenu.menu.add(Menu.NONE, 0, 0, "Delete the image")
+            popupMenu.setOnMenuItemClickListener {
+                when (it.itemId) {
+                    0 -> showDialog()
+                }
+                false
+            }
         }
+
+
+
+
         binding.reportBtn.setOnClickListener {
             popupMenu.show()
         }
@@ -332,5 +349,24 @@ class ImgDetailFragment : Fragment() {
             setTextColor(R.color.light_blue)
         }
 
+    }
+
+    private fun showDialog() {
+        //delete for short
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setMessage("Are You Sure to Delete ${post.id}?")
+            builder.setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, which ->
+                FirebaseFirestore.getInstance()
+                    .collection("Posts")
+                    .document(post.id)
+                    .delete()
+                    .addOnSuccessListener { Timber.d("DocumentSnapshot successfully deleted!") }
+                    .addOnFailureListener { e -> Timber.w( "Error deleting document", e) }
+            })
+            builder.setNegativeButton("No", DialogInterface.OnClickListener{ dialog, which ->
+
+            })
+            val alertDialog: AlertDialog = builder.create()
+            alertDialog.show()
     }
 }

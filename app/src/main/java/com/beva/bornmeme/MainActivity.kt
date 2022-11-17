@@ -110,8 +110,8 @@ class MainActivity : AppCompatActivity() {
         //the tool bar showing or not
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id == R.id.fragmentEditFixmode || destination.id == R.id.dialogPreview) {
-                binding.toolbar.visibility = View.GONE
                 binding.fab.visibility = View.GONE
+                binding.searchBar.visibility = View.GONE
                 binding.fab.setOnClickListener { galleryCheckPermission() }
             } else {
                 binding.toolbar.visibility = View.VISIBLE

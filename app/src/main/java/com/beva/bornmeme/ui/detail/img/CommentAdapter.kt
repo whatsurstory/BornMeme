@@ -16,6 +16,7 @@ class CommentAdapter(private val uiState: ImgDetailViewModel.UiState): ListAdapt
     class ParentViewHolder(private var binding: ItemDetailCommentParentBinding) : RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
         fun bind(item: CommentCell.ParentComment, uiState: ImgDetailViewModel.UiState) {
+
             if (item.hasChild) {
                 binding.seeMoreBtn.visibility = View.VISIBLE
                 binding.backBtn.visibility = View.GONE
@@ -73,6 +74,7 @@ class CommentAdapter(private val uiState: ImgDetailViewModel.UiState): ListAdapt
                 binding.commentTime.text = "$day days ago"
             }
             Timber.d("秒 $seconds 分 $minutes 時 $hour 天 $day")
+
         }
     }
 

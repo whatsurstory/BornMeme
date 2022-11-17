@@ -28,6 +28,9 @@
             android:layout_height="wrap_content"
             android:text="All Tag"
             style="@style/CustomChipStyle"
+            app:chipCornerRadius="12dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -52,7 +55,7 @@
             android:id="@+id/recycler_home"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginHorizontal="4dp"
+            android:layout_marginHorizontal="6dp"
             android:layout_marginBottom="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -62,14 +65,16 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/sort_btn"
-        android:layout_width="wrap_content"
+        android:layout_width="30dp"
         android:layout_height="0dp"
-        android:scaleType="center"
-        android:tint="@color/light_orange_pink"
+        android:scaleType="centerCrop"
+        android:tint="@color/dark_blue"
+        android:layout_marginEnd="12dp"
         app:layout_constraintBottom_toBottomOf="@+id/chip_group"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/chip_group"
-        app:srcCompat="@drawable/ic_baseline_sort_24" />
+        app:srcCompat="@drawable/ic_baseline_sort_24"
+        android:rotation="180"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

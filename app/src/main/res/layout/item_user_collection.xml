@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:layout_marginHorizontal="4dp"
+    android:layout_margin="6dp"
     android:layout_gravity="center_horizontal"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -11,7 +11,7 @@
         android:id="@+id/collection_img"
         android:layout_width="0dp"
         android:layout_height="180dp"
-        android:alpha="0.8"
+        android:alpha="0.9"
         android:scaleType="centerCrop"
         android:src="@drawable/dino"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:text="Folder Name"
-        android:textSize="24sp"
+        android:textSize="40sp"
         android:textStyle="bold"
         android:textColor="@color/light_orange_pink"
         app:layout_constraintStart_toStartOf="@id/collection_img"

@@ -3,7 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/rice"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -143,7 +142,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="Title"
-                android:textSize="20sp"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:textColor="@color/tiffany"
                 app:layout_constraintEnd_toEndOf="@id/share_btn"
                 app:layout_constraintStart_toStartOf="@id/like_btn"
                 app:layout_constraintTop_toBottomOf="@id/share_btn" />
@@ -154,7 +155,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:maxLines="2"
-                android:textSize="16sp"
+                android:textSize="24sp"
+                android:textColor="@color/tiffany"
                 app:layout_constraintEnd_toEndOf="@+id/img_detail_title"
                 app:layout_constraintStart_toStartOf="@id/img_detail_title"
                 app:layout_constraintTop_toBottomOf="@+id/img_detail_title"
@@ -165,7 +167,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:textColor="@color/tiffany"
                 android:text="9527 views"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="@+id/img_detail_description"
                 app:layout_constraintTop_toBottomOf="@+id/img_detail_description" />
 
@@ -174,9 +178,9 @@
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_marginTop="8dp"
-                android:background="@color/dark_blue"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                android:background="@color/tiffany"
+                app:layout_constraintEnd_toEndOf="@id/img_detail_description"
+                app:layout_constraintStart_toStartOf="@id/img_detail_description"
                 app:layout_constraintTop_toBottomOf="@id/view_text" />
 
 
@@ -192,6 +196,17 @@
                 tools:listitem="@layout/item_detail_comment_parent"
                 android:layout_margin="8dp"/>
 
+            <TextView
+                android:id="@+id/no_see_text"
+                 android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="雖然現在很安靜..."
+                android:visibility="gone"
+                android:layout_margin="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/img_detail_line"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/detail_guideline"

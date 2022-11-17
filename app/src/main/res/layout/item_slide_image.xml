@@ -5,33 +5,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:layout_gravity="center"
     >
 
     <androidx.cardview.widget.CardView
         android:id="@+id/image_card"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:elevation="8dp"
-        app:cardCornerRadius="30dp"
-        android:layout_margin="8dp"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="8dp"
+        android:layout_margin="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:layout_gravity="center">
-
-            <View
-                android:id="@+id/slide_top_view"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/slide_image" />
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/slide_image"
@@ -40,20 +25,11 @@
                 android:layout_gravity="center|top"
                 android:scaleType="center"
                 android:src="@drawable/dino"
-                app:layout_constraintBottom_toTopOf="@id/slide_view"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/slide_top_view" />
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
-            <View
-                android:id="@+id/slide_view"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/slide_image" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
