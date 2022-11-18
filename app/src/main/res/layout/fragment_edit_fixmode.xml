@@ -47,7 +47,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/teal_200"
-            android:maxHeight="400dp"
             android:src="@drawable/dino"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -65,8 +64,13 @@
             android:hint="@string/text_click"
             android:singleLine="true"
             android:textColor="@color/pinkpink"
-            android:textSize="30sp"
+            android:textSize="24sp"
             android:textStyle="bold"
+            android:shadowColor="#000000"
+            android:shadowDx="-1"
+            android:shadowDy="6"
+            android:shadowRadius="10"
+            android:paddingVertical="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/origin_photo"
             app:layout_constraintEnd_toEndOf="@+id/origin_photo"
             app:layout_constraintStart_toStartOf="@+id/origin_photo" />
@@ -77,11 +81,16 @@
             android:layout_height="wrap_content"
             android:autofillHints="Click to add some text"
             android:background="@null"
+            android:paddingVertical="8dp"
             android:gravity="center"
             android:hint="@string/text_click"
             android:singleLine="true"
+            android:shadowColor="#000000"
+            android:shadowDx="-1"
+            android:shadowDy="6"
+            android:shadowRadius="10"
             android:textColor="@color/pinkpink"
-            android:textSize="30sp"
+            android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@+id/origin_photo"
             app:layout_constraintStart_toStartOf="@+id/origin_photo"
@@ -133,7 +142,7 @@
             android:text="@string/preview_btn"
             android:textColor="@color/pinkpink"
             android:textSize="24sp"
-            app:chipCornerRadius="3dp" />
+            app:chipCornerRadius="12dp" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/publish_btn"
@@ -143,7 +152,7 @@
             android:text="@string/publish_btn"
             android:textColor="@color/pinkpink"
             android:textSize="24sp"
-            app:chipCornerRadius="3dp" />
+            app:chipCornerRadius="12dp" />
     </com.google.android.material.chip.ChipGroup>
 
 

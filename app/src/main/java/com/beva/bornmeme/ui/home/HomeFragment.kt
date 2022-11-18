@@ -11,6 +11,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
+import androidx.recyclerview.widget.StaggeredGridLayoutManager.GAP_HANDLING_NONE
 import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.databinding.FragmentHomeBinding
 import timber.log.Timber
@@ -49,7 +50,7 @@ class HomeFragment : Fragment() {
 
         binding.recyclerHome.adapter = adapter
 
-        layoutManager.gapStrategy = GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
+        layoutManager.gapStrategy = GAP_HANDLING_NONE
 
         viewModel.display.observe(viewLifecycleOwner, Observer {
             it?.let {

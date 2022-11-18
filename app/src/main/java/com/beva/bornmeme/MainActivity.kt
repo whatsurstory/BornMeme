@@ -37,6 +37,7 @@ import androidx.lifecycle.Observer
 import com.beva.bornmeme.databinding.ActivityMainBinding
 import com.beva.bornmeme.model.UserManager.user
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -68,10 +69,17 @@ class MainActivity : AppCompatActivity() {
         const val PHOTO_FROM_CAMERA = 1
     }
 
+    private lateinit var auth : FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.plant(Timber.DebugTree())
         binding = ActivityMainBinding.inflate(layoutInflater)
+
+        auth = FirebaseAuth.getInstance()
+
+        val email = intent.getStringExtra("email")
+        val displayName = intent.getStringExtra("name")
 
         val userId = com.beva.bornmeme.model.UserManager.user.userId
         viewModel = MainViewModel(userId)
