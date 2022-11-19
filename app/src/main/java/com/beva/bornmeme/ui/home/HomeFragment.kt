@@ -102,12 +102,6 @@ class HomeFragment : Fragment() {
             }
         )
 
-        binding.sortBtn.setOnClickListener {
-            findNavController().navigate(MobileNavigationDirections.navigateToDragEditFragment())
-        }
-
-
-
         return binding.root
     }
 

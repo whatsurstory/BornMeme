@@ -31,10 +31,10 @@
                 android:id="@+id/edit_publish_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginVertical="8dp"
                 android:gravity="center"
                 android:text="Comment"
-                android:textColor="@color/rice"
+                android:textColor="@color/dark_blue"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/edit_publish_content"
@@ -46,37 +46,46 @@
             <EditText
                 android:id="@+id/edit_publish_content"
                 android:layout_width="0dp"
-                android:layout_height="300dp"
-                android:layout_margin="16dp"
-                android:background="@color/rice"
+                android:layout_height="200dp"
+                android:layout_marginHorizontal="8dp"
+                android:background="@drawable/ripple_corner"
                 android:gravity="top|start"
-                android:hint="Content"
                 android:letterSpacing="0.15"
                 android:padding="8dp"
                 android:textColor="@color/dark_blue"
-                android:textColorHint="@color/tian_ching"
-                android:textSize="14sp"
+                android:textColorHint="@color/light_blue"
+                android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/button_publish"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edit_publish_title" />
+                app:layout_constraintTop_toBottomOf="@+id/edit_publish_title"
+                android:hint="Adding text to reply ..." />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_publish"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginVertical="8dp"
                 android:background="@color/rice"
                 android:gravity="center"
                 android:text="Publish"
-                android:textColor="@color/tian_ching"
-                android:textSize="14sp"
+                android:textColor="@color/dark_blue"
+                android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edit_publish_content" />
-
+                <TextView
+                    android:id="@+id/reply_who_text"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:text="REPLY TO: "
+                    android:padding="8dp"
+                    android:textColor="@color/dark_blue"
+                    app:layout_constraintStart_toStartOf="@+id/edit_publish_content"
+                    app:layout_constraintEnd_toEndOf="@+id/edit_publish_content"
+                    app:layout_constraintBottom_toBottomOf="@+id/edit_publish_content"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

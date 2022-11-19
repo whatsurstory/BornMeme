@@ -54,7 +54,7 @@ class EditViewModel : ViewModel() {
         Timber.d("getNewPost")
 
         val postPath = FirebaseFirestore.getInstance().collection("Posts").document()
-        val userPath = FirebaseFirestore.getInstance().collection("Users").document(UserManager.user.userId)
+        val userPath = FirebaseFirestore.getInstance().collection("Users").document(UserManager.user.userId.toString())
         val ref = FirebaseStorage.getInstance().reference
 
         ref.child("img_edited/" + postPath.id + ".jpg")

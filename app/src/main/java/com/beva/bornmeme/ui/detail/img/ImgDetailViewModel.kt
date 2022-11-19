@@ -175,7 +175,7 @@ data class UiState (
     fun doneCollection(postId: String){
         Firebase.firestore.collection("Posts")
             .document(postId)
-            .update("collection",FieldValue.arrayUnion("cNXUG5FShzYesEOltXUZ"))
+            .update("collection",FieldValue.arrayUnion(UserManager.user.userId))
             .addOnSuccessListener {
                 Timber.d("Success Posts adding User ID")
             }.addOnFailureListener {
@@ -186,7 +186,7 @@ data class UiState (
     fun onClickCollection(title:String, postId: String, url: String) {
         val ref = Firebase.firestore
             .collection("Users")
-            .document(UserManager.user.userId)
+            .document(UserManager.user.userId!!)
             .collection("Folders")
             .document(title)
 
@@ -218,7 +218,7 @@ data class UiState (
         Timber.d("UserID $userId")
         val db = Firebase.firestore.collection("Users")
         if (userId != UserManager.user.userId){
-        db.document(UserManager.user.userId)
+        db.document(UserManager.user.userId!!)
             .update("followList", FieldValue.arrayUnion(userId))
             .addOnSuccessListener {
                 db.document(userId)
@@ -262,7 +262,7 @@ data class UiState (
 
     fun getFolder() {
         Firebase.firestore.collection("Users")
-            .document(UserManager.user.userId)
+            .document(UserManager.user.userId!!)
             .collection("Folders")
             .get()
             .addOnCompleteListener { task ->

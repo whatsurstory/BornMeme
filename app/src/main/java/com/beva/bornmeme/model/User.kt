@@ -6,11 +6,12 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class User(
-    val userId: String = "",
+    var userId: String? = "",
     val profilePhoto: String = "",
     val userName: String = "",
     val introduce: String = "",
     val loginTimes: String = "",
+    val email: String = "",
     val registerTime: Timestamp? = null,
     val commentsId: List<String> = emptyList(),
     val collection: List<String> = emptyList(),

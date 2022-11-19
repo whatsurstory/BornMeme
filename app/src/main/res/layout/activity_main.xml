@@ -3,9 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-        <variable name="viewModel" type="com.beva.bornmeme.MainViewModel"/>
-    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -41,21 +38,21 @@
                     android:layout_height="wrap_content"
                     app:queryBackground="@null"
                     android:layout_marginEnd="8dp"
-                    android:background="@drawable/search_corner"
                     app:iconifiedByDefault="false"
                     app:theme="@style/AppSearchView"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/profile_btn"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:queryHint="Searching"
-                    app:searchIcon="@drawable/ic_baseline_self_improvement_24" />
+                    app:queryHint="BornMeme."
+                    app:searchIcon="@null"/>
 
+<!--    app:searchIcon="@drawable/ic_baseline_self_improvement_24"  -->
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/profile_btn"
-                    android:layout_width="60dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="0dp"
-                    android:scaleType="fitXY"
+                    android:scaleType="center"
                     android:src="@drawable/ic_baseline_tag_faces_24"
                     app:layout_constraintBottom_toBottomOf="@+id/search_bar"
                     app:layout_constraintEnd_toEndOf="parent"

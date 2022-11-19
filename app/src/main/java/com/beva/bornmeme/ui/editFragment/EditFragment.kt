@@ -157,6 +157,11 @@ class EditFragment : Fragment() {
                     }
             }
         }
+
+        binding.changeModeBtn.setOnClickListener {
+            findNavController().navigate(MobileNavigationDirections.navigateToDragEditFragment())
+        }
+
         return binding.root
     }
 

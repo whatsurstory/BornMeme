@@ -21,7 +21,7 @@ class SlideViewModel(folder: Folder) : ViewModel() {
     private fun getImage(folder: Folder) {
         FirebaseFirestore.getInstance()
             .collection("Users")
-            .document(UserManager.user.userId)
+            .document(UserManager.user.userId.toString())
             .collection("Folders")
             .document(folder.name)
             .addSnapshotListener { snapshot, exception ->

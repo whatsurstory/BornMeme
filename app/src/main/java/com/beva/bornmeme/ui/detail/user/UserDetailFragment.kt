@@ -64,10 +64,22 @@ class UserDetailFragment : Fragment() {
             .placeholder(R.drawable._50)
             .into(binding.userDetailImg)
         binding.userDetailName.text = user.userName
-        binding.followersText.text = "${user.followers.size}"
+
+        if (user.followers.isNullOrEmpty()) {
+            binding.followersText.text = "0"
+        } else {
+            binding.followersText.text = user.followers.size.toString()
+        }
+
         binding.introduceText.text = user.introduce
         binding.likesText.text = ""
-        binding.postsText.text = "${user.postQuantity.size}"
+
+        if (user.postQuantity.isNullOrEmpty()) {
+            binding.postsText.text = "0"
+        } else {
+            binding.postsText.text = user.postQuantity.size.toString()
+        }
+
         if (user.userId != UserManager.user.userId) {
             binding.editIcon.visibility = View.GONE
             binding.add2follow.visibility = View.VISIBLE

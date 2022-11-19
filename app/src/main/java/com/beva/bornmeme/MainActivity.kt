@@ -8,9 +8,11 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.os.PersistableBundle
 import android.os.UserManager
 import android.provider.MediaStore
 import android.provider.Settings
+import android.util.AttributeSet
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -34,10 +36,12 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
+import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
 import com.beva.bornmeme.databinding.ActivityMainBinding
 import com.beva.bornmeme.model.UserManager.user
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.core.Context
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -69,20 +73,15 @@ class MainActivity : AppCompatActivity() {
         const val PHOTO_FROM_CAMERA = 1
     }
 
-    private lateinit var auth : FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.plant(Timber.DebugTree())
         binding = ActivityMainBinding.inflate(layoutInflater)
 
-        auth = FirebaseAuth.getInstance()
-
-        val email = intent.getStringExtra("email")
-        val displayName = intent.getStringExtra("name")
-
-        val userId = com.beva.bornmeme.model.UserManager.user.userId
-        viewModel = MainViewModel(userId)
+        val userId = user.userId
+        Timber.d("userid -> $userId")
+        viewModel = MainViewModel(userId.toString())
 
         viewModel.userData.observe(this, Observer{
             it?.let {
@@ -94,13 +93,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-
         setContentView(binding.root)
-        if (savedInstanceState != null) {
-            saveUri = Uri.parse(savedInstanceState.getString("saveUri"))
-        }
-
-        setSupportActionBar(binding.toolbar)
 
         //Animation of fab
         fabOpen = AnimationUtils.loadAnimation(this, R.anim.fab_open)
@@ -110,11 +103,10 @@ class MainActivity : AppCompatActivity() {
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
 
-        setupActionBarWithNavController(navController)
-
-        binding.profileBtn.setOnClickListener {
-            navController.navigate(MobileNavigationDirections.navigateToUserDetailFragment(userId))
+        if (com.beva.bornmeme.model.UserManager.isLoggedIn) {
+            navController.navigate(MobileNavigationDirections.navigateToHomeFragment())
         }
+
         //the tool bar showing or not
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id == R.id.fragmentEditFixmode || destination.id == R.id.dialogPreview) {
@@ -174,7 +166,23 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        //toolbar support action bar
+        setSupportActionBar(binding.toolbar)
+        //navigate_up
+        setupActionBarWithNavController(navController)
+
+        binding.profileBtn.setOnClickListener {
+            navController.navigate(MobileNavigationDirections.navigateToUserDetailFragment(
+                userId.toString()
+            ))
+        }
     }
+
+
+
+
+
+
     private fun galleryCheckPermission() {
         Dexter.withContext(this).withPermission(
             android.Manifest.permission.READ_EXTERNAL_STORAGE

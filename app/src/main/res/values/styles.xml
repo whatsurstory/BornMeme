@@ -22,13 +22,14 @@
 
     <style name="AppSearchView" parent="Widget.AppCompat.SearchView" >
         <!-- Text Size -->
-<!--        <item name="android:textSize">@dimen/textSizePrimary</item>-->
-        <!-- Query Text Color -->
-        <item name="android:textColorPrimary">@color/green</item>
-        <!-- Hint Color -->
-        <item name="android:textColorHint">@color/pinkpink</item>
-        <!-- Icon Color -->
-        <item name="android:tint">@color/tian_ching</item>
+        <item name="android:textSize">16sp</item>
+        <!-- Typing Query Text Color -->
+        <item name="android:textColorPrimary">@color/dark_blue</item>
+        <!-- display Hint Color -->
+        <item name="android:textColorHint">@color/light_blue</item>
+        <!-- Icon and close Color -->
+        <item name="android:tint">@color/dark_blue</item>
+
     </style>
 
     <style name="PublishDialog">
@@ -42,7 +43,7 @@
 
     <style name="roundedCorner" parent="">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">2%</item>
+        <item name="cornerSize">1%</item>
     </style>
 
     <style name="SlideDialog">

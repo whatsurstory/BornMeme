@@ -4,8 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/splash_screen">
 
+    <fragment
+        android:id="@+id/splash_screen"
+        android:name="com.beva.bornmeme.SplashFragment"
+        tools:layout="@layout/fragment_splash">
+
+    </fragment>
     <fragment
         android:id="@+id/nav_home"
         android:name="com.beva.bornmeme.ui.home.HomeFragment"
@@ -16,7 +22,6 @@
     <dialog
         android:id="@+id/dialogPreview"
         android:name="com.beva.bornmeme.ui.gallery.PreviewDialog"
-        android:label=" "
         tools:layout="@layout/dialog_preview">
     <argument
         android:name="bitmap"
@@ -93,20 +98,23 @@
             app:argType="com.beva.bornmeme.model.Folder" />
     </dialog>
 
-    <action
-        android:id="@+id/navigate_to_edit_fragment"
-        app:destination="@+id/fragmentEditFixmode"/>
-    <action
-        android:id="@+id/navigate_to_drag_edit_fragment"
-        app:destination="@+id/fragmentEditDrag"/>
+    <action android:id="@+id/navigate_to_edit_fragment" app:destination="@+id/fragmentEditFixmode"/>
+    <action android:id="@+id/navigate_to_drag_edit_fragment" app:destination="@+id/fragmentEditDrag"/>
     <action android:id="@+id/navigate_to_edit_profile_dialog" app:destination="@+id/bottomsheet_edit_profile"/>
     <action android:id="@+id/navigate_to_preview_dialog" app:destination="@+id/dialogPreview"/>
     <action android:id="@+id/navigate_to_comment_dialog" app:destination="@+id/dialogComment"/>
     <action android:id="@+id/navigate_to_slide_dialog" app:destination="@+id/dialogSlide"/>
-    <action android:id="@+id/navigate_to_home_fragment" app:destination="@+id/nav_home"
+
+    <action android:id="@+id/navigate_to_img_detail_fragment"
+        app:destination="@+id/img_detail_fragment" />
+    <action
+        android:id="@+id/navigate_to_user_detail_fragment"
+        app:destination="@+id/user_detail_fragment" />
+
+    <action android:id="@+id/navigate_to_home_fragment"
+        app:destination="@+id/nav_home"
         app:popUpTo="@+id/mobile_navigation"
         app:popUpToInclusive="true"/>
-    <action android:id="@+id/navigate_to_img_detail_fragment" app:destination="@+id/img_detail_fragment"/>
-    <action android:id="@+id/navigate_to_user_detail_fragment" app:destination="@+id/user_detail_fragment"/>
+
 
 </navigation>

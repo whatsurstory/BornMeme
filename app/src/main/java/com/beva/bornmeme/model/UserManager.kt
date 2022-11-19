@@ -1,5 +1,8 @@
 package com.beva.bornmeme.model
 
 object UserManager {
-    val user: User = User(userId = "cNXUG5FShzYesEOltXUZ")
+    var user: User = User(userId = null)
+
+    val isLoggedIn: Boolean
+        get() = user.userId != null
 }

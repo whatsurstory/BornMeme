@@ -12,7 +12,7 @@
         android:layout_marginEnd="8dp"
         android:text="chip chip"
         style="@style/CustomChipStyle"
-        app:chipCornerRadius="12dp"
+        app:chipCornerRadius="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
