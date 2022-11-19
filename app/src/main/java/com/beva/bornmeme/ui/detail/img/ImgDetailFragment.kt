@@ -189,7 +189,6 @@ class ImgDetailFragment : Fragment() {
         })
         //the button to take post to collection
         binding.collectionBtn.setOnClickListener {
-            Toast.makeText(context, "let's relax a moment ...", Toast.LENGTH_SHORT).show()
             viewModel.getFolder()
         }
 
@@ -257,7 +256,7 @@ class ImgDetailFragment : Fragment() {
     private fun showAlert(folderNames: List<String>) {
         val builder: AlertDialog.Builder =
             AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
-        builder.setCancelable(false)
+//Make you can't dismiss by default -> builder.setCancelable(false)
         // Get the layout inflater
         val inflater = requireActivity().layoutInflater
         val isCheckedIndex = ArrayList<Int>()
@@ -289,7 +288,7 @@ class ImgDetailFragment : Fragment() {
                 }
             })
 
-        builder.setNeutralButton("SAVE",
+        builder.setPositiveButton("SAVE",
             DialogInterface.OnClickListener { dialog, which ->
                 run {
                     var title: String
@@ -315,10 +314,6 @@ class ImgDetailFragment : Fragment() {
                             viewModel.doneCollection(post.id)
 //                            Toast.makeText(context, "New Created $input Folder", Toast.LENGTH_SHORT).show()
                         }
-                    } else {
-//                        Toast.makeText(context, "Must Enter One Letter",Toast.LENGTH_SHORT).show()
-                        input.error = "Please fill this"
-
                     }
                 }
             })
@@ -330,17 +325,12 @@ class ImgDetailFragment : Fragment() {
         val alertDialog: AlertDialog = builder.create()
         alertDialog.show()
 
-        val saveButton = alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL)
+        val saveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
         with(saveButton) {
             setBackgroundColor(R.color.black)
             setPadding(0, 0, 20, 0)
             setTextColor(R.color.light_blue)
-
         }
-
-//        if (list.isNotEmpty() && input.text.toString().isNotEmpty()) {
-//            saveButton.isEnabled = true
-//        }
 
         val cancelButton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
         with(cancelButton) {
@@ -348,7 +338,6 @@ class ImgDetailFragment : Fragment() {
             setPadding(0, 0, 20, 0)
             setTextColor(R.color.light_blue)
         }
-
     }
 
     private fun showDialog() {

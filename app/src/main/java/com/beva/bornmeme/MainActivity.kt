@@ -36,6 +36,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
 import com.beva.bornmeme.databinding.ActivityMainBinding
 import com.beva.bornmeme.model.UserManager.user
@@ -109,13 +110,21 @@ class MainActivity : AppCompatActivity() {
 
         //the tool bar showing or not
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id == R.id.fragmentEditFixmode || destination.id == R.id.dialogPreview) {
+            if (destination.id == R.id.splash_screen) {
+                binding.fab.visibility = View.GONE
+                binding.changeModeBtn.visibility = View.GONE
+            } else if (destination.id == R.id.fragmentEditFixmode || destination.id == R.id.dialogPreview) {
                 binding.fab.visibility = View.GONE
                 binding.searchBar.visibility = View.GONE
-                binding.fab.setOnClickListener { galleryCheckPermission() }
+                binding.changeModeBtn.visibility = View.VISIBLE
+//                binding.changeModeBtn.setOnClickListener {
+//                    Timber.d("你有按到change")
+//                    navController.navigate(MobileNavigationDirections.navigateToDragEditFragment())
+//                }
+                binding.fab.setOnClickListener { toAlbum() }
             } else {
-                binding.toolbar.visibility = View.VISIBLE
                 binding.fab.visibility = View.VISIBLE
+                binding.changeModeBtn.visibility= View.GONE
                 //fab expending animation
                 binding.fab.setOnClickListener { view ->
 
@@ -124,6 +133,13 @@ class MainActivity : AppCompatActivity() {
                         binding.fabModuleEdit.startAnimation(fabClose)
                         binding.fabGalleryEdit.startAnimation(fabClose)
                         binding.fab.startAnimation(fabRotate)
+
+                        binding.fabCameraEdit.visibility = View.GONE
+                        binding.fabCameraEdit.clearAnimation()
+                        binding.fabModuleEdit.visibility = View.GONE
+                        binding.fabModuleEdit.clearAnimation()
+                        binding.fabGalleryEdit.visibility = View.GONE
+                        binding.fabGalleryEdit.clearAnimation()
 
                         binding.fabCameraEdit.isEnabled = false
                         binding.fabModuleEdit.isEnabled = false
@@ -156,14 +172,15 @@ class MainActivity : AppCompatActivity() {
                     }
                     binding.fabGalleryEdit.setOnClickListener {
                         galleryCheckPermission()
-
                     }
                 }
                 if (destination.id == R.id.nav_home) {
                     binding.searchBar.visibility = View.VISIBLE
+                    binding.changeModeBtn.visibility = View.GONE
                 } else {
                     binding.searchBar.visibility = View.GONE
                 }
+
             }
         }
         //toolbar support action bar
@@ -176,6 +193,7 @@ class MainActivity : AppCompatActivity() {
                 userId.toString()
             ))
         }
+
     }
 
 

@@ -6,6 +6,7 @@ import com.google.android.gms.common.api.Api
 import com.google.android.gms.common.api.ApiException
 import android.app.Activity
 import android.content.Intent
+import android.graphics.ColorFilter
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -23,10 +24,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContract
+import androidx.annotation.ColorRes
 import androidx.collection.arrayMapOf
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil.setContentView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.airbnb.lottie.LottieAnimationView
+import com.airbnb.lottie.LottieProperty
+import com.airbnb.lottie.SimpleColorFilter
+import com.airbnb.lottie.model.KeyPath
+import com.airbnb.lottie.value.LottieValueCallback
 import com.beva.bornmeme.databinding.FragmentSplashBinding
 import com.beva.bornmeme.model.UserManager
 import com.beva.bornmeme.model.UserManager.user
@@ -75,10 +83,29 @@ class SplashFragment : Fragment() {
 
         //Button to Login
         binding.gSignInBtn.setOnClickListener {
+            val color = this.context?.let {requireContext().getColor(R.color.white) }
+            val filter = SimpleColorFilter(color!!)
+            val keyPath = KeyPath("**")
+            val callback: LottieValueCallback<ColorFilter> = LottieValueCallback(filter)
+
+            binding.loginLoading.addValueCallback(keyPath, LottieProperty.COLOR_FILTER, callback)
+            binding.loginLoading.visibility = View.VISIBLE
+            binding.loginLoading.setAnimation(R.raw.bouncing_balls)
             signInGoogle()
         }
 
         return binding.root
+    }
+
+    fun LottieAnimationView.changeLayersColor(
+        @ColorRes colorRes: Int
+    ) {
+        val color = ContextCompat.getColor(context, colorRes)
+        val filter = SimpleColorFilter(color)
+        val keyPath = KeyPath("**")
+        val callback: LottieValueCallback<ColorFilter> = LottieValueCallback(filter)
+
+        addValueCallback(keyPath, LottieProperty.COLOR_FILTER, callback)
     }
 
     private fun signInGoogle() {

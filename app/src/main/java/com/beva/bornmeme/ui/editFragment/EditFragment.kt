@@ -14,18 +14,27 @@ import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.collection.arrayMapOf
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentEditFixmodeBinding
+import com.beva.bornmeme.model.UserManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.dialog.MaterialDialogs
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 
@@ -36,9 +45,9 @@ class EditFragment : Fragment() {
     private lateinit var uri: Uri
     private lateinit var upperText: AppCompatEditText
     private lateinit var bottomText: AppCompatEditText
-    //complete the publish will input the photo to firebase, Using  Path -> Posts
     private val fireStore = FirebaseFirestore.getInstance().collection("Posts")
     private val document = fireStore.document()
+    private lateinit var viewModel: EditViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,17 +68,57 @@ class EditFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val viewModel = ViewModelProvider(this).get(EditViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(EditViewModel::class.java)
         upperText = binding.upperText
         bottomText = binding.bottomText
 
+        binding.editTextCatalog
+            .addTextChangedListener(
+                afterTextChanged = {
+                    if (binding.editTextCatalog.text?.trim()?.isNotEmpty() == true) {
+                        binding.catalogCard.error = null
+                        binding.editTextCatalog.text.toString()
+                    }
+                },
+                onTextChanged = { s, start, before, count ->
+                    if (binding.editTextCatalog.text?.trim()?.isEmpty() == true) {
+                        binding.editTextCatalog.error =
+                            "If Tag is Empty the input will take 傻逼日常 as default"
+                        binding.editTextCatalog.setText("傻逼日常").toString()
+                    }
+                },
+                beforeTextChanged = { s, start, before, count ->
+                }
+            )
 
+        binding.editTextTitle
+            .addTextChangedListener(
+                afterTextChanged = {
+                    if (binding.editTextTitle.text?.trim()?.isNotEmpty() == true) {
+                        binding.titleCard.error = null
+                        binding.editTextTitle.text.toString()
+                    }
+                },
+                onTextChanged = { s, start, before, count ->
+                    if (binding.editTextTitle.text?.trim()?.isEmpty() == true) {
+                        binding.titleCard.error = "If Tag is Empty the input will take Your Name as default"
+                    }
+                },
+                    beforeTextChanged = { s, start, before, count ->
+
+                })
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         //to preview
         binding.previewBtn.setOnClickListener {
             Timber.d("onClick Preview")
 
-            if (upperText.text.isNullOrEmpty() || bottomText.text.isNullOrEmpty()){
+            if (upperText.text.isNullOrEmpty() || bottomText.text.isNullOrEmpty()) {
                 Snackbar.make(it, "Not Adding Text Yet", Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show()
             } else {
@@ -101,15 +150,24 @@ class EditFragment : Fragment() {
         //to publish
         binding.publishBtn.setOnClickListener {
             Timber.d("onClick publish")
-            val title = binding.editTextTitle.text.toString()
-            val tag = binding.editTextCatalog.text.toString()
+//
+//            val builder =
+//                MaterialAlertDialogBuilder(this.requireContext(), )
+//                .setView(R.layout.item_loading)
+//            builder.setCancelable(false)
+//            val dialog = builder.create()
+//            dialog.show()
+            binding.lottiePublishLoading.visibility = View.VISIBLE
+            binding.lottiePublishLoading.setAnimation(R.raw.dancing_pallbearers)
+
+            val tag =if (binding.editTextCatalog.text.toString() == "") { "傻逼日常" } else { binding.editTextCatalog.text.toString()}
+            val title = if ( binding.editTextTitle.text.toString() == "") { "Beva" } else { binding.editTextTitle.text.toString() }
 
             if (upperText.text.isNullOrEmpty() || bottomText.text.isNullOrEmpty()) {
-            Snackbar.make(it, "Not Adding Text Yet", Snackbar.LENGTH_SHORT)
-                .setAction("Action", null).show()
+                Snackbar.make(it, "Not Adding Text Yet", Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null).show()
 
             } else {
-
                 val ref = FirebaseStorage.getInstance().reference
                 ref.child("img_origin/" + document.id + ".jpg")
                     .putFile(uri)
@@ -117,7 +175,6 @@ class EditFragment : Fragment() {
                         it.metadata?.reference?.downloadUrl?.addOnSuccessListener {
                             //這層的it才會帶到firebase return 的 Uri
                             Timber.d("origin uri: $it => take it to base url")
-
 
 //                            Timber.d("newTag $newTag")
                             val res = listOf(
@@ -142,7 +199,7 @@ class EditFragment : Fragment() {
                             )
                             //saving to gallery and return the path(uri)
                             val newUri = viewModel.getImageUri(activity?.application, publishBitmap)
-                                Timber.d("newUri => $newUri")
+                            Timber.d("newUri => $newUri")
                             if (newUri != null) {
                                 viewModel.addNewPost(newUri, res, title, tag)
                             }
@@ -158,13 +215,7 @@ class EditFragment : Fragment() {
             }
         }
 
-        binding.changeModeBtn.setOnClickListener {
-            findNavController().navigate(MobileNavigationDirections.navigateToDragEditFragment())
-        }
-
-        return binding.root
     }
-
 
 
 //    private fun getBitmapByUri(bitmapUri: Uri): Bitmap {

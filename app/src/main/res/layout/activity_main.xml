@@ -9,6 +9,16 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/change_mode_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_collections_bookmark_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="12dp"/>
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -20,7 +30,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/content_main"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent" >
 
             <!-- app:contentInsetLeft="0dp"
                   app:contentInsetStart="0dp"        -->
@@ -28,9 +38,10 @@
             app:contentInsetStartWithNavigation="0dp"
             app:contentInsetEndWithActions="0dp"
             -->
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent" >
 
                 <androidx.appcompat.widget.SearchView
                     android:id="@+id/search_bar"
@@ -45,7 +56,8 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:queryHint="BornMeme."
-                    app:searchIcon="@null"/>
+                    app:searchIcon="@null"
+                    android:visibility="gone"/>
 
 <!--    app:searchIcon="@drawable/ic_baseline_self_improvement_24"  -->
                 <com.google.android.material.imageview.ShapeableImageView
@@ -57,9 +69,10 @@
                     app:layout_constraintBottom_toBottomOf="@+id/search_bar"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/search_bar"
-                    app:shapeAppearanceOverlay="@style/circle"/>
+                    app:shapeAppearanceOverlay="@style/circle" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.appcompat.widget.Toolbar>
 
         <include
@@ -79,9 +92,9 @@
             app:layout_constraintBottom_toTopOf="@+id/fab_camera_edit"
             android:layout_margin="8dp"
             app:elevation="6dp"
-            app:fabCustomSize="50dp"
+            app:fabCustomSize="60dp"
             app:tint="@color/dark_blue"
-            android:backgroundTint="@color/rice"
+            android:backgroundTint="@color/light_blue"
             android:src="@drawable/ic_baseline_add_to_photos_24"
             android:visibility="gone" />
 
@@ -93,9 +106,9 @@
             app:layout_constraintBottom_toTopOf="@+id/fab_gallery_edit"
             android:layout_margin="8dp"
             app:elevation="6dp"
-            app:fabCustomSize="50dp"
+            app:fabCustomSize="60dp"
             app:tint="@color/dark_blue"
-            android:backgroundTint="@color/rice"
+            android:backgroundTint="@color/light_blue"
             android:src="@drawable/ic_baseline_add_a_photo_24"
             android:visibility="gone" />
 
@@ -107,9 +120,9 @@
             app:layout_constraintBottom_toTopOf="@+id/fab"
             android:layout_margin="8dp"
             app:elevation="6dp"
-            app:fabCustomSize="50dp"
+            app:fabCustomSize="60dp"
             app:tint="@color/dark_blue"
-            android:backgroundTint="@color/rice"
+            android:backgroundTint="@color/light_blue"
             android:src="@drawable/ic_baseline_add_photo_alternate_24"
             android:visibility="gone" />
 
@@ -120,10 +133,10 @@
             android:layout_marginEnd="@dimen/fab_margin"
             android:layout_marginBottom="16dp"
             app:elevation="6dp"
-            app:fabCustomSize="60dp"
-            app:tint="@color/white"
+            app:fabCustomSize="70dp"
+            app:tint="@color/dark_blue"
             app:borderWidth="0dp"
-            android:backgroundTint="@color/dark_blue"
+            android:backgroundTint="@color/light_blue"
             android:src="@drawable/ic_baseline_add_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
