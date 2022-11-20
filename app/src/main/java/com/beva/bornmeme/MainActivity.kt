@@ -80,9 +80,10 @@ class MainActivity : AppCompatActivity() {
         Timber.plant(Timber.DebugTree())
         binding = ActivityMainBinding.inflate(layoutInflater)
 
-        val userId = user.userId
+        val userId = com.beva.bornmeme.model.UserManager.user.userId
         Timber.d("userid -> $userId")
         viewModel = MainViewModel(userId.toString())
+
 
         viewModel.userData.observe(this, Observer{
             it?.let {
@@ -103,10 +104,6 @@ class MainActivity : AppCompatActivity() {
         fabRotateAnti = AnimationUtils.loadAnimation(this, R.anim.rotate_anti)
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
-
-        if (com.beva.bornmeme.model.UserManager.isLoggedIn) {
-            navController.navigate(MobileNavigationDirections.navigateToHomeFragment())
-        }
 
         //the tool bar showing or not
         navController.addOnDestinationChangedListener { _, destination, _ ->
@@ -188,7 +185,10 @@ class MainActivity : AppCompatActivity() {
         //navigate_up
         setupActionBarWithNavController(navController)
 
+//        binding.toolbar.navigationIcon = null
+
         binding.profileBtn.setOnClickListener {
+            Timber.d("userid -> $userId")
             navController.navigate(MobileNavigationDirections.navigateToUserDetailFragment(
                 userId.toString()
             ))

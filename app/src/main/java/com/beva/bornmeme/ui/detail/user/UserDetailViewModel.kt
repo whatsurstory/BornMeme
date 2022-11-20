@@ -1,13 +1,17 @@
 package com.beva.bornmeme.ui.detail.user
 
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.beva.bornmeme.model.Post
 import com.beva.bornmeme.model.User
+import com.beva.bornmeme.model.UserManager
 import com.bumptech.glide.Glide.init
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import timber.log.Timber
 
 class UserDetailViewModel(userId: String) : ViewModel() {
@@ -31,6 +35,16 @@ class UserDetailViewModel(userId: String) : ViewModel() {
             }
             _user.value = user
         }
+    }
+
+    fun add2follow (userId:String) {
+        Firebase.firestore
+            .collection("Users")
+            .document(UserManager.user.userId.toString())
+            .update("followList",userId)
+            .addOnCompleteListener {
+                Timber.d("it = $it \n result = ${it.result}")
+            }
     }
 
 }

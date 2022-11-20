@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentCommentsBinding
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import timber.log.Timber
 
 
@@ -38,7 +40,7 @@ class CommentsFragment : Fragment() {
         val userId = requireArguments().getString("userIdKey") ?: ""
         viewModel = CommentsViewModel(userId)
 
-        val adapter = UserCommentAdapter()
+        val adapter = UserCommentAdapter(viewModel)
 
         binding.commentRecycler.adapter = adapter
 
@@ -49,4 +51,6 @@ class CommentsFragment : Fragment() {
 
         return binding.root
     }
+
+
 }

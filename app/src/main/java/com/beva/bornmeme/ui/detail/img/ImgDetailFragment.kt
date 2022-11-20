@@ -82,6 +82,8 @@ class ImgDetailFragment : Fragment() {
                             .error(R.drawable.dino)
                     ).into(binding.imgDetailUserImg)
                 binding.imgDetailUserName.text = it[0].userName
+
+                //follow button
                 if (post.ownerId == UserManager.user.userId) {
                     binding.followBtn.visibility = View.GONE
                 } else {
@@ -217,9 +219,6 @@ class ImgDetailFragment : Fragment() {
                 false
             }
         }
-
-
-
 
         binding.reportBtn.setOnClickListener {
             popupMenu.show()

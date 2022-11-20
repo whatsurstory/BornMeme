@@ -16,12 +16,12 @@ import com.bumptech.glide.Glide
 import timber.log.Timber
 import java.sql.Date
 
-class UserCommentAdapter: ListAdapter<Comment, UserCommentAdapter.ViewHolder>(DiffCallback) {
+class UserCommentAdapter(val viewModel: CommentsViewModel): ListAdapter<Comment, UserCommentAdapter.ViewHolder>(DiffCallback) {
 
     class ViewHolder(private val binding: ItemUserCommentBinding) :
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
-        fun bind(item: Comment){
+        fun bind(item: Comment, viewModel: CommentsViewModel){
             binding.contentText.text = item.content
 //            val timeString = item.time?.toDate()?.toString()
             val commentTime = item.time?.toDate()?.time
@@ -41,7 +41,7 @@ class UserCommentAdapter: ListAdapter<Comment, UserCommentAdapter.ViewHolder>(Di
             }
             Timber.d("秒 $seconds 分 $minutes 時 $hour 天 $day")
 //            binding.timeText.text = "$day days ago"
-            
+            viewModel.getPostImage(item.postId)
         }
     }
 
@@ -61,6 +61,6 @@ class UserCommentAdapter: ListAdapter<Comment, UserCommentAdapter.ViewHolder>(Di
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), viewModel)
     }
 }

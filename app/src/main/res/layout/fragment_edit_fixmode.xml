@@ -29,6 +29,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
+            android:fontFamily="@font/arista_pro_light_trial"
+            android:textSize="18sp"
             android:hint="Please Enter the Title of Image"
             android:textColor="@color/light_blue" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -68,6 +70,7 @@
             android:backgroundTint="@color/transparent"
             android:textSize="24sp"
             android:textStyle="bold"
+            android:fontFamily="@font/arista_pro_bold_trial"
             android:paddingVertical="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/origin_photo"
             app:layout_constraintEnd_toEndOf="@+id/origin_photo"
@@ -82,6 +85,7 @@
             android:paddingVertical="8dp"
             android:gravity="center"
             android:hint="@string/text_click"
+            android:fontFamily="@font/arista_pro_bold_trial"
             android:singleLine="true"
             android:textColor="@color/light_blue"
             android:textSize="24sp"
@@ -113,6 +117,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:maxLines="1"
+            android:fontFamily="@font/arista_pro_light_trial"
+            android:textSize="18sp"
             android:hint="Enter the tag of the image"
             android:textColor="@color/light_blue" />
 
@@ -129,11 +135,12 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/dark_blue"
             android:text="@string/preview_btn"
+            android:fontFamily="@font/arista_pro_bold_trial"
             android:layout_marginTop="8dp"
             android:layout_marginStart="16dp"
             android:textColor="@color/light_blue"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="24sp"
+            android:letterSpacing="0.1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
@@ -144,8 +151,9 @@
             android:backgroundTint="@color/dark_blue"
             android:text="@string/publish_btn"
             android:textColor="@color/light_blue"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:fontFamily="@font/arista_pro_bold_trial"
+            android:textSize="24sp"
+            android:letterSpacing="0.1"
             android:layout_marginEnd="16dp"
             android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"

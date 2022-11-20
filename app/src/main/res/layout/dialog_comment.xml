@@ -33,13 +33,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="8dp"
                 android:gravity="center"
-                android:text="Comment"
+                android:text="COMMENT"
                 android:textColor="@color/dark_blue"
                 android:textSize="18sp"
-                android:textStyle="bold"
+                android:letterSpacing="0.5"
+                android:fontFamily="@font/arista_pro_bold_trial"
                 app:layout_constraintBottom_toTopOf="@+id/edit_publish_content"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -50,11 +50,12 @@
                 android:layout_marginHorizontal="8dp"
                 android:background="@drawable/ripple_corner"
                 android:gravity="top|start"
-                android:letterSpacing="0.15"
+                android:letterSpacing="0.1"
                 android:padding="8dp"
                 android:textColor="@color/dark_blue"
                 android:textColorHint="@color/light_blue"
                 android:textSize="18sp"
+                android:fontFamily="@font/arista_pro_light_trial"
                 app:layout_constraintBottom_toTopOf="@+id/button_publish"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -70,6 +71,8 @@
                 android:background="@color/rice"
                 android:gravity="center"
                 android:text="Publish"
+                android:letterSpacing="0.5"
+                android:fontFamily="@font/arista_pro_bold_trial"
                 android:textColor="@color/dark_blue"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -82,10 +85,24 @@
                     android:layout_width="0dp"
                     android:text="REPLY TO: "
                     android:padding="8dp"
+                    android:letterSpacing="0.1"
+                    android:visibility="gone"
+                    android:fontFamily="@font/arista_pro_light_trial"
                     android:textColor="@color/dark_blue"
                     app:layout_constraintStart_toStartOf="@+id/edit_publish_content"
                     app:layout_constraintEnd_toEndOf="@+id/edit_publish_content"
                     app:layout_constraintBottom_toBottomOf="@+id/edit_publish_content"/>
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/post_comment_lotties"
+                android:layout_height="0dp"
+                android:layout_width="0dp"
+                app:lottie_autoPlay="true"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:lottie_speed="1"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

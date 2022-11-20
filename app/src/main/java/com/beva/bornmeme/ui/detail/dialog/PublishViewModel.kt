@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.beva.bornmeme.databinding.DialogCommentBinding
 import com.beva.bornmeme.model.Comment
+import com.beva.bornmeme.model.UserManager
 import com.google.firebase.firestore.FirebaseFirestore
 import okhttp3.internal.cache.DiskLruCache
 import timber.log.Timber
@@ -25,7 +26,7 @@ class PublishViewModel: ViewModel() {
             "photoUrl" to "",
             "postId" to postId,
             "time" to Date(Calendar.getInstance().timeInMillis),
-            "userId" to "cNXUG5FShzYesEOltXUZ"
+            "userId" to UserManager.user.userId
         )
 
         document.set(publish).addOnSuccessListener {

@@ -95,7 +95,7 @@
             app:fabCustomSize="60dp"
             app:tint="@color/dark_blue"
             android:backgroundTint="@color/light_blue"
-            android:src="@drawable/ic_baseline_add_to_photos_24"
+            android:src="@drawable/module_btn"
             android:visibility="gone" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -109,7 +109,7 @@
             app:fabCustomSize="60dp"
             app:tint="@color/dark_blue"
             android:backgroundTint="@color/light_blue"
-            android:src="@drawable/ic_baseline_add_a_photo_24"
+            android:src="@drawable/camera_btn"
             android:visibility="gone" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -123,7 +123,7 @@
             app:fabCustomSize="60dp"
             app:tint="@color/dark_blue"
             android:backgroundTint="@color/light_blue"
-            android:src="@drawable/ic_baseline_add_photo_alternate_24"
+            android:src="@drawable/gallery_btn"
             android:visibility="gone" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -137,7 +137,7 @@
             app:tint="@color/dark_blue"
             app:borderWidth="0dp"
             android:backgroundTint="@color/light_blue"
-            android:src="@drawable/ic_baseline_add_24"
+            android:src="@drawable/rotate"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

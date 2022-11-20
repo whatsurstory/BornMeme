@@ -1,12 +1,17 @@
 package com.beva.bornmeme.ui.detail.dialog
 
+import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.fragment.app.DialogFragment
+import androidx.navigation.fragment.findNavController
+import com.beva.bornmeme.MainActivity
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.DialogCommentBinding
 import com.google.android.material.snackbar.Snackbar
@@ -45,8 +50,12 @@ class PublishCommentDialog: AppCompatDialogFragment() {
                     .setAction("Action", null).show()
 
             } else {
+                binding.postCommentLotties.visibility = View.VISIBLE
+                binding.postCommentLotties.setAnimation(R.raw.refresh)
                 viewModel.publishComment(postId, parentId ,binding)
-                dismiss()
+                Handler(Looper.getMainLooper()).postDelayed({
+                    findNavController().navigateUp()
+                }, 1200)
             }
         }
 

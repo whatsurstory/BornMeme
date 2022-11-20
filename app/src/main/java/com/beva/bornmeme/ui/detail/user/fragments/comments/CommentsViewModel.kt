@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import com.beva.bornmeme.model.Comment
 import com.beva.bornmeme.model.Post
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import timber.log.Timber
 
 class CommentsViewModel(userId: String) : ViewModel() {
@@ -34,5 +36,14 @@ class CommentsViewModel(userId: String) : ViewModel() {
                 postData.value = list
             }
         return postData
+    }
+    fun getPostImage (postId: String) {
+        Firebase.firestore
+            .collection("Posts")
+            .document(postId)
+            .get()
+            .addOnCompleteListener { task ->
+                Timber.d("task -> ${task.result.data}")
+            }
     }
 }

@@ -23,16 +23,17 @@
 
     <ImageButton
         android:id="@+id/change_photo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_margin="16dp"
         android:background="@color/woo"
-        android:minWidth="48dp"
-        android:minHeight="48dp"
-        android:src="@drawable/ic_baseline_edit_24"
+        android:scaleType="centerInside"
+        android:src="@drawable/edit"
+        android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/shapeableImageView"
         app:layout_constraintEnd_toEndOf="@+id/shapeableImageView"
-        app:layout_constraintTop_toTopOf="@+id/shapeableImageView" />
+        app:layout_constraintTop_toTopOf="@+id/shapeableImageView"
+        app:tint="@color/dark_blue" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:layout_width="100dp"
@@ -53,8 +54,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:boxBackgroundMode="none"
-        app:boxStrokeColor="@color/tian_ching"
-        app:boxStrokeErrorColor="@color/purple_700"
+        app:boxStrokeColor="@color/dark_blue"
+        app:boxStrokeErrorColor="@color/light_orange_pink"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -66,6 +67,7 @@
             android:layout_height="match_parent"
             android:hint="Name"
             android:maxLines="1"
+            android:fontFamily="@font/arista_pro_light_trial"
             android:text="Defalt Name" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -75,8 +77,8 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:boxStrokeErrorColor="@color/purple_700"
-        app:boxStrokeColor="@color/tian_ching"
+        app:boxStrokeErrorColor="@color/light_orange_pink"
+        app:boxStrokeColor="@color/dark_blue"
         app:boxBackgroundMode="none"
         app:layout_constraintStart_toStartOf="@id/email_box"
         app:layout_constraintEnd_toEndOf="@id/email_box"
@@ -87,6 +89,7 @@
             android:layout_width="match_parent"
             android:maxLines="5"
             app:errorEnabled="true"
+            android:fontFamily="@font/arista_pro_light_trial"
             app:errorContentDescription="我是梗圖APP 不是Tinder"
             android:layout_height="match_parent"
             android:hint="Introduce"
@@ -101,8 +104,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginVertical="8dp"
-        app:boxStrokeErrorColor="@color/purple_700"
-        app:boxStrokeColor="@color/tian_ching"
+        app:boxStrokeErrorColor="@color/light_orange_pink"
+        app:boxStrokeColor="@color/dark_blue"
         app:boxBackgroundMode="none"
         app:layout_constraintStart_toStartOf="@+id/name_box"
         app:layout_constraintEnd_toEndOf="@+id/name_box"
@@ -112,6 +115,7 @@
             android:layout_height="match_parent"
             android:id="@+id/email"
             android:hint="Email"
+            android:fontFamily="@font/arista_pro_light_trial"
             android:text="Defalt Email" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -122,6 +126,10 @@
         android:layout_height="wrap_content"
         android:padding="16dp"
         android:text="Block List"
+        android:textSize="18sp"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/dark_blue"
+        android:fontFamily="@font/arista_pro_bold_trial"
         app:layout_constraintEnd_toEndOf="@id/desc_box"
         app:layout_constraintStart_toStartOf="@id/desc_box"
         app:layout_constraintTop_toBottomOf="@id/followers_list" />
@@ -129,10 +137,12 @@
     <ImageButton
         android:id="@+id/block_list_btn"
         android:layout_width="48dp"
-        android:layout_height="0dp"
+        android:layout_height="48dp"
         android:background="@color/woo"
-        android:scaleType="center"
-        android:src="@drawable/ic_baseline_more_vert_24"
+        android:scaleType="centerInside"
+        android:padding="16dp"
+        app:tint="@color/dark_blue"
+        android:src="@drawable/list_more"
         app:layout_constraintBottom_toBottomOf="@id/block_list"
         app:layout_constraintEnd_toEndOf="@id/block_list"
         app:layout_constraintTop_toTopOf="@id/block_list" />
@@ -143,6 +153,9 @@
         app:layout_constraintEnd_toEndOf="@id/desc_box"
         app:layout_constraintTop_toBottomOf="@id/desc_box"
         android:text="Follow List"
+        android:textColor="@color/dark_blue"
+        android:fontFamily="@font/arista_pro_bold_trial"
+        android:textSize="18sp"
         android:padding="16dp"
         android:layout_marginTop="8dp"
         android:layout_height="wrap_content"
@@ -151,10 +164,12 @@
     <ImageButton
         android:id="@+id/follow_list_btn"
         android:layout_width="48dp"
-        android:layout_height="0dp"
+        android:layout_height="48dp"
         android:background="@color/woo"
-        android:scaleType="center"
-        android:src="@drawable/ic_baseline_more_vert_24"
+        android:scaleType="centerInside"
+        android:padding="16dp"
+        android:src="@drawable/list_more"
+        app:tint="@color/dark_blue"
         app:layout_constraintBottom_toBottomOf="@id/follow_list"
         app:layout_constraintEnd_toEndOf="@id/follow_list"
         app:layout_constraintTop_toTopOf="@id/follow_list" />
@@ -166,6 +181,9 @@
         app:layout_constraintTop_toBottomOf="@id/follow_list"
         android:text="Followers List"
         android:padding="16dp"
+        android:textSize="18sp"
+        android:fontFamily="@font/arista_pro_bold_trial"
+        android:textColor="@color/dark_blue"
         android:layout_marginTop="8dp"
         android:layout_height="wrap_content"
         android:layout_width="0dp"/>
@@ -173,10 +191,11 @@
     <ImageButton
         android:id="@+id/followers_list_btn"
         android:layout_width="48dp"
-        android:layout_height="0dp"
+        android:layout_height="48dp"
         android:background="@color/woo"
-        android:scaleType="center"
-        android:src="@drawable/ic_baseline_more_vert_24"
+        android:scaleType="centerInside"
+        android:src="@drawable/list_more"
+        android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="@id/followers_list"
         app:layout_constraintEnd_toEndOf="@id/followers_list"
         app:layout_constraintTop_toTopOf="@id/followers_list" />
@@ -188,19 +207,25 @@
         android:layout_height="wrap_content"
         android:padding="16dp"
         android:text="Register Time: "
+        android:textColor="@color/dark_blue"
+        android:fontFamily="@font/arista_pro_light_trial"
         app:layout_constraintBottom_toTopOf="@+id/saveButton"
         app:layout_constraintEnd_toEndOf="@+id/block_list"
         app:layout_constraintStart_toStartOf="@+id/block_list"
         app:layout_constraintTop_toBottomOf="@id/block_list" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/saveButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="16dp"
-        android:backgroundTint="@color/rice"
-        android:text="Save"
+        android:layout_marginBottom="16dp"
+        android:layout_marginHorizontal="8dp"
+        android:text="S A V E"
+        android:textSize="18sp"
+        android:background="@color/rice"
+        app:backgroundTint="@color/rice"
+        android:fontFamily="@font/arista_pro_fat_trial"
         android:textColor="@color/teal_700"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

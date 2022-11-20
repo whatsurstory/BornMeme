@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
@@ -82,10 +83,22 @@ class UserDetailFragment : Fragment() {
 
         if (user.userId != UserManager.user.userId) {
             binding.editIcon.visibility = View.GONE
-            binding.add2follow.visibility = View.VISIBLE
-            binding.add2follow.setOnClickListener {
-                //adding to follow
+            for (item in user.followers) {
+                if (item == UserManager.user.userId) {
+                    binding.add2follow.visibility = View.GONE
+                    binding.alreadyFollow.visibility = View.VISIBLE
+                    binding.alreadyFollow.setOnClickListener {
+                        Toast.makeText(context, "已經追蹤該作者，退追請等待，加速要加錢", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    binding.alreadyFollow.visibility = View.GONE
+                    binding.add2follow.visibility = View.VISIBLE
+                    binding.add2follow.setOnClickListener {
+                        viewModel.add2follow(user.userId.toString())
+                    }
+                }
             }
+
         } else {
             binding.editIcon.visibility = View.VISIBLE
             binding.editIcon.setOnClickListener {

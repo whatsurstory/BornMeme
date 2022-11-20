@@ -11,6 +11,11 @@
         <item name="rippleColor">@color/rice</item>
     </style>
 
+    <style name="chipText" parent="TextAppearance.MaterialComponents.Chip">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/arista_pro_light_trial</item>
+    </style>
+
     <style name="CustomMenuStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">true</item>
         <item name="color">@color/dark_blue</item>

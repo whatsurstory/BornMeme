@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_blue"
+    android:background="@color/rice"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,55 +29,73 @@
 
         <ImageView
             android:id="@+id/editIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_edit_24"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/edit"
+            android:scaleType="centerInside"
+            android:padding="2dp"
             android:visibility="gone"
             android:layout_marginEnd="4dp"
-            app:layout_constraintStart_toEndOf="@id/user_detail_name"
             app:layout_constraintBottom_toBottomOf="@id/user_detail_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/user_detail_name"
-            app:tint="@color/tian_ching" />
+            app:tint="@color/dark_blue" />
 
         <ImageView
             android:id="@+id/add2follow"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:src="@drawable/ic_baseline_add_24"
-            app:tint="@color/tian_ching"
+            android:layout_height="24dp"
+            android:layout_width="24dp"
+            android:padding="2dp"
+            android:src="@drawable/adding2follow"
+            app:tint="@color/dark_blue"
             android:layout_marginEnd="4dp"
             app:layout_constraintTop_toTopOf="@id/user_detail_name"
             app:layout_constraintBottom_toBottomOf="@id/user_detail_name"
-            app:layout_constraintStart_toEndOf="@id/user_detail_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/already_follow"
+            android:layout_height="24dp"
+            android:layout_width="24dp"
+            android:src="@drawable/after_follow"
+            android:scaleType="centerInside"
+            android:padding="2dp"
+            app:tint="@color/dark_blue"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintTop_toTopOf="@id/user_detail_name"
+            app:layout_constraintBottom_toBottomOf="@id/user_detail_name"
             app:layout_constraintEnd_toEndOf="parent"
             android:visibility="gone"/>
 
         <TextView
             android:id="@+id/user_detail_name"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:text="Beva9527"
-            android:textColor="@color/tian_ching"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/editIcon"
-            app:layout_constraintStart_toEndOf="@id/user_detail_img"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/arista_pro_bold_trial"
+            android:gravity="start|center_vertical"
+            android:text="Beva"
+            android:maxEms="20"
+            android:textColor="@color/dark_blue"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="@+id/introduce_text"
             app:layout_constraintTop_toTopOf="@+id/user_detail_img" />
 
         <ImageView
             android:id="@+id/user_followers_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:src="@drawable/ic_baseline_people_outline_24"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:src="@drawable/follewers"
+            android:padding="2dp"
+            android:scaleType="centerInside"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/followers_text"
             app:layout_constraintStart_toStartOf="@+id/introduce_text"
             app:layout_constraintTop_toBottomOf="@+id/introduce_text"
-            app:tint="@color/tian_ching" />
+            app:tint="@color/dark_blue" />
 
         <TextView
             android:id="@+id/introduce_text"
@@ -86,42 +104,49 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="8dp"
             android:text="introduce Zone"
-            android:textColor="@color/tian_ching"
+            android:fontFamily="@font/arista_pro_light_trial"
+            android:textColor="@color/dark_blue"
             app:layout_constraintBottom_toTopOf="@+id/user_followers_icon"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/user_detail_img"
             app:layout_constraintTop_toBottomOf="@+id/user_detail_name" />
 
         <TextView
             android:id="@+id/followers_text"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:text="100"
-            android:textColor="@color/tian_ching"
+            android:textSize="28sp"
+            android:layout_marginStart="4dp"
+            android:fontFamily="@font/chenyuluoyan_thin"
+            android:textColor="@color/dark_blue"
             app:layout_constraintBottom_toBottomOf="@+id/user_followers_icon"
             app:layout_constraintEnd_toStartOf="@+id/user_likes_icon"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/user_followers_icon"
             app:layout_constraintTop_toTopOf="@+id/user_followers_icon" />
 
         <ImageView
             android:id="@+id/user_posts_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_people_outline_24"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="2dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/post"
             app:layout_constraintBottom_toBottomOf="@+id/likes_text"
             app:layout_constraintEnd_toStartOf="@+id/posts_text"
             app:layout_constraintStart_toEndOf="@+id/likes_text"
             app:layout_constraintTop_toTopOf="@+id/likes_text"
-            app:tint="@color/tian_ching" />
+            app:tint="@color/dark_blue" />
 
         <TextView
             android:id="@+id/posts_text"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:text="100"
-            android:textColor="@color/tian_ching"
+            android:fontFamily="@font/chenyuluoyan_thin"
+            android:textColor="@color/dark_blue"
+            android:textSize="28sp"
+            android:layout_marginStart="4dp"
             app:layout_constraintBottom_toBottomOf="@+id/user_posts_icon"
             app:layout_constraintEnd_toEndOf="@+id/introduce_text"
             app:layout_constraintStart_toEndOf="@+id/user_posts_icon"
@@ -129,22 +154,27 @@
 
         <ImageView
             android:id="@+id/user_likes_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_people_outline_24"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:scaleType="centerInside"
+            android:padding="2dp"
+            android:src="@drawable/after_like"
             app:layout_constraintBottom_toBottomOf="@+id/followers_text"
             app:layout_constraintEnd_toStartOf="@+id/likes_text"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/followers_text"
             app:layout_constraintTop_toTopOf="@+id/followers_text"
-            app:tint="@color/tian_ching" />
+            app:tint="@color/dark_blue" />
 
         <TextView
             android:id="@+id/likes_text"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:text="100"
-            android:textColor="@color/tian_ching"
+            android:textSize="28sp"
+            android:layout_marginStart="4dp"
+            android:fontFamily="@font/chenyuluoyan_thin"
+            android:textColor="@color/dark_blue"
             app:layout_constraintBottom_toBottomOf="@+id/user_likes_icon"
             app:layout_constraintEnd_toStartOf="@+id/user_posts_icon"
             app:layout_constraintHorizontal_bias="0.5"
@@ -157,7 +187,7 @@
         android:id="@+id/user_tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/light_blue"
+        android:background="@color/rice"
         app:layout_constraintBottom_toTopOf="@+id/user_viewpager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

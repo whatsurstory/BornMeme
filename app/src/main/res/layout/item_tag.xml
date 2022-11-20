@@ -13,6 +13,7 @@
         android:text="chip chip"
         style="@style/CustomChipStyle"
         app:chipCornerRadius="16dp"
+        android:textAppearance="@style/chipText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
