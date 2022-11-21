@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.detail.user.fragments.CommentsFragment"
+    tools:context=".ui.detail.user.fragments.comments.CommentsFragment"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageButton
@@ -14,17 +14,21 @@
         android:layout_margin="8dp"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_baseline_sort_24"
-        android:background="@color/whit_alpha"
+        android:background="@color/woo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/comment_recycler"/>
+        app:layout_constraintBottom_toTopOf="@id/comment_recycler"
+        app:tint="@color/dark_blue" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/comment_recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_comment"
+        tools:listitem="@layout/item_user_comment"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

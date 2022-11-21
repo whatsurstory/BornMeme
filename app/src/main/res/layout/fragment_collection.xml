@@ -3,29 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.detail.user.fragments.CollectionFragment"
+    tools:context=".ui.detail.user.fragments.collection.CollectionFragment"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <ImageButton
-        android:id="@+id/collection_sort_btn"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_margin="8dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_baseline_sort_24"
-        android:background="@color/whit_alpha"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/collection_recycler"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/collection_recycler"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_user_collection"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:spanCount="2"
+        android:layout_margin="4dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/collection_sort_btn">
+        app:layout_constraintTop_toTopOf="parent">
 
     </androidx.recyclerview.widget.RecyclerView>
 

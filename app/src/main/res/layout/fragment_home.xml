@@ -8,59 +8,64 @@
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/chip_group"
-        android:layout_height="wrap_content"
         android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginHorizontal="8dp"
-        app:layout_constraintStart_toStartOf="@id/recycler_home"
-        app:layout_constraintEnd_toEndOf="@id/recycler_home"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginEnd="12dp"
         app:layout_constraintBottom_toTopOf="@id/recycler_home"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:singleSelection="true"
+        >
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
         >
 
         <com.google.android.material.chip.Chip
-            style="@style/CustomChipStyle"
-            android:layout_height="wrap_content"
+            android:id="@+id/reset_btn"
             android:layout_width="wrap_content"
-            android:layout_marginHorizontal="1dp"
-            android:text="catalog"/>
-        <com.google.android.material.chip.Chip
-            style="@style/CustomChipStyle"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_marginHorizontal="1dp"
-            android:text="Tag"/>
-        <com.google.android.material.chip.Chip
+            android:text="All Tag"
+            android:textAppearance="@style/chipText"
             style="@style/CustomChipStyle"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_marginHorizontal="1dp"
-            android:text="catalog"/>
-        <com.google.android.material.chip.Chip
-            style="@style/CustomChipStyle"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_marginHorizontal="1dp"
-            android:text="Tag"/>
-        <com.google.android.material.chip.Chip
-            style="@style/CustomChipStyle"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-            android:layout_marginHorizontal="1dp"
-        android:text="catalog"/>
-
-    </com.google.android.material.chip.ChipGroup>
+            app:chipCornerRadius="16dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/chipRecycler"/>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chipRecycler"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toEndOf="@+id/reset_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/reset_btn"
+            app:layout_constraintBottom_toBottomOf="@id/reset_btn"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_tag" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.chip.ChipGroup>
+
+    <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_home"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="6dp"
+            android:layout_marginBottom="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/chip_group"
             tools:listitem="@layout/item_home_img"/>
+
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

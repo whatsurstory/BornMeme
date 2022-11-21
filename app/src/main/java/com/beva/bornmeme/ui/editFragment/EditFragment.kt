@@ -1,40 +1,53 @@
 package com.beva.bornmeme.ui.editFragment
 
 
-import android.app.Activity
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.Toast
+import androidx.appcompat.widget.AppCompatEditText
 import androidx.collection.arrayMapOf
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.beva.bornmeme.MobileNavigationDirections
+import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentEditFixmodeBinding
+import com.beva.bornmeme.model.UserManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.dialog.MaterialDialogs
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 
 class EditFragment : Fragment() {
+//TODO: REPOSITORY to be complete
 
     private lateinit var binding: FragmentEditFixmodeBinding
     private lateinit var uri: Uri
-    private lateinit var upperText: EditText
-    private lateinit var bottomText: EditText
-    //complete the publish will input the photo to firebase, Using  Path -> Posts
+    private lateinit var upperText: AppCompatEditText
+    private lateinit var bottomText: AppCompatEditText
     private val fireStore = FirebaseFirestore.getInstance().collection("Posts")
     private val document = fireStore.document()
+    private lateinit var viewModel: EditViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,31 +55,78 @@ class EditFragment : Fragment() {
 
         arguments?.let { bundle ->
             uri = bundle.getParcelable("uri")!!
-            Log.d("From Gallery", "get uri= $uri")
+            Timber.d("From Album uri => $uri")
         }
+//        binding.originPhoto.setImageURI(uri)
         getLayoutPrams()
+//        getTextPrams()
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val viewModel = ViewModelProvider(this).get(EditViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(EditViewModel::class.java)
         upperText = binding.upperText
         bottomText = binding.bottomText
 
+        binding.editTextCatalog
+            .addTextChangedListener(
+                afterTextChanged = {
+                    if (binding.editTextCatalog.text?.trim()?.isNotEmpty() == true) {
+                        binding.catalogCard.error = null
+                        binding.editTextCatalog.text.toString()
+                    } else {
+                        binding.editTextCatalog.setText("傻逼日常").toString()
+                    }
+                },
+                onTextChanged = { s, start, before, count ->
+                    if (binding.editTextCatalog.text?.trim()?.isEmpty() == true) {
+                        binding.editTextCatalog.error =
+                            "If Tag is Empty the input will take 傻逼日常 as default"
+                    }
+                },
+                beforeTextChanged = { s, start, before, count ->
+                }
+            )
+
+        binding.editTextTitle
+            .addTextChangedListener(
+                afterTextChanged = {
+                    if (binding.editTextTitle.text?.trim()?.isNotEmpty() == true) {
+                        binding.titleCard.error = null
+                        binding.editTextTitle.text.toString()
+                    }
+                },
+                onTextChanged = { s, start, before, count ->
+                    if (binding.editTextTitle.text?.trim()?.isEmpty() == true) {
+                        binding.titleCard.error = "If Tag is Empty the input will take Your Name as default"
+                    }
+                },
+                    beforeTextChanged = { s, start, before, count ->
+
+                })
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         //to preview
         binding.previewBtn.setOnClickListener {
+            Timber.d("onClick Preview")
 
-            if (upperText.text.isNullOrEmpty() || bottomText.text.isNullOrEmpty()){
-//                Toast.makeText(context,"Adding Text Plz", Toast.LENGTH_SHORT).show()
+            if (upperText.text.isNullOrEmpty() || bottomText.text.isNullOrEmpty()) {
                 Snackbar.make(it, "Not Adding Text Yet", Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show()
             } else {
 
-                val baseBitmap = getBitmapByUri(uri)
+//                val baseBitmap = getBitmapByUri(uri)
+                binding.originPhoto.buildDrawingCache()
+                val baseBitmap = binding.originPhoto.drawingCache
                 upperText.buildDrawingCache()
                 val upperBitmap = upperText.drawingCache
                 bottomText.buildDrawingCache()
@@ -78,7 +138,7 @@ class EditFragment : Fragment() {
                 //only to destroy the origin data to render new view
                 upperText.destroyDrawingCache()
                 bottomText.destroyDrawingCache()
-//            Log.d("Bevaaaaa", "previewBitmap is $previewBitmap")
+                binding.originPhoto.destroyDrawingCache()
 
                 findNavController().navigate(
                     MobileNavigationDirections.navigateToPreviewDialog(
@@ -90,23 +150,34 @@ class EditFragment : Fragment() {
 
         //to publish
         binding.publishBtn.setOnClickListener {
+            Timber.d("onClick publish")
+//
+//            val builder =
+//                MaterialAlertDialogBuilder(this.requireContext(), )
+//                .setView(R.layout.item_loading)
+//            builder.setCancelable(false)
+//            val dialog = builder.create()
+//            dialog.show()
+            binding.lottiePublishLoading.visibility = View.VISIBLE
+            binding.lottiePublishLoading.setAnimation(R.raw.dancing_pallbearers)
+
+            val tag =if (binding.editTextCatalog.text.toString() == "") { "傻逼日常" } else { binding.editTextCatalog.text.toString()}
+            val title = if ( binding.editTextTitle.text.toString() == "") { "Beva" } else { binding.editTextTitle.text.toString() }
 
             if (upperText.text.isNullOrEmpty() || bottomText.text.isNullOrEmpty()) {
-//                Toast.makeText(context, "Adding Text Plz", Toast.LENGTH_SHORT).show()
-            Snackbar.make(it, "Not Adding Text Yet", Snackbar.LENGTH_SHORT)
-                .setAction("Action", null).show()
+                Snackbar.make(it, "Not Adding Text Yet", Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null).show()
 
             } else {
-
                 val ref = FirebaseStorage.getInstance().reference
                 ref.child("img_origin/" + document.id + ".jpg")
                     .putFile(uri)
                     .addOnSuccessListener {
                         it.metadata?.reference?.downloadUrl?.addOnSuccessListener {
                             //這層的it才會帶到firebase return 的 Uri
-                            Log.d("origin =>", "downloadUrl = $it")
-                            Log.d("origin =>", "origin uri = $it => take it to base:url")
+                            Timber.d("origin uri: $it => take it to base url")
 
+//                            Timber.d("newTag $newTag")
                             val res = listOf(
                                 arrayMapOf("type" to "base", "url" to it),
                                 (arrayMapOf(
@@ -114,11 +185,9 @@ class EditFragment : Fragment() {
                                     "url" to upperText.text.toString() + bottomText.text.toString()
                                 ))
                             )
-//                          Log.d("check res","res $res")
-//                          Log.d("Upper Text", "upperText -> ${upperText.text.toString()}")
-//                          Log.d("Bottom Text", "BottomText -> ${bottomText.text.toString()}")
 
-                            val baseBitmap = getBitmapByUri(uri)
+                            binding.originPhoto.buildDrawingCache()
+                            val baseBitmap = binding.originPhoto.drawingCache
                             upperText.buildDrawingCache()
                             val upperBitmap = upperText.drawingCache
                             bottomText.buildDrawingCache()
@@ -131,32 +200,31 @@ class EditFragment : Fragment() {
                             )
                             //saving to gallery and return the path(uri)
                             val newUri = viewModel.getImageUri(activity?.application, publishBitmap)
-                            Log.d("check newUri", "newUri $newUri")
+                            Timber.d("newUri => $newUri")
                             if (newUri != null) {
-                                viewModel.getNewPost(newUri, res)
+                                viewModel.addNewPost(newUri, res, title, tag)
                             }
                             findNavController().navigate(MobileNavigationDirections.navigateToHomeFragment())
 
                         }?.addOnFailureListener {
-                            Log.d("Get Url Error", "${it.message}")
+                            Timber.d("upload uri Error => $it")
                         }
 
                     }.addOnFailureListener {
-                        Log.d("Upload Task Snapshot Error", "${it.message}")
+                        Timber.d("TaskSnapshot Error => $it")
                     }
             }
         }
-        return binding.root
+
     }
 
 
-
-    private fun getBitmapByUri(bitmapUri: Uri): Bitmap {
-        return BitmapFactory.decodeStream(activity?.contentResolver?.openInputStream(bitmapUri))
-    }
+//    private fun getBitmapByUri(bitmapUri: Uri): Bitmap {
+//        return BitmapFactory.decodeStream(activity?.contentResolver?.openInputStream(bitmapUri))
+//    }
 
     private fun getLayoutPrams() {
-        //TODO: Fixed the Text Size not same
+
         val options = BitmapFactory.Options()
         options.inJustDecodeBounds = true
 
@@ -169,12 +237,12 @@ class EditFragment : Fragment() {
         //Gallery Image origin Width &Height
         val oriWidth = options.outWidth
         val oriHeight = options.outHeight
-        Log.w("oriWidth", "oriWidth=${oriWidth}")
-        Log.w("oriHeight", "oriHeight=${oriHeight}")
+        Timber.w("oriWidth => $oriWidth")
+        Timber.w("oriHeight => $oriHeight")
 
         //Screen ViewWidth & Height
         val screenWidth = resources.displayMetrics.widthPixels
-        val screenHeight = resources.displayMetrics.heightPixels
+//        val screenHeight = resources.displayMetrics.heightPixels
 //        Log.i("screenWidth", "screenWidth = $screenWidth")
 //        Log.i("screenHeight", "screenHeight = $screenHeight")
 
@@ -183,8 +251,8 @@ class EditFragment : Fragment() {
         //螢幕寬 除以 圖片寬 乘以 圖片高 = 符合畫面比例高
         val height = (screenWidth.toFloat() / oriWidth.toFloat() * oriHeight.toFloat()).toInt()
         //our image will fit the screen width
-        Log.d("final width", "width = $screenWidth")
-        Log.d("final height", "height = $height")
+        Timber.d("final width => $screenWidth")
+        Timber.d("final height => $height")
 
         val layoutParam = ConstraintLayout.LayoutParams(
             screenWidth,
@@ -194,5 +262,38 @@ class EditFragment : Fragment() {
         binding.originPhoto.layoutParams = layoutParam
         binding.originPhoto.scaleType = ImageView.ScaleType.FIT_CENTER
         binding.originPhoto.setImageURI(uri)
+
+    }
+
+    private fun getTextPrams() {
+
+
+        //Gallery Image origin Width &Height
+        val oriWidth = upperText.width
+        val oriHeight = upperText.height
+        Timber.w("oriWidth => $oriWidth")
+        Timber.w("oriHeight => $oriHeight")
+
+//Screen ViewWidth & Height
+        val screenWidth = resources.displayMetrics.widthPixels
+//        val screenHeight = resources.displayMetrics.heightPixels
+//        Log.i("screenWidth", "screenWidth = $screenWidth")
+//        Log.i("screenHeight", "screenHeight = $screenHeight")
+
+        //After combine Image Height
+        //**require number type is float but the return number (after operating) is Int
+        //螢幕寬 除以 圖片寬 乘以 圖片高 = 符合畫面比例高
+        val height = (screenWidth.toFloat() / oriWidth.toFloat() * oriHeight.toFloat()).toInt()
+        //our image will fit the screen width
+        Timber.d("final width => $screenWidth")
+        Timber.d("final height => $height")
+
+        val layoutParam = ConstraintLayout.LayoutParams(
+            screenWidth,
+            height
+        )
+        //let new height and width assign as constraint layout parameter
+        binding.originPhoto.layoutParams = layoutParam
+        binding.originPhoto.scaleType = ImageView.ScaleType.FIT_CENTER
     }
 }

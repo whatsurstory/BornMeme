@@ -4,19 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.detail.user.fragments.FavoriteFragment">
+    tools:context=".ui.detail.user.fragments.favorite.FavoriteFragment">
 
-    <ImageButton
-        android:id="@+id/favorite_sort_btn"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_margin="8dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_baseline_sort_24"
-        android:background="@color/whit_alpha"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/favorite_recycler"/>
+<!--    <ImageButton-->
+<!--        android:id="@+id/favorite_sort_btn"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_margin="8dp"-->
+<!--        android:scaleType="centerCrop"-->
+<!--        android:src="@drawable/ic_baseline_sort_24"-->
+<!--        android:background="@color/whit_alpha"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/favorite_recycler"/>-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/favorite_recycler"
@@ -25,8 +25,9 @@
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        tools:listitem="@layout/item_user_favorite"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/favorite_sort_btn">
+        app:layout_constraintTop_toTopOf="parent">
 
     </androidx.recyclerview.widget.RecyclerView>
 </androidx.constraintlayout.widget.ConstraintLayout>

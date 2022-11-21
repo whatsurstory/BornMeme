@@ -3,30 +3,145 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-    </data>
 
-    <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/drawer_layout"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        tools:openDrawer="start">
+        tools:context=".MainActivity">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/change_mode_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_collections_bookmark_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="12dp"/>
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="4dp"
+            app:contentInsetStart="12dp"
+            app:contentInsetEnd="12dp"
+            android:layout_marginTop="12dp"
+            app:layout_constraintBottom_toBottomOf="@+id/content_main"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" >
+
+            <!-- app:contentInsetLeft="0dp"
+                  app:contentInsetStart="0dp"        -->
+            <!--this is the perfect width for toolbar
+            app:contentInsetStartWithNavigation="0dp"
+            app:contentInsetEndWithActions="0dp"
+            -->
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <androidx.appcompat.widget.SearchView
+                    android:id="@+id/search_bar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:queryBackground="@null"
+                    android:layout_marginEnd="8dp"
+                    app:iconifiedByDefault="false"
+                    app:theme="@style/AppSearchView"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/profile_btn"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:queryHint="BornMeme."
+                    app:searchIcon="@null"
+                    android:visibility="gone"/>
+
+<!--    app:searchIcon="@drawable/ic_baseline_self_improvement_24"  -->
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/profile_btn"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:scaleType="fitCenter"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_baseline_tag_faces_24"
+                    app:layout_constraintBottom_toBottomOf="@+id/search_bar"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/search_bar"
+                    app:shapeAppearanceOverlay="@style/circle" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.appcompat.widget.Toolbar>
 
         <include
-            android:id="@+id/app_bar_main"
-            layout="@layout/app_bar_main"
+            layout="@layout/content_main"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
-        <com.google.android.material.navigation.NavigationView
-            android:id="@+id/nav_view"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_module_edit"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:fitsSystemWindows="true"
-            android:clipToPadding="false"
-            app:headerLayout="@layout/nav_header_main"
-            app:menu="@menu/activity_main_drawer" />
-    </androidx.drawerlayout.widget.DrawerLayout>
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/fab"
+            app:layout_constraintBottom_toTopOf="@+id/fab_camera_edit"
+            android:layout_margin="8dp"
+            app:elevation="6dp"
+            app:fabCustomSize="60dp"
+            app:tint="@color/dark_blue"
+            android:backgroundTint="@color/light_blue"
+            android:src="@drawable/module_btn"
+            android:visibility="gone" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_camera_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/fab"
+            app:layout_constraintBottom_toTopOf="@+id/fab_gallery_edit"
+            android:layout_margin="8dp"
+            app:elevation="6dp"
+            app:fabCustomSize="60dp"
+            app:tint="@color/dark_blue"
+            android:backgroundTint="@color/light_blue"
+            android:src="@drawable/camera_btn"
+            android:visibility="gone" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_gallery_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/fab"
+            app:layout_constraintBottom_toTopOf="@+id/fab"
+            android:layout_margin="8dp"
+            app:elevation="6dp"
+            app:fabCustomSize="60dp"
+            app:tint="@color/dark_blue"
+            android:backgroundTint="@color/light_blue"
+            android:src="@drawable/gallery_btn"
+            android:visibility="gone" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:layout_marginBottom="16dp"
+            app:elevation="6dp"
+            app:fabCustomSize="70dp"
+            app:tint="@color/dark_blue"
+            app:borderWidth="0dp"
+            android:backgroundTint="@color/light_blue"
+            android:src="@drawable/rotate"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!--        android:onClick="@{() -> viewModel.navigate2Camera()}"-->
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

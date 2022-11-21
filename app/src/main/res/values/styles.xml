@@ -11,17 +11,56 @@
         <item name="rippleColor">@color/rice</item>
     </style>
 
+    <style name="chipText" parent="TextAppearance.MaterialComponents.Chip">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/arista_pro_light_trial</item>
+    </style>
+
     <style name="CustomMenuStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">true</item>
-        <item name="color">@color/rice</item>
+        <item name="color">@color/dark_blue</item>
         <item name="gapBetweenBars">8dp</item>
         <item name="barLength">24dp</item>
         <item name="thickness">2dp</item>
     </style>
 
 
-    <style name="SearchViewMy" parent="Widget.AppCompat.Light.SearchView">
-        <item name="searchIcon">@null</item>
+    <style name="AppSearchView" parent="Widget.AppCompat.SearchView" >
+        <!-- Text Size -->
+        <item name="android:textSize">16sp</item>
+        <!-- Typing Query Text Color -->
+        <item name="android:textColorPrimary">@color/dark_blue</item>
+        <!-- display Hint Color -->
+        <item name="android:textColorHint">@color/light_blue</item>
+        <!-- Icon and close Color -->
+        <item name="android:tint">@color/dark_blue</item>
+
     </style>
+
+    <style name="PublishDialog">
+        <item name="android:windowBackground">@color/transparent</item>
+    </style>
+
+    <style name="circle" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="roundedCorner" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">1%</item>
+    </style>
+
+    <style name="SlideDialog">
+        <item name="android:windowBackground">@color/translucent_80</item>
+    </style>
+
+
+<!-- setting the item in multiChoice list -->
+    <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:textColor">@color/dark_blue</item>
+        <item name="colorAccent">@color/dark_blue</item>
+    </style>
+
 
 </resources>

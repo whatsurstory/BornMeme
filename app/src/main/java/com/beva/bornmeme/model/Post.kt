@@ -20,10 +20,7 @@ data class Post(
     val url: String? = null,
     val like: List<String>? = null,
     val resources: List<Resource> = emptyList(),
-    val collection: List<String> = emptyList(),
+    val collection: List<String>? =null,
     val createdTime: Timestamp? = null,
-) : Parcelable {
-    @IgnoredOnParcel
-    val user: List<User> = emptyList()
-}
+) : Parcelable
 

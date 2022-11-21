@@ -5,7 +5,7 @@
     <color name="purple_200">#d9d9f3</color>
     <color name="rice">#f4f0e6</color>
     <color name="light_tiffany">#ceefe4</color>
-    <color name="green">#9dd3a8</color>
+    <color name="green">#8bc24c</color>
 
 <!--  darkred  -->
     <color name="purple_500">#947B89</color>
@@ -23,6 +23,8 @@
     <color name="whit_alpha">#10ffffff</color>
     <color name="white">#FFFFFFFF</color>
     <color name="translucent_80">#cccccccc</color>
+    <color name="transparent">#cc000000</color>
+    <color name="woo">#00000000</color>
 
 <!--  Gentle  -->
     <color name="pinkpink">#ffb6b9</color>

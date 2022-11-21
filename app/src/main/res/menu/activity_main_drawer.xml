@@ -3,28 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <item android:title="Menu">
-        <menu>
+    <group android:checkableBehavior="single">
+
             <item
-                android:id="@+id/nav_awaiting_payment"
+                android:id="@+id/nav_awaiting_review"
                 android:icon="@drawable/ic_baseline_settings_24"
                 android:title="Setting" />
             <item
-                android:id="@+id/nav_awaiting_shipment"
+                android:id="@+id/bottomsheet_edit_profile"
                 android:icon="@drawable/ic_baseline_edit_24"
-                android:title="Editing" />
+                android:title="Edit Profile" />
             <item
-                android:id="@+id/nav_shipped"
-                android:title="待" />
-<!--                android:icon=""-->
+                android:id="@+id/user_detail_fragment"
+                android:title="Profile"
+                android:icon="@drawable/ic_baseline_people_outline_24"/>
             <item
-                android:id="@+id/nav_awaiting_review"
-                android:title="待" />
-<!--            android:icon=""-->
-            <item
-                android:id="@+id/nav_exchange"
-                android:title="待" />
-<!--          android:icon=""  -->
-        </menu>
-    </item>
+                android:id="@+id/nav_home"
+                android:title="Home" />
+    </group>
 </menu>

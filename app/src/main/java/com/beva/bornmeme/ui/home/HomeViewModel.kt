@@ -1,17 +1,33 @@
 package com.beva.bornmeme.ui.home
 
 import android.graphics.Bitmap
+import android.os.Build.VERSION_CODES.M
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.beva.bornmeme.model.Post
 import com.beva.bornmeme.model.Resource
+import com.beva.bornmeme.model.User
+import com.beva.bornmeme.ui.detail.img.CommentCell
+import com.beva.bornmeme.ui.detail.img.ImgDetailViewModel
+import com.bumptech.glide.Glide.init
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import org.checkerframework.checker.units.qual.s
+import timber.log.Timber
 
 class HomeViewModel : ViewModel() {
 
+    data class UiState(
+        val getUserImg: (userId: String, onUserObtained: ((User) -> Unit)) -> Unit
+    )
+
      val liveData = MutableLiveData<List<Post>>()
+
+    private var _tagSet = MutableLiveData<String>()
+    private val tagSet: MutableLiveData<String>
+        get() = _tagSet
 
     // Handle navigation to detail
     private val _navigateToDetail = MutableLiveData<Post>()
@@ -19,25 +35,53 @@ class HomeViewModel : ViewModel() {
     val navigateToDetail: LiveData<Post>
         get() = _navigateToDetail
 
-    init {
-        getData()
-    }
+    val uiState = UiState(
+        getUserImg = { userId, onUserObtained ->
+            Firebase.firestore
+                .collection("Users")
+                .document(userId)
+                .get().addOnCompleteListener {
+                    val user = it.result.toObject(User::class.java)
+                    if (user != null) {
+                        return@addOnCompleteListener onUserObtained(user)
+                    }
+                }
+        }
+    )
 
 
-    //Post All Photo in Fragment
+        init {
+            getData()
+        }
+
+        val tagCell = Transformations.map(liveData) {
+            val cells = mutableListOf<String>()
+            for (item in it) {
+                val tag = item.catalog
+                //包含了相同的字串就不加入list
+                if (!cells.contains(tag)) {
+                    cells.add(tag)
+                }
+//                Timber.d("Post cells $cells")
+            }
+            cells
+        }
+
+
+    //單獨處理snapshotlistener的方式
     private fun getData(): MutableLiveData<List<Post>> {
         val postData = FirebaseFirestore.getInstance()
             .collection("Posts")
+            .orderBy("createdTime", Query.Direction.DESCENDING)
         postData.addSnapshotListener { snapshot, exception ->
-            Log.i("Bevaaaaa", "addSnapshotListener detect")
+            Timber.d("You are in HomeViewModel")
 
             exception?.let {
-                Log.w("Bevaaaaa", "[${this::class.simpleName}] Error getting documents. ${it.message}")
+                Timber.d("Exception ${it.message}")
             }
 
             val list = mutableListOf<Post>()
             for (document in snapshot!!) {
-                Log.d("Bevaaaaa", document.id + " => " + document.data)
                 val post = document.toObject(Post::class.java)
                 list.add(post)
             }
@@ -45,6 +89,45 @@ class HomeViewModel : ViewModel() {
             liveData.value = list
         }
         return liveData
+    }
+
+    val display = MediatorLiveData<List<Post>>().apply {
+        addSource(liveData) {
+            it.let { posts ->
+                value = if (tagSet.value == null) {
+                    Timber.d("1 初始觀察到的所有貼文數量 ${posts?.size}")
+                    posts
+                } else {
+                    val dataList = posts.filter { it ->
+                        it.catalog == tagSet.value || it.catalog.isEmpty() || it.catalog.isBlank()
+                    }
+                    Timber.d("2 透過tagSet篩選之後給livedata資料 ${dataList.size}")
+                    dataList
+                }
+            }
+        }
+        addSource(tagSet) {
+            it.let { tag ->
+                val dataList = liveData.value?.filter { it ->
+                    it.catalog == tag
+                }
+                Timber.d("3 按下 $tag ${dataList?.size}")
+                value = if (tag != null) {
+                    dataList
+                } else {
+                    liveData.value
+                }
+            }
+        }
+    }
+
+    fun changeTag (tagSet: String) {
+        Timber.d("changeTag $tagSet")
+        _tagSet.value = tagSet
+    }
+
+    fun resetTag () {
+        _tagSet.value = null
     }
 
     fun navigateToDetail(item: Post) {
@@ -55,4 +138,4 @@ class HomeViewModel : ViewModel() {
         _navigateToDetail.value = null
     }
 
-    }
+}

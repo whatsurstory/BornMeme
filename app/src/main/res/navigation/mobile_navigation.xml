@@ -4,29 +4,46 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/splash_screen">
 
+    <fragment
+        android:id="@+id/splash_screen"
+        android:name="com.beva.bornmeme.SplashFragment"
+        tools:layout="@layout/fragment_splash">
+
+    </fragment>
     <fragment
         android:id="@+id/nav_home"
         android:name="com.beva.bornmeme.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home">
-<!--doesn't have to set arguments, when the navigation done
-the current fragment will call the user data to render the view
-        <argument-->
-<!--            android:name="photoKey"-->
-<!--            app:argType="android.graphics.Bitmap"-->
-<!--            app:nullable="true" />-->
     </fragment>
 
     <dialog
         android:id="@+id/dialogPreview"
         android:name="com.beva.bornmeme.ui.gallery.PreviewDialog"
-        android:label=" "
         tools:layout="@layout/dialog_preview">
     <argument
         android:name="bitmap"
         app:argType="android.graphics.Bitmap" />
+    </dialog>
+
+
+    <dialog
+        android:id="@+id/dialogComment"
+        android:name="com.beva.bornmeme.ui.detail.dialog.PublishCommentDialog"
+        android:label=""
+        tools:layout="@layout/dialog_comment">
+        <argument
+            android:name="postId"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="parentId"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="" />
     </dialog>
 
     <fragment
@@ -41,13 +58,20 @@ the current fragment will call the user data to render the view
     </fragment>
 
     <fragment
+        android:id="@+id/fragmentEditDrag"
+        android:name="com.beva.bornmeme.ui.editFragment.EditDragFragment"
+        tools:layout="@layout/fragment_drag_edit">
+
+    </fragment>
+
+    <fragment
         android:id="@+id/img_detail_fragment"
         android:name="com.beva.bornmeme.ui.detail.img.ImgDetailFragment"
         android:label=""
         tools:layout="@layout/fragment_img_detail">
         <argument
             android:name="postKey"
-            app:argType="com.beva.bornmeme.model.Post" />
+            app:argType="com.beva.bornmeme.model.Post"/>
     </fragment>
 
     <fragment
@@ -55,17 +79,42 @@ the current fragment will call the user data to render the view
         android:name="com.beva.bornmeme.ui.detail.user.UserDetailFragment"
         android:label=""
         tools:layout="@layout/fragment_user_detail">
+        <argument
+            android:name="userId"
+            app:argType="string"/>
     </fragment>
 
+    <dialog
+        android:id="@+id/bottomsheet_edit_profile"
+        android:name="com.beva.bornmeme.ui.detail.dialog.EditProfileBottomSheet"
+        tools:layout="@layout/bottomsheet_edit_profile"/>
 
-    <action
-        android:id="@+id/navigate_to_edit_fragment"
-        app:destination="@+id/fragmentEditFixmode"/>
+    <dialog
+        android:id="@+id/dialogSlide"
+        android:name="com.beva.bornmeme.ui.detail.dialog.SlideImageDialog"
+        tools:layout="@layout/dialog_slide_collection">
+        <argument
+            android:name="folder"
+            app:argType="com.beva.bornmeme.model.Folder" />
+    </dialog>
+
+    <action android:id="@+id/navigate_to_edit_fragment" app:destination="@+id/fragmentEditFixmode"/>
+    <action android:id="@+id/navigate_to_drag_edit_fragment" app:destination="@+id/fragmentEditDrag"/>
+    <action android:id="@+id/navigate_to_edit_profile_dialog" app:destination="@+id/bottomsheet_edit_profile"/>
     <action android:id="@+id/navigate_to_preview_dialog" app:destination="@+id/dialogPreview"/>
-    <action android:id="@+id/navigate_to_home_fragment" app:destination="@+id/nav_home"
+    <action android:id="@+id/navigate_to_comment_dialog" app:destination="@+id/dialogComment"/>
+    <action android:id="@+id/navigate_to_slide_dialog" app:destination="@+id/dialogSlide"/>
+
+    <action android:id="@+id/navigate_to_img_detail_fragment"
+        app:destination="@+id/img_detail_fragment" />
+    <action
+        android:id="@+id/navigate_to_user_detail_fragment"
+        app:destination="@+id/user_detail_fragment" />
+
+    <action android:id="@+id/navigate_to_home_fragment"
+        app:destination="@+id/nav_home"
         app:popUpTo="@+id/mobile_navigation"
         app:popUpToInclusive="true"/>
-    <action android:id="@+id/navigate_to_img_detail_fragment" app:destination="@+id/img_detail_fragment"/>
-    <action android:id="@+id/navigate_to_user_detail_fragment" app:destination="@+id/user_detail_fragment"/>
+
 
 </navigation>

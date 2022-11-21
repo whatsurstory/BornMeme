@@ -2,27 +2,22 @@ package com.beva.bornmeme.ui.editFragment
 
 import android.app.Application
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.icu.util.Calendar
 import android.net.Uri
 import android.provider.MediaStore
-import android.util.Log
-import android.widget.EditText
-import androidx.collection.ArrayMap
-import androidx.collection.arrayMapOf
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
-import androidx.navigation.fragment.findNavController
-import com.beva.bornmeme.MobileNavigationDirections
+import com.beva.bornmeme.model.UserManager
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.google.rpc.BadRequest
+import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.util.*
 
 class EditViewModel : ViewModel() {
+
 
 
     fun mergeBitmap(
@@ -34,19 +29,11 @@ class EditViewModel : ViewModel() {
         val canvas = Canvas(result)
         canvas.drawBitmap(firstImage, 0f, 0f, null)
         val secondImageLeft = (firstImage.width - secondImage.width).toFloat() / 2
-        Log.d("secondImageLeft","secondImageLeft = $secondImageLeft")
         canvas.drawBitmap(secondImage, secondImageLeft, 0f, null)
         val thirdImageLeft = (firstImage.width - thirdImage.width).toFloat() / 2
-        Log.d("thirdImageLeft","thirdImageLeft = $thirdImageLeft")
         val thirdImageTop = (firstImage.height - thirdImage.height).toFloat()
-        Log.d("thirdImageTop","thirdImageTop = $thirdImageTop")
         canvas.drawBitmap(thirdImage, thirdImageLeft, thirdImageTop, null)
-        Log.d("座標", "$thirdImage $thirdImageLeft $thirdImageTop")
-        //圖片中心點放置座標(resource, left, top,(may be null)): (背景寬 - 內容寬) / 2
-        //**require parameter type is float
-//        Log.d("secondImageLeft","secondImageLeft = $secondImageLeft")
-//        Log.d("thirdImageLeft","thirdImageLeft = $thirdImageLeft")
-//        Log.d("thirdImageTop","thirdImageTop = $thirdImageTop")
+
         return result
     }
 
@@ -63,48 +50,26 @@ class EditViewModel : ViewModel() {
         return Uri.parse(path)
     }
 
-    //Put the bitmap into local gallery
-//    private fun merge(view: View) {
-//        val contentValues = ContentValues()
-//        contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, System.currentTimeMillis())
-//        contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-//        val uri =
-//            activity?.contentResolver?.insert(
-//                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-//                contentValues
-//            )
-//        Log.d("uri","$uri")
-//        Log.d("contentValues" , "$contentValues")
-//        uri?.apply {
-//            val ops = activity?.contentResolver?.openOutputStream(this)
-//            mergeBitmap(
-//                bgBitmap,
-//                binding.upperText.drawingCache,
-//                binding.bottomText.drawingCache
-//            )?.compress(Bitmap.CompressFormat.JPEG, 100, ops)
-//            ops?.close()
-//        }
-//    }
+    fun addNewPost(uri: Uri, res: List<Any>, title:String, tag:String) {
+        Timber.d("getNewPost")
 
-    fun getNewPost(uri: Uri, res: List<Any>) {
-        val fireStore = FirebaseFirestore.getInstance().collection("Posts")
-        val document = fireStore.document()
+        val postPath = FirebaseFirestore.getInstance().collection("Posts").document()
+        val userPath = FirebaseFirestore.getInstance().collection("Users").document(UserManager.user.userId.toString())
         val ref = FirebaseStorage.getInstance().reference
 
-        ref.child("img_edited/" + document.id + ".jpg")
+        ref.child("img_edited/" + postPath.id + ".jpg")
             .putFile(uri)
             .addOnSuccessListener {
                 it.metadata?.reference?.downloadUrl?.addOnSuccessListener {
                     //這層的it才會帶到firebase return 的 Uri
-                    Log.d("edit =>", "downloadUrl = $it")
-                    Log.d("edit =>", "edit uri = $it => take it to Posts:url")
-
+//                    Timber.d("edited uri: $it => take it to upload url")
+//                    Timber.d("newTag $tag")
                     val post = hashMapOf(
-                        "id" to document.id,
+                        "id" to postPath.id,
                         "photoId" to "photo_id",
-                        "ownerId" to "Beva9487",
-                        "title" to "test title",
-                        "catalog" to "test tag",
+                        "ownerId" to UserManager.user.userId,
+                        "title" to title,
+                        "catalog" to tag,
                         "like" to null,
                         "resources" to res,
                         "collection" to null,
@@ -112,13 +77,14 @@ class EditViewModel : ViewModel() {
                         "url" to it
                     )
                     //put into firebase_storage
-                    document.set(post)
-                    Log.i("tofirebase =>", "Publish Done: $post")
+                    postPath.set(post)
+                    userPath.update("postQuantity", FieldValue.arrayUnion(postPath.id))
+                    Timber.d("to firebase => Publish Done: POST ${postPath.id} \n USER ${userPath.id}")
                     //  Log.d("test","test uri = ${Uri.parse(uri.toString())}")
                 }
             }
             .addOnFailureListener {
-                Log.d("Error", "${it.message}")
+                Timber.d("Error-> ${it.message}")
             }
     }
 }
