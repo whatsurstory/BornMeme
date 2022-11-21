@@ -1,5 +1,6 @@
 package com.beva.bornmeme.ui.detail.dialog
 
+import android.annotation.SuppressLint
 import android.icu.util.Calendar
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,6 +11,9 @@ import com.beva.bornmeme.model.UserManager
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import okhttp3.internal.cache.DiskLruCache
 import timber.log.Timber
 import java.util.*
@@ -43,4 +47,17 @@ class PublishViewModel: ViewModel() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
+    fun getUserName(parentId: String, binding: DialogCommentBinding) {
+        Firebase.firestore.collection("Users")
+            .whereArrayContains("commentsId", parentId)
+            .get()
+            .addOnCompleteListener {
+                for (item in it.result) {
+                    Timber.d("user name - > ${item.contains("userName")}")
+                    binding.replyWhoText.text = "Reply to : ${item.data["userName"]}"
+                }
+            }
+    }
 }
+

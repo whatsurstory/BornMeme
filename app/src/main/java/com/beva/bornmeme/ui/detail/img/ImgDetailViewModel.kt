@@ -5,7 +5,6 @@ import androidx.collection.arrayMapOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.ViewModelFactoryDsl
 import com.beva.bornmeme.databinding.FragmentImgDetailBinding
 import com.beva.bornmeme.model.*
 import com.beva.bornmeme.model.UserManager.user

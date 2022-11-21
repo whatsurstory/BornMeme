@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import com.beva.bornmeme.MainActivity
@@ -42,6 +43,12 @@ class PublishCommentDialog: AppCompatDialogFragment() {
             parentId = bundle.getString("parentId").toString()
             Timber.d("get parentId from post $parentId")
         }
+
+        if (parentId.isNotEmpty()) {
+            binding.replyWhoText.visibility = View.VISIBLE
+            viewModel.getUserName(parentId, binding)
+        }
+
 
         binding.buttonPublish.setOnClickListener {
 

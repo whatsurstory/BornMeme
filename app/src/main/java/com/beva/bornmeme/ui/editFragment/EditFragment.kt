@@ -86,6 +86,8 @@ class EditFragment : Fragment() {
                     if (binding.editTextCatalog.text?.trim()?.isEmpty() == true) {
                         binding.editTextCatalog.error =
                             "If Tag is Empty the input will take 傻逼日常 as default"
+                    } else {
+                        binding.editTextCatalog.text?.trim()
                     }
                 },
                 beforeTextChanged = { s, start, before, count ->
@@ -102,10 +104,11 @@ class EditFragment : Fragment() {
                 },
                 onTextChanged = { s, start, before, count ->
                     if (binding.editTextTitle.text?.trim()?.isEmpty() == true) {
-                        binding.titleCard.error = "If Tag is Empty the input will take Your Name as default"
+                        binding.titleCard.error =
+                            "If Tag is Empty the input will take Your Name as default"
                     }
                 },
-                    beforeTextChanged = { s, start, before, count ->
+                beforeTextChanged = { s, start, before, count ->
 
                 })
 
