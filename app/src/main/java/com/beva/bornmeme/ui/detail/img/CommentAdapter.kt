@@ -7,8 +7,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.ItemDetailCommentChildBinding
 import com.beva.bornmeme.databinding.ItemDetailCommentParentBinding
+import com.beva.bornmeme.model.Post
+import com.beva.bornmeme.model.User
+import com.bumptech.glide.Glide
 import timber.log.Timber
 
 class CommentAdapter(private val uiState: ImgDetailViewModel.UiState): ListAdapter<CommentCell, RecyclerView.ViewHolder>(DiffCallback) {
@@ -54,8 +58,7 @@ class CommentAdapter(private val uiState: ImgDetailViewModel.UiState): ListAdapt
             }
 
             binding.commentZoneText.text = item.comment.content
-            binding.commentUserName.text = item.comment.userId
-            val timeString = item.comment.time?.toDate()?.toString()
+//            val timeString = item.comment.time?.toDate()?.toString()
             val commentTime = item.comment.time?.toDate()?.time
             val currentTime = System.currentTimeMillis()
             Timber.d("currentTime $currentTime")
@@ -74,6 +77,14 @@ class CommentAdapter(private val uiState: ImgDetailViewModel.UiState): ListAdapt
             }
             Timber.d("秒 $seconds 分 $minutes 時 $hour 天 $day")
 
+            uiState.getUserImg(item.comment.userId) { user: User ->
+                Timber.d("img => ${user.profilePhoto}")
+                Glide.with(binding.commentUserImg)
+                    .load(user.profilePhoto)
+                    .placeholder(R.drawable._50)
+                    .into(binding.commentUserImg)
+                binding.commentUserName.text = user.userName
+            }
         }
     }
 
@@ -100,10 +111,7 @@ class CommentAdapter(private val uiState: ImgDetailViewModel.UiState): ListAdapt
                 binding.childDislikeNum.text = item.comment.dislike.size.toString()
             }
             binding.childZoneText.text = item.comment.content
-            binding.childUserName.text = item.comment.userId
-            //TODO: user data need query to show the image and name
-            //error handle: the time need checking day or hours or minute
-            val timeString = item.comment.time?.toDate()?.toString()
+//            val timeString = item.comment.time?.toDate()?.toString()
             val commentTime = item.comment.time?.toDate()?.time
             val currentTime = System.currentTimeMillis()
             val seconds = (currentTime - commentTime!!)/1000
@@ -120,6 +128,15 @@ class CommentAdapter(private val uiState: ImgDetailViewModel.UiState): ListAdapt
                 binding.childTime.text = "$day days ago"
             }
             Timber.d("秒 $seconds 分 $minutes 時 $hour 天 $day")
+
+            uiState.getUserImg(item.comment.userId) { user: User ->
+                Timber.d("img => ${user.profilePhoto}")
+                Glide.with(binding.childUserImg)
+                    .load(user.profilePhoto)
+                    .placeholder(R.drawable._50)
+                    .into(binding.childUserImg)
+                binding.childUserName.text = user.userName
+            }
         }
     }
 

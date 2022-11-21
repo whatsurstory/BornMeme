@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import com.beva.bornmeme.databinding.DialogCommentBinding
 import com.beva.bornmeme.model.Comment
 import com.beva.bornmeme.model.UserManager
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import okhttp3.internal.cache.DiskLruCache
 import timber.log.Timber
@@ -25,19 +27,17 @@ class PublishViewModel: ViewModel() {
             "parentId" to parentId,
             "photoUrl" to "",
             "postId" to postId,
-            "time" to Date(Calendar.getInstance().timeInMillis),
+            "time" to Timestamp.now(),
             "userId" to UserManager.user.userId
         )
 
-        document.set(publish).addOnSuccessListener {
+        document.set(publish)
+            .addOnSuccessListener {
             Timber.d("Publish Done")
             FirebaseFirestore.getInstance()
-                .collection("Posts").document(postId)
-                .addSnapshotListener { snapshot, error ->
-                    if (snapshot != null) {
-                        Timber.d("${snapshot.id} ${snapshot.data}")
-                    }
-                }
+                .collection("Users")
+                .document(UserManager.user.userId!!)
+                .update("commentsId", FieldValue.arrayUnion(document.id))
         }.addOnFailureListener {
             Timber.d("Error $it")
         }

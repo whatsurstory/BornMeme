@@ -12,16 +12,17 @@ import com.beva.bornmeme.databinding.ItemUserCommentBinding
 import com.beva.bornmeme.databinding.ItemUserPostsBinding
 import com.beva.bornmeme.model.Comment
 import com.beva.bornmeme.model.Post
+import com.beva.bornmeme.model.UserManager.user
 import com.bumptech.glide.Glide
 import timber.log.Timber
 import java.sql.Date
 
-class UserCommentAdapter(val viewModel: CommentsViewModel): ListAdapter<Comment, UserCommentAdapter.ViewHolder>(DiffCallback) {
+class UserCommentAdapter(private val uiState: CommentsViewModel.UiState): ListAdapter<Comment, UserCommentAdapter.ViewHolder>(DiffCallback) {
 
     class ViewHolder(private val binding: ItemUserCommentBinding) :
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
-        fun bind(item: Comment, viewModel: CommentsViewModel){
+        fun bind(item: Comment, uiState: CommentsViewModel.UiState){
             binding.contentText.text = item.content
 //            val timeString = item.time?.toDate()?.toString()
             val commentTime = item.time?.toDate()?.time
@@ -41,7 +42,13 @@ class UserCommentAdapter(val viewModel: CommentsViewModel): ListAdapter<Comment,
             }
             Timber.d("秒 $seconds 分 $minutes 時 $hour 天 $day")
 //            binding.timeText.text = "$day days ago"
-            viewModel.getPostImage(item.postId)
+            uiState.getPostImg(item.postId) { post:Post ->
+                Timber.d("img => ${post.url}")
+                Glide.with(binding.commentImg)
+                    .load(post.url)
+                    .placeholder(R.drawable._50)
+                    .into(binding.commentImg)
+            }
         }
     }
 
@@ -61,6 +68,6 @@ class UserCommentAdapter(val viewModel: CommentsViewModel): ListAdapter<Comment,
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position), viewModel)
+        holder.bind(getItem(position), uiState)
     }
 }

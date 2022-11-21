@@ -152,7 +152,7 @@ class ImgDetailFragment : Fragment() {
         binding.likeBtn.setOnClickListener {
             FirebaseFirestore.getInstance()
                 .collection("Posts").document(post.id)
-                .update("like", FieldValue.arrayUnion("cNXUG5FShzYesEOltXUZ"))
+                .update("like", FieldValue.arrayUnion(UserManager.user.userId))
                 .addOnSuccessListener {
                     Timber.d("Success add like")
                     Snackbar.make(this.requireView(), "喜歡喜歡~~~", Snackbar.LENGTH_SHORT)

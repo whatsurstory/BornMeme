@@ -4,12 +4,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.beva.bornmeme.model.Comment
 import com.beva.bornmeme.model.Post
+import com.beva.bornmeme.model.UserManager.user
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import timber.log.Timber
 
 class CommentsViewModel(userId: String) : ViewModel() {
+
+    data class UiState(
+        val getPostImg:(postId:String, onPostObtained:((Post) -> Unit)) -> Unit
+    )
 
     val postData = MutableLiveData<List<Comment>>()
 
@@ -37,13 +43,20 @@ class CommentsViewModel(userId: String) : ViewModel() {
             }
         return postData
     }
-    fun getPostImage (postId: String) {
-        Firebase.firestore
-            .collection("Posts")
-            .document(postId)
-            .get()
-            .addOnCompleteListener { task ->
-                Timber.d("task -> ${task.result.data}")
-            }
-    }
+
+    val uiState = UiState (
+        getPostImg = { postId, onPostObtained ->
+            Firebase.firestore
+                .collection("Posts")
+                .document(postId)
+                .get()
+                .addOnCompleteListener {
+                    val post = it.result.toObject(Post::class.java)
+                    if (post != null) {
+                        return@addOnCompleteListener onPostObtained(post)
+                    }
+                }
+        }
+    )
+
 }
