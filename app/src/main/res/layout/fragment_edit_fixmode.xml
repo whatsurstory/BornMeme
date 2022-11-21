@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".ui.editFragment.EditFragment">
 
+    <ScrollView
+        app:layout_constraintTop_toBottomOf="@+id/preview_btn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="0dp"
+        android:layout_width="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/scroll_cons"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/title_card"
         android:layout_width="match_parent"
@@ -22,7 +33,7 @@
         app:boxStrokeErrorColor="@color/dark_blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/preview_btn">
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_text_title"
@@ -123,7 +134,8 @@
             android:textColor="@color/light_blue" />
 
     </com.google.android.material.textfield.TextInputLayout>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
     <!--    adding icon in edittext area
                 android:layout_alignParentRight="true"
                 android:drawableRight="@android:drawable/ic_menu_search"     -->

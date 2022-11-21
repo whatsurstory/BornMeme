@@ -78,13 +78,14 @@ class EditFragment : Fragment() {
                     if (binding.editTextCatalog.text?.trim()?.isNotEmpty() == true) {
                         binding.catalogCard.error = null
                         binding.editTextCatalog.text.toString()
+                    } else {
+                        binding.editTextCatalog.setText("傻逼日常").toString()
                     }
                 },
                 onTextChanged = { s, start, before, count ->
                     if (binding.editTextCatalog.text?.trim()?.isEmpty() == true) {
                         binding.editTextCatalog.error =
                             "If Tag is Empty the input will take 傻逼日常 as default"
-                        binding.editTextCatalog.setText("傻逼日常").toString()
                     }
                 },
                 beforeTextChanged = { s, start, before, count ->

@@ -62,9 +62,10 @@
 <!--    app:searchIcon="@drawable/ic_baseline_self_improvement_24"  -->
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/profile_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:scaleType="center"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:scaleType="fitCenter"
+                    android:visibility="gone"
                     android:src="@drawable/ic_baseline_tag_faces_24"
                     app:layout_constraintBottom_toBottomOf="@+id/search_bar"
                     app:layout_constraintEnd_toEndOf="parent"

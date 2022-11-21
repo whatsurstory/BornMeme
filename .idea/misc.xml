@@ -11,13 +11,13 @@
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/drawable/search_corner.xml" value="0.135" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/drawable/side_nav_bar.xml" value="0.1" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/drawable/stroke_shape.xml" value="0.1525" />
-        <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/activity_main.xml" value="0.39172749391727496" />
+        <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/activity_splash.xml" value="0.18385416666666668" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/app_bar_main.xml" value="0.15246636771300448" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/bottom_comment.xml" value="0.22" />
-        <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/bottomsheet_edit_profile.xml" value="0.3333333333333333" />
+        <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/bottomsheet_edit_profile.xml" value="0.13583815028901733" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/content_main.xml" value="0.1" />
-        <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/dialog_comment.xml" value="0.2198581560283688" />
+        <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/dialog_comment.xml" value="0.1" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/dialog_preview.xml" value="0.22448979591836735" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/dialog_slide_collection.xml" value="0.1" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/diaolog_collection.xml" value="0.22" />
@@ -38,7 +38,7 @@
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/item_circle.xml" value="0.1" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/item_comment.xml" value="0.18888888888888888" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/item_detail_comment_child.xml" value="0.3333333333333333" />
-        <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/item_detail_comment_parent.xml" value="0.3333333333333333" />
+        <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/item_detail_comment_parent.xml" value="0.37764932562620424" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/item_home_img.xml" value="0.4230769230769231" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/item_loading.xml" value="0.153125" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/item_slide_image.xml" value="0.1" />
@@ -74,7 +74,7 @@
   <component name="VisualizationToolProject">
     <option name="state">
       <ProjectState>
-        <option name="scale" value="0.4466666666666667" />
+        <option name="scale" value="0.24890829694323144" />
       </ProjectState>
     </option>
   </component>

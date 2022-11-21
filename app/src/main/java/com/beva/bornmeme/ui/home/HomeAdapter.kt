@@ -1,21 +1,11 @@
 package com.beva.bornmeme.ui.home
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.DialogInterface
-import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.media.Image
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.AbsListView
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.Constraints
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -23,33 +13,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.ItemHomeImgBinding
 import com.beva.bornmeme.model.Post
-import com.beva.bornmeme.ui.detail.img.CommentAdapter
+import com.beva.bornmeme.model.User
 
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
-import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
-import com.google.android.material.snackbar.Snackbar
-import com.google.api.ResourceProto.resource
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 import kotlin.math.roundToInt
 
-class HomeAdapter(private val onClickListener: OnClickListener) : ListAdapter<Post, HomeAdapter.ViewHolder>(
+class HomeAdapter(private val onClickListener: OnClickListener,private val uiState: HomeViewModel.UiState) : ListAdapter<Post, HomeAdapter.ViewHolder>(
     DiffCallback
 ) {
     class ViewHolder(private val binding: ItemHomeImgBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         @SuppressLint("SetTextI18n")
-        fun bind(item: Post) {
+        fun bind(item: Post, uiState: HomeViewModel.UiState) {
 
             Glide.with(binding.homeImg.context)
                 .load(item.url).centerCrop()
@@ -100,6 +79,15 @@ class HomeAdapter(private val onClickListener: OnClickListener) : ListAdapter<Po
                 binding.likeNum.text = item.like.size.toString()
             }
 
+            uiState.getUserImg(item.ownerId) { user: User ->
+
+                Timber.d("img => ${user.profilePhoto}")
+                Glide.with(binding.userImg)
+                    .load(user.profilePhoto)
+                    .placeholder(R.drawable._50)
+                    .into(binding.userImg)
+            }
+
         }
     }
 
@@ -125,7 +113,7 @@ class HomeAdapter(private val onClickListener: OnClickListener) : ListAdapter<Po
             holder.itemView.setOnClickListener {
                 onClickListener.onClick(item)
             }
-            holder.bind(item)
+            holder.bind(item, uiState)
         }
     }
 

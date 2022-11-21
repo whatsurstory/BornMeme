@@ -13,27 +13,35 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import timber.log.Timber
 
-class MainViewModel(userId: String): ViewModel() {
+class MainViewModel: ViewModel() {
 
-    val userData = MutableLiveData<List<User>>()
+//    val userData = MutableLiveData<List<User>>()
 
-    init {
-        getUser(userId)
-    }
+    val _user = MutableLiveData<User>(null)
+    val user: LiveData<User>
+        get() = _user
 
-    private fun getUser (userId : String): MutableLiveData<List<User>> {
-        if (userId == UserManager.user.userId) {
-            Firebase.firestore.collection("Users")
-                .whereEqualTo("userId", userId)
-                .addSnapshotListener { snapshot, error ->
-                    val list = mutableListOf<User>()
-                    for (document in snapshot!!) {
-                        val data = document.toObject(User::class.java)
-                        list.add(data)
-                    }
-                    userData.value = list
-                }
-        }
-        return userData
+//    init {
+//        getUser(userId)
+//    }
+
+//    private fun getUser (userId : String): MutableLiveData<List<User>> {
+//        if (userId == UserManager.user.userId) {
+//            Firebase.firestore.collection("Users")
+//                .whereEqualTo("userId", userId)
+//                .addSnapshotListener { snapshot, error ->
+//                    val list = mutableListOf<User>()
+//                    for (document in snapshot!!) {
+//                        val data = document.toObject(User::class.java)
+//                        list.add(data)
+//                    }
+//                    userData.value = list
+//                }
+//        }
+//        return userData
+//    }
+
+    fun setUser(user: User) {
+        _user.value = user
     }
 }

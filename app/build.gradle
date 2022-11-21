@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId "com.beva.bornmeme"
-        minSdk 28
+        minSdk 23
         targetSdk 32
         versionCode 3
         versionName "1.1"

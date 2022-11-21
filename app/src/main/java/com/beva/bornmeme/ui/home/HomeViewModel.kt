@@ -6,12 +6,22 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.beva.bornmeme.model.Post
 import com.beva.bornmeme.model.Resource
+import com.beva.bornmeme.model.User
 import com.beva.bornmeme.ui.detail.img.CommentCell
+import com.beva.bornmeme.ui.detail.img.ImgDetailViewModel
+import com.bumptech.glide.Glide.init
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import org.checkerframework.checker.units.qual.s
 import timber.log.Timber
 
 class HomeViewModel : ViewModel() {
+
+    data class UiState(
+        val getUserImg: (userId: String, onUserObtained: ((User) -> Unit)) -> Unit
+    )
 
      val liveData = MutableLiveData<List<Post>>()
 
@@ -25,11 +35,24 @@ class HomeViewModel : ViewModel() {
     val navigateToDetail: LiveData<Post>
         get() = _navigateToDetail
 
+    val uiState = UiState(
+        getUserImg = { userId, onUserObtained ->
+            Firebase.firestore
+                .collection("Users")
+                .document(userId)
+                .get().addOnCompleteListener {
+                    val user = it.result.toObject(User::class.java)
+                    if (user != null) {
+                        return@addOnCompleteListener onUserObtained(user)
+                    }
+                }
+        }
+    )
 
 
-    init {
-        getData()
-    }
+        init {
+            getData()
+        }
 
         val tagCell = Transformations.map(liveData) {
             val cells = mutableListOf<String>()

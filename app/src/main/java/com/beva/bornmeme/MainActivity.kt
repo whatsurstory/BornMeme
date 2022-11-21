@@ -1,48 +1,28 @@
 package com.beva.bornmeme
 
-import android.Manifest
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
-import android.os.PersistableBundle
-import android.os.UserManager
 import android.provider.MediaStore
 import android.provider.Settings
-import android.util.AttributeSet
-import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.SlidingDrawer
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.navigation.NavigationView
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.FileProvider
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
+import androidx.navigation.findNavController
+import androidx.navigation.ui.setupActionBarWithNavController
 import com.beva.bornmeme.databinding.ActivityMainBinding
-import com.beva.bornmeme.model.UserManager.user
+import com.beva.bornmeme.model.UserManager
 import com.bumptech.glide.Glide
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.core.Context
+import com.google.android.material.snackbar.Snackbar
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -80,16 +60,13 @@ class MainActivity : AppCompatActivity() {
         Timber.plant(Timber.DebugTree())
         binding = ActivityMainBinding.inflate(layoutInflater)
 
-        val userId = com.beva.bornmeme.model.UserManager.user.userId
-        Timber.d("userid -> $userId")
-        viewModel = MainViewModel(userId.toString())
+        viewModel = MainViewModel()
 
-
-        viewModel.userData.observe(this, Observer{
+        viewModel.user.observe(this, Observer{
             it?.let {
                 Timber.d(("Observe User cell : $it"))
             Glide.with(this)
-                .load(it[0].profilePhoto)
+                .load(it.profilePhoto)
                 .placeholder(R.drawable._50)
                 .into(binding.profileBtn)
             }
@@ -109,11 +86,14 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id == R.id.splash_screen) {
                 binding.fab.visibility = View.GONE
-                binding.changeModeBtn.visibility = View.GONE
+                binding.changeModeBtn.visibility= View.GONE
+                binding.searchBar.visibility = View.GONE
+                binding.profileBtn.visibility = View.GONE
             } else if (destination.id == R.id.fragmentEditFixmode || destination.id == R.id.dialogPreview) {
                 binding.fab.visibility = View.GONE
                 binding.searchBar.visibility = View.GONE
                 binding.changeModeBtn.visibility = View.VISIBLE
+                binding.profileBtn.visibility = View.GONE
 //                binding.changeModeBtn.setOnClickListener {
 //                    Timber.d("你有按到change")
 //                    navController.navigate(MobileNavigationDirections.navigateToDragEditFragment())
@@ -122,6 +102,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 binding.fab.visibility = View.VISIBLE
                 binding.changeModeBtn.visibility= View.GONE
+                binding.profileBtn.visibility = View.GONE
                 //fab expending animation
                 binding.fab.setOnClickListener { view ->
 
@@ -174,6 +155,8 @@ class MainActivity : AppCompatActivity() {
                 if (destination.id == R.id.nav_home) {
                     binding.searchBar.visibility = View.VISIBLE
                     binding.changeModeBtn.visibility = View.GONE
+                    binding.profileBtn.visibility = View.VISIBLE
+                    viewModel.setUser(UserManager.user)
                 } else {
                     binding.searchBar.visibility = View.GONE
                 }
@@ -188,18 +171,15 @@ class MainActivity : AppCompatActivity() {
 //        binding.toolbar.navigationIcon = null
 
         binding.profileBtn.setOnClickListener {
-            Timber.d("userid -> $userId")
-            navController.navigate(MobileNavigationDirections.navigateToUserDetailFragment(
-                userId.toString()
-            ))
+            Timber.d("userid ->")
+            viewModel.user.value?.userId?.let { id ->
+                navController.navigate(MobileNavigationDirections
+                    .navigateToUserDetailFragment(id))
+            }
+
         }
 
     }
-
-
-
-
-
 
     private fun galleryCheckPermission() {
         Dexter.withContext(this).withPermission(

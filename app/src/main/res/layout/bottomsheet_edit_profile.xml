@@ -225,7 +225,7 @@
         android:textSize="18sp"
         android:background="@color/rice"
         app:backgroundTint="@color/rice"
-        android:fontFamily="@font/arista_pro_fat_trial"
+        android:fontFamily="@font/arista_pro_bold_trial"
         android:textColor="@color/teal_700"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

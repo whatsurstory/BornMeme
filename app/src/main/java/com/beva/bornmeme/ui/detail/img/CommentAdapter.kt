@@ -19,13 +19,12 @@ class CommentAdapter(private val uiState: ImgDetailViewModel.UiState): ListAdapt
 
             if (item.hasChild) {
                 binding.seeMoreBtn.visibility = View.VISIBLE
-                binding.backBtn.visibility = View.GONE
             } else {
                 binding.seeMoreBtn.visibility = View.GONE
-                binding.backBtn.visibility = View.VISIBLE
             }
             binding.seeMoreBtn.setOnClickListener {
                 uiState.onClickToSeeMore(item)
+                binding.backBtn.visibility = View.VISIBLE
             }
 
             binding.backBtn.setOnClickListener {
