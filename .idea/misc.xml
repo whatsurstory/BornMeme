@@ -17,7 +17,7 @@
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/bottom_comment.xml" value="0.22" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/bottomsheet_edit_profile.xml" value="0.13583815028901733" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/content_main.xml" value="0.1" />
-        <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/dialog_comment.xml" value="0.1" />
+        <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/dialog_comment.xml" value="0.30668983492615115" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/dialog_preview.xml" value="0.22448979591836735" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/dialog_slide_collection.xml" value="0.1" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/diaolog_collection.xml" value="0.22" />
@@ -74,7 +74,7 @@
   <component name="VisualizationToolProject">
     <option name="state">
       <ProjectState>
-        <option name="scale" value="0.24890829694323144" />
+        <option name="scale" value="0.1" />
       </ProjectState>
     </option>
   </component>
