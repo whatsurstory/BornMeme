@@ -16,21 +16,20 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         app:lottie_autoPlay="true"
-        app:lottie_speed="0.9"
-        android:layout_marginHorizontal="24dp"
-        app:lottie_rawRes="@raw/salad_cat" />
+        app:lottie_rawRes="@raw/salad_cat"
+        app:lottie_speed="0.9" />
 
     <TextView
         android:id="@+id/greeting_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="24dp"
         android:fontFamily="@font/arista_pro_bold_trial"
         android:gravity="center"
         android:text="BornMeme."
         android:textColor="@color/dark_blue"
         android:textSize="48sp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/gSignInBtn"
         app:layout_constraintEnd_toEndOf="@+id/gSignInBtn"
         app:layout_constraintStart_toStartOf="@+id/gSignInBtn" />
@@ -51,26 +50,26 @@
         app:iconPadding="16dp"
         app:iconSize="28dp"
         app:iconTint="@null"
-        android:visibility="gone"
+        android:visibility="visible"
         android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.8" />
+        app:layout_constraintVertical_bias="0.85" />
 
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/login_loading"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_width="160dp"
         app:lottie_autoPlay="true"
-        android:visibility="gone"
+        android:visibility="invisible"
         app:lottie_loop="true"
         app:lottie_speed="0.9"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toTopOf="@id/gSignInBtn"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
