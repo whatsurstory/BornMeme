@@ -16,8 +16,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         app:lottie_autoPlay="true"
-        app:lottie_rawRes="@raw/salad_cat"
-        app:lottie_speed="0.9" />
+        app:lottie_speed="1.6"
+        app:lottie_rawRes="@raw/salad_cat" />
 
     <TextView
         android:id="@+id/greeting_text"
@@ -29,7 +29,7 @@
         android:text="BornMeme."
         android:textColor="@color/dark_blue"
         android:textSize="48sp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/gSignInBtn"
         app:layout_constraintEnd_toEndOf="@+id/gSignInBtn"
         app:layout_constraintStart_toStartOf="@+id/gSignInBtn" />
@@ -50,7 +50,7 @@
         app:iconPadding="16dp"
         app:iconSize="28dp"
         app:iconTint="@null"
-        android:visibility="visible"
+        android:visibility="gone"
         android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

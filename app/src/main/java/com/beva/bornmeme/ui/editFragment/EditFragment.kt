@@ -78,17 +78,19 @@ class EditFragment : Fragment() {
                     if (binding.editTextCatalog.text?.trim()?.isNotEmpty() == true) {
                         binding.catalogCard.error = null
                         binding.editTextCatalog.text.toString()
-                    } else {
-                        binding.editTextCatalog.setText("傻逼日常").toString()
                     }
+//                    else {
+//                        binding.editTextCatalog.setText("傻逼日常").toString()
+//                    }
                 },
                 onTextChanged = { s, start, before, count ->
                     if (binding.editTextCatalog.text?.trim()?.isEmpty() == true) {
-                        binding.editTextCatalog.error =
+                        binding.catalogCard.error =
                             "If Tag is Empty the input will take 傻逼日常 as default"
-                    } else {
-                        binding.editTextCatalog.text?.trim()
                     }
+//                    else {
+//                        binding.editTextCatalog.setText("")
+//                    }
                 },
                 beforeTextChanged = { s, start, before, count ->
                 }
@@ -154,24 +156,15 @@ class EditFragment : Fragment() {
         //to publish
         binding.publishBtn.setOnClickListener {
             Timber.d("onClick publish")
-//
-//            val builder =
-//                MaterialAlertDialogBuilder(this.requireContext(), )
-//                .setView(R.layout.item_loading)
-//            builder.setCancelable(false)
-//            val dialog = builder.create()
-//            dialog.show()
-            binding.lottiePublishLoading.visibility = View.VISIBLE
-            binding.lottiePublishLoading.setAnimation(R.raw.dancing_pallbearers)
-
-            val tag =if (binding.editTextCatalog.text.toString() == "") { "傻逼日常" } else { binding.editTextCatalog.text.toString()}
-            val title = if ( binding.editTextTitle.text.toString() == "") { "Beva" } else { binding.editTextTitle.text.toString() }
 
             if (upperText.text.isNullOrEmpty() || bottomText.text.isNullOrEmpty()) {
                 Snackbar.make(it, "Not Adding Text Yet", Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show()
 
             } else {
+                binding.lottiePublishLoading.visibility = View.VISIBLE
+                binding.lottiePublishLoading.setAnimation(R.raw.dancing_pallbearers)
+
                 val ref = FirebaseStorage.getInstance().reference
                 ref.child("img_origin/" + document.id + ".jpg")
                     .putFile(uri)
@@ -188,6 +181,9 @@ class EditFragment : Fragment() {
                                     "url" to upperText.text.toString() + bottomText.text.toString()
                                 ))
                             )
+                            val tag =if (binding.editTextCatalog.text.toString() == "") { "傻逼日常" } else { binding.editTextCatalog.text.toString()}
+                            val title = if ( binding.editTextTitle.text.toString() == "") { UserManager.user.userName } else { binding.editTextTitle.text.toString() }
+
 
                             binding.originPhoto.buildDrawingCache()
                             val baseBitmap = binding.originPhoto.drawingCache
@@ -207,6 +203,7 @@ class EditFragment : Fragment() {
                             if (newUri != null) {
                                 viewModel.addNewPost(newUri, res, title, tag)
                             }
+
                             findNavController().navigate(MobileNavigationDirections.navigateToHomeFragment())
 
                         }?.addOnFailureListener {

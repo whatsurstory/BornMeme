@@ -184,12 +184,15 @@ class MainActivity : AppCompatActivity() {
     private fun galleryCheckPermission() {
         Dexter.withContext(this).withPermission(
             android.Manifest.permission.READ_EXTERNAL_STORAGE
-        ).withListener(object : PermissionListener {
-            override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
+        ).withListener(
+            object : PermissionListener {
+            override fun onPermissionGranted(
+                p0: PermissionGrantedResponse?) {
                 toAlbum()
             }
 
-            override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
+            override fun onPermissionDenied(
+                p0: PermissionDeniedResponse?) {
                 Toast.makeText(
                     this@MainActivity,
                     "You have denied the storage permission to select image",
@@ -212,10 +215,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun cameraCheckPermission() {
-        Dexter.withContext(this).withPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.CAMERA).withListener(
-            object : MultiplePermissionsListener {
-                override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                    report.let {
+        Dexter.withContext(this)
+            .withPermissions(
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.CAMERA).withListener(
+                object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(
+                        report: MultiplePermissionsReport?) {
+                        report.let {
                         if (report != null) {
                             if (report.areAllPermissionsGranted()){
                                 toCamera()
@@ -303,7 +310,16 @@ class MainActivity : AppCompatActivity() {
             binding.fabCameraEdit.startAnimation(fabClose)
             binding.fabModuleEdit.startAnimation(fabClose)
             binding.fabGalleryEdit.startAnimation(fabClose)
+
             binding.fab.startAnimation(fabRotate)
+
+            binding.fabCameraEdit.visibility = View.GONE
+            binding.fabCameraEdit.clearAnimation()
+            binding.fabModuleEdit.visibility = View.GONE
+            binding.fabModuleEdit.clearAnimation()
+            binding.fabGalleryEdit.visibility = View.GONE
+            binding.fabGalleryEdit.clearAnimation()
+
             isOpen = false
 
             findNavController(R.id.nav_host_fragment_content_main)

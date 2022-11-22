@@ -2,40 +2,44 @@ package com.beva.bornmeme.ui.detail.img
 
 
 import android.annotation.SuppressLint
+import android.app.DownloadManager
 import android.content.Context
+import android.content.Context.DOWNLOAD_SERVICE
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Color.blue
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
+import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
-import android.provider.MediaStore
-import android.text.InputType
-import android.text.TextUtils.indexOf
-import android.view.*
-import android.widget.*
-import androidx.fragment.app.Fragment
+import android.os.Environment
+import android.provider.Settings
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.View
+import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.PopupMenu
+import android.widget.Toast
+import androidx.annotation.Nullable
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
-import androidx.databinding.adapters.ViewBindingAdapter.setPadding
+import androidx.core.content.FileProvider
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.beva.bornmeme.MobileNavigationDirections
-import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentImgDetailBinding
-import com.beva.bornmeme.model.Folder
 import com.beva.bornmeme.model.Post
-import com.beva.bornmeme.model.User
 import com.beva.bornmeme.model.UserManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.getField
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import timber.log.Timber
+import java.io.File
+
 
 class ImgDetailFragment : Fragment() {
 
@@ -50,15 +54,15 @@ class ImgDetailFragment : Fragment() {
             post = bundle.getParcelable("postKey")!!
             Timber.d("WelCome to Img Detail: arg -> ${post.id}")
         }
-//        Timber.d("check User data ${post.user}")
+
         binding.imgDetailUserName.text = post.ownerId
         binding.imgDetailTitle.text = post.title
         Glide.with(this)
             .load(post.url)
             .apply(
                 RequestOptions()
-                    .placeholder(R.drawable._50)
-                    .error(R.drawable.dino)
+                    .placeholder(com.beva.bornmeme.R.drawable._50)
+                    .error(com.beva.bornmeme.R.drawable.dino)
             ).into(binding.imgDetailImage)
         binding.imgDetailDescription.text = post.resources[1].url
     }
@@ -78,8 +82,8 @@ class ImgDetailFragment : Fragment() {
                     .load(it[0].profilePhoto)
                     .apply(
                         RequestOptions()
-                            .placeholder(R.drawable._50)
-                            .error(R.drawable.dino)
+                            .placeholder(com.beva.bornmeme.R.drawable._50)
+                            .error(com.beva.bornmeme.R.drawable.dino)
                     ).into(binding.imgDetailUserImg)
                 binding.imgDetailUserName.text = it[0].userName
 
@@ -111,8 +115,8 @@ class ImgDetailFragment : Fragment() {
             .load(post.url)
             .apply(
                 RequestOptions()
-                    .placeholder(R.drawable._50)
-                    .error(R.drawable.dino)
+                    .placeholder(com.beva.bornmeme.R.drawable._50)
+                    .error(com.beva.bornmeme.R.drawable.dino)
             ).into(binding.imgDetailImage)
         binding.imgDetailDescription.text = post.resources[1].url
 
@@ -206,7 +210,8 @@ class ImgDetailFragment : Fragment() {
                 when (val id = it.itemId) {
                     0 -> Toast.makeText(context, "ID $id -> Report the Image", Toast.LENGTH_SHORT)
                         .show()
-                    1 -> Toast.makeText(context, "ID $id -> Report the User", Toast.LENGTH_SHORT).show()
+                    1 -> Toast.makeText(context, "ID $id -> Report the User", Toast.LENGTH_SHORT)
+                        .show()
                 }
                 false
             }
@@ -224,23 +229,51 @@ class ImgDetailFragment : Fragment() {
             popupMenu.show()
         }
 
-
-        //the permission problem in samsung, maybe due to the version of android
         binding.shareBtn.setOnClickListener {
-            val bitmapDrawable = binding.imgDetailImage.drawable as BitmapDrawable
-            val bitmap = bitmapDrawable.bitmap
-            val bitmapPath = MediaStore.Images.Media.insertImage(
-                requireContext()
-                    .contentResolver, bitmap, "Description", null
-            )
-            val bitmapUri = Uri.parse(bitmapPath)
+                if (SDK_INT >= Build.VERSION_CODES.R) {
+                    if (Environment.isExternalStorageManager()) {
 
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.type = "image/*"
-            intent.putExtra(Intent.EXTRA_STREAM, bitmapUri)
-            startActivity(Intent.createChooser(intent, "Description"))
+                        val uri = FirebaseStorage.getInstance().reference.child("img_edited/" + post.id + ".jpg")
+                        val filePath = requireContext().filesDir.absolutePath + "/" + post.id + ".jpg"
+                        Timber.d("filePath -> $filePath")
+
+                        uri.getFile(Uri.parse(filePath))
+                            .addOnCompleteListener {
+                                if (it.isSuccessful) {
+                                    Timber.d("success")
+                                    //get Uri by file path
+//                        Uri.parse("content:/$filePath")
+//                        val fileUri = Uri.fromFile(File(filePath))
+                                    val file = File(filePath)
+                                    val uri =
+                                        FileProvider.getUriForFile(
+                                            requireContext(),
+                                            "com.beva.bornmeme.fileProvider", file
+                                        )
+                                    Timber.d("fileUri -> $uri")
+                                    val intent = Intent(Intent.ACTION_SEND)
+                                    intent.type = "image/*"
+                                    intent.putExtra(
+                                        Intent.EXTRA_STREAM,
+                                        uri
+                                    )
+                                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or
+                                            Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+//                                    startActivity(Intent.createChooser (intent, "Share Image"))
+                                    startActivity(intent)
+                                }
+                            }
+                } else {
+                        requestPermission()
+                }
+            }
+
         }
 
+        //the permission problem in samsung, maybe due to the version of android
+        binding.downloadBtn.setOnClickListener {
+            downLoad("${post.id}.jpg", "File Desc", post.url.toString())
+        }
 
         //BUG: the argument can't be rendering on newView
 //        binding.imgDetailImage.setOnClickListener {
@@ -251,10 +284,64 @@ class ImgDetailFragment : Fragment() {
         return binding.root
     }
 
+    private fun requestPermission() {
+
+        if (SDK_INT >= Build.VERSION_CODES.R) {
+            try {
+                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+                intent.addCategory("android.intent.category.DEFAULT")
+                intent.data = Uri.parse(
+                    String.format(
+                        "package:%s",
+                        getApplicationContext<Context>().packageName
+                    )
+                )
+                startActivityForResult(intent, 2296)
+
+
+            } catch (e: Exception) {
+                val intent = Intent()
+                intent.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
+                startActivityForResult(intent, 2296)
+
+            }
+        } else {
+            //below android 11
+//            ActivityCompat.requestPermissions(
+//                this.requireActivity(),
+//                arrayOf(WRITE_EXTERNAL_STORAGE),
+//                2296
+//            )
+        }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        @Nullable data: Intent?
+    ) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 2296) {
+            if (SDK_INT >= Build.VERSION_CODES.R) {
+                if (Environment.isExternalStorageManager()) {
+                    // perform action when allow permission success
+                } else {
+                    Toast.makeText(
+                        this.context,
+                        "Allow permission for storage access!",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                }
+            }
+        }
+    }
+
     @SuppressLint("ResourceAsColor")
     private fun showAlert(folderNames: List<String>) {
         val builder: AlertDialog.Builder =
-            AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
+            AlertDialog.Builder(requireContext(), com.beva.bornmeme.R.style.AlertDialogTheme)
 //Make you can't dismiss by default -> builder.setCancelable(false)
         // Get the layout inflater
         val inflater = requireActivity().layoutInflater
@@ -262,9 +349,9 @@ class ImgDetailFragment : Fragment() {
         val list = ArrayList<String>()
 
         builder.setTitle("Name your Folder")
-        val view = inflater.inflate(R.layout.diaolog_collection, null)
+        val view = inflater.inflate(com.beva.bornmeme.R.layout.diaolog_collection, null)
         builder.setView(view)
-        val input = view.findViewById<EditText>(R.id.folder_name)
+        val input = view.findViewById<EditText>(com.beva.bornmeme.R.id.folder_name)
 
 
         builder.setMultiChoiceItems(
@@ -326,35 +413,55 @@ class ImgDetailFragment : Fragment() {
 
         val saveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
         with(saveButton) {
-            setBackgroundColor(R.color.black)
+            setBackgroundColor(com.beva.bornmeme.R.color.black)
             setPadding(0, 0, 20, 0)
-            setTextColor(R.color.light_blue)
+            setTextColor(com.beva.bornmeme.R.color.light_blue)
         }
 
         val cancelButton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
         with(cancelButton) {
-            setBackgroundColor(R.color.black)
+            setBackgroundColor(com.beva.bornmeme.R.color.black)
             setPadding(0, 0, 20, 0)
-            setTextColor(R.color.light_blue)
+            setTextColor(com.beva.bornmeme.R.color.light_blue)
         }
     }
 
     private fun showDialog() {
         //delete for short
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setMessage("Are You Sure to Delete ${post.id}?")
-            builder.setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, which ->
-                FirebaseFirestore.getInstance()
-                    .collection("Posts")
-                    .document(post.id)
-                    .delete()
-                    .addOnSuccessListener { Timber.d("DocumentSnapshot successfully deleted!") }
-                    .addOnFailureListener { e -> Timber.w( "Error deleting document", e) }
-            })
-            builder.setNegativeButton("No", DialogInterface.OnClickListener{ dialog, which ->
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setMessage("Are You Sure to Delete ${post.id}?")
+        builder.setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, which ->
+            FirebaseFirestore.getInstance()
+                .collection("Posts")
+                .document(post.id)
+                .delete()
+                .addOnSuccessListener { Timber.d("DocumentSnapshot successfully deleted!") }
+                .addOnFailureListener { e -> Timber.w("Error deleting document", e) }
+        })
+        builder.setNegativeButton("No", DialogInterface.OnClickListener { dialog, which ->
 
-            })
-            val alertDialog: AlertDialog = builder.create()
-            alertDialog.show()
+        })
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.show()
     }
+
+
+    //need permission of write in
+    private fun downLoad(fileName: String, desc: String, url: String) {
+        val downloadManager = context?.getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+        val request = DownloadManager.Request(Uri.parse(url))
+            .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE or DownloadManager.Request.NETWORK_WIFI)
+            .setTitle(fileName)
+            .setDescription(desc)
+            .setAllowedOverMetered(true)
+            .setAllowedOverRoaming(false)
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            .setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, fileName)
+        downloadManager.enqueue(request)
+        Snackbar.make(this.requireView(), "DownLoad Finished", Snackbar.LENGTH_SHORT)
+            .setAction("Action", null).show()
+    }
+
+
 }
+

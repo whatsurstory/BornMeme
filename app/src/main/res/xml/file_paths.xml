@@ -1,7 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
 
+<!--  internal storage  -->
     <files-path name="camera_photo"
         path="."/>
+
+<!--&lt;!&ndash;  external storage  &ndash;&gt;-->
+<!--    <external-path name="external"-->
+<!--        path="." />-->
+
+<!--&lt;!&ndash;  external private storage  &ndash;&gt;-->
+    <external-path name="files"
+        path="." />
+
+<!--&lt;!&ndash;  internal storage  &ndash;&gt;-->
+<!--    <cache-path name="cache"-->
+<!--        path="." />-->
+
+<!--&lt;!&ndash;  external cache storage  &ndash;&gt;-->
+<!--    <external-cache-path name="external_cache"-->
+<!--        path="." />-->
+
+<!--&lt;!&ndash;  externalMediaDirs  &ndash;&gt;-->
+<!--    <external-media-path name="external_media_path"-->
+<!--        path="." />-->
 
 </paths>
