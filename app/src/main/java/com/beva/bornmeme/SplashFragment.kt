@@ -3,6 +3,7 @@ package com.beva.bornmeme
 
 import android.animation.Animator
 import android.app.Activity
+import android.content.Context
 import android.graphics.ColorFilter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -30,6 +31,7 @@ import com.beva.bornmeme.model.UserManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.ktx.firestore
@@ -171,12 +173,15 @@ class SplashFragment : Fragment() {
         Firebase.firestore.runTransaction { transaction ->
             val snapshot = transaction.get(ref)
 //            val loginTimes = n + 1
-            Timber.d("snapshot ??? $snapshot")
+//            Timber.d("snapshot ??? $snapshot")
             if (snapshot.data != null) {
-                Timber.d("ID: ${snapshot.id} snapshot.data != null ${snapshot.data}")
+                Timber.d("ID: ${snapshot.id} snapshot.data != null")
                 val checkUser = snapshot.toObject(User::class.java)
                 UserManager.user = checkUser!!
-                Timber.d("UserManager ${UserManager.user}")
+                Snackbar.make(requireView(), "Nice to See you Again! ${UserManager.user.userName}",
+                    Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null).show()
+//                Timber.d("UserManager ${UserManager.user}")
 //                transaction.update(ref,FieldValue.arrayUnion(loginTimes))
             } else {
                 Timber.d("ID: ${snapshot.id} snapshot.data == null")
@@ -200,6 +205,9 @@ class SplashFragment : Fragment() {
             }
         }.addOnSuccessListener {
             Timber.d("Success to adding $ref")
+            Snackbar.make(requireView(), "WelCome! ${user.displayName.toString()}",
+                Snackbar.LENGTH_SHORT)
+                .setAction("Action", null).show()
             findNavController().navigate(MobileNavigationDirections.navigateToHomeFragment())
 
         }.addOnFailureListener {

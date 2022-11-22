@@ -46,9 +46,14 @@
         <item name="cornerSize">50%</item>
     </style>
 
-    <style name="roundedCorner" parent="">
+    <style name="roundedCorner_1" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">1%</item>
+    </style>
+
+    <style name="roundedCorner_4" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">4%</item>
     </style>
 
     <style name="SlideDialog">

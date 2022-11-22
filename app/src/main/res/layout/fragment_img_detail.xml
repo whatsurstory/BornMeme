@@ -120,13 +120,13 @@
                 android:id="@+id/comment_btn"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_marginEnd="4dp"
                 android:background="@color/woo"
                 android:padding="10dp"
+                android:layout_marginStart="6dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/comment"
                 app:layout_constraintBottom_toTopOf="@+id/comments_recycler"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/img_detail_line"
                 app:tint="@color/dark_blue" />
 
@@ -172,50 +172,51 @@
                 android:id="@+id/img_detail_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="18dp"
-                android:fontFamily="@font/arista_pro_bold_trial"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp"
                 android:text="Title"
                 android:textColor="@color/blue_gray"
                 android:textSize="24sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/img_detail_user_img"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/share_btn"
+                app:layout_constraintStart_toStartOf="@+id/like_btn"
                 app:layout_constraintTop_toBottomOf="@id/share_btn" />
 
             <TextView
                 android:id="@+id/img_detail_description"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:maxLines="2"
-                android:fontFamily="@font/arista_pro_light_trial"
                 android:textSize="16sp"
+                android:paddingVertical="4dp"
+                android:paddingHorizontal="8dp"
                 android:textColor="@color/blue_gray"
+                app:layout_constraintBottom_toTopOf="@id/img_detail_line"
                 app:layout_constraintEnd_toEndOf="@+id/img_detail_title"
                 app:layout_constraintStart_toStartOf="@id/img_detail_title"
                 app:layout_constraintTop_toBottomOf="@+id/img_detail_title"
-                tools:text="Picture Description Text" />
+                tools:text="Picture Description Text Picture Description TextPicture Description TextPicture Description TextPicture Description Text" />
 
             <TextView
-                android:id="@+id/view_text"
+                android:id="@+id/comment_num_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
                 android:fontFamily="@font/chenyuluoyan_thin"
-                android:text="9527 views"
+                android:text="9527 comments"
                 android:textColor="@color/blue_gray"
                 android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/img_detail_line" />
 
             <View
                 android:id="@+id/img_detail_line"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:background="@color/blue_gray"
-                app:layout_constraintEnd_toEndOf="@id/img_detail_description"
-                app:layout_constraintStart_toStartOf="@id/img_detail_description"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/img_detail_description" />
 
 
@@ -227,7 +228,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view_text"
+                app:layout_constraintTop_toBottomOf="@+id/comment_num_text"
                 tools:listitem="@layout/item_detail_comment_parent" />
 
             <TextView
@@ -235,8 +236,9 @@
                  android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:text="Although it's a little bit quiet in here ..."
-                android:visibility="gone"
-                android:layout_margin="16dp"
+                android:visibility="visible"
+                android:layout_marginVertical="24dp"
+                android:layout_marginHorizontal="16dp"
                 android:fontFamily="@font/arista_pro_bold_trial"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

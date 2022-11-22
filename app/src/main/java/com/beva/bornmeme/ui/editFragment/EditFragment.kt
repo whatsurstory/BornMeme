@@ -1,21 +1,16 @@
 package com.beva.bornmeme.ui.editFragment
 
 
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.collection.arrayMapOf
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -24,17 +19,9 @@ import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentEditFixmodeBinding
 import com.beva.bornmeme.model.UserManager
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.dialog.MaterialDialogs
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 
@@ -120,6 +107,7 @@ class EditFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         //to preview
         binding.previewBtn.setOnClickListener {
             Timber.d("onClick Preview")
@@ -181,9 +169,9 @@ class EditFragment : Fragment() {
                                     "url" to upperText.text.toString() + bottomText.text.toString()
                                 ))
                             )
-                            val tag =if (binding.editTextCatalog.text.toString() == "") { "傻逼日常" } else { binding.editTextCatalog.text.toString()}
-                            val title = if ( binding.editTextTitle.text.toString() == "") { UserManager.user.userName } else { binding.editTextTitle.text.toString() }
 
+                            val tag = if (binding.editTextCatalog.text?.isNotEmpty() == true) { "傻逼日常" } else { binding.editTextCatalog.text.toString() }
+                            val title = if ( binding.editTextTitle.text?.isNotEmpty() == true) { UserManager.user.userName } else { binding.editTextTitle.text.toString() }
 
                             binding.originPhoto.buildDrawingCache()
                             val baseBitmap = binding.originPhoto.drawingCache
@@ -199,11 +187,7 @@ class EditFragment : Fragment() {
                             )
                             //saving to gallery and return the path(uri)
                             val newUri = viewModel.getImageUri(activity?.application, publishBitmap)
-                            Timber.d("newUri => $newUri")
-                            if (newUri != null) {
-                                viewModel.addNewPost(newUri, res, title, tag)
-                            }
-
+                            viewModel.addNewPost(newUri, res, title, tag)
                             findNavController().navigate(MobileNavigationDirections.navigateToHomeFragment())
 
                         }?.addOnFailureListener {

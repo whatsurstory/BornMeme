@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         app:lottie_autoPlay="true"
-        app:lottie_speed="1.6"
+        app:lottie_speed="1.5"
         app:lottie_rawRes="@raw/salad_cat" />
 
     <TextView

@@ -22,7 +22,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_corner"
-            android:paddingTop="8dp"
+            android:paddingTop="12dp"
+            android:layout_marginBottom="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -36,18 +37,15 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:background="@drawable/search_corner"
-                android:fontFamily="@font/arista_pro_light_trial"
-                android:letterSpacing="0.1"
+                android:hint="Adding text to reply ..."
                 android:maxLines="1"
                 android:minHeight="48dp"
-                android:paddingHorizontal="8dp"
+                android:padding="10dp"
                 android:textColor="@color/dark_blue"
-                android:textColorHint="@color/dark_blue"
-                android:textSize="18sp"
+                android:textColorHint="@color/blue_gray"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/button_publish"
-                app:layout_constraintStart_toStartOf="parent"
-                android:hint="Adding text to reply ..." />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_publish"
