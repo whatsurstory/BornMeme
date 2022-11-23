@@ -42,9 +42,9 @@ class UserDetailViewModel(userId: String) : ViewModel() {
             .collection("Users")
             .document(UserManager.user.userId.toString())
             .update("followList",userId)
-            .addOnCompleteListener {
-                Timber.d("it = $it \n result = ${it.result}")
-            }
+//            .addOnCompleteListener {
+//                Timber.d("it = $it \n result = ${it.result}")
+//            }
     }
 
 }
