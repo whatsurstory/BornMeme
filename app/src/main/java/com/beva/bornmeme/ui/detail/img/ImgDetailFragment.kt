@@ -253,17 +253,17 @@ class ImgDetailFragment : Fragment() {
 //                        Uri.parse("content:/$filePath")
 //                        val fileUri = Uri.fromFile(File(filePath))
                                     val file = File(filePath)
-                                    val uri =
+                                    val newUri =
                                         FileProvider.getUriForFile(
                                             requireContext(),
                                             "com.beva.bornmeme.fileProvider", file
                                         )
-                                    Timber.d("fileUri -> $uri")
+                                    Timber.d("fileUri -> $newUri")
                                     val intent = Intent(Intent.ACTION_SEND)
                                     intent.type = "image/*"
                                     intent.putExtra(
                                         Intent.EXTRA_STREAM,
-                                        uri
+                                        newUri
                                     )
                                     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or
                                             Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
