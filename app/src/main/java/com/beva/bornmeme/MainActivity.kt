@@ -147,6 +147,23 @@ class MainActivity : AppCompatActivity() {
                     binding.fabModuleEdit.setOnClickListener {
 //                        Snackbar.make(view, "This is Module Button", Snackbar.LENGTH_SHORT)
 //                            .setAction("Action", null).show()
+                        binding.fabCameraEdit.startAnimation(fabClose)
+                        binding.fabModuleEdit.startAnimation(fabClose)
+                        binding.fabGalleryEdit.startAnimation(fabClose)
+                        binding.fab.startAnimation(fabRotate)
+
+                        binding.fabCameraEdit.visibility = View.GONE
+                        binding.fabCameraEdit.clearAnimation()
+                        binding.fabModuleEdit.visibility = View.GONE
+                        binding.fabModuleEdit.clearAnimation()
+                        binding.fabGalleryEdit.visibility = View.GONE
+                        binding.fabGalleryEdit.clearAnimation()
+
+                        binding.fabCameraEdit.isEnabled = false
+                        binding.fabModuleEdit.isEnabled = false
+                        binding.fabGalleryEdit.isEnabled = false
+
+                        isOpen = false
                         navController.navigate(MobileNavigationDirections.navigateToFragmentGallery())
                     }
                     binding.fabGalleryEdit.setOnClickListener {

@@ -13,6 +13,7 @@ import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
+import android.provider.SyncStateContract.Helpers.update
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
@@ -39,6 +40,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -439,13 +442,12 @@ class ImgDetailFragment : Fragment() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setMessage("Are You Sure to Delete ${post.id}?")
         builder.setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, which ->
-            FirebaseFirestore.getInstance()
-                .collection("Posts")
-                .document(post.id)
-                .delete()
-                .addOnSuccessListener {
+            val user = Firebase.firestore.collection("Users").document(post.ownerId)
+                user.update("postQuantity", FieldValue.arrayRemove(post.id))
+            val postId = FirebaseFirestore.getInstance().collection("Posts").document(post.id)
+                postId.delete().addOnSuccessListener {
                     Timber.d("DocumentSnapshot successfully deleted!")
-                    findNavController().navigate(MobileNavigationDirections.navigateToHomeFragment())
+                    findNavController().navigateUp()
                 }
                 .addOnFailureListener { e -> Timber.w("Error deleting document", e) }
         })

@@ -66,6 +66,7 @@ class UserDetailFragment : Fragment() {
             .into(binding.userDetailImg)
         binding.userDetailName.text = user.userName
 
+        //粉絲數
         if (user.followers.isNullOrEmpty()) {
             binding.followersText.text = "0"
         } else {

@@ -178,6 +178,7 @@ class SplashFragment : Fragment() {
                 Timber.d("ID: ${snapshot.id} snapshot.data != null")
                 val checkUser = snapshot.toObject(User::class.java)
                 UserManager.user = checkUser!!
+                //when the member come back
                 Snackbar.make(requireView(), "Nice to See you Again! ${UserManager.user.userName}",
                     Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show()
@@ -202,12 +203,13 @@ class SplashFragment : Fragment() {
                 )
                 transaction.set(ref,userData)
                 UserManager.user = userData
+                //when new comer sign-in
+                Snackbar.make(requireView(), "WelCome to Join! ${UserManager.user.userName}",
+                    Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null).show()
             }
         }.addOnSuccessListener {
             Timber.d("Success to adding $ref")
-            Snackbar.make(requireView(), "WelCome! ${user.displayName.toString()}",
-                Snackbar.LENGTH_SHORT)
-                .setAction("Action", null).show()
             findNavController().navigate(MobileNavigationDirections.navigateToHomeFragment())
 
         }.addOnFailureListener {

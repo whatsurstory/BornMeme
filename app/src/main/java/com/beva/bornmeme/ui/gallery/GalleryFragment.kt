@@ -16,9 +16,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentGalleryBinding
 import com.beva.bornmeme.model.Image
@@ -76,8 +79,6 @@ class GalleryFragment: Fragment() {
             val bitmap = bitmapDrawable.bitmap
             saveImage(bitmap, img.imageId)
             Timber.d("filePath -> $bitmap")
-
-
         }
         builder.setNegativeButton("No", DialogInterface.OnClickListener { dialog, which ->
 
@@ -94,7 +95,7 @@ class GalleryFragment: Fragment() {
         val imageFileName = "$id.jpg"
         val storageDir = File(
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                .toString() + "/YOUR_FOLDER_NAME"
+                .toString() + "/BornMeme"
         )
         var success = true
         if (!storageDir.exists()) {
@@ -113,20 +114,27 @@ class GalleryFragment: Fragment() {
 
             // Add the image to the system gallery
             galleryAddPic(savedImagePath)
-            Toast.makeText(context, "IMAGE SAVED", Toast.LENGTH_LONG).show()
+
+//            Toast.makeText(context, "IMAGE SAVED", Toast.LENGTH_LONG).show()
         }
         return savedImagePath
     }
     private fun galleryAddPic(imagePath: String) {
 //        val mediaScanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
         val file = File(imagePath)
-        val contentUri = Uri.fromFile(file)
+//        val contentUri = Uri.fromFile(file)
 //        mediaScanIntent.data = contentUri
-        MediaScannerConnection.scanFile(context, arrayOf(file.toString()),
-            null, null)
+//        MediaScannerConnection.scanFile(context, arrayOf(file.toString()),
+//            null, null)
+//        Timber.d("contentUri $contentUri \n file $file ")
 
-        Timber.d("contentUri $contentUri \n file $file ")
-
+        val newUri =
+            FileProvider.getUriForFile(
+                requireContext(),
+                "com.beva.bornmeme.fileProvider", file
+            )
+        Timber.d("fileUri -> $newUri")
+        findNavController().navigate(MobileNavigationDirections.navigateToEditFragment(newUri))
     }
 
 }
