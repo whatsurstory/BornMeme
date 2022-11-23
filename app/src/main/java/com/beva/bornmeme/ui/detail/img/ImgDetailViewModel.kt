@@ -1,10 +1,9 @@
 package com.beva.bornmeme.ui.detail.img
 
 import android.view.View
+import android.widget.TextView
 import androidx.collection.arrayMapOf
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.beva.bornmeme.databinding.FragmentImgDetailBinding
 import com.beva.bornmeme.model.*
 import com.beva.bornmeme.model.UserManager.user
@@ -13,6 +12,8 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 
@@ -287,4 +288,6 @@ data class UiState (
                     }
                 }
             }
-    }
+
+
+}

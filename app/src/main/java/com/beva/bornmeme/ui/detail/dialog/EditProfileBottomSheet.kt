@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
+import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.BottomsheetEditProfileBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.checkerframework.checker.units.qual.s
@@ -17,6 +18,8 @@ class EditProfileBottomSheet : BottomSheetDialogFragment()
 {
     private lateinit var binding: BottomsheetEditProfileBinding
     private lateinit var viewModel: EditProfileViewModel
+
+    override fun getTheme() = R.style.CustomBottomSheetDialog
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -57,6 +57,8 @@ class EditViewModel : ViewModel() {
         val userPath = FirebaseFirestore.getInstance().collection("Users").document(UserManager.user.userId.toString())
         val ref = FirebaseStorage.getInstance().reference
 
+
+
         if (uri != null) {
             ref.child("img_edited/" + postPath.id + ".jpg")
                 .putFile(uri)

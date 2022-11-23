@@ -233,17 +233,16 @@
 
             <TextView
                 android:id="@+id/no_see_text"
-                 android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="Although it's a little bit quiet in here ..."
-                android:visibility="visible"
-                android:layout_marginVertical="24dp"
-                android:layout_marginHorizontal="16dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:fontFamily="@font/arista_pro_bold_trial"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/img_detail_line"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                android:gravity="center"
+                android:textSize="28sp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/img_detail_description"
+                app:layout_constraintStart_toStartOf="@+id/comment_btn"
+                app:layout_constraintTop_toBottomOf="@+id/comment_btn" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/detail_guideline"

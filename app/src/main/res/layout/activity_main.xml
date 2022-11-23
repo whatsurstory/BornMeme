@@ -56,7 +56,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:queryHint="BornMeme."
-                    app:searchIcon="@null"
                     android:visibility="gone"/>
 
 <!--    app:searchIcon="@drawable/ic_baseline_self_improvement_24"  -->

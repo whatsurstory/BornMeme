@@ -19,12 +19,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.PopupMenu
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.beva.bornmeme.MobileNavigationDirections
@@ -37,6 +40,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
 
@@ -128,6 +133,9 @@ class ImgDetailFragment : Fragment() {
             it?.let {
                 if (it.isEmpty()) {
                     binding.noSeeText.visibility = View.VISIBLE
+                    binding.noSeeText.typeWrite(viewLifecycleOwner,
+                        "it's a little bit quiet in here ...",
+                        80L)
                 } else {
                     binding.noSeeText.visibility = View.GONE
                     Timber.d(("Observe comment cell : $it"))
@@ -435,7 +443,10 @@ class ImgDetailFragment : Fragment() {
                 .collection("Posts")
                 .document(post.id)
                 .delete()
-                .addOnSuccessListener { Timber.d("DocumentSnapshot successfully deleted!") }
+                .addOnSuccessListener {
+                    Timber.d("DocumentSnapshot successfully deleted!")
+                    findNavController().navigate(MobileNavigationDirections.navigateToHomeFragment())
+                }
                 .addOnFailureListener { e -> Timber.w("Error deleting document", e) }
         })
         builder.setNegativeButton("No", DialogInterface.OnClickListener { dialog, which ->
@@ -460,6 +471,16 @@ class ImgDetailFragment : Fragment() {
         downloadManager.enqueue(request)
         Snackbar.make(this.requireView(), "DownLoad Finished", Snackbar.LENGTH_SHORT)
             .setAction("Action", null).show()
+    }
+
+    private fun TextView.typeWrite(lifecycleOwner: LifecycleOwner, text: String, intervalMs: Long) {
+        this@typeWrite.text = ""
+        lifecycleOwner.lifecycleScope.launch {
+            repeat(text.length) {
+                delay(intervalMs)
+                this@typeWrite.text = text.take(it + 1)
+            }
+        }
     }
 
 
