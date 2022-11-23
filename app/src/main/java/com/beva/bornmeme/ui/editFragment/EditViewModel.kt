@@ -57,14 +57,12 @@ class EditViewModel : ViewModel() {
         val userPath = FirebaseFirestore.getInstance().collection("Users").document(UserManager.user.userId.toString())
         val ref = FirebaseStorage.getInstance().reference
 
-
-
         if (uri != null) {
             ref.child("img_edited/" + postPath.id + ".jpg")
                 .putFile(uri)
                 .addOnSuccessListener {
                     it.metadata?.reference?.downloadUrl?.addOnSuccessListener {
-                        //這層的it才會帶到firebase return 的 Uri
+                        //這層的it才會帶到firebase return 的 Url
     //                    Timber.d("edited uri: $it => take it to upload url")
     //                    Timber.d("newTag $tag")
                         val post = hashMapOf(

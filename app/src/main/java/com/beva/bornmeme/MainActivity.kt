@@ -145,8 +145,9 @@ class MainActivity : AppCompatActivity() {
                         cameraCheckPermission()
                     }
                     binding.fabModuleEdit.setOnClickListener {
-                        Snackbar.make(view, "This is Module Button", Snackbar.LENGTH_SHORT)
-                            .setAction("Action", null).show()
+//                        Snackbar.make(view, "This is Module Button", Snackbar.LENGTH_SHORT)
+//                            .setAction("Action", null).show()
+                        navController.navigate(MobileNavigationDirections.navigateToFragmentGallery())
                     }
                     binding.fabGalleryEdit.setOnClickListener {
                         galleryCheckPermission()

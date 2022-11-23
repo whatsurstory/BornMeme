@@ -84,6 +84,11 @@
             app:argType="string"/>
     </fragment>
 
+    <fragment
+        android:id="@+id/fragment_gallery"
+        android:name="com.beva.bornmeme.ui.gallery.GalleryFragment"
+        tools:layout="@layout/fragment_gallery" />
+
     <dialog
         android:id="@+id/bottomsheet_edit_profile"
         android:name="com.beva.bornmeme.ui.detail.dialog.EditProfileBottomSheet"
@@ -99,6 +104,7 @@
     </dialog>
 
     <action android:id="@+id/navigate_to_edit_fragment" app:destination="@+id/fragmentEditFixmode"/>
+    <action android:id="@+id/navigate_to_fragment_gallery" app:destination="@+id/fragment_gallery"/>
     <action android:id="@+id/navigate_to_drag_edit_fragment" app:destination="@+id/fragmentEditDrag"/>
     <action android:id="@+id/navigate_to_edit_profile_dialog" app:destination="@+id/bottomsheet_edit_profile"/>
     <action android:id="@+id/navigate_to_preview_dialog" app:destination="@+id/dialogPreview"/>
