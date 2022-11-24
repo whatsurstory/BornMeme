@@ -21,25 +21,6 @@ class MainViewModel: ViewModel() {
     val user: LiveData<User>
         get() = _user
 
-//    init {
-//        getUser(userId)
-//    }
-
-//    private fun getUser (userId : String): MutableLiveData<List<User>> {
-//        if (userId == UserManager.user.userId) {
-//            Firebase.firestore.collection("Users")
-//                .whereEqualTo("userId", userId)
-//                .addSnapshotListener { snapshot, error ->
-//                    val list = mutableListOf<User>()
-//                    for (document in snapshot!!) {
-//                        val data = document.toObject(User::class.java)
-//                        list.add(data)
-//                    }
-//                    userData.value = list
-//                }
-//        }
-//        return userData
-//    }
 
     fun setUser(user: User) {
         _user.value = user

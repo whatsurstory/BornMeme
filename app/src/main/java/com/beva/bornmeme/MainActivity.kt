@@ -7,6 +7,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
+import android.system.Os.remove
+import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -18,6 +20,8 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.beva.bornmeme.databinding.ActivityMainBinding
 import com.beva.bornmeme.model.UserManager
@@ -42,6 +46,7 @@ class MainActivity : AppCompatActivity() {
     private var isOpen = false
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainViewModel
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
     //Animation of fab
     private lateinit var fabOpen: Animation
@@ -54,12 +59,11 @@ class MainActivity : AppCompatActivity() {
         const val PHOTO_FROM_CAMERA = 1
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.plant(Timber.DebugTree())
         binding = ActivityMainBinding.inflate(layoutInflater)
-
+        setContentView(binding.root)
         viewModel = MainViewModel()
 
         viewModel.user.observe(this, Observer{
@@ -72,8 +76,6 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        setContentView(binding.root)
-
         //Animation of fab
         fabOpen = AnimationUtils.loadAnimation(this, R.anim.fab_open)
         fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_close)
@@ -81,28 +83,34 @@ class MainActivity : AppCompatActivity() {
         fabRotateAnti = AnimationUtils.loadAnimation(this, R.anim.rotate_anti)
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
+        //toolbar support action bar
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.title = null
+        appBarConfiguration = AppBarConfiguration(
+            setOf(R.id.splash_screen, R.id.nav_home)) //  IDs of fragments you want without the ActionBar home/up button
+
+        setupActionBarWithNavController(navController, appBarConfiguration)
+
 
         //the tool bar showing or not
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id == R.id.splash_screen) {
                 binding.fab.visibility = View.GONE
-                binding.changeModeBtn.visibility= View.GONE
-                binding.searchBar.visibility = View.GONE
                 binding.profileBtn.visibility = View.GONE
+                binding.changeModeBtn.visibility = View.GONE
             } else if (destination.id == R.id.fragmentEditFixmode || destination.id == R.id.dialogPreview) {
                 binding.fab.visibility = View.GONE
-                binding.searchBar.visibility = View.GONE
-                binding.changeModeBtn.visibility = View.VISIBLE
                 binding.profileBtn.visibility = View.GONE
-//                binding.changeModeBtn.setOnClickListener {
-//                    Timber.d("你有按到change")
-//                    navController.navigate(MobileNavigationDirections.navigateToDragEditFragment())
-//                }
+                binding.changeModeBtn.visibility = View.VISIBLE
+                binding.changeModeBtn.setOnClickListener {
+                    Timber.d("你有按到change")
+                    navController.navigate(MobileNavigationDirections.navigateToDragEditFragment())
+                }
                 binding.fab.setOnClickListener { toAlbum() }
             } else {
                 binding.fab.visibility = View.VISIBLE
-                binding.changeModeBtn.visibility= View.GONE
                 binding.profileBtn.visibility = View.GONE
+                binding.changeModeBtn.visibility = View.GONE
                 //fab expending animation
                 binding.fab.setOnClickListener { view ->
 
@@ -171,22 +179,15 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 if (destination.id == R.id.nav_home) {
-                    binding.searchBar.visibility = View.VISIBLE
-                    binding.changeModeBtn.visibility = View.GONE
-                    binding.profileBtn.visibility = View.VISIBLE
                     viewModel.setUser(UserManager.user)
-                } else {
-                    binding.searchBar.visibility = View.GONE
+                    binding.profileBtn.visibility = View.VISIBLE
+                    binding.changeModeBtn.visibility = View.GONE
                 }
 
             }
         }
-        //toolbar support action bar
-        setSupportActionBar(binding.toolbar)
-        //navigate_up
-        setupActionBarWithNavController(navController)
 
-//        binding.toolbar.navigationIcon = null
+
 
         binding.profileBtn.setOnClickListener {
             Timber.d("userid ->")
@@ -198,6 +199,8 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
+
 
     private fun galleryCheckPermission() {
         Dexter.withContext(this).withPermission(
@@ -345,6 +348,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle presses on the action bar menu items
+        when (item.itemId) {
+            android.R.id.home -> {
+                this.onBackPressed()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp() || super.onSupportNavigateUp()
@@ -372,4 +386,5 @@ class MainActivity : AppCompatActivity() {
                 dialog.dismiss()
             }.show()
     }
+
 }

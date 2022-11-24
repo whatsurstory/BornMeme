@@ -19,6 +19,7 @@ import android.view.animation.AnimationUtils
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieProperty
@@ -43,6 +44,7 @@ class SplashFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
     lateinit var binding: FragmentSplashBinding
+    private lateinit var viewModel: SplashViewModel
 
 //    override fun onCreate(savedInstanceState: Bundle?) {
 //        super.onCreate(savedInstanceState)
@@ -61,7 +63,7 @@ class SplashFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSplashBinding.inflate(layoutInflater)
-
+        viewModel = SplashViewModel()
         auth = FirebaseAuth.getInstance()
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -104,6 +106,16 @@ class SplashFragment : Fragment() {
             binding.loginLoading.setAnimation(R.raw.bouncing_balls)
             signInGoogle()
         }
+
+        viewModel.leave.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+//                    navigateToBackStack()
+                    viewModel.onLeaveCompleted()
+                }
+            }
+        )
 
 
         return binding.root
@@ -210,11 +222,21 @@ class SplashFragment : Fragment() {
             }
         }.addOnSuccessListener {
             Timber.d("Success to adding $ref")
+            viewModel.leave()
+            findNavController().popBackStack(R.id.splash_screen, true)
             findNavController().navigate(MobileNavigationDirections.navigateToHomeFragment())
 
         }.addOnFailureListener {
             Timber.d("ERROR ${it.message}")
         }
     }
+
+//    private fun navigateToBackStack() {
+//        fragmentManager?.beginTransaction()?.remove(this)?.commit()
+//        fragmentManager?.popBackStack()
+//        fragmentManager?.popBackStackImmediate()
+//        this.context.getSupportFragmentManager().beginTransaction().remove(this@SplashFragment).commit()
+//        activity?.supportFragmentManager?.popBackStack()
+//    }
 
 }

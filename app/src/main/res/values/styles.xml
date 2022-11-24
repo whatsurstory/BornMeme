@@ -17,11 +17,11 @@
     </style>
 
     <style name="CustomMenuStyle" parent="Widget.AppCompat.DrawerArrowToggle">
-        <item name="spinBars">true</item>
+<!--        <item name="spinBars">true</item>-->
         <item name="color">@color/dark_blue</item>
-        <item name="gapBetweenBars">8dp</item>
-        <item name="barLength">24dp</item>
-        <item name="thickness">2dp</item>
+<!--        <item name="gapBetweenBars">8dp</item>-->
+<!--        <item name="barLength">24dp</item>-->
+<!--        <item name="thickness">2dp</item>-->
     </style>
 
 

@@ -7,75 +7,41 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingTop="10dp"
         tools:context=".MainActivity">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/change_mode_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="16dp"
             android:src="@drawable/ic_baseline_collections_bookmark_24"
+            app:layout_constraintBottom_toTopOf="@+id/include"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/profile_btn"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="12dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_baseline_tag_faces_24"
+            app:layout_constraintBottom_toTopOf="@+id/include"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="28dp"
-            android:layout_marginEnd="12dp"/>
+            app:shapeAppearanceOverlay="@style/circle" />
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:elevation="4dp"
-            app:contentInsetStart="12dp"
-            app:contentInsetEnd="12dp"
-            android:layout_marginTop="12dp"
-            app:layout_constraintBottom_toBottomOf="@+id/content_main"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" >
-
-            <!-- app:contentInsetLeft="0dp"
-                  app:contentInsetStart="0dp"        -->
-            <!--this is the perfect width for toolbar
-            app:contentInsetStartWithNavigation="0dp"
-            app:contentInsetEndWithActions="0dp"
-            -->
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-
-                <androidx.appcompat.widget.SearchView
-                    android:id="@+id/search_bar"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:queryBackground="@null"
-                    android:layout_marginEnd="8dp"
-                    app:iconifiedByDefault="false"
-                    app:theme="@style/AppSearchView"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/profile_btn"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:queryHint="BornMeme."
-                    android:visibility="gone"/>
-
-<!--    app:searchIcon="@drawable/ic_baseline_self_improvement_24"  -->
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/profile_btn"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:scaleType="fitCenter"
-                    android:visibility="gone"
-                    android:src="@drawable/ic_baseline_tag_faces_24"
-                    app:layout_constraintBottom_toBottomOf="@+id/search_bar"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/search_bar"
-                    app:shapeAppearanceOverlay="@style/circle" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.appcompat.widget.Toolbar>
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <include
+            android:id="@+id/include"
             layout="@layout/content_main"
             android:layout_width="match_parent"
             android:layout_height="0dp"
