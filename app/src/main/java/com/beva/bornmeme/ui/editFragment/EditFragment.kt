@@ -177,10 +177,10 @@ class EditFragment : Fragment() {
 //                            Timber.d("newTag $newTag")
                             val res = listOf(
                                 arrayMapOf("type" to "base", "url" to it),
-                                (arrayMapOf(
+                                arrayMapOf(
                                     "type" to "text",
                                     "url" to upperText.text.toString() + bottomText.text.toString()
-                                ))
+                                )
                             )
 
                             binding.originPhoto.buildDrawingCache()
@@ -195,9 +195,17 @@ class EditFragment : Fragment() {
                                 upperBitmap,
                                 bottomBitmap
                             )
+
+
                             //saving to gallery and return the path(uri)
                             val newUri = viewModel.getImageUri(activity?.application, publishBitmap)
-                            viewModel.addNewPost(newUri, res, title.text.toString(), tag.text.toString())
+                            viewModel.addNewPost(
+                                newUri,
+                                res,
+                                title.text.toString(),
+                                tag.text.toString(),
+                                publishBitmap.width,
+                                publishBitmap.height)
                             findNavController().navigate(MobileNavigationDirections.navigateToHomeFragment())
 
                         }?.addOnFailureListener {

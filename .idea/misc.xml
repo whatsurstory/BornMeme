@@ -5,6 +5,7 @@
       <map>
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/drawable/alpha_corner.xml" value="0.1215" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/drawable/bg_corner.xml" value="0.1" />
+        <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/drawable/dialog_bg.xml" value="0.1" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.148" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/drawable/radius_corner.xml" value="0.4466666666666667" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/drawable/ripple_corner.xml" value="0.4466666666666667" />
@@ -18,6 +19,7 @@
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/bottomsheet_edit_profile.xml" value="0.22" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/content_main.xml" value="0.1" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/dialog_comment.xml" value="0.2470680218921032" />
+        <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/dialog_custom_delete.xml" value="0.16822916666666668" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/dialog_image.xml" value="0.1828125" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/dialog_preview.xml" value="0.22448979591836735" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/dialog_slide_collection.xml" value="0.1" />
@@ -52,6 +54,8 @@
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/nav_header_main.xml" value="0.1574074074074074" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/menu/activity_main_drawer.xml" value="0.3333333333333333" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/menu/custom_menu.xml" value="0.140625" />
+        <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/mipmap-anydpi-v26/icon_yelling.xml" value="0.1" />
+        <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/mipmap-anydpi-v26/yelling_round.xml" value="0.1585" />
         <entry key="..\:/Android_18/BornMeme/app/src/main/res/drawable/ic_menu_slideshow.xml" value="0.101" />
         <entry key="..\:/Android_18/BornMeme/app/src/main/res/drawable/search_corner.xml" value="0.1" />
         <entry key="..\:/Android_18/BornMeme/app/src/main/res/layout/activity_main.xml" value="0.1" />

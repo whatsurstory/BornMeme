@@ -22,5 +22,7 @@ data class Post(
     val resources: List<Resource> = emptyList(),
     val collection: List<String>? =null,
     val createdTime: Timestamp? = null,
+    val imageWidth: Int = -1,
+    val imageHeight: Int = -1
 ) : Parcelable
 

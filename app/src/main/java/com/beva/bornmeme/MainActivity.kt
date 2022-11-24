@@ -12,13 +12,16 @@ import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.FileProvider
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -35,6 +38,8 @@ import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.karumi.dexter.listener.single.PermissionListener
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
 
@@ -86,6 +91,7 @@ class MainActivity : AppCompatActivity() {
         //toolbar support action bar
         setSupportActionBar(binding.toolbar)
         supportActionBar?.title = null
+
         appBarConfiguration = AppBarConfiguration(
             setOf(R.id.splash_screen, R.id.nav_home)) //  IDs of fragments you want without the ActionBar home/up button
 
@@ -183,11 +189,8 @@ class MainActivity : AppCompatActivity() {
                     binding.profileBtn.visibility = View.VISIBLE
                     binding.changeModeBtn.visibility = View.GONE
                 }
-
             }
         }
-
-
 
         binding.profileBtn.setOnClickListener {
             Timber.d("userid ->")
@@ -195,11 +198,8 @@ class MainActivity : AppCompatActivity() {
                 navController.navigate(MobileNavigationDirections
                     .navigateToUserDetailFragment(id))
             }
-
         }
-
     }
-
 
 
     private fun galleryCheckPermission() {

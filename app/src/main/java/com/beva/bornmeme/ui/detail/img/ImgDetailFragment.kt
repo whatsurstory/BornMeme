@@ -7,24 +7,25 @@ import android.content.Context
 import android.content.Context.DOWNLOAD_SERVICE
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
-import android.provider.SyncStateContract.Helpers.update
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.PopupMenu
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
@@ -32,7 +33,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.beva.bornmeme.MobileNavigationDirections
+import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentImgDetailBinding
+import com.beva.bornmeme.model.Image
 import com.beva.bornmeme.model.Post
 import com.beva.bornmeme.model.UserManager
 import com.bumptech.glide.Glide
@@ -47,6 +50,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStream
 
 
 class ImgDetailFragment : Fragment() {
@@ -287,11 +292,16 @@ class ImgDetailFragment : Fragment() {
         }
 
         //BUG: the argument can't be rendering on newView
-//        binding.imgDetailImage.setOnClickListener {
-//            Timber.d(("index 0 => ${post.resources[0].url}"))
-//            val uri : Uri = (post.resources[0].url.toString()).toUri()
-//            findNavController().navigate(MobileNavigationDirections.navigateToEditFragment(uri))
-//        }
+        binding.imgDetailImage.setOnLongClickListener {
+            Timber.d(("index 0 => ${post.resources[0].url}"))
+
+            longClick2edit (post)
+
+            //dialog to navigate to edit
+//            Snackbar.make(it, "Long click", Snackbar.LENGTH_INDEFINITE).show()
+            //findNavController().navigate(MobileNavigationDirections.navigateToEditFragment(uri))
+            true
+        }
         return binding.root
     }
 
@@ -424,38 +434,55 @@ class ImgDetailFragment : Fragment() {
 
         val saveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
         with(saveButton) {
-            setBackgroundColor(com.beva.bornmeme.R.color.black)
+            setBackgroundColor(R.color.black)
             setPadding(0, 0, 20, 0)
-            setTextColor(com.beva.bornmeme.R.color.light_blue)
+            setTextColor(R.color.light_blue)
         }
 
         val cancelButton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
         with(cancelButton) {
-            setBackgroundColor(com.beva.bornmeme.R.color.black)
+            setBackgroundColor(R.color.black)
             setPadding(0, 0, 20, 0)
-            setTextColor(com.beva.bornmeme.R.color.light_blue)
+            setTextColor(R.color.light_blue)
         }
     }
 
+
+
+    @SuppressLint("SetTextI18n")
     private fun showDialog() {
         //delete for short
         val builder = AlertDialog.Builder(requireContext())
-        builder.setMessage("Are You Sure to Delete ${post.id}?")
-        builder.setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, which ->
+        val inflater = requireActivity().layoutInflater
+        val view = inflater.inflate(com.beva.bornmeme.R.layout.dialog_custom_delete, null)
+        builder.setView(view)
+
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        alertDialog.show()
+        val message = view.findViewById<TextView>(R.id.delete_message)
+        message.text = "Are You Sure About That?"
+
+        val okay = view.findViewById<Button>(R.id.okay_delete_btn)
+        okay.setOnClickListener {
+//        builder.setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, which ->
             val user = Firebase.firestore.collection("Users").document(post.ownerId)
                 user.update("postQuantity", FieldValue.arrayRemove(post.id))
             val postId = FirebaseFirestore.getInstance().collection("Posts").document(post.id)
                 postId.delete().addOnSuccessListener {
-                    Timber.d("DocumentSnapshot successfully deleted!")
+                    Timber.d("DocumentSnapshot successfully deleted${post.id}!")
+                    alertDialog.dismiss()
                     findNavController().navigateUp()
                 }
                 .addOnFailureListener { e -> Timber.w("Error deleting document", e) }
-        })
-        builder.setNegativeButton("No", DialogInterface.OnClickListener { dialog, which ->
+        }
 
-        })
-        val alertDialog: AlertDialog = builder.create()
-        alertDialog.show()
+//        })
+//        builder.setNegativeButton("No", DialogInterface.OnClickListener { dialog, which ->
+//        })
+
+        val cancel = view.findViewById<Button>(com.beva.bornmeme.R.id.cancel_button)
+        cancel.setOnClickListener { alertDialog.dismiss() }
     }
 
 
@@ -486,5 +513,66 @@ class ImgDetailFragment : Fragment() {
     }
 
 
+    private fun longClick2edit (img: Post) {
+        val builder = AlertDialog.Builder(requireContext())
+        val inflater = requireActivity().layoutInflater
+        val view = inflater.inflate(R.layout.dialog_image, null)
+        builder.setView(view)
+        val image = view.findViewById<ImageView>(R.id.gallery_img)
+        Glide.with(image).load(post.resources[0].url).placeholder(R.drawable._50).into(image)
+
+        builder.setTitle("It's ${post.title}")
+        builder.setPositiveButton("Yes") { dialog, _ ->
+            val bitmapDrawable = image.drawable as BitmapDrawable
+            val bitmap = bitmapDrawable.bitmap
+            saveImage(bitmap, img.id)
+            Timber.d("filePath -> $bitmap")
+        }
+        builder.setNegativeButton("No", DialogInterface.OnClickListener { dialog, which ->
+
+        })
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.show()
+    }
+
+    private fun saveImage(image: Bitmap, id:String): String? {
+        var savedImagePath: String? = null
+        val imageFileName = "$id.jpg"
+        val storageDir = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                .toString() + "/BornMeme"
+        )
+        var success = true
+        if (!storageDir.exists()) {
+            success = storageDir.mkdirs()
+        }
+        if (success) {
+            val imageFile = File(storageDir, imageFileName)
+            savedImagePath = imageFile.absolutePath
+            try {
+                val fOut: OutputStream = FileOutputStream(imageFile)
+                image.compress(Bitmap.CompressFormat.JPEG, 100, fOut)
+                fOut.close()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+            // Add the image to the system gallery
+            galleryAddPic(savedImagePath)
+
+//        Toast.makeText(context, "IMAGE SAVED", Toast.LENGTH_LONG).show()
+        }
+        return savedImagePath
+    }
+    private fun galleryAddPic(imagePath: String) {
+        val file = File(imagePath)
+        val newUri =
+            FileProvider.getUriForFile(
+                requireContext(),
+                "com.beva.bornmeme.fileProvider", file
+            )
+        Timber.d("fileUri -> $newUri")
+        findNavController().navigate(MobileNavigationDirections.navigateToEditFragment(newUri))
+    }
 }
 
