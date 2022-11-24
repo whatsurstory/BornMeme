@@ -64,6 +64,16 @@ class MainActivity : AppCompatActivity() {
         const val PHOTO_FROM_CAMERA = 1
     }
 
+    private fun TextView.typeWrite(lifecycleOwner: LifecycleOwner, text: String, intervalMs: Long) {
+        this@typeWrite.text = ""
+        lifecycleOwner.lifecycleScope.launch {
+            repeat(text.length) {
+                delay(intervalMs)
+                this@typeWrite.text = text.take(it + 1)
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.plant(Timber.DebugTree())
@@ -101,10 +111,12 @@ class MainActivity : AppCompatActivity() {
         //the tool bar showing or not
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id == R.id.splash_screen) {
+                binding.greeting.visibility = View.GONE
                 binding.fab.visibility = View.GONE
                 binding.profileBtn.visibility = View.GONE
                 binding.changeModeBtn.visibility = View.GONE
             } else if (destination.id == R.id.fragmentEditFixmode || destination.id == R.id.dialogPreview) {
+                binding.greeting.visibility = View.GONE
                 binding.fab.visibility = View.GONE
                 binding.profileBtn.visibility = View.GONE
                 binding.changeModeBtn.visibility = View.VISIBLE
@@ -114,6 +126,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 binding.fab.setOnClickListener { toAlbum() }
             } else {
+                binding.greeting.visibility = View.GONE
                 binding.fab.visibility = View.VISIBLE
                 binding.profileBtn.visibility = View.GONE
                 binding.changeModeBtn.visibility = View.GONE
@@ -188,6 +201,10 @@ class MainActivity : AppCompatActivity() {
                     viewModel.setUser(UserManager.user)
                     binding.profileBtn.visibility = View.VISIBLE
                     binding.changeModeBtn.visibility = View.GONE
+                    binding.greeting.visibility = View.VISIBLE
+                    binding.greeting.typeWrite(this,
+                        "BornMeme.",
+                        100L)
                 }
             }
         }

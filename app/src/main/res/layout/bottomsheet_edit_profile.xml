@@ -64,6 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:boxBackgroundMode="none"
+            app:errorEnabled="true"
             app:boxStrokeColor="@color/dark_blue"
             app:boxStrokeErrorColor="@color/light_orange_pink"
             app:layout_constraintEnd_toEndOf="parent"
@@ -74,7 +75,6 @@
                 android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/arista_pro_light_trial"
                 android:hint="Name"
                 android:maxLines="1"
                 android:text="Defalt Name" />
@@ -88,6 +88,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:boxBackgroundMode="none"
+            app:errorEnabled="true"
             app:boxStrokeColor="@color/dark_blue"
             app:boxStrokeErrorColor="@color/light_orange_pink"
             app:layout_constraintEnd_toEndOf="@id/email_box"
@@ -98,11 +99,8 @@
                 android:id="@+id/desc"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/arista_pro_light_trial"
                 android:hint="Introduce"
-                android:maxLines="5"
-                android:text="Defalt Introduce"
-                app:errorContentDescription="我是梗圖APP 不是Tinder"
+                android:maxLines="2"
                 app:errorEnabled="true" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -124,8 +122,8 @@
                 android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/arista_pro_light_trial"
                 android:hint="Email"
+                android:textColorHint="@color/dark_blue"
                 android:text="Defalt Email" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -161,7 +159,7 @@
             android:id="@+id/follow_list"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="8dp"
             android:fontFamily="@font/arista_pro_bold_trial"
             android:padding="16dp"
             android:text="Follow List"
@@ -214,7 +212,6 @@
             android:id="@+id/registerTime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/arista_pro_light_trial"
             android:padding="16dp"
             android:text="Register Time: "
             android:textColor="@color/dark_blue"
@@ -230,7 +227,6 @@
             android:layout_gravity="center"
             android:layout_margin="8dp"
             android:backgroundTint="@color/blue_gray"
-            android:fontFamily="@font/arista_pro_bold_trial"
             android:letterSpacing="0.3"
             android:text="SAVE"
             android:textColor="@color/teal_700"

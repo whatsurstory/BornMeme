@@ -141,9 +141,9 @@ class ImgDetailFragment : Fragment() {
             it?.let {
                 if (it.isEmpty()) {
                     binding.noSeeText.visibility = View.VISIBLE
-                    binding.noSeeText.typeWrite(viewLifecycleOwner,
-                        "it's a little bit quiet in here ...",
-                        80L)
+//                    binding.noSeeText.typeWrite(viewLifecycleOwner,
+//                        "it's a little bit quiet in here ...",
+//                        80L)
                 } else {
                     binding.noSeeText.visibility = View.GONE
                     Timber.d(("Observe comment cell : $it"))
@@ -297,9 +297,6 @@ class ImgDetailFragment : Fragment() {
 
             longClick2edit (post)
 
-            //dialog to navigate to edit
-//            Snackbar.make(it, "Long click", Snackbar.LENGTH_INDEFINITE).show()
-            //findNavController().navigate(MobileNavigationDirections.navigateToEditFragment(uri))
             true
         }
         return binding.root
@@ -502,15 +499,15 @@ class ImgDetailFragment : Fragment() {
             .setAction("Action", null).show()
     }
 
-    private fun TextView.typeWrite(lifecycleOwner: LifecycleOwner, text: String, intervalMs: Long) {
-        this@typeWrite.text = ""
-        lifecycleOwner.lifecycleScope.launch {
-            repeat(text.length) {
-                delay(intervalMs)
-                this@typeWrite.text = text.take(it + 1)
-            }
-        }
-    }
+//    private fun TextView.typeWrite(lifecycleOwner: LifecycleOwner, text: String, intervalMs: Long) {
+//        this@typeWrite.text = ""
+//        lifecycleOwner.lifecycleScope.launch {
+//            repeat(text.length) {
+//                delay(intervalMs)
+//                this@typeWrite.text = text.take(it + 1)
+//            }
+//        }
+//    }
 
 
     private fun longClick2edit (img: Post) {
