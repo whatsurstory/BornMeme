@@ -211,6 +211,7 @@ class SplashFragment : Fragment() {
                     emptyList(),
                     emptyList(),
                     emptyList(),
+                    emptyList(),
                     emptyList()
                 )
                 transaction.set(ref,userData)
@@ -223,20 +224,11 @@ class SplashFragment : Fragment() {
         }.addOnSuccessListener {
             Timber.d("Success to adding $ref")
             viewModel.leave()
-            findNavController().popBackStack(R.id.splash_screen, true)
             findNavController().navigate(MobileNavigationDirections.navigateToHomeFragment())
 
         }.addOnFailureListener {
             Timber.d("ERROR ${it.message}")
         }
     }
-
-//    private fun navigateToBackStack() {
-//        fragmentManager?.beginTransaction()?.remove(this)?.commit()
-//        fragmentManager?.popBackStack()
-//        fragmentManager?.popBackStackImmediate()
-//        this.context.getSupportFragmentManager().beginTransaction().remove(this@SplashFragment).commit()
-//        activity?.supportFragmentManager?.popBackStack()
-//    }
 
 }

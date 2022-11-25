@@ -14,6 +14,7 @@ data class User(
     val email: String = "",
     val registerTime: Timestamp? = null,
     val commentsId: List<String> = emptyList(),
+    val likeId: List<String> = emptyList(),
     val collection: List<String> = emptyList(),
     val followers: List<String> = emptyList(),
     val postQuantity: List<String> = emptyList(),

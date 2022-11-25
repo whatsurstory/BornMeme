@@ -10,10 +10,12 @@
         android:id="@+id/img_detail_user_scroll"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintVertical_bias="1.0">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -24,8 +26,8 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginStart="16dp"
-                android:scaleType="centerCrop"
                 android:layout_marginTop="8dp"
+                android:scaleType="centerCrop"
                 android:src="@drawable/dino"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -37,14 +39,14 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="8dp"
-                android:gravity="center_vertical"
-                android:text="Beva"
                 android:fontFamily="@font/arista_pro_bold_trial"
+                android:gravity="center_vertical"
                 android:maxLines="1"
-                android:textSize="20sp"
+                android:text="Beva"
                 android:textColor="@color/blue_gray"
-                app:layout_constraintEnd_toStartOf="@id/detail_guideline"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="@id/img_detail_user_img"
+                app:layout_constraintEnd_toStartOf="@id/detail_guideline"
                 app:layout_constraintStart_toEndOf="@id/img_detail_user_img"
                 app:layout_constraintTop_toTopOf="@+id/img_detail_user_img" />
 
@@ -52,38 +54,38 @@
                 android:id="@+id/follow_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
+                android:fontFamily="@font/arista_pro_bold_trial"
                 android:gravity="center"
                 android:text="follow"
-                android:fontFamily="@font/arista_pro_bold_trial"
+                android:textColor="@color/blue_gray"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@color/blue_gray"
                 app:layout_constraintBottom_toBottomOf="@+id/img_detail_user_name"
                 app:layout_constraintEnd_toStartOf="@+id/report_btn"
                 app:layout_constraintStart_toEndOf="@+id/detail_guideline"
                 app:layout_constraintTop_toTopOf="@+id/img_detail_user_name" />
 
-<!--            <TextView-->
-<!--                android:id="@+id/unfollow_btn"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="following"-->
-<!--                android:gravity="center"-->
-<!--                android:visibility="gone"-->
-<!--                app:layout_constraintBottom_toBottomOf="@+id/img_detail_user_name"-->
-<!--                app:layout_constraintEnd_toStartOf="@+id/report_btn"-->
-<!--                app:layout_constraintStart_toEndOf="@+id/detail_guideline"-->
-<!--                app:layout_constraintTop_toTopOf="@+id/img_detail_user_name" />-->
+            <!--            <TextView-->
+            <!--                android:id="@+id/unfollow_btn"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:text="following"-->
+            <!--                android:gravity="center"-->
+            <!--                android:visibility="gone"-->
+            <!--                app:layout_constraintBottom_toBottomOf="@+id/img_detail_user_name"-->
+            <!--                app:layout_constraintEnd_toStartOf="@+id/report_btn"-->
+            <!--                app:layout_constraintStart_toEndOf="@+id/detail_guideline"-->
+            <!--                app:layout_constraintTop_toTopOf="@+id/img_detail_user_name" />-->
 
             <ImageButton
                 android:id="@+id/report_btn"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:background="@color/woo"
-                android:rotation="90"
                 android:layout_marginEnd="4dp"
-                android:scaleType="centerCrop"
+                android:background="@color/woo"
                 android:padding="6dp"
+                android:rotation="90"
+                android:scaleType="centerCrop"
                 android:src="@drawable/ic_baseline_more_vert_24"
                 app:layout_constraintBottom_toBottomOf="@+id/follow_btn"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -91,53 +93,56 @@
                 app:tint="@color/dark_blue" />
 
             <ImageButton
-                android:id="@+id/like_btn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@color/woo"
-                android:padding="10dp"
-                android:layout_marginStart="6dp"
-                android:scaleType="centerInside"
-                android:src="@drawable/before_thumbup"
+                android:id="@+id/before_thumbup_btn"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/img_detail_image"
                 app:tint="@color/dark_blue" />
 
+            <!--            <ImageButton-->
+            <!--                android:id="@+id/after_thumpup_btn"-->
+            <!--                android:layout_width="36dp"-->
+            <!--                android:layout_height="36dp"-->
+            <!--                android:layout_marginStart="12dp"-->
+            <!--                android:layout_marginTop="8dp"-->
+            <!--                android:background="@drawable/after_thumpup"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@id/img_detail_image"-->
+            <!--                app:tint="@color/dark_blue"-->
+            <!--                android:visibility="gone"/>-->
+
             <ImageButton
                 android:id="@+id/download_btn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@color/woo"
-                android:padding="10dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginHorizontal="8dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/download"
-                app:layout_constraintBottom_toBottomOf="@+id/like_btn"
-                app:layout_constraintStart_toEndOf="@+id/like_btn"
-                app:layout_constraintTop_toTopOf="@+id/like_btn"
+                android:background="@drawable/download"
+                app:layout_constraintBottom_toBottomOf="@+id/before_thumbup_btn"
+                app:layout_constraintStart_toEndOf="@+id/before_thumbup_btn"
+                app:layout_constraintTop_toTopOf="@+id/before_thumbup_btn"
                 app:tint="@color/dark_blue" />
 
             <ImageButton
                 android:id="@+id/comment_btn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@color/woo"
-                android:padding="10dp"
-                android:layout_marginStart="6dp"
-                android:scaleType="centerInside"
-                android:src="@drawable/comment"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginVertical="8dp"
+                android:background="@drawable/comment"
                 app:layout_constraintBottom_toTopOf="@+id/comments_recycler"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/img_detail_user_img"
                 app:layout_constraintTop_toBottomOf="@+id/img_detail_line"
                 app:tint="@color/dark_blue" />
 
             <ImageButton
                 android:id="@+id/collection_btn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@color/woo"
-                android:src="@drawable/collection"
-                android:scaleType="centerInside"
-                android:padding="12dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginHorizontal="8dp"
+                android:background="@drawable/collection"
                 app:layout_constraintBottom_toBottomOf="@id/share_btn"
                 app:layout_constraintEnd_toStartOf="@id/share_btn"
                 app:layout_constraintTop_toTopOf="@id/share_btn"
@@ -145,13 +150,11 @@
 
             <ImageButton
                 android:id="@+id/share_btn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginEnd="8dp"
-                android:background="@color/woo"
-                android:src="@drawable/share"
-                android:scaleType="centerInside"
-                android:padding="10dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/share"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/img_detail_image"
                 app:tint="@color/dark_blue" />
@@ -172,14 +175,16 @@
                 android:id="@+id/img_detail_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:maxLines="1"
                 android:paddingHorizontal="8dp"
                 android:paddingVertical="4dp"
                 android:text="Title"
                 android:textColor="@color/blue_gray"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@+id/share_btn"
-                app:layout_constraintStart_toStartOf="@+id/like_btn"
+                app:layout_constraintStart_toStartOf="@+id/img_detail_user_img"
                 app:layout_constraintTop_toBottomOf="@id/share_btn" />
 
             <TextView
@@ -187,10 +192,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:maxLines="2"
-                android:textSize="16sp"
-                android:paddingVertical="4dp"
                 android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp"
                 android:textColor="@color/blue_gray"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toTopOf="@id/img_detail_line"
                 app:layout_constraintEnd_toEndOf="@+id/img_detail_title"
                 app:layout_constraintStart_toStartOf="@id/img_detail_title"

@@ -34,7 +34,7 @@
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/fragment_favorite.xml" value="0.1" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/fragment_gallery.xml" value="0.1" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/fragment_home.xml" value="0.3333333333333333" />
-        <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/fragment_img_detail.xml" value="0.1" />
+        <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/fragment_img_detail.xml" value="0.20761904761904762" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/fragment_posts.xml" value="0.1" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/fragment_splash.xml" value="0.12" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/fragment_user_detail.xml" value="0.3962558502340094" />
@@ -80,7 +80,7 @@
   <component name="VisualizationToolProject">
     <option name="state">
       <ProjectState>
-        <option name="scale" value="0.22" />
+        <option name="scale" value="0.16666666666666666" />
       </ProjectState>
     </option>
   </component>

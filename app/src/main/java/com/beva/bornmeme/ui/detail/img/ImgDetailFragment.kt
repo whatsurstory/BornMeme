@@ -17,6 +17,7 @@ import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
+import android.provider.SyncStateContract.Helpers.update
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
@@ -24,6 +25,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
@@ -78,6 +80,19 @@ class ImgDetailFragment : Fragment() {
                     .error(com.beva.bornmeme.R.drawable.dino)
             ).into(binding.imgDetailImage)
         binding.imgDetailDescription.text = post.resources[1].url
+
+        if (post.like?.isEmpty() == true) {
+            Timber.d("Post Like ${post.like}")
+            binding.beforeThumbupBtn.setBackgroundResource(R.drawable.before_thumbup)
+        } else {
+            for (item in post.like!!) {
+                if (item == UserManager.user.userId) {
+                    Timber.d("item $item")
+                    binding.beforeThumbupBtn.setBackgroundResource(R.drawable.after_thumpup)
+                }
+            }
+        }
+
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -119,6 +134,19 @@ class ImgDetailFragment : Fragment() {
                         }
                     }
                 }
+
+//                if (it[0].likeId.isEmpty()) {
+//                    Timber.d("Post Like ${post.like} user like ${it[0].likeId}")
+//                    binding.beforeThumbupBtn.setBackgroundResource(R.drawable.before_thumbup)
+//                } else {
+//                    for (item in it[0].likeId) {
+//                        if (item == post.id) {
+//                            Timber.d("item $item")
+//                            binding.beforeThumbupBtn.setBackgroundResource(R.drawable.after_thumpup)
+//                        }
+//                    }
+//                }
+
             }
         })
 
@@ -169,14 +197,16 @@ class ImgDetailFragment : Fragment() {
             )
         }
         //the button to like post
-        binding.likeBtn.setOnClickListener {
-            FirebaseFirestore.getInstance()
-                .collection("Posts").document(post.id)
-                .update("like", FieldValue.arrayUnion(UserManager.user.userId))
+        val postRef = FirebaseFirestore.getInstance().collection("Posts").document(post.id)
+        val userRef = FirebaseFirestore.getInstance().collection("Users").document(UserManager.user.userId!!)
+        binding.beforeThumbupBtn.setOnClickListener {
+                userRef.update("likeId", FieldValue.arrayUnion(post.id))
+                postRef.update("like", FieldValue.arrayUnion(UserManager.user.userId))
                 .addOnSuccessListener {
                     Timber.d("Success add like")
-                    Snackbar.make(this.requireView(), "喜歡喜歡~~~", Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show()
+                    binding.beforeThumbupBtn.setBackgroundResource(R.drawable.after_thumpup)
+//                    Snackbar.make(this.requireView(), "喜歡喜歡~~~", Snackbar.LENGTH_SHORT)
+//                        .setAction("Action", null).show()
                 }.addOnFailureListener {
                     Timber.d("Error ${it.message}")
                 }
@@ -472,8 +502,7 @@ class ImgDetailFragment : Fragment() {
                     findNavController().navigateUp()
                 }
                 .addOnFailureListener { e -> Timber.w("Error deleting document", e) }
-        }
-
+            }
 //        })
 //        builder.setNegativeButton("No", DialogInterface.OnClickListener { dialog, which ->
 //        })
