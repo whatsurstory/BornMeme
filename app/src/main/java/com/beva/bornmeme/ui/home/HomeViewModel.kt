@@ -7,6 +7,7 @@ import androidx.lifecycle.*
 import com.beva.bornmeme.model.Post
 import com.beva.bornmeme.model.Resource
 import com.beva.bornmeme.model.User
+import com.beva.bornmeme.model.UserManager
 import com.beva.bornmeme.ui.detail.img.CommentCell
 import com.beva.bornmeme.ui.detail.img.ImgDetailViewModel
 import com.bumptech.glide.Glide.init
@@ -14,6 +15,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.flow.callbackFlow
 import org.checkerframework.checker.units.qual.s
 import timber.log.Timber
 
@@ -62,7 +64,6 @@ class HomeViewModel : ViewModel() {
                 if (!cells.contains(tag)) {
                     cells.add(tag)
                 }
-//                Timber.d("Post cells $cells")
             }
             cells
         }
@@ -85,7 +86,6 @@ class HomeViewModel : ViewModel() {
                 val post = document.toObject(Post::class.java)
                 list.add(post)
             }
-
             liveData.value = list
         }
         return liveData
@@ -137,5 +137,10 @@ class HomeViewModel : ViewModel() {
     fun onDetailNavigated() {
         _navigateToDetail.value = null
     }
+}
 
+
+
+fun List<Post>.filterBlock(): List<Post> {
+    return this.filter { !UserManager.user.blockList.contains(it.ownerId) }
 }

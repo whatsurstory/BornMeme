@@ -54,6 +54,7 @@ import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
+import kotlin.coroutines.EmptyCoroutineContext.plus
 
 
 class ImgDetailFragment : Fragment() {
@@ -89,6 +90,8 @@ class ImgDetailFragment : Fragment() {
                 if (item == UserManager.user.userId) {
                     Timber.d("item $item")
                     binding.beforeThumbupBtn.setBackgroundResource(R.drawable.after_thumpup)
+                } else {
+                    binding.beforeThumbupBtn.setBackgroundResource(R.drawable.before_thumbup)
                 }
             }
         }
@@ -134,20 +137,7 @@ class ImgDetailFragment : Fragment() {
                         }
                     }
                 }
-
-//                if (it[0].likeId.isEmpty()) {
-//                    Timber.d("Post Like ${post.like} user like ${it[0].likeId}")
-//                    binding.beforeThumbupBtn.setBackgroundResource(R.drawable.before_thumbup)
-//                } else {
-//                    for (item in it[0].likeId) {
-//                        if (item == post.id) {
-//                            Timber.d("item $item")
-//                            binding.beforeThumbupBtn.setBackgroundResource(R.drawable.after_thumpup)
-//                        }
-//                    }
-//                }
-
-            }
+             }
         })
 
 
@@ -256,11 +246,11 @@ class ImgDetailFragment : Fragment() {
                 when (val id = it.itemId) {
                     0 -> Toast.makeText(context, "ID $id -> Report the Image", Toast.LENGTH_SHORT)
                         .show()
-                    1 -> Toast.makeText(context, "ID $id -> Report the User", Toast.LENGTH_SHORT)
-                        .show()
+                    1 -> add2Block()
                 }
                 false
             }
+
         } else {
             popupMenu.menu.add(Menu.NONE, 0, 0, "Delete the image")
             popupMenu.setOnMenuItemClickListener {
@@ -323,13 +313,40 @@ class ImgDetailFragment : Fragment() {
 
         //BUG: the argument can't be rendering on newView
         binding.imgDetailImage.setOnLongClickListener {
-            Timber.d(("index 0 => ${post.resources[0].url}"))
-
+//            Timber.d(("index 0 => ${post.resources[0].url}"))
             longClick2edit (post)
-
             true
         }
         return binding.root
+    }
+
+    private fun add2Block() {
+        val builder = AlertDialog.Builder(requireContext())
+        val inflater = requireActivity().layoutInflater
+        val view = inflater.inflate(com.beva.bornmeme.R.layout.dialog_custom_delete, null)
+        builder.setView(view)
+
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        alertDialog.show()
+        val message = view.findViewById<TextView>(R.id.delete_message)
+        message.text = "Are You Sure to Block?"
+
+        val okay = view.findViewById<Button>(R.id.okay_delete_btn)
+        okay.setOnClickListener {
+            //先把資料裝進local 再上傳到firebase
+            UserManager.user.blockList += post.ownerId
+            Firebase.firestore.collection("Users")
+                .document(UserManager.user.userId!!)
+                .update("blockList", UserManager.user.blockList)
+                .addOnCompleteListener {
+                    Timber.d("add to block ${post.ownerId}")
+                    alertDialog.dismiss()
+                    findNavController().navigateUp()
+                }
+            val cancel = view.findViewById<Button>(R.id.cancel_button)
+            cancel.setOnClickListener { alertDialog.dismiss() }
+        }
     }
 
     private fun requestPermission() {
