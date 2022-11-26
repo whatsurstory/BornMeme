@@ -134,15 +134,16 @@ class EditFragment : Fragment() {
         //to publish
         binding.publishBtn.setOnClickListener {
             Timber.d("onClick publish")
-
             if (upperText.text.isNullOrEmpty() || bottomText.text.isNullOrEmpty()) {
                 Snackbar.make(it, "Not Adding Text Yet", Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show()
             } else if (title.text.trim().isEmpty()) {
-                val titleSnack = Snackbar.make(it,"The Title Still Empty, We'll let it Default as Name",Snackbar.LENGTH_INDEFINITE)
+                //Snackbar ani
+                val titleSnack = Snackbar.make(it,"還有資料未完成，幫你填入預設值，不客氣",Snackbar.LENGTH_INDEFINITE)
                 titleSnack.animationMode = BaseTransientBottomBar.ANIMATION_MODE_FADE
                 titleSnack.setBackgroundTint(Color.parseColor("#FF6768"))
-                titleSnack.setAction("Got it") {
+                titleSnack.setTextColor(Color.parseColor("#FFFFFF"))
+                titleSnack.setAction("感恩的心") {
                         title.setText(UserManager.user.userName)
                     }
                 val snackBarView = titleSnack.view
@@ -152,16 +153,19 @@ class EditFragment : Fragment() {
                 titleSnack.show()
 
             } else if (tag.text.trim().isEmpty()) {
-                Snackbar.make(
-                    it,
-                    "The Tag Still Empty, We'll let it Default as 傻逼日常",
-                    Snackbar.LENGTH_INDEFINITE)
-                    .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
+                val tagSnack =
+                    Snackbar.make( it,"還有資料未完成，幫你填入預設值，不客氣", Snackbar.LENGTH_INDEFINITE)
+                    .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
                     .setBackgroundTint(Color.parseColor("#FF6768"))
-                    .setAction("Got it") {
+                    .setTextColor(Color.parseColor("#FFFFFF"))
+                    .setAction("感謝有你") {
                         tag.setText("傻逼日常")
                     }
-                    .show()
+                val snackBarView = tagSnack.view
+                val params = snackBarView.layoutParams as FrameLayout.LayoutParams
+                params.gravity =  Gravity.CENTER_HORIZONTAL and Gravity.TOP
+                snackBarView.layoutParams = params
+                tagSnack.show()
             } else {
                 binding.lottiePublishLoading.visibility = View.VISIBLE
                 binding.lottiePublishLoading.setAnimation(R.raw.dancing_pallbearers)
@@ -219,8 +223,6 @@ class EditFragment : Fragment() {
         }
 
     }
-
-
 
 //    private fun getBitmapByUri(bitmapUri: Uri): Bitmap {
 //        return BitmapFactory.decodeStream(activity?.contentResolver?.openInputStream(bitmapUri))

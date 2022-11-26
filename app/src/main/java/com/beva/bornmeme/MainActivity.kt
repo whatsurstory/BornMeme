@@ -27,6 +27,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.beva.bornmeme.databinding.ActivityMainBinding
+import com.beva.bornmeme.model.User
 import com.beva.bornmeme.model.UserManager
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
@@ -119,12 +120,14 @@ class MainActivity : AppCompatActivity() {
                 binding.greeting.visibility = View.GONE
                 binding.fab.visibility = View.GONE
                 binding.profileBtn.visibility = View.GONE
-                binding.changeModeBtn.visibility = View.VISIBLE
-                binding.changeModeBtn.setOnClickListener {
-                    Timber.d("你有按到change")
-                    navController.navigate(MobileNavigationDirections.navigateToDragEditFragment())
+//                binding.changeModeBtn.visibility = View.VISIBLE
+//                binding.changeModeBtn.setOnClickListener {
+//                    Timber.d("你有按到change")
+//                    navController.navigate(MobileNavigationDirections.navigateToDragEditFragment())
+//                }
+                binding.fab.setOnClickListener {
+                    toAlbum()
                 }
-                binding.fab.setOnClickListener { toAlbum() }
             } else {
                 binding.greeting.visibility = View.GONE
                 binding.fab.visibility = View.VISIBLE
@@ -169,11 +172,28 @@ class MainActivity : AppCompatActivity() {
                         isOpen = true
                     }
                     binding.fabCameraEdit.setOnClickListener {
+
+                        fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_close)
+                        fabRotate = AnimationUtils.loadAnimation(this, R.anim.rotate)
+                        binding.fabCameraEdit.startAnimation(fabClose)
+                        binding.fabModuleEdit.startAnimation(fabClose)
+                        binding.fabGalleryEdit.startAnimation(fabClose)
+
+                        binding.fab.startAnimation(fabRotate)
+
+                        binding.fabCameraEdit.visibility = View.GONE
+                        binding.fabCameraEdit.clearAnimation()
+                        binding.fabModuleEdit.visibility = View.GONE
+                        binding.fabModuleEdit.clearAnimation()
+                        binding.fabGalleryEdit.visibility = View.GONE
+                        binding.fabGalleryEdit.clearAnimation()
+
+                        isOpen = false
+
                         cameraCheckPermission()
                     }
                     binding.fabModuleEdit.setOnClickListener {
-//                        Snackbar.make(view, "This is Module Button", Snackbar.LENGTH_SHORT)
-//                            .setAction("Action", null).show()
+
                         binding.fabCameraEdit.startAnimation(fabClose)
                         binding.fabModuleEdit.startAnimation(fabClose)
                         binding.fabGalleryEdit.startAnimation(fabClose)
@@ -194,6 +214,24 @@ class MainActivity : AppCompatActivity() {
                         navController.navigate(MobileNavigationDirections.navigateToFragmentGallery())
                     }
                     binding.fabGalleryEdit.setOnClickListener {
+
+                        fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_close)
+                        fabRotate = AnimationUtils.loadAnimation(this, R.anim.rotate)
+                        binding.fabCameraEdit.startAnimation(fabClose)
+                        binding.fabModuleEdit.startAnimation(fabClose)
+                        binding.fabGalleryEdit.startAnimation(fabClose)
+
+                        binding.fab.startAnimation(fabRotate)
+
+                        binding.fabCameraEdit.visibility = View.GONE
+                        binding.fabCameraEdit.clearAnimation()
+                        binding.fabModuleEdit.visibility = View.GONE
+                        binding.fabModuleEdit.clearAnimation()
+                        binding.fabGalleryEdit.visibility = View.GONE
+                        binding.fabGalleryEdit.clearAnimation()
+
+                        isOpen = false
+
                         galleryCheckPermission()
                     }
                 }
@@ -216,6 +254,10 @@ class MainActivity : AppCompatActivity() {
                     .navigateToUserDetailFragment(id))
             }
         }
+    }
+
+    fun updateUser(user: User) {
+        viewModel.setUser(user)
     }
 
 
@@ -343,22 +385,6 @@ class MainActivity : AppCompatActivity() {
     //if we got the photo from camera/gallery, we'll take the arguments of image complete the navigate
     private fun navigateToEditor(uri: Uri?) {
         uri?.let {
-            fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_close)
-            fabRotate = AnimationUtils.loadAnimation(this, R.anim.rotate)
-            binding.fabCameraEdit.startAnimation(fabClose)
-            binding.fabModuleEdit.startAnimation(fabClose)
-            binding.fabGalleryEdit.startAnimation(fabClose)
-
-            binding.fab.startAnimation(fabRotate)
-
-            binding.fabCameraEdit.visibility = View.GONE
-            binding.fabCameraEdit.clearAnimation()
-            binding.fabModuleEdit.visibility = View.GONE
-            binding.fabModuleEdit.clearAnimation()
-            binding.fabGalleryEdit.visibility = View.GONE
-            binding.fabGalleryEdit.clearAnimation()
-
-            isOpen = false
 
             findNavController(R.id.nav_host_fragment_content_main)
                 .navigate(MobileNavigationDirections.navigateToEditFragment(it))

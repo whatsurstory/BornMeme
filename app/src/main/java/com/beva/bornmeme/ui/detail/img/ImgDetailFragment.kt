@@ -2,10 +2,12 @@ package com.beva.bornmeme.ui.detail.img
 
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Context.DOWNLOAD_SERVICE
 import android.content.DialogInterface
+import android.content.DialogInterface.OnMultiChoiceClickListener
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -17,27 +19,21 @@ import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
-import android.provider.SyncStateContract.Helpers.update
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.*
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.core.net.toUri
+import androidx.databinding.adapters.ViewBindingAdapter.setPadding
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentImgDetailBinding
-import com.beva.bornmeme.model.Image
+import com.beva.bornmeme.databinding.SnackBarCustomBinding
 import com.beva.bornmeme.model.Post
 import com.beva.bornmeme.model.UserManager
 import com.bumptech.glide.Glide
@@ -48,13 +44,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
-import kotlin.coroutines.EmptyCoroutineContext.plus
+import java.util.*
 
 
 class ImgDetailFragment : Fragment() {
@@ -77,8 +71,8 @@ class ImgDetailFragment : Fragment() {
             .load(post.url)
             .apply(
                 RequestOptions()
-                    .placeholder(com.beva.bornmeme.R.drawable._50)
-                    .error(com.beva.bornmeme.R.drawable.dino)
+                    .placeholder(R.drawable._50)
+                    .error(R.drawable.dino)
             ).into(binding.imgDetailImage)
         binding.imgDetailDescription.text = post.resources[1].url
 
@@ -126,7 +120,7 @@ class ImgDetailFragment : Fragment() {
                         if (item == UserManager.user.userId) {
                             binding.followBtn.text = "Following"
                             binding.followBtn.setOnClickListener {
-                                Toast.makeText(context, "你已經追蹤該作者", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "已經追蹤該作者", Toast.LENGTH_SHORT).show()
                             }
                         } else {
                             binding.followBtn.text = "Follow"
@@ -220,7 +214,6 @@ class ImgDetailFragment : Fragment() {
                         )
                 )
                 viewModel.onDetailNavigated()
-                Timber.d("navigate end")
             }
         }
 
@@ -240,19 +233,19 @@ class ImgDetailFragment : Fragment() {
             binding.reportBtn
         )
         if (post.ownerId != UserManager.user.userId) {
-            popupMenu.menu.add(Menu.NONE, 0, 0, "Report the Image")
-            popupMenu.menu.add(Menu.NONE, 1, 1, "Report the User")
+
+            popupMenu.menu.add(Menu.NONE, 0, 0, "檢舉圖片")
+            popupMenu.menu.add(Menu.NONE, 1, 1, "封鎖用戶")
             popupMenu.setOnMenuItemClickListener {
-                when (val id = it.itemId) {
-                    0 -> Toast.makeText(context, "ID $id -> Report the Image", Toast.LENGTH_SHORT)
-                        .show()
+                when (it.itemId) {
+                    0 -> reportDialog()
                     1 -> add2Block()
                 }
                 false
             }
 
         } else {
-            popupMenu.menu.add(Menu.NONE, 0, 0, "Delete the image")
+            popupMenu.menu.add(Menu.NONE, 0, 0, "刪除照片")
             popupMenu.setOnMenuItemClickListener {
                 when (it.itemId) {
                     0 -> showDialog()
@@ -330,7 +323,7 @@ class ImgDetailFragment : Fragment() {
         alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         alertDialog.show()
         val message = view.findViewById<TextView>(R.id.delete_message)
-        message.text = "Are You Sure to Block?"
+        message.text = "你確定要封鎖人家嗎，再也看不見的那種?"
 
         val okay = view.findViewById<Button>(R.id.okay_delete_btn)
         okay.setOnClickListener {
@@ -344,9 +337,9 @@ class ImgDetailFragment : Fragment() {
                     alertDialog.dismiss()
                     findNavController().navigateUp()
                 }
-            val cancel = view.findViewById<Button>(R.id.cancel_button)
-            cancel.setOnClickListener { alertDialog.dismiss() }
-        }
+            }
+        val cancel = view.findViewById<Button>(R.id.cancel_button)
+        cancel.setOnClickListener { alertDialog.dismiss() }
     }
 
     private fun requestPermission() {
@@ -413,10 +406,10 @@ class ImgDetailFragment : Fragment() {
         val isCheckedIndex = ArrayList<Int>()
         val list = ArrayList<String>()
 
-        builder.setTitle("Name your Folder")
-        val view = inflater.inflate(com.beva.bornmeme.R.layout.diaolog_collection, null)
+        builder.setTitle("請幫忙收藏夾命名")
+        val view = inflater.inflate(R.layout.diaolog_collection, null)
         builder.setView(view)
-        val input = view.findViewById<EditText>(com.beva.bornmeme.R.id.folder_name)
+        val input = view.findViewById<EditText>(R.id.folder_name)
 
 
         builder.setMultiChoiceItems(
@@ -439,7 +432,7 @@ class ImgDetailFragment : Fragment() {
                 }
             })
 
-        builder.setPositiveButton("SAVE",
+        builder.setPositiveButton("確定",
             DialogInterface.OnClickListener { dialog, which ->
                 run {
                     var title: String
@@ -463,12 +456,11 @@ class ImgDetailFragment : Fragment() {
                             Timber.d("title $title")
                             viewModel.onClickCollection(title, post.id, post.url.toString())
                             viewModel.doneCollection(post.id)
-//                            Toast.makeText(context, "New Created $input Folder", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
             })
-        builder.setNegativeButton("CANCEL",
+        builder.setNegativeButton("取消",
             DialogInterface.OnClickListener { _, _ ->
 //            Timber.d("check the selected item -> list size:${list.size} int size: ${isCheckedIndex.size}")
             })
@@ -505,11 +497,10 @@ class ImgDetailFragment : Fragment() {
         alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         alertDialog.show()
         val message = view.findViewById<TextView>(R.id.delete_message)
-        message.text = "Are You Sure About That?"
+        message.text = "確定要刪除這麼棒的智慧結晶嗎?"
 
         val okay = view.findViewById<Button>(R.id.okay_delete_btn)
         okay.setOnClickListener {
-//        builder.setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, which ->
             val user = Firebase.firestore.collection("Users").document(post.ownerId)
                 user.update("postQuantity", FieldValue.arrayRemove(post.id))
             val postId = FirebaseFirestore.getInstance().collection("Posts").document(post.id)
@@ -519,10 +510,7 @@ class ImgDetailFragment : Fragment() {
                     findNavController().navigateUp()
                 }
                 .addOnFailureListener { e -> Timber.w("Error deleting document", e) }
-            }
-//        })
-//        builder.setNegativeButton("No", DialogInterface.OnClickListener { dialog, which ->
-//        })
+        }
 
         val cancel = view.findViewById<Button>(com.beva.bornmeme.R.id.cancel_button)
         cancel.setOnClickListener { alertDialog.dismiss() }
@@ -541,8 +529,8 @@ class ImgDetailFragment : Fragment() {
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
             .setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, fileName)
         downloadManager.enqueue(request)
-        Snackbar.make(this.requireView(), "DownLoad Finished", Snackbar.LENGTH_SHORT)
-            .setAction("Action", null).show()
+
+        Toast.makeText(context, "下載完成",Toast.LENGTH_SHORT).show()
     }
 
 //    private fun TextView.typeWrite(lifecycleOwner: LifecycleOwner, text: String, intervalMs: Long) {
@@ -564,14 +552,14 @@ class ImgDetailFragment : Fragment() {
         val image = view.findViewById<ImageView>(R.id.gallery_img)
         Glide.with(image).load(post.resources[0].url).placeholder(R.drawable._50).into(image)
 
-        builder.setTitle("It's ${post.title}")
-        builder.setPositiveButton("Yes") { dialog, _ ->
+        builder.setTitle("就決定是${post.title}了嗎?")
+        builder.setPositiveButton("對沒錯") { dialog, _ ->
             val bitmapDrawable = image.drawable as BitmapDrawable
             val bitmap = bitmapDrawable.bitmap
             saveImage(bitmap, img.id)
             Timber.d("filePath -> $bitmap")
         }
-        builder.setNegativeButton("No", DialogInterface.OnClickListener { dialog, which ->
+        builder.setNegativeButton("再想想", DialogInterface.OnClickListener { dialog, which ->
 
         })
         val alertDialog: AlertDialog = builder.create()
@@ -602,8 +590,6 @@ class ImgDetailFragment : Fragment() {
 
             // Add the image to the system gallery
             galleryAddPic(savedImagePath)
-
-//        Toast.makeText(context, "IMAGE SAVED", Toast.LENGTH_LONG).show()
         }
         return savedImagePath
     }
@@ -617,5 +603,67 @@ class ImgDetailFragment : Fragment() {
         Timber.d("fileUri -> $newUri")
         findNavController().navigate(MobileNavigationDirections.navigateToEditFragment(newUri))
     }
+
+    @SuppressLint("ResourceAsColor")
+    private fun reportDialog() {
+        val data = arrayOf("色情","暴力","賭博","非法交易","種族歧視")
+        val selected = booleanArrayOf(false,false,false,false,false)
+
+        val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
+        builder.setTitle("Dialog")
+        builder.setMultiChoiceItems(data, selected) { dialog, i , b ->
+            val currentItem = data[i]
+        }
+        builder.setPositiveButton("確定") { dialogInterface, j ->
+            for (i in data.indices) if (selected[i]) {
+                selected[i] = false
+            }
+            val customSnack= Snackbar.make(requireView(),"",Snackbar.LENGTH_INDEFINITE)
+            val layout = customSnack.view as Snackbar.SnackbarLayout
+            val bind = SnackBarCustomBinding.inflate(layoutInflater)
+            bind.notToBlockBtn.setOnClickListener {
+                customSnack.dismiss()
+            }
+            bind.toBlockBtn.setOnClickListener {
+                UserManager.user.blockList += post.ownerId
+            Firebase.firestore.collection("Users")
+                .document(UserManager.user.userId!!)
+                .update("blockList", UserManager.user.blockList)
+                .addOnCompleteListener {
+                    Timber.d("add to block ${post.ownerId}")
+                    customSnack.dismiss()
+                    findNavController().navigateUp()
+                }
+            }
+            layout.addView(bind.root)
+            customSnack.setBackgroundTint(ContextCompat.getColor(requireContext(), android.R.color.white))
+            customSnack.view.layoutParams = (customSnack.view.layoutParams as FrameLayout.LayoutParams)
+                .apply {
+                gravity = Gravity.TOP
+            }
+            layout.setPadding(0,0,0,0)
+            customSnack.show()
+        }
+        builder.setNegativeButton("取消") { dialog, i ->
+
+        }
+        val dialog = builder.create()
+        dialog.show()
+
+        val saveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
+        with(saveButton) {
+            setBackgroundColor(R.color.black)
+            setPadding(0, 0, 20, 0)
+            setTextColor(R.color.light_blue)
+        }
+
+        val cancelButton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+        with(cancelButton) {
+            setBackgroundColor(R.color.black)
+            setPadding(0, 0, 20, 0)
+            setTextColor(R.color.light_blue)
+        }
+    }
+
 }
 

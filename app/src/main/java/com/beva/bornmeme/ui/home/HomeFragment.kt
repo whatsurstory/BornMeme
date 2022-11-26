@@ -55,7 +55,6 @@ class HomeFragment : Fragment() {
 
         viewModel.display.observe(viewLifecycleOwner, Observer {
             it?.let {
-
                 adapter.submitList(it.filterBlock())
                 adapter.notifyDataSetChanged()
             }

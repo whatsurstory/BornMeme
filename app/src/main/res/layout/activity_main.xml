@@ -115,7 +115,8 @@
             android:backgroundTint="@color/light_blue"
             android:src="@drawable/rotate"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"/>
 
         <!--        android:onClick="@{() -> viewModel.navigate2Camera()}"-->
     </androidx.constraintlayout.widget.ConstraintLayout>

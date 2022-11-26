@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/report_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginVertical="8dp"
+        android:paddingHorizontal="24dp"
+        android:paddingVertical="8dp"
+        android:text="是否將此用戶封鎖?"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/toBlock_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="確定"
+        app:backgroundTint="@null"
+        android:background="@color/light_orange_pink"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/report_text"
+        app:layout_constraintTop_toBottomOf="@id/report_text" />
+
+    <Button
+        android:id="@+id/not_to_block_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="取消"
+        android:layout_marginBottom="8dp"
+        app:backgroundTint="@null"
+        android:background="@color/light_orange_pink"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/report_text"
+        app:layout_constraintTop_toBottomOf="@+id/report_text" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

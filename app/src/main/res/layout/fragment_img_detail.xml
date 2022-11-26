@@ -25,7 +25,7 @@
                 android:id="@+id/img_detail_user_img"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="12dp"
                 android:layout_marginTop="8dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/dino"
@@ -39,8 +39,8 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="8dp"
-                android:fontFamily="@font/arista_pro_bold_trial"
                 android:gravity="center_vertical"
+                android:fontFamily="@font/yozai_bold"
                 android:maxLines="1"
                 android:text="Beva"
                 android:textColor="@color/blue_gray"
@@ -60,6 +60,7 @@
                 android:textColor="@color/blue_gray"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                android:paddingHorizontal="4dp"
                 app:layout_constraintBottom_toBottomOf="@+id/img_detail_user_name"
                 app:layout_constraintEnd_toStartOf="@+id/report_btn"
                 app:layout_constraintStart_toEndOf="@+id/detail_guideline"
@@ -94,10 +95,10 @@
 
             <ImageButton
                 android:id="@+id/before_thumbup_btn"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="8dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/img_detail_image"
                 app:tint="@color/dark_blue" />
@@ -116,11 +117,11 @@
 
             <ImageButton
                 android:id="@+id/download_btn"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginHorizontal="8dp"
-                android:scaleType="centerInside"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="10dp"
                 android:background="@drawable/download"
+                android:scaleType="centerInside"
                 app:layout_constraintBottom_toBottomOf="@+id/before_thumbup_btn"
                 app:layout_constraintStart_toEndOf="@+id/before_thumbup_btn"
                 app:layout_constraintTop_toTopOf="@+id/before_thumbup_btn"
@@ -128,20 +129,20 @@
 
             <ImageButton
                 android:id="@+id/comment_btn"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginVertical="8dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="10dp"
                 android:background="@drawable/comment"
-                app:layout_constraintBottom_toTopOf="@+id/comments_recycler"
-                app:layout_constraintStart_toStartOf="@+id/img_detail_user_img"
-                app:layout_constraintTop_toBottomOf="@+id/img_detail_line"
+                app:layout_constraintBottom_toBottomOf="@+id/download_btn"
+                app:layout_constraintStart_toEndOf="@+id/download_btn"
+                app:layout_constraintTop_toTopOf="@+id/download_btn"
                 app:tint="@color/dark_blue" />
 
             <ImageButton
                 android:id="@+id/collection_btn"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginHorizontal="8dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginEnd="10dp"
                 android:background="@drawable/collection"
                 app:layout_constraintBottom_toBottomOf="@id/share_btn"
                 app:layout_constraintEnd_toStartOf="@id/share_btn"
@@ -150,9 +151,9 @@
 
             <ImageButton
                 android:id="@+id/share_btn"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginTop="8dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/share"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -175,16 +176,17 @@
                 android:id="@+id/img_detail_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="8dp"
                 android:maxLines="1"
-                android:paddingHorizontal="8dp"
+                android:paddingHorizontal="12dp"
                 android:paddingVertical="4dp"
                 android:text="Title"
+                android:fontFamily="@font/yozai_bold"
                 android:textColor="@color/blue_gray"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@+id/share_btn"
-                app:layout_constraintStart_toStartOf="@+id/img_detail_user_img"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/share_btn" />
 
             <TextView
@@ -192,15 +194,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:maxLines="2"
-                android:paddingHorizontal="8dp"
+                android:paddingHorizontal="12dp"
                 android:paddingVertical="4dp"
                 android:textColor="@color/blue_gray"
+                android:fontFamily="@font/yozai_bold"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toTopOf="@id/img_detail_line"
                 app:layout_constraintEnd_toEndOf="@+id/img_detail_title"
                 app:layout_constraintStart_toStartOf="@id/img_detail_title"
                 app:layout_constraintTop_toBottomOf="@+id/img_detail_title"
-                tools:text="Picture Description Text Picture Description TextPicture Description TextPicture Description TextPicture Description Text" />
+                tools:text="12345,.!?*%$#Picture Description Text Picture Description TextPicture Description TextPicture Description TextPicture Description Text" />
 
             <TextView
                 android:id="@+id/comment_num_text"
@@ -229,6 +232,7 @@
                 android:id="@+id/comments_recycler"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -240,14 +244,16 @@
                 android:id="@+id/no_see_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/arista_pro_bold_trial"
+                android:fontFamily="@font/yozai_bold"
                 android:gravity="center"
-                android:textSize="28sp"
+                android:layout_marginTop="12dp"
+                android:text="雖然現在這裡有點安靜 ..."
+                android:textSize="18sp"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/img_detail_description"
-                app:layout_constraintStart_toStartOf="@+id/comment_btn"
-                app:layout_constraintTop_toBottomOf="@+id/comment_btn" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/img_detail_line" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/detail_guideline"

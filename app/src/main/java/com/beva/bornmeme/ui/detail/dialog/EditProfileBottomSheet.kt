@@ -1,6 +1,11 @@
 package com.beva.bornmeme.ui.detail.dialog
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.SyncStateContract.Helpers.update
 import android.text.Editable
@@ -9,8 +14,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
+import coil.load
+import coil.transform.CircleCropTransformation
+import com.beva.bornmeme.MainActivity
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.BottomsheetEditProfileBinding
 import com.beva.bornmeme.model.User
@@ -22,6 +32,13 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionDeniedResponse
+import com.karumi.dexter.listener.PermissionGrantedResponse
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.single.PermissionListener
 import org.checkerframework.checker.units.qual.s
 import timber.log.Timber
 import java.sql.Date
@@ -29,6 +46,7 @@ import java.sql.Date
 
 class EditProfileBottomSheet : BottomSheetDialogFragment()
 {
+
     private lateinit var binding: BottomsheetEditProfileBinding
     private lateinit var viewModel: EditProfileViewModel
     lateinit var userId: String
@@ -52,7 +70,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment()
             Timber.d("get userId from profile $userId")
         }
         viewModel = EditProfileViewModel(userId)
-
+        Manifest.permission()
         viewModel.user.observe(viewLifecycleOwner) {
             Timber.d("Observe user $it")
             it?.let {
@@ -155,9 +173,46 @@ class EditProfileBottomSheet : BottomSheetDialogFragment()
 //        Timber.d("binding.registerTime.text ${binding.registerTime.text}")
 
     //TODO: 設定大頭貼及背景顏色、追蹤誰及誰追蹤查看、封鎖名單
+//        binding.fab.setOnClickListener { toAlbum() }
+        binding.changePhoto.setOnClickListener {
+            toAlbum()
+        }
 
+    }
 
+    private fun toAlbum() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
+        startActivityForResult(intent, 1)
+    }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1) {
+            binding.profileImg.setImageURI(data?.data)
+            Timber.d("setImageURI ${data?.data}")
+            binding.saveButton.setOnClickListener {
+
+                val ref = FirebaseStorage.getInstance().reference
+                ref.child("profile_img/" + System.currentTimeMillis() + ".jpg")
+                    .putFile(data?.data!!)
+                    .addOnSuccessListener {
+                        it.metadata?.reference?.downloadUrl?.addOnSuccessListener {
+
+                            UserManager.user.profilePhoto  = it.toString()
+
+                            Firebase.firestore.collection("Users")
+                                .document(user.userId!!)
+                                .update("profilePhoto", it)
+                                .addOnCompleteListener {
+
+                                    (activity as MainActivity).updateUser(user)
+
+                                }
+                        }
+                    }
+            }
+        }
     }
 
 }

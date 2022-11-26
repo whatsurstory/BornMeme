@@ -37,4 +37,14 @@
     <color name="tian_ching">#263859</color>
     <color name="blue_gray">#6b778d</color>
     <color name="light_orange_pink">#ff6768</color>
+
+
+<!--  final  -->
+    <color name="tr_black">#181A19</color>
+    <color name="dark_gray">#383639</color>
+    <color name="tr_pink">#EADDDB</color>
+    <color name="gray_white">#F4F4F4</color>
+
+
+
 </resources>
