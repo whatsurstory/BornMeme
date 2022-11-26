@@ -7,15 +7,18 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="10dp"
+        android:background="@color/tr_black"
         tools:context=".MainActivity">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/change_mode_btn"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_marginEnd="16dp"
-            android:src="@drawable/ic_baseline_collections_bookmark_24"
+            android:visibility="gone"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/tr_pink"
+            android:background="@drawable/ic_baseline_collections_bookmark_24"
             app:layout_constraintBottom_toTopOf="@+id/include"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -26,27 +29,45 @@
             android:layout_height="48dp"
             android:layout_marginEnd="12dp"
             android:scaleType="fitCenter"
+            android:layout_marginTop="10dp"
             android:src="@drawable/ic_baseline_tag_faces_24"
             app:layout_constraintBottom_toTopOf="@+id/include"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/circle" />
 
+        <TextView
+            android:id="@+id/module_title_text"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/module_text"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/arista_pro_light_trial"
+            android:textSize="40sp"
+            android:textColor="@color/tr_pink"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="12dp"
+            android:visibility="gone"/>
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:elevation="4dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/tr_black"
+            app:theme="@style/ToolbarTheme"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/greeting"
-                android:textSize="40dp"
-                android:textColor="@color/dark_blue"
-                android:fontFamily="@font/arista_pro_bold_trial"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_width="wrap_content"/>
+                android:fontFamily="@font/arista_pro_bold_trial"
+                android:textColor="@color/tr_pink"
+                android:textSize="40sp" />
 
         </androidx.appcompat.widget.Toolbar>
 
@@ -69,8 +90,8 @@
             android:layout_margin="8dp"
             app:elevation="6dp"
             app:fabCustomSize="52dp"
-            app:tint="@color/dark_blue"
-            android:backgroundTint="@color/light_blue"
+            app:tint="@color/tr_black"
+            android:backgroundTint="@color/tr_pink"
             android:src="@drawable/module_btn"
             android:visibility="gone" />
 
@@ -83,8 +104,8 @@
             android:layout_margin="8dp"
             app:elevation="6dp"
             app:fabCustomSize="52dp"
-            app:tint="@color/dark_blue"
-            android:backgroundTint="@color/light_blue"
+            app:tint="@color/tr_black"
+            android:backgroundTint="@color/tr_pink"
             android:src="@drawable/camera_btn"
             android:visibility="gone" />
 
@@ -97,8 +118,8 @@
             android:layout_margin="8dp"
             app:elevation="6dp"
             app:fabCustomSize="52dp"
-            app:tint="@color/dark_blue"
-            android:backgroundTint="@color/light_blue"
+            app:tint="@color/tr_black"
+            android:backgroundTint="@color/tr_pink"
             android:src="@drawable/gallery_btn"
             android:visibility="gone" />
 
@@ -110,9 +131,9 @@
             android:layout_marginBottom="16dp"
             app:elevation="6dp"
             app:fabCustomSize="58dp"
-            app:tint="@color/dark_blue"
+            app:tint="@color/tr_black"
             app:borderWidth="0dp"
-            android:backgroundTint="@color/light_blue"
+            android:backgroundTint="@color/tr_pink"
             android:src="@drawable/rotate"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

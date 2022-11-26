@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/tr_black">
 
     <ScrollView
         android:id="@+id/img_detail_user_scroll"
@@ -42,9 +43,8 @@
                 android:gravity="center_vertical"
                 android:fontFamily="@font/yozai_bold"
                 android:maxLines="1"
-                android:text="Beva"
-                android:textColor="@color/blue_gray"
-                android:textSize="20sp"
+                android:textColor="@color/tr_pink"
+                android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@id/img_detail_user_img"
                 app:layout_constraintEnd_toStartOf="@id/detail_guideline"
                 app:layout_constraintStart_toEndOf="@id/img_detail_user_img"
@@ -56,8 +56,8 @@
                 android:layout_height="0dp"
                 android:fontFamily="@font/arista_pro_bold_trial"
                 android:gravity="center"
-                android:text="follow"
-                android:textColor="@color/blue_gray"
+                android:text="@string/img_detail_follow_text"
+                android:textColor="@color/tr_pink"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:paddingHorizontal="4dp"
@@ -91,7 +91,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/follow_btn"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/follow_btn"
-                app:tint="@color/dark_blue" />
+                app:tint="@color/tr_pink" />
 
             <ImageButton
                 android:id="@+id/before_thumbup_btn"
@@ -101,7 +101,7 @@
                 android:layout_marginTop="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/img_detail_image"
-                app:tint="@color/dark_blue" />
+                app:backgroundTint="@color/tr_pink" />
 
             <!--            <ImageButton-->
             <!--                android:id="@+id/after_thumpup_btn"-->
@@ -119,35 +119,35 @@
                 android:id="@+id/download_btn"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:layout_marginStart="10dp"
-                android:background="@drawable/download"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/icons8_desktop_download_48"
                 android:scaleType="centerInside"
                 app:layout_constraintBottom_toBottomOf="@+id/before_thumbup_btn"
                 app:layout_constraintStart_toEndOf="@+id/before_thumbup_btn"
                 app:layout_constraintTop_toTopOf="@+id/before_thumbup_btn"
-                app:tint="@color/dark_blue" />
+                app:backgroundTint="@color/tr_pink" />
 
             <ImageButton
                 android:id="@+id/comment_btn"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:layout_marginStart="10dp"
-                android:background="@drawable/comment"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/icons8_comments_48"
                 app:layout_constraintBottom_toBottomOf="@+id/download_btn"
                 app:layout_constraintStart_toEndOf="@+id/download_btn"
                 app:layout_constraintTop_toTopOf="@+id/download_btn"
-                app:tint="@color/dark_blue" />
+                app:backgroundTint="@color/tr_pink" />
 
             <ImageButton
                 android:id="@+id/collection_btn"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:layout_marginEnd="10dp"
-                android:background="@drawable/collection"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/icons8_folder_48"
                 app:layout_constraintBottom_toBottomOf="@id/share_btn"
                 app:layout_constraintEnd_toStartOf="@id/share_btn"
                 app:layout_constraintTop_toTopOf="@id/share_btn"
-                app:tint="@color/dark_blue" />
+                app:backgroundTint="@color/tr_pink" />
 
             <ImageButton
                 android:id="@+id/share_btn"
@@ -155,10 +155,10 @@
                 android:layout_height="28dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="16dp"
-                android:background="@drawable/share"
+                android:background="@drawable/icons8_share_rounded_48"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/img_detail_image"
-                app:tint="@color/dark_blue" />
+                app:backgroundTint="@color/tr_pink" />
 
 
             <ImageView
@@ -180,9 +180,8 @@
                 android:maxLines="1"
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="4dp"
-                android:text="Title"
                 android:fontFamily="@font/yozai_bold"
-                android:textColor="@color/blue_gray"
+                android:textColor="@color/tr_pink"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -196,7 +195,7 @@
                 android:maxLines="2"
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="4dp"
-                android:textColor="@color/blue_gray"
+                android:textColor="@color/tr_pink"
                 android:fontFamily="@font/yozai_bold"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toTopOf="@id/img_detail_line"
@@ -222,7 +221,7 @@
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_marginTop="8dp"
-                android:background="@color/blue_gray"
+                android:background="@color/gray_white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/img_detail_description" />
@@ -246,8 +245,9 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/yozai_bold"
                 android:gravity="center"
-                android:layout_marginTop="12dp"
-                android:text="雖然現在這裡有點安靜 ..."
+                android:textColor="@color/tr_pink"
+                android:layout_marginVertical="12dp"
+                android:text="@string/comment_recycle_text"
                 android:textSize="18sp"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"

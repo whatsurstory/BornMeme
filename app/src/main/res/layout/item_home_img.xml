@@ -15,7 +15,6 @@
         app:cardCornerRadius="4dp"
         app:cardElevation="0px"
         app:cardUseCompatPadding="false"
-        android:background="@color/dark_blue"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -25,7 +24,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/dark_blue"
+            android:background="@color/tr_pink"
             >
 
             <ImageView
@@ -54,43 +53,48 @@
 
             <TextView
                 android:id="@+id/user_name"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="@font/yozai_bold"
                 android:gravity="center_vertical"
-                android:letterSpacing="0.15"
-                android:textColor="@color/light_blue"
+                android:maxLength="10"
+                android:maxLines="1"
+                android:textColor="@color/tr_black"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/user_img"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/user_img"
                 app:layout_constraintTop_toTopOf="@+id/user_img"
-                tools:text="Beva Lin"
-                android:maxLength="20"/>
+                tools:text="Beva Lin" />
 
             <ImageView
                 android:id="@+id/like_btn"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginVertical="6dp"
-                android:src="@drawable/before_thumbup"
+                android:src="@drawable/after_thumpup"
                 app:layout_constraintEnd_toEndOf="@+id/user_img"
                 app:layout_constraintStart_toStartOf="@+id/user_img"
                 app:layout_constraintTop_toBottomOf="@+id/user_img"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:tint="@color/light_blue"/>
+                app:tint="@color/tr_black"/>
 
             <TextView
                 android:id="@+id/like_num"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/yozai_medium"
                 android:gravity="center_vertical"
-                android:textColor="@color/light_blue"
-                android:letterSpacing="0.15"
-                app:layout_constraintTop_toTopOf="@+id/like_btn"
+                android:maxLength="20"
+                android:textColor="@color/tr_black"
                 app:layout_constraintBottom_toBottomOf="@+id/like_btn"
+                app:layout_constraintEnd_toEndOf="@+id/user_name"
                 app:layout_constraintStart_toStartOf="@+id/user_name"
-                tools:text="1000000000000000000000000"
-                android:maxLength="20" />
+                app:layout_constraintTop_toTopOf="@+id/like_btn"
+                tools:text="1000000000000000000000000" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

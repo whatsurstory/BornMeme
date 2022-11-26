@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/tr_black"
     tools:context=".ui.editFragment.EditFragment">
 
     <ScrollView
@@ -22,28 +23,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        app:boxStrokeWidth="0dp"
-        android:textColorHint="@color/light_blue"
-        app:boxBackgroundColor="@color/dark_blue"
-        app:boxCornerRadiusBottomEnd="0dp"
-        app:boxCornerRadiusBottomStart="0dp"
-        app:boxCornerRadiusTopEnd="4dp"
-        app:boxCornerRadiusTopStart="4dp"
+        app:boxBackgroundColor="@color/tr_pink"
         app:errorEnabled="true"
-        app:boxStrokeErrorColor="@color/dark_blue"
+        app:boxStrokeWidth="0dp"
+        android:textColorHint="@color/dark_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+<!--
+
+app:boxStrokeErrorColor="@color/dark_blue"
+        app:boxCornerRadiusBottomEnd="0dp"
+        app:boxCornerRadiusBottomStart="0dp"
+        app:boxCornerRadiusTopEnd="4dp"
+        app:boxCornerRadiusTopStart="4dp"     -->
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_text_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/arista_pro_light_trial"
+            android:fontFamily="@font/yozai_medium"
             android:textSize="18sp"
             android:singleLine="true"
-            android:hint="Please Enter the Title of Image"
-            android:textColor="@color/light_blue" />
+            android:textColorHint="@color/dark_gray"
+            android:hint="@string/enter_title_hint"
+            android:textColor="@color/tr_black" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -60,8 +65,8 @@
             android:id="@+id/origin_photo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/light_blue"
             android:src="@drawable/dino"
+            android:background="@color/tr_pink"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -73,15 +78,14 @@
             android:id="@+id/bottomText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@null"
-            android:backgroundTint="@color/transparent"
-            android:fontFamily="@font/arista_pro_bold_trial"
+            android:background="@color/whit_alpha"
+            android:fontFamily="@font/yozai_bold"
             android:gravity="center"
             android:hint="@string/text_click"
             android:minHeight="48dp"
             android:paddingVertical="8dp"
             android:singleLine="true"
-            android:textColor="@color/light_blue"
+            android:textColor="@color/gray_white"
             android:textSize="24sp"
             android:textStyle="bold"
             android:cursorVisible="true"
@@ -93,15 +97,13 @@
             android:id="@+id/upperText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:autofillHints="Click to add some text"
-            android:background="@null"
-            android:fontFamily="@font/arista_pro_bold_trial"
+            android:background="@color/whit_alpha"
+            android:fontFamily="@font/yozai_bold"
             android:gravity="center"
             android:hint="@string/text_click"
-            android:minHeight="48dp"
             android:paddingVertical="8dp"
             android:singleLine="true"
-            android:textColor="@color/light_blue"
+            android:textColor="@color/gray_white"
             android:textSize="24sp"
             android:textStyle="bold"
             android:cursorVisible="true"
@@ -114,28 +116,31 @@
         android:id="@+id/catalog_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:boxStrokeWidth="0dp"
-        android:textColorHint="@color/light_blue"
-        app:boxBackgroundColor="@color/dark_blue"
-        app:boxCornerRadiusBottomEnd="4dp"
-        app:boxCornerRadiusBottomStart="4dp"
-        app:boxCornerRadiusTopEnd="0dp"
-        app:boxCornerRadiusTopStart="0dp"
+        android:textColorHint="@color/dark_gray"
+        app:boxBackgroundColor="@color/tr_pink"
         app:errorEnabled="true"
-        app:boxStrokeErrorColor="@color/dark_blue"
+        app:boxStrokeWidth="0dp"
         app:layout_constraintTop_toBottomOf="@+id/photo_area"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" >
+
+<!--
+ app:boxStrokeErrorColor="@color/dark_blue"
+app:boxCornerRadiusBottomEnd="4dp"
+        app:boxCornerRadiusBottomStart="4dp"
+        app:boxCornerRadiusTopEnd="0dp"
+        app:boxCornerRadiusTopStart="0dp"     -->
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_text_catalog"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:singleLine="true"
-            android:fontFamily="@font/arista_pro_light_trial"
+            android:fontFamily="@font/yozai_medium"
             android:textSize="18sp"
-            android:hint="Enter the tag of the image"
-            android:textColor="@color/light_blue" />
+            android:textColorHint="@color/dark_gray"
+            android:hint="@string/enter_tag_hint"
+            android:textColor="@color/tr_black" />
 
     </com.google.android.material.textfield.TextInputLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -154,9 +159,8 @@
             android:fontFamily="@font/arista_pro_bold_trial"
             android:layout_marginTop="8dp"
             android:layout_marginStart="16dp"
-            android:textColor="@color/light_blue"
-            android:textSize="24sp"
-            android:letterSpacing="0.1"
+            android:textColor="@color/tr_pink"
+            android:textSize="28sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
@@ -166,10 +170,9 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/dark_blue"
             android:text="@string/publish_btn"
-            android:textColor="@color/light_blue"
+            android:textColor="@color/tr_pink"
             android:fontFamily="@font/arista_pro_bold_trial"
-            android:textSize="24sp"
-            android:letterSpacing="0.1"
+            android:textSize="28sp"
             android:layout_marginEnd="16dp"
             android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -186,6 +189,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:visibility="gone"
-        app:lottie_speed="1.8"/>
+        app:lottie_speed="1.6"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/gray_white"
     tools:context=".SplashFragment">
 
     <com.airbnb.lottie.LottieAnimationView
@@ -14,7 +15,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
         app:lottie_autoPlay="true"
         app:lottie_speed="1.5"
         app:lottie_rawRes="@raw/salad_cat" />
@@ -26,8 +26,8 @@
         android:layout_marginBottom="24dp"
         android:fontFamily="@font/arista_pro_bold_trial"
         android:gravity="center"
-        android:text="BornMeme."
-        android:textColor="@color/dark_blue"
+        android:text="@string/bornmeme"
+        android:textColor="@color/tr_black"
         android:textSize="48sp"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/gSignInBtn"
@@ -40,10 +40,10 @@
         android:layout_height="60dp"
         android:layout_marginHorizontal="24dp"
         android:text="Google Sign In"
-        android:textColor="@color/dark_blue"
+        android:textColor="@color/tr_black"
         android:textSize="24sp"
         android:fontFamily="@font/arista_pro_light_trial"
-        app:backgroundTint="@color/white"
+        app:backgroundTint="@color/gray_white"
         app:icon="@drawable/icons8_google_48___"
         app:iconGravity="textStart"
         android:textStyle="bold"

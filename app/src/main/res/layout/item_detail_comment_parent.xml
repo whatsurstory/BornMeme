@@ -8,9 +8,9 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/comment_user_img"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_marginStart="4dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="6dp"
         android:layout_marginTop="14dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -29,16 +29,17 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_height="match_parent"
-            android:layout_width="match_parent">
+            android:layout_width="match_parent"
+            android:layout_marginVertical="6dp">
             <TextView
                 android:id="@+id/comment_user_name"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
+                android:layout_height="0dp"
+                android:paddingVertical="4dp"
                 android:text="Mindy"
                 android:maxLength="10"
                 android:maxLines="1"
-                android:layout_marginVertical="6dp"
+                android:textColor="@color/tr_black"
                 android:layout_marginHorizontal="10dp"
                 android:fontFamily="@font/yozai_bold"
                 android:textSize="18sp"
@@ -53,11 +54,10 @@
                 android:id="@+id/comment_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp"
                 android:gravity="end|bottom"
                 android:fontFamily="@font/yozai_bold"
                 android:text="30 min ago"
-                android:textColor="@color/blue_gray"
+                android:textColor="@color/dark_gray"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/comment_dislike_num" />
@@ -68,7 +68,8 @@
                 android:layout_height="wrap_content"
                 android:paddingVertical="6dp"
                 android:textSize="16sp"
-                android:fontFamily="@font/yozai_bold"
+                android:textColor="@color/dark_gray"
+                android:fontFamily="@font/yozai_medium"
                 android:text="TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description"
                 app:layout_constraintEnd_toEndOf="@+id/comment_dislike_num"
                 app:layout_constraintStart_toStartOf="@+id/comment_user_name"
@@ -76,8 +77,8 @@
 
             <ImageButton
                 android:id="@+id/comment_like_btn"
-                android:layout_width="24dp"
-                android:layout_height="0dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:background="@color/woo"
                 android:layout_marginEnd="10dp"
                 android:scaleType="centerInside"
@@ -86,15 +87,16 @@
                 app:layout_constraintBottom_toBottomOf="@+id/comment_user_name"
                 app:layout_constraintEnd_toStartOf="@+id/comment_like_num"
                 app:layout_constraintTop_toTopOf="@+id/comment_user_name"
-                app:tint="@color/dark_blue" />
+                app:tint="@color/tr_black" />
 
             <TextView
                 android:id="@+id/comment_like_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="200"
-                android:fontFamily="@font/yozai_bold"
-                android:textSize="18sp"
+                android:fontFamily="@font/yozai_medium"
+                android:textSize="16sp"
+                android:textColor="@color/dark_gray"
                 android:layout_marginEnd="10dp"
                 app:layout_constraintBottom_toBottomOf="@+id/comment_like_btn"
                 app:layout_constraintEnd_toStartOf="@+id/comment_dislike_btn"
@@ -102,8 +104,8 @@
 
             <ImageButton
                 android:id="@+id/comment_dislike_btn"
-                android:layout_width="24dp"
-                android:layout_height="0dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:padding="4dp"
                 android:background="@color/woo"
                 android:scaleType="centerInside"
@@ -112,15 +114,16 @@
                 app:layout_constraintBottom_toBottomOf="@+id/comment_like_num"
                 app:layout_constraintEnd_toStartOf="@+id/comment_dislike_num"
                 app:layout_constraintTop_toTopOf="@+id/comment_like_num"
-                app:tint="@color/dark_blue" />
+                app:tint="@color/tr_black" />
 
             <TextView
                 android:id="@+id/comment_dislike_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="100"
-                android:fontFamily="@font/yozai_bold"
-                android:textSize="18sp"
+                android:fontFamily="@font/yozai_medium"
+                android:textSize="16sp"
+                android:textColor="@color/dark_gray"
                 android:layout_marginEnd="10dp"
                 app:layout_constraintBottom_toBottomOf="@+id/comment_dislike_btn"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -132,9 +135,9 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/yozai_bold"
                 android:gravity="center_vertical"
-                android:text="回覆"
-                android:textColor="@color/dark_blue"
-                android:textSize="18sp"
+                android:text="@string/reply_btn"
+                android:textColor="@color/tr_black"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="@+id/comment_zone_text"
                 app:layout_constraintTop_toBottomOf="@+id/comment_zone_text" />
 
@@ -144,9 +147,10 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/yozai_medium"
                 android:gravity="center_vertical"
-                android:text="查看更多回覆"
-                android:textSize="18sp"
+                android:text="@string/see_more_text"
+                android:textSize="16sp"
                 android:visibility="gone"
+                android:textColor="@color/dark_gray"
                 app:layout_constraintBottom_toTopOf="@+id/comment_time"
                 app:layout_constraintEnd_toEndOf="@+id/comment_time"
                 app:layout_constraintTop_toBottomOf="@+id/comment_zone_text" />
@@ -157,8 +161,9 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/yozai_medium"
                 android:gravity="center_vertical"
-                android:text="收起回覆"
-                android:textSize="18sp"
+                android:text="@string/back_btn"
+                android:textColor="@color/dark_gray"
+                android:textSize="16sp"
                 android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@+id/comment_time"
                 app:layout_constraintEnd_toEndOf="@+id/comment_time"

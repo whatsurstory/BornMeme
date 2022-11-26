@@ -8,16 +8,16 @@
     <ImageView
         android:id="@+id/drag_img"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/_50"
+        android:layout_height="wrap_content"
+        android:background="@drawable/dino"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
     <EditText
-        android:clickable="false"
         android:id="@+id/drag_edit_text"
+        android:background="@color/dark_gray"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:text="DRAG MEEE"
@@ -28,7 +28,5 @@
         app:layout_constraintEnd_toEndOf="@+id/drag_img"
         app:layout_constraintTop_toTopOf="@+id/drag_img"
         app:layout_constraintBottom_toBottomOf="@+id/drag_img"/>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

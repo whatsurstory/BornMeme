@@ -1,5 +1,6 @@
 package com.beva.bornmeme
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
@@ -8,6 +9,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
 import android.system.Os.remove
+import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
@@ -75,6 +77,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.plant(Timber.DebugTree())
@@ -103,6 +106,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.title = null
 
+
         appBarConfiguration = AppBarConfiguration(
             setOf(R.id.splash_screen, R.id.nav_home)) //  IDs of fragments you want without the ActionBar home/up button
 
@@ -112,23 +116,27 @@ class MainActivity : AppCompatActivity() {
         //the tool bar showing or not
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id == R.id.splash_screen) {
+                supportActionBar?.hide()
                 binding.greeting.visibility = View.GONE
                 binding.fab.visibility = View.GONE
                 binding.profileBtn.visibility = View.GONE
                 binding.changeModeBtn.visibility = View.GONE
             } else if (destination.id == R.id.fragmentEditFixmode || destination.id == R.id.dialogPreview) {
+                supportActionBar?.show()
                 binding.greeting.visibility = View.GONE
                 binding.fab.visibility = View.GONE
                 binding.profileBtn.visibility = View.GONE
-//                binding.changeModeBtn.visibility = View.VISIBLE
-//                binding.changeModeBtn.setOnClickListener {
-//                    Timber.d("你有按到change")
-//                    navController.navigate(MobileNavigationDirections.navigateToDragEditFragment())
-//                }
+                binding.moduleTitleText.visibility = View.GONE
+                binding.changeModeBtn.visibility = View.VISIBLE
+                binding.changeModeBtn.setOnClickListener {
+                    Timber.d("你有按到change")
+                    navController.navigate(MobileNavigationDirections.navigateToDragEditFragment())
+                }
                 binding.fab.setOnClickListener {
                     toAlbum()
                 }
             } else {
+                supportActionBar?.show()
                 binding.greeting.visibility = View.GONE
                 binding.fab.visibility = View.VISIBLE
                 binding.profileBtn.visibility = View.GONE
@@ -237,12 +245,17 @@ class MainActivity : AppCompatActivity() {
                 }
                 if (destination.id == R.id.nav_home) {
                     viewModel.setUser(UserManager.user)
+                    binding.moduleTitleText.visibility = View.GONE
                     binding.profileBtn.visibility = View.VISIBLE
                     binding.changeModeBtn.visibility = View.GONE
                     binding.greeting.visibility = View.VISIBLE
                     binding.greeting.typeWrite(this,
                         "BornMeme.",
                         100L)
+                } else if (destination.id == R.id.fragment_gallery) {
+                    binding.moduleTitleText.visibility = View.VISIBLE
+                } else {
+                    binding.moduleTitleText.visibility = View.GONE
                 }
             }
         }

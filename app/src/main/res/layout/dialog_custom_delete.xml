@@ -20,34 +20,45 @@
             android:layout_gravity="center"
             android:layout_marginHorizontal="8dp"
             android:layout_marginTop="50dp"
-            android:paddingTop="10dp"
+            android:textSize="18sp"
             android:text=""
-            android:textStyle="bold|italic" />
+            android:textColor="@color/tr_black"
+            android:fontFamily="@font/yozai_medium" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="10dp"
+            android:layout_marginVertical="20dp"
             android:orientation="horizontal">
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/okay_delete_btn"
-                android:layout_width="100dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:layout_marginEnd="20dp"
                 android:gravity="center"
-                android:text="對沒錯" />
+                android:textSize="18sp"
+                android:backgroundTint="@color/tr_black"
+                android:background="@drawable/button_style"
+                android:textColor="@color/gray_white"
+                android:fontFamily="@font/yozai_medium"
+                android:text="@string/yes_btn" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/cancel_button"
-                android:layout_width="100dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_marginStart="20dp"
+                android:backgroundTint="@color/tr_black"
+                android:textColor="@color/gray_white"
+                android:background="@drawable/button_style"
+                android:fontFamily="@font/yozai_medium"
                 android:gravity="center"
-                android:text="再想想" />
+                android:textSize="18sp"
+                android:text="@string/no_btn" />
 
         </LinearLayout>
     </LinearLayout>
@@ -59,5 +70,5 @@
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/meme_without_bg"
-        app:lottie_speed="0.7" />
+        app:lottie_speed="0.8" />
 </RelativeLayout>

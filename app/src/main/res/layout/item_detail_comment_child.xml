@@ -8,9 +8,9 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/child_user_img"
-        android:layout_width="52dp"
-        android:layout_height="52dp"
-        android:layout_marginStart="4dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="6dp"
         android:layout_marginTop="14dp"
         app:layout_constraintStart_toEndOf="@id/comment_guideline"
         app:layout_constraintTop_toTopOf="parent"
@@ -41,7 +41,7 @@
                 android:gravity="center_vertical"
                 android:text="Mindy"
                 android:fontFamily="@font/yozai_bold"
-                android:textColor="@color/dark_blue"
+                android:textColor="@color/tr_black"
                 android:textSize="18sp"
                 android:maxLength="10"
                 android:maxLines="1"
@@ -54,8 +54,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="8dp"
-                android:text="30 min ago"
-                android:textColor="@color/blue_gray"
+                tools:text="30 min ago"
+                android:textColor="@color/dark_gray"
                 android:fontFamily="@font/yozai_medium"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -68,8 +68,8 @@
                 android:layout_height="wrap_content"
                 android:paddingVertical="6dp"
                 android:textSize="16sp"
-                android:fontFamily="@font/yozai_bold"
-                android:textColor="@color/dark_blue"
+                android:fontFamily="@font/yozai_medium"
+                android:textColor="@color/dark_gray"
                 android:text="TextPicture Description TextPicture Description TextPictureTextPicture Description TextPicture"
                 app:layout_constraintBottom_toTopOf="@+id/child_time"
                 app:layout_constraintEnd_toEndOf="@+id/child_dislike_num"
@@ -78,8 +78,8 @@
 
             <ImageButton
                 android:id="@+id/child_like_btn"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:padding="4dp"
                 android:background="@color/woo"
                 android:scaleType="centerInside"
@@ -88,25 +88,25 @@
                 app:layout_constraintBottom_toBottomOf="@+id/child_user_name"
                 app:layout_constraintEnd_toStartOf="@+id/child_like_num"
                 app:layout_constraintTop_toTopOf="@+id/child_user_name"
-                app:tint="@color/dark_blue" />
+                app:tint="@color/tr_black" />
 
             <TextView
                 android:id="@+id/child_like_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="200"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:layout_marginEnd="10dp"
-                android:textColor="@color/dark_blue"
-                android:fontFamily="@font/yozai_bold"
+                android:textColor="@color/dark_gray"
+                android:fontFamily="@font/yozai_medium"
                 app:layout_constraintBottom_toBottomOf="@+id/child_like_btn"
                 app:layout_constraintEnd_toStartOf="@+id/child_dislike_btn"
                 app:layout_constraintTop_toTopOf="@+id/child_like_btn" />
 
             <ImageButton
                 android:id="@+id/child_dislike_btn"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:padding="4dp"
                 android:layout_marginEnd="10dp"
                 android:background="@color/woo"
@@ -115,17 +115,17 @@
                 app:layout_constraintBottom_toBottomOf="@id/child_like_num"
                 app:layout_constraintEnd_toStartOf="@+id/child_dislike_num"
                 app:layout_constraintTop_toTopOf="@+id/child_like_num"
-                app:tint="@color/dark_blue" />
+                app:tint="@color/tr_black" />
 
             <TextView
                 android:id="@+id/child_dislike_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="100"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:layout_marginEnd="10dp"
-                android:textColor="@color/dark_blue"
-                android:fontFamily="@font/yozai_bold"
+                android:textColor="@color/dark_gray"
+                android:fontFamily="@font/yozai_medium"
                 app:layout_constraintBottom_toBottomOf="@+id/child_dislike_btn"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/child_dislike_btn" />

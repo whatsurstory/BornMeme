@@ -75,8 +75,11 @@ class UserDetailFragment : Fragment() {
         //自我介紹
         binding.introduceText.text = user.introduce
         //被喜歡
-        binding.likesText.text = ""
-
+        if (user.likeId.isNullOrEmpty()){
+            binding.likesText.text = "0"
+        }else {
+            binding.likesText.text = user.likeId.size.toString()
+        }
         //po文數
         if (user.postQuantity.isNullOrEmpty()) {
             binding.postsText.text = "0"

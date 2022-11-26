@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentGalleryBinding
@@ -52,7 +53,7 @@ class GalleryFragment: Fragment() {
             }
         )
 
-        binding.verticalRecycle.layoutManager = GridLayoutManager(this.context, 3)
+//        binding.verticalRecycle.layoutManager = LinearLayoutManager(this.context)
 
         binding.verticalRecycle.adapter = adapter
 
@@ -115,19 +116,11 @@ class GalleryFragment: Fragment() {
             // Add the image to the system gallery
             galleryAddPic(savedImagePath)
 
-//            Toast.makeText(context, "IMAGE SAVED", Toast.LENGTH_LONG).show()
         }
         return savedImagePath
     }
     private fun galleryAddPic(imagePath: String) {
-//        val mediaScanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
         val file = File(imagePath)
-//        val contentUri = Uri.fromFile(file)
-//        mediaScanIntent.data = contentUri
-//        MediaScannerConnection.scanFile(context, arrayOf(file.toString()),
-//            null, null)
-//        Timber.d("contentUri $contentUri \n file $file ")
-
         val newUri =
             FileProvider.getUriForFile(
                 requireContext(),

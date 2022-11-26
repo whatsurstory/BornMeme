@@ -8,10 +8,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
-        android:fontFamily="@font/arista_pro_light_trial"
-        android:hint="Enter Folder Name"
+        android:padding="8dp"
+        android:fontFamily="@font/yozai_medium"
+        android:hint="@string/enter_folder_name"
         android:minHeight="48dp"
-        android:textColorHint="@color/dark_blue" />
+        android:background="@null"
+        android:textColor="@color/tr_black"
+        android:textColorHint="@color/dark_gray" />
 
 
 </LinearLayout>

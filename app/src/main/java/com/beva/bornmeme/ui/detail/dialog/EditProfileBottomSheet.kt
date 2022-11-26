@@ -136,7 +136,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment()
                     }
                 } else {
                     binding.saveButton.setOnClickListener {
-                        binding.desc.error = "格子放不下，失主我勸你也放下"
+                        binding.desc.error = "格子放不下，勸施主也放下"
                     }
                 }
             }
@@ -191,6 +191,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment()
         if (requestCode == 1) {
             binding.profileImg.setImageURI(data?.data)
             Timber.d("setImageURI ${data?.data}")
+
             binding.saveButton.setOnClickListener {
 
                 val ref = FirebaseStorage.getInstance().reference
@@ -207,7 +208,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment()
                                 .addOnCompleteListener {
 
                                     (activity as MainActivity).updateUser(user)
-
+                                    dismiss()
                                 }
                         }
                     }
