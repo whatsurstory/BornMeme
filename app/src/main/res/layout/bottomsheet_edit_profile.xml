@@ -160,7 +160,7 @@
             app:layout_constraintBottom_toBottomOf="@id/block_list"
             app:layout_constraintEnd_toEndOf="@id/block_list"
             app:layout_constraintTop_toTopOf="@id/block_list"
-            app:tint="@color/tr_black" />
+            app:tint="@color/dark_gray" />
 
         <TextView
             android:id="@+id/follow_list"
@@ -188,7 +188,7 @@
             app:layout_constraintBottom_toBottomOf="@id/follow_list"
             app:layout_constraintEnd_toEndOf="@id/follow_list"
             app:layout_constraintTop_toTopOf="@id/follow_list"
-            app:tint="@color/tr_black" />
+            app:tint="@color/dark_gray" />
 
         <TextView
             android:id="@+id/followers_list"
@@ -212,7 +212,7 @@
             android:padding="18dp"
             android:scaleType="centerInside"
             android:src="@drawable/list_more"
-            app:tint="@color/tr_black"
+            app:tint="@color/dark_gray"
             app:layout_constraintBottom_toBottomOf="@id/followers_list"
             app:layout_constraintEnd_toEndOf="@id/followers_list"
             app:layout_constraintTop_toTopOf="@id/followers_list" />

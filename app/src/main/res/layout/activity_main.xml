@@ -38,23 +38,24 @@
 
         <TextView
             android:id="@+id/module_title_text"
-            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:text="@string/module_text"
-            android:layout_marginTop="10dp"
-            android:fontFamily="@font/arista_pro_light_trial"
-            android:textSize="40sp"
-            android:textColor="@color/tr_pink"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_height="0dp"
+            android:gravity="bottom"
+            android:layout_marginBottom="12dp"
             android:layout_marginEnd="12dp"
-            android:visibility="gone"/>
+            android:fontFamily="@font/arista_pro_light_trial"
+            android:text="@string/module_text"
+            android:textColor="@color/tr_pink"
+            android:textSize="20sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/include"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:elevation="4dp"
             android:layout_marginTop="10dp"
             android:background="@color/tr_black"
             app:theme="@style/ToolbarTheme"

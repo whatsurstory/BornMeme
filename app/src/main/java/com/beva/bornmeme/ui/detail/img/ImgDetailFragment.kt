@@ -11,6 +11,7 @@ import android.content.DialogInterface.OnMultiChoiceClickListener
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.Color.parseColor
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -23,6 +24,7 @@ import android.view.*
 import android.widget.*
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.databinding.adapters.ViewBindingAdapter.setPadding
@@ -74,18 +76,18 @@ class ImgDetailFragment : Fragment() {
                     .placeholder(R.drawable._50)
                     .error(R.drawable.dino)
             ).into(binding.imgDetailImage)
-        binding.imgDetailDescription.text = post.resources[1].url
+        binding.imgDetailDescription.text = post.resources[1].url?.trim()
 
         if (post.like?.isEmpty() == true) {
             Timber.d("Post Like ${post.like}")
-            binding.beforeThumbupBtn.setBackgroundResource(R.drawable.before_thumbup)
+            binding.beforeThumbupBtn.setBackgroundResource(R.drawable._heart)
         } else {
             for (item in post.like!!) {
                 if (item == UserManager.user.userId) {
                     Timber.d("item $item")
-                    binding.beforeThumbupBtn.setBackgroundResource(R.drawable.after_thumpup)
+                    binding.beforeThumbupBtn.setBackgroundResource(R.drawable.heart)
                 } else {
-                    binding.beforeThumbupBtn.setBackgroundResource(R.drawable.before_thumbup)
+                    binding.beforeThumbupBtn.setBackgroundResource(R.drawable._heart)
                 }
             }
         }
@@ -151,17 +153,17 @@ class ImgDetailFragment : Fragment() {
         //Observe the view of comments recycler
         viewModel.commentCells.observe(viewLifecycleOwner, Observer {
             it?.let {
-                if (it.isEmpty()) {
-                    binding.noSeeText.visibility = View.VISIBLE
+//                if (it.isEmpty()) {
+//                    binding.noSeeText.visibility = View.VISIBLE
 //                    binding.noSeeText.typeWrite(viewLifecycleOwner,
 //                        "it's a little bit quiet in here ...",
 //                        80L)
-                } else {
+//                } else {
                     binding.noSeeText.visibility = View.GONE
                     Timber.d(("Observe comment cell : $it"))
                     adapter.submitList(it)
                     adapter.notifyDataSetChanged()
-                }
+//                }
             }
 
         })
@@ -188,7 +190,7 @@ class ImgDetailFragment : Fragment() {
                 postRef.update("like", FieldValue.arrayUnion(UserManager.user.userId))
                 .addOnSuccessListener {
                     Timber.d("Success add like")
-                    binding.beforeThumbupBtn.setBackgroundResource(R.drawable.after_thumpup)
+                    binding.beforeThumbupBtn.setBackgroundResource(R.drawable.heart)
 //                    Snackbar.make(this.requireView(), "喜歡喜歡~~~", Snackbar.LENGTH_SHORT)
 //                        .setAction("Action", null).show()
                 }.addOnFailureListener {
@@ -313,6 +315,7 @@ class ImgDetailFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     private fun add2Block() {
         val builder = AlertDialog.Builder(requireContext())
         val inflater = requireActivity().layoutInflater
@@ -323,7 +326,7 @@ class ImgDetailFragment : Fragment() {
         alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         alertDialog.show()
         val message = view.findViewById<TextView>(R.id.delete_message)
-        message.text = "你確定要封鎖人家嗎，再也看不見的那種?"
+        message.text = "你確定要封鎖人家嗎...\n再也看不見的那種?"
 
         val okay = view.findViewById<Button>(R.id.okay_delete_btn)
         okay.setOnClickListener {
@@ -399,14 +402,14 @@ class ImgDetailFragment : Fragment() {
     @SuppressLint("ResourceAsColor")
     private fun showAlert(folderNames: List<String>) {
         val builder: AlertDialog.Builder =
-            AlertDialog.Builder(requireContext(), com.beva.bornmeme.R.style.AlertDialogTheme)
+            AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
 //Make you can't dismiss by default -> builder.setCancelable(false)
         // Get the layout inflater
         val inflater = requireActivity().layoutInflater
         val isCheckedIndex = ArrayList<Int>()
         val list = ArrayList<String>()
 
-        builder.setTitle("請幫忙收藏夾命名")
+        builder.setTitle("幫收藏夾取名字(*‘ v`*)")
         val view = inflater.inflate(R.layout.diaolog_collection, null)
         builder.setView(view)
         val input = view.findViewById<EditText>(R.id.folder_name)
@@ -468,19 +471,11 @@ class ImgDetailFragment : Fragment() {
         val alertDialog: AlertDialog = builder.create()
         alertDialog.show()
 
-        val saveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
-        with(saveButton) {
-            setBackgroundColor(R.color.black)
-            setPadding(0, 0, 20, 0)
-            setTextColor(R.color.light_blue)
-        }
+        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+            .setTextColor(parseColor("#181A19"))
+        alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+            .setTextColor(parseColor("#181A19"))
 
-        val cancelButton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
-        with(cancelButton) {
-            setBackgroundColor(R.color.black)
-            setPadding(0, 0, 20, 0)
-            setTextColor(R.color.light_blue)
-        }
     }
 
 
@@ -545,14 +540,14 @@ class ImgDetailFragment : Fragment() {
 
 
     private fun longClick2edit (img: Post) {
-        val builder = AlertDialog.Builder(requireContext())
+        val builder = AlertDialog.Builder(requireContext(),R.style.AlertDialogTheme)
         val inflater = requireActivity().layoutInflater
         val view = inflater.inflate(R.layout.dialog_image, null)
         builder.setView(view)
         val image = view.findViewById<ImageView>(R.id.gallery_img)
         Glide.with(image).load(post.resources[0].url).placeholder(R.drawable._50).into(image)
 
-        builder.setTitle("就決定是${post.title}了嗎?")
+        builder.setMessage("就決定是${post.title}了嗎?(・∀・)つ⑩")
         builder.setPositiveButton("對沒錯") { dialog, _ ->
             val bitmapDrawable = image.drawable as BitmapDrawable
             val bitmap = bitmapDrawable.bitmap
@@ -564,6 +559,8 @@ class ImgDetailFragment : Fragment() {
         })
         val alertDialog: AlertDialog = builder.create()
         alertDialog.show()
+        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(parseColor("#181A19"))
+        alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(parseColor("#181A19"))
     }
 
     private fun saveImage(image: Bitmap, id:String): String? {
@@ -607,17 +604,17 @@ class ImgDetailFragment : Fragment() {
     @SuppressLint("ResourceAsColor")
     private fun reportDialog() {
         val data = arrayOf("色情","暴力","賭博","非法交易","種族歧視")
-        val selected = booleanArrayOf(false,false,false,false,false)
+//        val selected = booleanArrayOf(false,false,false,false,false)
 
         val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
-        builder.setTitle("Dialog")
-        builder.setMultiChoiceItems(data, selected) { dialog, i , b ->
+        builder.setTitle("請選擇檢舉原因")
+        builder.setMultiChoiceItems(data, null) { dialog, i , b ->
             val currentItem = data[i]
         }
         builder.setPositiveButton("確定") { dialogInterface, j ->
-            for (i in data.indices) if (selected[i]) {
-                selected[i] = false
-            }
+//            for (i in data.indices) if (selected[i]) {
+//                selected[i] = false
+//            }
             val customSnack= Snackbar.make(requireView(),"",Snackbar.LENGTH_INDEFINITE)
             val layout = customSnack.view as Snackbar.SnackbarLayout
             val bind = SnackBarCustomBinding.inflate(layoutInflater)
@@ -641,6 +638,7 @@ class ImgDetailFragment : Fragment() {
                 .apply {
                 gravity = Gravity.TOP
             }
+
             layout.setPadding(0,0,0,0)
             customSnack.show()
         }
@@ -649,20 +647,9 @@ class ImgDetailFragment : Fragment() {
         }
         val dialog = builder.create()
         dialog.show()
+        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(parseColor("#181A19"))
+        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(parseColor("#181A19"))
 
-        val saveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
-        with(saveButton) {
-            setBackgroundColor(R.color.black)
-            setPadding(0, 0, 20, 0)
-            setTextColor(R.color.light_blue)
-        }
-
-        val cancelButton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE)
-        with(cancelButton) {
-            setBackgroundColor(R.color.black)
-            setPadding(0, 0, 20, 0)
-            setTextColor(R.color.light_blue)
-        }
     }
 
 }

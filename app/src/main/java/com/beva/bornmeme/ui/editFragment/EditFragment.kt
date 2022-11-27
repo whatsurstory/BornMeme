@@ -142,10 +142,10 @@ class EditFragment : Fragment() {
                     .setAction("Action", null).show()
             } else if (title.text.trim().isEmpty()) {
                 //Snackbar ani
-                val titleSnack = Snackbar.make(it,"還有資料未完成，幫你填入預設值，不客氣",Snackbar.LENGTH_INDEFINITE)
+                val titleSnack = Snackbar.make(it,"資料未完成將填入預設值，不客氣",Snackbar.LENGTH_INDEFINITE)
                 titleSnack.animationMode = BaseTransientBottomBar.ANIMATION_MODE_FADE
-                titleSnack.setBackgroundTint(Color.parseColor("#FF6768"))
-                titleSnack.setTextColor(Color.parseColor("#FFFFFF"))
+                titleSnack.setBackgroundTint(Color.parseColor("#EADDDB"))
+                titleSnack.setTextColor(Color.parseColor("#181A19"))
                 titleSnack.setAction("感恩的心") {
                         title.setText(UserManager.user.userName)
                     }
@@ -157,10 +157,10 @@ class EditFragment : Fragment() {
 
             } else if (tag.text.trim().isEmpty()) {
                 val tagSnack =
-                    Snackbar.make( it,"還有資料未完成，幫你填入預設值，不客氣", Snackbar.LENGTH_INDEFINITE)
+                    Snackbar.make( it,"資料未完成將填入預設值，不客氣", Snackbar.LENGTH_INDEFINITE)
                     .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
-                    .setBackgroundTint(Color.parseColor("#FF6768"))
-                    .setTextColor(Color.parseColor("#FFFFFF"))
+                    .setBackgroundTint(Color.parseColor("#EADDDB"))
+                    .setTextColor(Color.parseColor("#181A19"))
                     .setAction("感謝有你") {
                         tag.setText("傻逼日常")
                     }
@@ -186,7 +186,7 @@ class EditFragment : Fragment() {
                                 arrayMapOf("type" to "base", "url" to it),
                                 arrayMapOf(
                                     "type" to "text",
-                                    "url" to upperText.text.toString() + bottomText.text.toString()
+                                    "url" to "${upperText.text}\n${bottomText.text}"
                                 )
                             )
 

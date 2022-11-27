@@ -1,27 +1,21 @@
 package com.beva.bornmeme.ui.detail.dialog
 
 import android.annotation.SuppressLint
-import android.app.Dialog
-import android.graphics.Rect
-import android.opengl.ETC1.getWidth
-import android.os.Build
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import android.view.*
-import android.widget.LinearLayout
-import androidx.annotation.RequiresApi
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDialogFragment
-import androidx.constraintlayout.widget.ConstraintAttribute.setAttributes
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearSnapHelper
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.PagerSnapHelper
-import androidx.recyclerview.widget.SnapHelper
+import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.DialogSlideCollectionBinding
 import com.beva.bornmeme.model.Folder
 import timber.log.Timber
-import java.nio.Buffer
 
 class SlideImageDialog: AppCompatDialogFragment() {
 
@@ -49,7 +43,11 @@ class SlideImageDialog: AppCompatDialogFragment() {
         binding = DialogSlideCollectionBinding.inflate(layoutInflater)
         binding.dialog = this
 
-        val adapter = SlideAdapter()
+        val adapter = SlideAdapter(
+            SlideAdapter.OnClickListener {
+                viewModel.navigateToDetail(it)
+            }
+        )
         binding.slideImgRecycler.adapter = adapter
 //        val snapHelper: SnapHelper = LinearSnapHelper()
 //        snapHelper.attachToRecyclerView(binding.slideImgRecycler)
@@ -66,13 +64,20 @@ class SlideImageDialog: AppCompatDialogFragment() {
             Timber.d("observe -> $it")
             adapter.submitList(it)
             adapter.notifyDataSetChanged()
+
         })
+
+        viewModel.navigateToDetail.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+//                    findNavController().navigate(MobileNavigationDirections.navigateToImgDetailFragment(it.id))
+                    viewModel.onDetailNavigated()
+                }
+            }
+        )
 
         return binding.root
     }
-//    @RequiresApi(Build.VERSION_CODES.S)
-//    private fun Dialog.setTransparentBackground() {
-//        window?.setBackgroundDrawableResource(android.R.color.transparent)
-//
-//    }
+
 }

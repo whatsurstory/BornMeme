@@ -2,8 +2,6 @@ package com.beva.bornmeme.ui.detail.dialog
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Context.INPUT_METHOD_SERVICE
-import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -14,7 +12,6 @@ import android.view.ViewTreeObserver
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatDialogFragment
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import com.beva.bornmeme.R
@@ -92,7 +89,6 @@ class PublishCommentDialog: AppCompatDialogFragment() {
             viewModel.getUserName(parentId, binding)
         }
 
-        
         binding.buttonPublish.setOnClickListener {
 
             if (binding.editPublishContent.text.isNullOrEmpty()) {

@@ -8,6 +8,6 @@ data class Image(
     val imageId:String ="",
     val title:String = "",
     val url:String = "",
-    val tag: String = "",
+    val tag: List<String> = emptyList(),
     val userId: List<String> = emptyList()
 )

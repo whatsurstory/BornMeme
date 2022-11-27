@@ -10,6 +10,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.beva.bornmeme.databinding.FragmentDragEditBinding
 import timber.log.Timber
@@ -48,11 +49,13 @@ class EditDragFragment: Fragment(), View.OnTouchListener {
         binding = FragmentDragEditBinding.inflate(layoutInflater)
         val text = binding.dragEditText
         var isMove = true
-//        text.setOnTouchListener(this)
+//        binding.stickerImg.setOnTouchListener(this)
+
+
         text.setOnClickListener{
          if (!isMove){
              Timber.d("setOnTouchListener $isMove")
-         }
+            }
         }
 
         var startX = 0
@@ -68,38 +71,38 @@ class EditDragFragment: Fragment(), View.OnTouchListener {
                 }
 
                 MotionEvent.ACTION_MOVE -> {
+
                     val endX: Int = event.rawX.toInt()
                     val endY: Int = event.rawY.toInt()
 
                     val spaceX = endX - startX
                     val spaceY = endY - startY
 
-                    val left = text.left +spaceX
-                    val top = text.top +spaceY
-                    val right = text.right +left
-                    val bottom = text.height +top
+                    val left = text.left + spaceX
+                    val top = text.top + spaceY
+                    val right = text.right + spaceX
+                    val bottom = text.bottom + spaceY
 
                     text.layout(left,top,right, bottom)
                     startX = endX
                     startY = endY
 
-                    if (spaceX >5 || spaceY >5){
+                    if (spaceX > 5 || spaceY > 5){
                         isMove = true
                     }
                 }
 
-//                MotionEvent.ACTION_UP -> {
-//                    pUpX= event.x.toInt()
-//                    pUpY= event.y.toInt()
-//                }
-//
-//                MotionEvent.ACTION_CANCEL -> {
-//
-//                }
-//
-//                else ->{
-//
-//                }
+                MotionEvent.ACTION_UP -> {
+
+                }
+
+                MotionEvent.ACTION_CANCEL -> {
+
+                }
+
+                else ->{
+
+                }
             }
             return@setOnTouchListener false
         }
@@ -109,7 +112,7 @@ class EditDragFragment: Fragment(), View.OnTouchListener {
         val view = v as ImageView
         when (event.action and MotionEvent.ACTION_MASK) {
             MotionEvent.ACTION_DOWN -> {
-                matrix.set(view.imageMatrix)
+                matrix.set(v.imageMatrix)
                 savedMatrix.set(matrix)
                 startPoint.set(event.x, event.y)
                 mode = DRAG
@@ -155,8 +158,4 @@ class EditDragFragment: Fragment(), View.OnTouchListener {
         val y = event.getY(0) + event.getY(1)
         return PointF(x / 2, y / 2)
     }
-    //https://www.runoob.com/w3cnote/android-tutorial-touchlistener-ontouchevent.html
-    //https://ithelp.ithome.com.tw/articles/10190917
-    //https://github.com/Aria-Lee/30Day_Challenge/blob/master/DAY04_Scalable_Image(ViewMotionEvent)/app/src/main/java/com/example/fish/day4_scalableimageviewmotionevent/MainActivity.kt
-    //https://github.com/slamdon/kotlin-playground/blob/master/4-ScalableImageView/app/src/main/java/devdon/com/scalableimageview/MovableImageView.kt
 }

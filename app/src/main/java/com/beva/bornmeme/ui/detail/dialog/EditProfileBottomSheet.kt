@@ -1,27 +1,22 @@
 package com.beva.bornmeme.ui.detail.dialog
 
 import android.Manifest
+import android.R
 import android.annotation.SuppressLint
-import android.app.Activity
+import android.app.Dialog
+import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.provider.SyncStateContract.Helpers.update
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityCompat.startActivityForResult
-import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.ViewModelProvider
-import coil.load
-import coil.transform.CircleCropTransformation
+import android.widget.*
+import android.widget.AdapterView.OnItemClickListener
+import androidx.annotation.NonNull
 import com.beva.bornmeme.MainActivity
-import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.BottomsheetEditProfileBinding
 import com.beva.bornmeme.model.User
 import com.beva.bornmeme.model.UserManager
@@ -33,13 +28,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionDeniedResponse
-import com.karumi.dexter.listener.PermissionGrantedResponse
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.single.PermissionListener
-import org.checkerframework.checker.units.qual.s
 import timber.log.Timber
 import java.sql.Date
 
@@ -51,7 +39,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment()
     private lateinit var viewModel: EditProfileViewModel
     lateinit var userId: String
 
-    override fun getTheme() = R.style.CustomBottomSheetDialog
+    override fun getTheme() = com.beva.bornmeme.R.style.CustomBottomSheetDialog
 
 //    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 //        super.onViewCreated(view, savedInstanceState)
@@ -162,7 +150,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment()
 
         Glide.with(binding.profileImg)
             .load(user.profilePhoto)
-            .placeholder(R.drawable.dino)
+            .placeholder(com.beva.bornmeme.R.drawable.dino)
             .into(binding.profileImg)
 
         binding.name.setText(user.userName)
@@ -172,10 +160,20 @@ class EditProfileBottomSheet : BottomSheetDialogFragment()
             "Register Time: " + Date(user.registerTime?.toDate()?.time!!).toLocaleString()
 //        Timber.d("binding.registerTime.text ${binding.registerTime.text}")
 
-    //TODO: 設定大頭貼及背景顏色、追蹤誰及誰追蹤查看、封鎖名單
-//        binding.fab.setOnClickListener { toAlbum() }
         binding.changePhoto.setOnClickListener {
             toAlbum()
+        }
+
+        binding.blockListBtn.setOnClickListener {
+
+
+
+        }
+        binding.followersListBtn.setOnClickListener {
+
+        }
+        binding.followListBtn.setOnClickListener {
+
         }
 
     }
@@ -216,4 +214,55 @@ class EditProfileBottomSheet : BottomSheetDialogFragment()
         }
     }
 
+    // Pass list of your model as arraylist
+//    private fun showCustomAlertDialogBoxForUserList(allUsersList: ArrayList<User>) {
+//        val dialog = Dialog(requireContext())
+//        dialog.setContentView(com.beva.bornmeme.R.layout.assignment_dialog_list_view)
+//        val listView = dialog.findViewById<ListView>(com.beva.bornmeme.R.id.lv_assignment_users)
+//        val tv = dialog.findViewById<TextView>(com.beva.bornmeme.R.id.tv_popup_title)
+//        val arrayAdapter: ArrayAdapter<*> =
+//            UserListAdapter(context, com.beva.bornmeme.R.layout.item_assignment_dialog_list_layout, allUsersList)
+//        listView.adapter = arrayAdapter
+//        listView.onItemClickListener =
+//            OnItemClickListener { adapterView: AdapterView<*>?, view: View?, which: Int, l: Long ->
+//
+//            }
+//        dialog.show()
+//    }
+
 }
+
+//class UserListAdapter(
+//    @NonNull context: Context,
+//    resource: Int,
+//    @NonNull objects: List<User>
+//) :
+//    ArrayAdapter<User?>(context, resource, objects) {
+//    private val context: Context
+//    private val userList: List<User>
+//
+//    @SuppressLint("ViewHolder")
+//    @NonNull
+//    override fun getView(
+//        position: Int,
+//        @Nullable convertView: View?,
+//        @NonNull parent: ViewGroup
+//    ): View {
+//        val inflater = context
+//            .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+//        val rowView: View =
+//            inflater.inflate(com.beva.bornmeme.R.layout.item_assignment_dialog_list_layout, parent, false)
+//        val profilePic = rowView.findViewById<ImageView>(com.beva.bornmeme.R.id.iv_user_profile_image)
+//        val userName = rowView.findViewById<TextView>(com.beva.bornmeme.R.id.tv_user_name)
+//        val user: AssignmentUserModel = userList[position]
+//        userName.setText(user.getUserName())
+//        val bitmap: Bitmap = user.getUserProfileBitmap()
+//        profilePic.setImageDrawable(bitmap)
+//        return rowView
+//    }
+//
+//    init {
+//        userList = objects
+//        this.context = context
+//    }
+//}

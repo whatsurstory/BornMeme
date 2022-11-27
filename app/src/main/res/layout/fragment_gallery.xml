@@ -6,28 +6,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/tr_black">
 
-    <TextView
-        android:textStyle="bold"
-        android:text="版主推薦"
-        android:padding="8dp"
-        android:textColor="@color/tr_pink"
-        android:fontFamily="@font/yozai_bold"
-        android:textSize="36sp"
-        android:id="@+id/gallery_suggest_title"
+<!--    <TextView-->
+<!--        android:textStyle="bold"-->
+<!--        android:text="版主推薦"-->
+<!--        android:padding="8dp"-->
+<!--        android:textColor="@color/tr_pink"-->
+<!--        android:fontFamily="@font/yozai_bold"-->
+<!--        android:textSize="36sp"-->
+<!--        android:id="@+id/gallery_suggest_title"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_width="wrap_content"/>-->
+
+    <Button
+        android:id="@+id/add_new_img_btn"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"/>
+        android:text="新增照片"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/vertical_recycle"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:orientation="horizontal"
         android:paddingHorizontal="4dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/gallery_suggest_title"
-        tools:listitem="@layout/item_vertical_image_list"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:listitem="@layout/item_vertical_image_list" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

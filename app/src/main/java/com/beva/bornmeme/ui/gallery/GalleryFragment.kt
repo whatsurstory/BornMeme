@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.media.MediaScannerConnection
 import android.net.Uri
@@ -26,7 +27,14 @@ import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentGalleryBinding
 import com.beva.bornmeme.model.Image
+import com.beva.bornmeme.model.UserManager
 import com.bumptech.glide.Glide
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
@@ -50,11 +58,10 @@ class GalleryFragment: Fragment() {
         adapter = GalleryAdapter(
             GalleryAdapter.OnClickListener {
                 showDialog(it)
+                Timber.d("it -> ${it.imageId}")
             }
         )
-
-//        binding.verticalRecycle.layoutManager = LinearLayoutManager(this.context)
-
+        binding.verticalRecycle.layoutManager = GridLayoutManager(context, 3)
         binding.verticalRecycle.adapter = adapter
 
         viewModel.liveData.observe(viewLifecycleOwner, Observer{
@@ -63,25 +70,40 @@ class GalleryFragment: Fragment() {
             adapter.notifyDataSetChanged()
         })
 
+
+        //加照片用
+        binding.addNewImgBtn.visibility = View.VISIBLE
+        binding.addNewImgBtn.setOnClickListener {
+            val fireStore = FirebaseFirestore.getInstance().collection("Modules")
+            val document = fireStore.document()
+            val publish = Image(
+                document.id,
+                "你知道這個是什麼嗎?",
+                "https://memeprod.ap-south-1.linodeobjects.com/user-template/568777b6b3da80b0e251dd788447ae59.png",
+                emptyList(),
+                emptyList()
+            )
+            document.set(publish)
+        }
         return binding.root
     }
 
     private fun showDialog (img:Image) {
-        val builder = AlertDialog.Builder(requireContext())
+        val builder = AlertDialog.Builder(requireContext(),R.style.AlertDialogTheme)
         val inflater = requireActivity().layoutInflater
         val view = inflater.inflate(R.layout.dialog_image, null)
         builder.setView(view)
         val image = view.findViewById<ImageView>(R.id.gallery_img)
         Glide.with(image).load(img.url).placeholder(R.drawable._50).into(image)
 
-        builder.setTitle("Is ${img.title} your final choice?")
-        builder.setPositiveButton("Yes") { dialog, _ ->
+        builder.setMessage("就決定是${img.title}了嗎?(・∀・)つ⑩")
+        builder.setPositiveButton("對沒錯") { dialog, _ ->
             val bitmapDrawable = image.drawable as BitmapDrawable
             val bitmap = bitmapDrawable.bitmap
             saveImage(bitmap, img.imageId)
             Timber.d("filePath -> $bitmap")
         }
-        builder.setNegativeButton("No", DialogInterface.OnClickListener { dialog, which ->
+        builder.setNegativeButton("再想想", DialogInterface.OnClickListener { dialog, which ->
 
         })
         val alertDialog: AlertDialog = builder.create()
@@ -89,6 +111,8 @@ class GalleryFragment: Fragment() {
 //        val width = metrics.widthPixels
 //        val height = metrics.heightPixels
         alertDialog.show()
+        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.parseColor("#181A19"))
+        alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#181A19"))
     }
 
     private fun saveImage(image: Bitmap, id:String): String? {

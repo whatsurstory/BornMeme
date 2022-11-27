@@ -40,10 +40,10 @@
 
 
 <!--  final  -->
-    <color name="tr_black">#181A19</color>
-    <color name="dark_gray">#383639</color>
+    <color name="tr_black">#2d2d2d</color>
+    <color name="dark_gray">#525252</color>
     <color name="tr_pink">#EADDDB</color>
-    <color name="gray_white">#F4F4F4</color>
+    <color name="gray_white">#fff7f7</color>
 
 
 

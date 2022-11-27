@@ -68,6 +68,9 @@
         <argument
             android:name="postKey"
             app:argType="com.beva.bornmeme.model.Post"/>
+<!--        <argument-->
+<!--            android:name="postId"-->
+<!--            app:argType="string"/>-->
     </fragment>
 
     <fragment

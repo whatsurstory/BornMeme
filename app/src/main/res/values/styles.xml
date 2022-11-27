@@ -27,6 +27,7 @@
     <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
         <!-- Customize color of navigation drawer icon and back arrow -->
         <item name="colorControlNormal">@color/gray_white</item>
+
     </style>
 
 
@@ -69,9 +70,17 @@
 
 <!-- setting the item in multiChoice list -->
     <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:textColor">@color/dark_blue</item>
-        <item name="colorAccent">@color/dark_blue</item>
+<!--   make dialog can't see     -->
+<!--        <item name="android:windowBackground">@android:color/transparent</item>-->
+<!--        <item name="android:windowContentOverlay">@null</item>-->
+        <item name="android:textColor">@color/tr_black</item>
+        <item name="colorAccent">@color/tr_black</item>
+        <item name="fontFamily">@font/yozai_medium</item>
     </style>
+
+<!--    <style name="MyTextAppearance" parent="TextAppearance.AppCompat">-->
+<!--        <item name="android:fontFamily">@font/yozai_medium</item>-->
+<!--    </style>-->
 
     <style name="CustomBottomSheetDialog" parent="@style/ThemeOverlay.MaterialComponents.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/CustomBottomSheet</item>

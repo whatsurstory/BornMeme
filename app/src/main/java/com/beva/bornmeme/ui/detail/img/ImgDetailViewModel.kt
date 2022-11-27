@@ -109,7 +109,7 @@ data class UiState (
                 .addOnCompleteListener {
                     val post = it.result.toObject(User::class.java)
                     if (post != null) {
-                        return@addOnCompleteListener onUserObtained(user)
+                        return@addOnCompleteListener onUserObtained(post)
                     }
                 }
         }
@@ -288,6 +288,4 @@ data class UiState (
                     }
                 }
             }
-
-
-}
+        }
