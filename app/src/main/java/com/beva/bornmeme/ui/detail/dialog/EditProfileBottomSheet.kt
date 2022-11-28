@@ -41,11 +41,6 @@ class EditProfileBottomSheet : BottomSheetDialogFragment()
 
     override fun getTheme() = com.beva.bornmeme.R.style.CustomBottomSheetDialog
 
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//
-//    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog?.let {
             val sheet = it as BottomSheetDialog
@@ -70,10 +65,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment()
         binding.emailBox.setOnClickListener {
             binding.emailBox.error = "信箱修改開發中，加速要加錢"
         }
-        binding.changePhoto.setOnClickListener {
-            //開啟相簿權限
-            //把選到的圖片上傳到storage轉成URL，先用這個URL setImage
-        }
+
         val db = Firebase.firestore.collection("Users").document(userId)
         binding.name.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -214,55 +206,5 @@ class EditProfileBottomSheet : BottomSheetDialogFragment()
         }
     }
 
-    // Pass list of your model as arraylist
-//    private fun showCustomAlertDialogBoxForUserList(allUsersList: ArrayList<User>) {
-//        val dialog = Dialog(requireContext())
-//        dialog.setContentView(com.beva.bornmeme.R.layout.assignment_dialog_list_view)
-//        val listView = dialog.findViewById<ListView>(com.beva.bornmeme.R.id.lv_assignment_users)
-//        val tv = dialog.findViewById<TextView>(com.beva.bornmeme.R.id.tv_popup_title)
-//        val arrayAdapter: ArrayAdapter<*> =
-//            UserListAdapter(context, com.beva.bornmeme.R.layout.item_assignment_dialog_list_layout, allUsersList)
-//        listView.adapter = arrayAdapter
-//        listView.onItemClickListener =
-//            OnItemClickListener { adapterView: AdapterView<*>?, view: View?, which: Int, l: Long ->
-//
-//            }
-//        dialog.show()
-//    }
 
 }
-
-//class UserListAdapter(
-//    @NonNull context: Context,
-//    resource: Int,
-//    @NonNull objects: List<User>
-//) :
-//    ArrayAdapter<User?>(context, resource, objects) {
-//    private val context: Context
-//    private val userList: List<User>
-//
-//    @SuppressLint("ViewHolder")
-//    @NonNull
-//    override fun getView(
-//        position: Int,
-//        @Nullable convertView: View?,
-//        @NonNull parent: ViewGroup
-//    ): View {
-//        val inflater = context
-//            .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-//        val rowView: View =
-//            inflater.inflate(com.beva.bornmeme.R.layout.item_assignment_dialog_list_layout, parent, false)
-//        val profilePic = rowView.findViewById<ImageView>(com.beva.bornmeme.R.id.iv_user_profile_image)
-//        val userName = rowView.findViewById<TextView>(com.beva.bornmeme.R.id.tv_user_name)
-//        val user: AssignmentUserModel = userList[position]
-//        userName.setText(user.getUserName())
-//        val bitmap: Bitmap = user.getUserProfileBitmap()
-//        profilePic.setImageDrawable(bitmap)
-//        return rowView
-//    }
-//
-//    init {
-//        userList = objects
-//        this.context = context
-//    }
-//}

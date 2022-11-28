@@ -23,7 +23,7 @@
             android:textSize="18sp"
             android:gravity="center"
             android:textColor="@color/tr_black"
-            android:fontFamily="@font/yozai_medium" />
+            android:fontFamily="@font/round_border" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -43,7 +43,7 @@
                 android:backgroundTint="@color/tr_black"
                 android:background="@drawable/button_style"
                 android:textColor="@color/gray_white"
-                android:fontFamily="@font/yozai_medium"
+                android:fontFamily="@font/round_border"
                 android:text="@string/yes_btn" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -55,7 +55,7 @@
                 android:backgroundTint="@color/tr_black"
                 android:textColor="@color/gray_white"
                 android:background="@drawable/button_style"
-                android:fontFamily="@font/yozai_medium"
+                android:fontFamily="@font/round_border"
                 android:gravity="center"
                 android:textSize="18sp"
                 android:text="@string/no_btn" />

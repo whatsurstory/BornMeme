@@ -72,14 +72,14 @@ class GalleryFragment: Fragment() {
 
 
         //加照片用
-        binding.addNewImgBtn.visibility = View.VISIBLE
+        binding.addNewImgBtn.visibility = View.GONE
         binding.addNewImgBtn.setOnClickListener {
             val fireStore = FirebaseFirestore.getInstance().collection("Modules")
             val document = fireStore.document()
             val publish = Image(
                 document.id,
-                "你知道這個是什麼嗎?",
-                "https://memeprod.ap-south-1.linodeobjects.com/user-template/568777b6b3da80b0e251dd788447ae59.png",
+                "我大哥",
+                "https://memeprod.ap-south-1.linodeobjects.com/user-template/1bd1165b953a44c9ef68761073dfbe1d.png",
                 emptyList(),
                 emptyList()
             )

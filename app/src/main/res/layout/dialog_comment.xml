@@ -43,7 +43,7 @@
                 android:padding="10dp"
                 android:textColor="@color/tr_black"
                 android:textColorHint="@color/dark_gray"
-                android:fontFamily="@font/yozai_medium"
+                android:fontFamily="@font/round_border"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/button_publish"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -69,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/tr_black"
                 android:layout_marginTop="4dp"
-                android:fontFamily="@font/yozai_medium"
+                android:fontFamily="@font/round_border"
                 android:text="@string/chip_reply_to"
                 android:textColor="@color/tr_pink"
                 android:visibility="gone"

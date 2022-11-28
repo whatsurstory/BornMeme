@@ -27,7 +27,7 @@
         tools:text="Folder Name"
         android:gravity="center"
         android:textSize="36sp"
-        android:fontFamily="@font/yozai_bold"
+        android:fontFamily="@font/round_border"
         android:textColor="@color/tr_pink"
         android:background="@drawable/text_round_corner"
         app:layout_constraintStart_toStartOf="@id/collection_img"

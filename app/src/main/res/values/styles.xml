@@ -13,7 +13,7 @@
 
     <style name="chipText" parent="TextAppearance.MaterialComponents.Chip">
         <item name="android:textSize">16sp</item>
-        <item name="android:fontFamily">@font/yozai_bold</item>
+        <item name="android:fontFamily">@font/round_border</item>
     </style>
 
 <!--    <style name="CustomMenuStyle" parent="Widget.AppCompat.DrawerArrowToggle">-->
@@ -75,7 +75,7 @@
 <!--        <item name="android:windowContentOverlay">@null</item>-->
         <item name="android:textColor">@color/tr_black</item>
         <item name="colorAccent">@color/tr_black</item>
-        <item name="fontFamily">@font/yozai_medium</item>
+        <item name="fontFamily">@font/round_border</item>
     </style>
 
 <!--    <style name="MyTextAppearance" parent="TextAppearance.AppCompat">-->
@@ -99,8 +99,8 @@
     </style>
 
     <style name="MyCustomTabTextAppearance" parent="TextAppearance.Design.Tab">
-        <item name="fontFamily">@font/yozai_medium</item>
-        <item name="android:fontFamily">@font/yozai_medium</item>
+        <item name="fontFamily">@font/round_border</item>
+        <item name="android:fontFamily">@font/round_border</item>
         <item name="textAllCaps">false</item>
         <item name="android:textSize">16sp</item>
     </style>
