@@ -185,23 +185,25 @@ class EditProfileBottomSheet : BottomSheetDialogFragment()
             binding.saveButton.setOnClickListener {
 
                 val ref = FirebaseStorage.getInstance().reference
-                ref.child("profile_img/" + System.currentTimeMillis() + ".jpg")
-                    .putFile(data?.data!!)
-                    .addOnSuccessListener {
-                        it.metadata?.reference?.downloadUrl?.addOnSuccessListener {
+                if (data != null) {
+                    ref.child("profile_img/" + System.currentTimeMillis() + ".jpg")
+                        .putFile(data.data!!)
+                        .addOnSuccessListener {
+                            it.metadata?.reference?.downloadUrl?.addOnSuccessListener {
 
-                            UserManager.user.profilePhoto  = it.toString()
+                                UserManager.user.profilePhoto  = it.toString()
 
-                            Firebase.firestore.collection("Users")
-                                .document(user.userId!!)
-                                .update("profilePhoto", it)
-                                .addOnCompleteListener {
+                                Firebase.firestore.collection("Users")
+                                    .document(user.userId!!)
+                                    .update("profilePhoto", it)
+                                    .addOnCompleteListener {
 
-                                    (activity as MainActivity).updateUser(user)
-                                    dismiss()
-                                }
+                                        (activity as MainActivity).updateUser(user)
+                                        dismiss()
+                                    }
+                            }
                         }
-                    }
+                }
             }
         }
     }
