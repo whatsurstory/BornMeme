@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/report_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginVertical="8dp"
+        android:paddingHorizontal="24dp"
+        android:paddingVertical="8dp"
+        android:text="@string/block_text"
+        android:textColor="@color/tr_black"
+        android:fontFamily="@font/round_border"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/toBlock_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/yes_btn"
+        android:backgroundTint="@color/tr_black"
+        android:textColor="@color/gray_white"
+        android:background="@drawable/button_style"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/report_text"
+        app:layout_constraintTop_toBottomOf="@id/report_text" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/not_to_block_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_btn"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="@color/tr_black"
+        android:textColor="@color/gray_white"
+        android:background="@drawable/button_style"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/report_text"
+        app:layout_constraintTop_toBottomOf="@+id/report_text" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

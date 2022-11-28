@@ -7,76 +7,73 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/tr_black"
         tools:context=".MainActivity">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/change_mode_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_collections_bookmark_24"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="16dp"
+            android:visibility="gone"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/tr_pink"
+            android:background="@drawable/ic_baseline_collections_bookmark_24"
+            app:layout_constraintBottom_toTopOf="@+id/include"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/profile_btn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="12dp"
+            android:scaleType="fitCenter"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ic_baseline_tag_faces_24"
+            app:layout_constraintBottom_toTopOf="@+id/include"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="28dp"
-            android:layout_marginEnd="12dp"/>
+            app:shapeAppearanceOverlay="@style/circle" />
+
+        <TextView
+            android:id="@+id/module_title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:gravity="bottom"
+            android:layout_marginBottom="12dp"
+            android:layout_marginEnd="12dp"
+            android:fontFamily="@font/arista_pro_light_trial"
+            android:text="@string/module_text"
+            android:textColor="@color/tr_pink"
+            android:textSize="20sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/include"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:elevation="4dp"
-            app:contentInsetStart="12dp"
-            app:contentInsetEnd="12dp"
-            android:layout_marginTop="12dp"
-            app:layout_constraintBottom_toBottomOf="@+id/content_main"
+            android:layout_marginTop="10dp"
+            android:background="@color/tr_black"
+            app:theme="@style/ToolbarTheme"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" >
+            app:layout_constraintTop_toTopOf="parent">
 
-            <!-- app:contentInsetLeft="0dp"
-                  app:contentInsetStart="0dp"        -->
-            <!--this is the perfect width for toolbar
-            app:contentInsetStartWithNavigation="0dp"
-            app:contentInsetEndWithActions="0dp"
-            -->
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-
-                <androidx.appcompat.widget.SearchView
-                    android:id="@+id/search_bar"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:queryBackground="@null"
-                    android:layout_marginEnd="8dp"
-                    app:iconifiedByDefault="false"
-                    app:theme="@style/AppSearchView"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/profile_btn"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:queryHint="BornMeme."
-                    app:searchIcon="@null"
-                    android:visibility="gone"/>
-
-<!--    app:searchIcon="@drawable/ic_baseline_self_improvement_24"  -->
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/profile_btn"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:scaleType="fitCenter"
-                    android:visibility="gone"
-                    android:src="@drawable/ic_baseline_tag_faces_24"
-                    app:layout_constraintBottom_toBottomOf="@+id/search_bar"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/search_bar"
-                    app:shapeAppearanceOverlay="@style/circle" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/greeting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/arista_pro_bold_trial"
+                android:textColor="@color/tr_pink"
+                android:textSize="40sp" />
 
         </androidx.appcompat.widget.Toolbar>
 
         <include
+            android:id="@+id/include"
             layout="@layout/content_main"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -93,9 +90,9 @@
             app:layout_constraintBottom_toTopOf="@+id/fab_camera_edit"
             android:layout_margin="8dp"
             app:elevation="6dp"
-            app:fabCustomSize="60dp"
-            app:tint="@color/dark_blue"
-            android:backgroundTint="@color/light_blue"
+            app:fabCustomSize="52dp"
+            app:tint="@color/tr_black"
+            android:backgroundTint="@color/tr_pink"
             android:src="@drawable/module_btn"
             android:visibility="gone" />
 
@@ -107,9 +104,9 @@
             app:layout_constraintBottom_toTopOf="@+id/fab_gallery_edit"
             android:layout_margin="8dp"
             app:elevation="6dp"
-            app:fabCustomSize="60dp"
-            app:tint="@color/dark_blue"
-            android:backgroundTint="@color/light_blue"
+            app:fabCustomSize="52dp"
+            app:tint="@color/tr_black"
+            android:backgroundTint="@color/tr_pink"
             android:src="@drawable/camera_btn"
             android:visibility="gone" />
 
@@ -121,9 +118,9 @@
             app:layout_constraintBottom_toTopOf="@+id/fab"
             android:layout_margin="8dp"
             app:elevation="6dp"
-            app:fabCustomSize="60dp"
-            app:tint="@color/dark_blue"
-            android:backgroundTint="@color/light_blue"
+            app:fabCustomSize="52dp"
+            app:tint="@color/tr_black"
+            android:backgroundTint="@color/tr_pink"
             android:src="@drawable/gallery_btn"
             android:visibility="gone" />
 
@@ -134,13 +131,14 @@
             android:layout_marginEnd="@dimen/fab_margin"
             android:layout_marginBottom="16dp"
             app:elevation="6dp"
-            app:fabCustomSize="70dp"
-            app:tint="@color/dark_blue"
+            app:fabCustomSize="58dp"
+            app:tint="@color/tr_black"
             app:borderWidth="0dp"
-            android:backgroundTint="@color/light_blue"
+            android:backgroundTint="@color/tr_pink"
             android:src="@drawable/rotate"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"/>
 
         <!--        android:onClick="@{() -> viewModel.navigate2Camera()}"-->
     </androidx.constraintlayout.widget.ConstraintLayout>

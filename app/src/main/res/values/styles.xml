@@ -12,16 +12,22 @@
     </style>
 
     <style name="chipText" parent="TextAppearance.MaterialComponents.Chip">
-        <item name="android:textSize">14sp</item>
-        <item name="android:fontFamily">@font/arista_pro_light_trial</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/round_border</item>
     </style>
 
-    <style name="CustomMenuStyle" parent="Widget.AppCompat.DrawerArrowToggle">
-        <item name="spinBars">true</item>
-        <item name="color">@color/dark_blue</item>
-        <item name="gapBetweenBars">8dp</item>
-        <item name="barLength">24dp</item>
-        <item name="thickness">2dp</item>
+<!--    <style name="CustomMenuStyle" parent="Widget.AppCompat.DrawerArrowToggle">-->
+<!--        <item name="spinBars">true</item>-->
+<!--        <item name="color">@color/gray_white</item>-->
+<!--        <item name="gapBetweenBars">8dp</item>-->
+<!--        <item name="barLength">24dp</item>-->
+<!--        <item name="thickness">2dp</item>-->
+<!--    </style>-->
+
+    <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <!-- Customize color of navigation drawer icon and back arrow -->
+        <item name="colorControlNormal">@color/gray_white</item>
+
     </style>
 
 
@@ -35,6 +41,7 @@
         <!-- Icon and close Color -->
         <item name="android:tint">@color/dark_blue</item>
 
+
     </style>
 
     <style name="PublishDialog">
@@ -46,9 +53,14 @@
         <item name="cornerSize">50%</item>
     </style>
 
-    <style name="roundedCorner" parent="">
+    <style name="roundedCorner_1" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">1%</item>
+    </style>
+
+    <style name="roundedCorner_4" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">4%</item>
     </style>
 
     <style name="SlideDialog">
@@ -58,9 +70,39 @@
 
 <!-- setting the item in multiChoice list -->
     <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:textColor">@color/dark_blue</item>
-        <item name="colorAccent">@color/dark_blue</item>
+<!--   make dialog can't see     -->
+<!--        <item name="android:windowBackground">@android:color/transparent</item>-->
+<!--        <item name="android:windowContentOverlay">@null</item>-->
+        <item name="android:textColor">@color/tr_black</item>
+        <item name="colorAccent">@color/tr_black</item>
+        <item name="fontFamily">@font/round_border</item>
     </style>
 
+<!--    <style name="MyTextAppearance" parent="TextAppearance.AppCompat">-->
+<!--        <item name="android:fontFamily">@font/yozai_medium</item>-->
+<!--    </style>-->
+
+    <style name="CustomBottomSheetDialog" parent="@style/ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/CustomBottomSheet</item>
+    </style>
+
+    <style name="CustomBottomSheet" parent="Widget.MaterialComponents.BottomSheet">
+        <item name="shapeAppearanceOverlay">@style/CustomShapeAppearanceBottomSheetDialog</item>
+    </style>
+
+    <style name="CustomShapeAppearanceBottomSheetDialog" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">16dp</item>
+        <item name="cornerSizeTopLeft">16dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+    </style>
+
+    <style name="MyCustomTabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="fontFamily">@font/round_border</item>
+        <item name="android:fontFamily">@font/round_border</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:textSize">16sp</item>
+    </style>
 
 </resources>

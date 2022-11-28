@@ -4,31 +4,32 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/collection_img"
         android:layout_width="0dp"
         android:layout_height="180dp"
-        android:alpha="0.3"
         android:layout_margin="4dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/dino"
-        android:background="@color/dark_blue"
+        android:background="@drawable/dino"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:shapeAppearanceOverlay="@style/roundedCorner" />
+        app:shapeAppearanceOverlay="@style/roundedCorner_1" />
 
     <TextView
         android:id="@+id/collection_folder_name"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="Folder Name"
-        android:textSize="48sp"
-        android:fontFamily="@font/arista_pro_bold_trial"
-        android:textColor="@color/light_blue"
+        android:layout_height="0dp"
+        android:layout_width="0dp"
+        tools:text="Folder Name"
+        android:gravity="center"
+        android:textSize="36sp"
+        android:fontFamily="@font/round_border"
+        android:textColor="@color/tr_pink"
+        android:background="@drawable/text_round_corner"
         app:layout_constraintStart_toStartOf="@id/collection_img"
         app:layout_constraintEnd_toEndOf="@+id/collection_img"
         app:layout_constraintTop_toTopOf="@+id/collection_img"

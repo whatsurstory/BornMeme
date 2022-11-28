@@ -17,10 +17,12 @@ data class Post(
     val ownerId: String = "",
     val title: String = "",
     val catalog: String = "",
-    val url: String? = null,
-    val like: List<String>? = null,
+    val url: String? = "",
+    val like: List<String>? = emptyList(),
     val resources: List<Resource> = emptyList(),
-    val collection: List<String>? =null,
+    val collection: List<String>? =emptyList(),
     val createdTime: Timestamp? = null,
+    val imageWidth: Int = -1,
+    val imageHeight: Int = -1
 ) : Parcelable
 

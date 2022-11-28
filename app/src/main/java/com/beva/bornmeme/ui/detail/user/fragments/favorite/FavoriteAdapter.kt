@@ -11,6 +11,7 @@ import com.beva.bornmeme.databinding.ItemUserPostsBinding
 import com.beva.bornmeme.model.Post
 import com.beva.bornmeme.ui.home.HomeAdapter
 import com.bumptech.glide.Glide
+import timber.log.Timber
 
 class FavoriteAdapter(private val onClickListener: OnClickListener): ListAdapter<Post, FavoriteAdapter.ViewHolder>(DiffCallback) {
 
@@ -45,6 +46,7 @@ class FavoriteAdapter(private val onClickListener: OnClickListener): ListAdapter
         item?.let {
             holder.itemView.setOnClickListener {
                 onClickListener.onClick(item)
+                Timber.d("click $item position $position")
             }
             holder.bind(item)
         }

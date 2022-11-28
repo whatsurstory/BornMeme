@@ -1,22 +1,28 @@
 package com.beva.bornmeme.ui.editFragment
 
 
-import android.graphics.Bitmap
+import android.annotation.SuppressLint
 import android.graphics.BitmapFactory
-import android.graphics.drawable.GradientDrawable
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.collection.arrayMapOf
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat
+import androidx.core.view.accessibility.AccessibilityEventCompat.setAction
 import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -24,17 +30,10 @@ import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentEditFixmodeBinding
 import com.beva.bornmeme.model.UserManager
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.dialog.MaterialDialogs
+import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 
@@ -45,6 +44,8 @@ class EditFragment : Fragment() {
     private lateinit var uri: Uri
     private lateinit var upperText: AppCompatEditText
     private lateinit var bottomText: AppCompatEditText
+    private lateinit var tag: EditText
+    private lateinit var title:EditText
     private val fireStore = FirebaseFirestore.getInstance().collection("Posts")
     private val document = fireStore.document()
     private lateinit var viewModel: EditViewModel
@@ -57,9 +58,7 @@ class EditFragment : Fragment() {
             uri = bundle.getParcelable("uri")!!
             Timber.d("From Album uri => $uri")
         }
-//        binding.originPhoto.setImageURI(uri)
         getLayoutPrams()
-//        getTextPrams()
     }
 
 
@@ -71,44 +70,29 @@ class EditFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(EditViewModel::class.java)
         upperText = binding.upperText
         bottomText = binding.bottomText
+        tag = binding.editTextCatalog
+        title = binding.editTextTitle
 
-        binding.editTextCatalog
-            .addTextChangedListener(
-                afterTextChanged = {
-                    if (binding.editTextCatalog.text?.trim()?.isNotEmpty() == true) {
-                        binding.catalogCard.error = null
-                        binding.editTextCatalog.text.toString()
-                    } else {
-                        binding.editTextCatalog.setText("傻逼日常").toString()
-                    }
-                },
-                onTextChanged = { s, start, before, count ->
-                    if (binding.editTextCatalog.text?.trim()?.isEmpty() == true) {
-                        binding.editTextCatalog.error =
-                            "If Tag is Empty the input will take 傻逼日常 as default"
-                    }
-                },
-                beforeTextChanged = { s, start, before, count ->
-                }
-            )
+        tag.doOnTextChanged { text, start, count, after ->
+            // action which will be invoked when the text is changing
+            if (text.isNullOrEmpty()) {
+                binding.catalogCard.error = "No word in here"
+            } else {
+                binding.catalogCard.error = null
+            }
+        }
 
-        binding.editTextTitle
-            .addTextChangedListener(
-                afterTextChanged = {
-                    if (binding.editTextTitle.text?.trim()?.isNotEmpty() == true) {
-                        binding.titleCard.error = null
-                        binding.editTextTitle.text.toString()
-                    }
-                },
-                onTextChanged = { s, start, before, count ->
-                    if (binding.editTextTitle.text?.trim()?.isEmpty() == true) {
-                        binding.titleCard.error = "If Tag is Empty the input will take Your Name as default"
-                    }
-                },
-                    beforeTextChanged = { s, start, before, count ->
+        title.doOnTextChanged { text, start, count, after ->
+            // action which will be invoked when the text is changing
+            if (text.isNullOrEmpty()) {
+                binding.titleCard.error = "No word in here"
+            } else {
+                binding.titleCard.error = null
+            }
+        }
 
-                })
-
+        (tag.parent.parent as ViewGroup).setBackgroundColor(Color.parseColor("#EADDDB"))
+        (title.parent.parent as ViewGroup).setBackgroundColor(Color.parseColor("#EADDDB"))
         return binding.root
     }
 
@@ -118,6 +102,8 @@ class EditFragment : Fragment() {
         //to preview
         binding.previewBtn.setOnClickListener {
             Timber.d("onClick Preview")
+            Timber.d("editTextCatalog ${tag.text}")
+            Timber.d("editTextTitle ${title.text}")
 
             if (upperText.text.isNullOrEmpty() || bottomText.text.isNullOrEmpty()) {
                 Snackbar.make(it, "Not Adding Text Yet", Snackbar.LENGTH_SHORT)
@@ -151,24 +137,42 @@ class EditFragment : Fragment() {
         //to publish
         binding.publishBtn.setOnClickListener {
             Timber.d("onClick publish")
-//
-//            val builder =
-//                MaterialAlertDialogBuilder(this.requireContext(), )
-//                .setView(R.layout.item_loading)
-//            builder.setCancelable(false)
-//            val dialog = builder.create()
-//            dialog.show()
-            binding.lottiePublishLoading.visibility = View.VISIBLE
-            binding.lottiePublishLoading.setAnimation(R.raw.dancing_pallbearers)
-
-            val tag =if (binding.editTextCatalog.text.toString() == "") { "傻逼日常" } else { binding.editTextCatalog.text.toString()}
-            val title = if ( binding.editTextTitle.text.toString() == "") { "Beva" } else { binding.editTextTitle.text.toString() }
-
             if (upperText.text.isNullOrEmpty() || bottomText.text.isNullOrEmpty()) {
                 Snackbar.make(it, "Not Adding Text Yet", Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show()
+            } else if (title.text.trim().isEmpty()) {
+                //Snackbar ani
+                val titleSnack = Snackbar.make(it,"資料未完成將填入預設值，不客氣",Snackbar.LENGTH_INDEFINITE)
+                titleSnack.animationMode = BaseTransientBottomBar.ANIMATION_MODE_FADE
+                titleSnack.setBackgroundTint(Color.parseColor("#EADDDB"))
+                titleSnack.setTextColor(Color.parseColor("#181A19"))
+                titleSnack.setAction("感恩的心") {
+                        title.setText(UserManager.user.userName)
+                    }
+                val snackBarView = titleSnack.view
+                val params = snackBarView.layoutParams as FrameLayout.LayoutParams
+                params.gravity =  Gravity.CENTER_HORIZONTAL and Gravity.TOP
+                snackBarView.layoutParams = params
+                titleSnack.show()
 
+            } else if (tag.text.trim().isEmpty()) {
+                val tagSnack =
+                    Snackbar.make( it,"資料未完成將填入預設值，不客氣", Snackbar.LENGTH_INDEFINITE)
+                    .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
+                    .setBackgroundTint(Color.parseColor("#EADDDB"))
+                    .setTextColor(Color.parseColor("#181A19"))
+                    .setAction("感謝有你") {
+                        tag.setText("傻逼日常")
+                    }
+                val snackBarView = tagSnack.view
+                val params = snackBarView.layoutParams as FrameLayout.LayoutParams
+                params.gravity =  Gravity.CENTER_HORIZONTAL and Gravity.TOP
+                snackBarView.layoutParams = params
+                tagSnack.show()
             } else {
+                binding.lottiePublishLoading.visibility = View.VISIBLE
+                binding.lottiePublishLoading.setAnimation(R.raw.dancing_pallbearers)
+
                 val ref = FirebaseStorage.getInstance().reference
                 ref.child("img_origin/" + document.id + ".jpg")
                     .putFile(uri)
@@ -180,10 +184,10 @@ class EditFragment : Fragment() {
 //                            Timber.d("newTag $newTag")
                             val res = listOf(
                                 arrayMapOf("type" to "base", "url" to it),
-                                (arrayMapOf(
+                                arrayMapOf(
                                     "type" to "text",
-                                    "url" to upperText.text.toString() + bottomText.text.toString()
-                                ))
+                                    "url" to "${upperText.text}\n${bottomText.text}"
+                                )
                             )
 
                             binding.originPhoto.buildDrawingCache()
@@ -198,12 +202,17 @@ class EditFragment : Fragment() {
                                 upperBitmap,
                                 bottomBitmap
                             )
+
+
                             //saving to gallery and return the path(uri)
                             val newUri = viewModel.getImageUri(activity?.application, publishBitmap)
-                            Timber.d("newUri => $newUri")
-                            if (newUri != null) {
-                                viewModel.addNewPost(newUri, res, title, tag)
-                            }
+                            viewModel.addNewPost(
+                                newUri,
+                                res,
+                                title.text.toString(),
+                                tag.text.toString(),
+                                publishBitmap.width,
+                                publishBitmap.height)
                             findNavController().navigate(MobileNavigationDirections.navigateToHomeFragment())
 
                         }?.addOnFailureListener {
@@ -217,7 +226,6 @@ class EditFragment : Fragment() {
         }
 
     }
-
 
 //    private fun getBitmapByUri(bitmapUri: Uri): Bitmap {
 //        return BitmapFactory.decodeStream(activity?.contentResolver?.openInputStream(bitmapUri))

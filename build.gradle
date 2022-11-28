@@ -17,6 +17,7 @@ buildscript {
         classpath "com.android.tools.build:gradle:$version_android_gradle_plugin"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$version_navigation"
         classpath("org.jlleitschuh.gradle:ktlint-gradle:$version_ktlint")
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.2'
     }
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {

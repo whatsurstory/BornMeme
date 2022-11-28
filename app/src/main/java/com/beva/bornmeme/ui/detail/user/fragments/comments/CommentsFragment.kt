@@ -40,7 +40,7 @@ class CommentsFragment : Fragment() {
         val userId = requireArguments().getString("userIdKey") ?: ""
         viewModel = CommentsViewModel(userId)
 
-        val adapter = UserCommentAdapter(viewModel)
+        val adapter = UserCommentAdapter(viewModel.uiState)
 
         binding.commentRecycler.adapter = adapter
 

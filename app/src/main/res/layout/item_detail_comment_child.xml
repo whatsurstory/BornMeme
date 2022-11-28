@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,9 +8,10 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/child_user_img"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_margin="8dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="14dp"
         app:layout_constraintStart_toEndOf="@id/comment_guideline"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/circle"
@@ -21,7 +23,7 @@
         android:layout_height="match_parent"
         android:elevation="8dp"
         android:layout_marginHorizontal="8dp"
-        android:layout_marginVertical="8dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/child_user_img"
@@ -33,16 +35,18 @@
 
             <TextView
                 android:id="@+id/child_user_name"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:fontFamily="@font/arista_pro_bold_trial"
+                android:layout_marginVertical="6dp"
+                android:layout_marginHorizontal="10dp"
                 android:gravity="center_vertical"
-                android:text="Mindy"
-                android:textColor="@color/dark_blue"
-                android:textSize="18sp"
+                tools:text="Mindy"
+                android:fontFamily="@font/round_border"
+                android:textColor="@color/dark_gray"
+                android:textSize="12sp"
+                android:maxLength="10"
+                android:maxLines="1"
                 app:layout_constraintBottom_toTopOf="@id/child_zone_text"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -51,71 +55,80 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="8dp"
-                android:fontFamily="@font/chenyuluoyan_thin"
-                android:text="30 min ago"
-                android:textColor="@color/blue_gray"
-                android:textSize="24sp"
+                tools:text="30 min ago"
+                android:textColor="@color/dark_gray"
+                android:fontFamily="@font/round_border"
+                android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/child_like_btn"
-                app:layout_constraintStart_toStartOf="@+id/child_zone_text" />
+                app:layout_constraintEnd_toEndOf="@+id/child_dislike_num" />
 
 
             <TextView
                 android:id="@+id/child_zone_text"
                 android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:fontFamily="@font/arista_pro_light_trial"
+                android:layout_height="wrap_content"
+                android:paddingVertical="6dp"
+                android:textSize="16sp"
+                android:fontFamily="@font/round_border"
+                android:textColor="@color/tr_black"
+                tools:text="TextPicture Description TextPicture Description TextPictureTextPicture Description TextPicture"
                 app:layout_constraintBottom_toTopOf="@+id/child_time"
-                app:layout_constraintEnd_toEndOf="@id/child_user_name"
+                app:layout_constraintEnd_toEndOf="@+id/child_dislike_num"
                 app:layout_constraintStart_toStartOf="@+id/child_user_name"
                 app:layout_constraintTop_toBottomOf="@id/child_user_name" />
 
             <ImageButton
                 android:id="@+id/child_like_btn"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:scaleType="centerInside"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:padding="4dp"
                 android:background="@color/woo"
-                android:layout_marginStart="8dp"
+                android:scaleType="centerInside"
+                android:layout_marginEnd="10dp"
                 android:src="@drawable/before_thumbup"
-                app:layout_constraintStart_toEndOf="@+id/child_time"
-                app:layout_constraintTop_toTopOf="@id/child_time"
-                app:layout_constraintBottom_toBottomOf="@id/child_time"/>
+                app:layout_constraintBottom_toBottomOf="@+id/child_user_name"
+                app:layout_constraintEnd_toStartOf="@+id/child_like_num"
+                app:layout_constraintTop_toTopOf="@+id/child_user_name"
+                app:tint="@color/tr_black" />
 
             <TextView
                 android:id="@+id/child_like_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="200"
-                android:fontFamily="@font/chenyuluoyan_thin"
-                android:textSize="20sp"
-                android:layout_marginStart="8dp"
+                tools:ignore="200"
+                android:textSize="12sp"
+                android:layout_marginEnd="10dp"
+                android:textColor="@color/dark_gray"
+                android:fontFamily="@font/round_border"
                 app:layout_constraintBottom_toBottomOf="@+id/child_like_btn"
-                app:layout_constraintStart_toEndOf="@id/child_like_btn"
+                app:layout_constraintEnd_toStartOf="@+id/child_dislike_btn"
                 app:layout_constraintTop_toTopOf="@+id/child_like_btn" />
 
             <ImageButton
                 android:id="@+id/child_dislike_btn"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:scaleType="centerInside"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:padding="4dp"
+                android:layout_marginEnd="10dp"
                 android:background="@color/woo"
-                android:layout_marginStart="8dp"
+                android:scaleType="centerInside"
                 android:src="@drawable/b4_thumbdown"
                 app:layout_constraintBottom_toBottomOf="@id/child_like_num"
-                app:layout_constraintStart_toEndOf="@+id/child_like_num"
-                app:layout_constraintTop_toTopOf="@+id/child_like_num" />
+                app:layout_constraintEnd_toStartOf="@+id/child_dislike_num"
+                app:layout_constraintTop_toTopOf="@+id/child_like_num"
+                app:tint="@color/tr_black" />
 
             <TextView
                 android:id="@+id/child_dislike_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="100"
-                android:textSize="20sp"
-                android:fontFamily="@font/chenyuluoyan_thin"
-                android:layout_marginStart="8dp"
+                tools:text="100"
+                android:textSize="12sp"
+                android:layout_marginEnd="10dp"
+                android:textColor="@color/dark_gray"
+                android:fontFamily="@font/round_border"
                 app:layout_constraintBottom_toBottomOf="@+id/child_dislike_btn"
-                app:layout_constraintStart_toEndOf="@+id/child_dislike_btn"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/child_dislike_btn" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -126,6 +139,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.05" />
+        app:layout_constraintGuide_percent="0.1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

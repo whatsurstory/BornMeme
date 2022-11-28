@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/tr_black"
     tools:context=".ui.home.HomeFragment">
 
     <com.google.android.material.chip.ChipGroup
@@ -11,7 +13,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginEnd="12dp"
         app:layout_constraintBottom_toTopOf="@id/recycler_home"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,7 +33,6 @@
             style="@style/CustomChipStyle"
             app:chipCornerRadius="16dp"
             android:layout_marginStart="12dp"
-            android:layout_marginEnd="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -43,11 +43,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintStart_toEndOf="@+id/reset_btn"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/reset_btn"
-            app:layout_constraintBottom_toBottomOf="@id/reset_btn"
+            android:paddingHorizontal="8dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="@id/reset_btn"
+            app:layout_constraintStart_toEndOf="@+id/reset_btn"
+            app:layout_constraintTop_toTopOf="@id/reset_btn"
+            app:layout_constraintEnd_toEndOf="parent"
             tools:listitem="@layout/item_tag" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -58,15 +59,11 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginHorizontal="6dp"
-            android:layout_marginBottom="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/chip_group"
             tools:listitem="@layout/item_home_img"/>
-
-
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

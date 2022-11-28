@@ -1,21 +1,19 @@
 package com.beva.bornmeme.ui.detail.img
 
 import android.view.View
+import android.widget.TextView
 import androidx.collection.arrayMapOf
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.ViewModelFactoryDsl
+import androidx.lifecycle.*
 import com.beva.bornmeme.databinding.FragmentImgDetailBinding
-import com.beva.bornmeme.model.Comment
-import com.beva.bornmeme.model.Folder
-import com.beva.bornmeme.model.User
-import com.beva.bornmeme.model.UserManager
+import com.beva.bornmeme.model.*
+import com.beva.bornmeme.model.UserManager.user
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 
@@ -27,8 +25,8 @@ data class UiState (
     val onClickToLike: (comment: String) -> Unit,
     val onClickToDislike: (comment: String) -> Unit,
     val onClickToSeeMore: (comment: CommentCell.ParentComment) -> Unit,
-    val onClickToBack: (commentId: String)-> Unit
-
+    val onClickToBack: (commentId: String)-> Unit,
+    val getUserImg: (userId:String, onUserObtained: ((User) -> Unit)) -> Unit
 )
     val liveData = MutableLiveData<List<Comment>>()
 
@@ -102,6 +100,18 @@ data class UiState (
                         || (it is CommentCell.ChildComment && it.comment.parentId != parentId)
             }?.toMutableList()
 
+        },
+        getUserImg = { userId, onUserObtained ->
+            Firebase.firestore
+                .collection("Users")
+                .document(userId)
+                .get()
+                .addOnCompleteListener {
+                    val post = it.result.toObject(User::class.java)
+                    if (post != null) {
+                        return@addOnCompleteListener onUserObtained(post)
+                    }
+                }
         }
     )
 
@@ -278,4 +288,4 @@ data class UiState (
                     }
                 }
             }
-    }
+        }

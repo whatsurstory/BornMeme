@@ -11,6 +11,7 @@ import com.beva.bornmeme.databinding.FragmentHomeBinding
 import com.beva.bornmeme.databinding.ItemTagBinding
 import com.beva.bornmeme.model.Post
 import timber.log.Timber
+import java.util.*
 
 
 //
@@ -23,7 +24,11 @@ class TagAdapter(private val onClickListener: OnClickListener): ListAdapter<Stri
         val chipCard = binding.chipCard
         @SuppressLint("ResourceAsColor")
         fun bind(item: String, selectedItem:Int){
-            binding.chipCard.text = item
+            binding.chipCard.text = item.replaceFirstChar {
+                if (it.isLowerCase()) it.titlecase(
+                    Locale.getDefault()
+                ) else it.toString()
+            }
             if (adapterPosition == selectedItem) {
                 //recycler reuse if else condition
                 Timber.d("adapterPosition $adapterPosition")

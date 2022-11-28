@@ -7,11 +7,32 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_edit">Edit</string>
     <string name="text_click">Click to add some text</string>
     <string name="preview_btn">Preview</string>
     <string name="publish_btn">Publish</string>
     <string name="save_btn">Save</string>
+    <string name="module_text">choose the perfect images for editor</string>
+    <string name="profile_name_text">Name</string>
+    <string name="default_text">Default</string>
+    <string name="introduce_text">Introduce</string>
+    <string name="email_text">Email</string>
+    <string name="followers_list_text">Followers List</string>
+    <string name="block_list_text">Block List</string>
+    <string name="follow_list_text">Follow List</string>
+    <string name="save_profile_text">Save And Update</string>
+    <string name="text_to_reply_hint">Adding text to reply …</string>
+    <string name="publish_text">Publish</string>
+    <string name="chip_reply_to">Reply To:</string>
+    <string name="yes_btn">對沒錯</string>
+    <string name="no_btn">再想想</string>
+    <string name="enter_folder_name">Enter Folder Name</string>
+    <string name="enter_title_hint">Please Enter the Title of Image</string>
+    <string name="enter_tag_hint">Enter the tag of the image</string>
+    <string name="img_detail_follow_text">follow</string>
+    <string name="comment_recycle_text">雖然現在這裡有點安靜 ...</string>
+    <string name="bornmeme">BornMeme.</string>
+    <string name="see_more_text">查看更多回覆</string>
+    <string name="reply_btn">回覆</string>
+    <string name="back_btn">收起回覆</string>
+    <string name="block_text">是否將此用戶封鎖?</string>
 </resources>

@@ -1,13 +1,19 @@
 package com.beva.bornmeme.ui.editFragment
 
 import android.app.Application
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.icu.util.Calendar
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.lifecycle.ViewModel
 import com.beva.bornmeme.model.UserManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -50,41 +56,43 @@ class EditViewModel : ViewModel() {
         return Uri.parse(path)
     }
 
-    fun addNewPost(uri: Uri, res: List<Any>, title:String, tag:String) {
+    fun addNewPost(uri: Uri?, res: List<Any>, title:String, tag:String, width: Int, height: Int) {
         Timber.d("getNewPost")
-
+        Timber.d("publish => $title tag $tag")
         val postPath = FirebaseFirestore.getInstance().collection("Posts").document()
         val userPath = FirebaseFirestore.getInstance().collection("Users").document(UserManager.user.userId.toString())
         val ref = FirebaseStorage.getInstance().reference
 
-        ref.child("img_edited/" + postPath.id + ".jpg")
-            .putFile(uri)
-            .addOnSuccessListener {
-                it.metadata?.reference?.downloadUrl?.addOnSuccessListener {
-                    //這層的it才會帶到firebase return 的 Uri
-//                    Timber.d("edited uri: $it => take it to upload url")
-//                    Timber.d("newTag $tag")
-                    val post = hashMapOf(
-                        "id" to postPath.id,
-                        "photoId" to "photo_id",
-                        "ownerId" to UserManager.user.userId,
-                        "title" to title,
-                        "catalog" to tag,
-                        "like" to null,
-                        "resources" to res,
-                        "collection" to null,
-                        "createdTime" to Date(Calendar.getInstance().timeInMillis),
-                        "url" to it
-                    )
-                    //put into firebase_storage
-                    postPath.set(post)
-                    userPath.update("postQuantity", FieldValue.arrayUnion(postPath.id))
-                    Timber.d("to firebase => Publish Done: POST ${postPath.id} \n USER ${userPath.id}")
-                    //  Log.d("test","test uri = ${Uri.parse(uri.toString())}")
+        if (uri != null) {
+            ref.child("img_edited/" + postPath.id + ".jpg")
+                .putFile(uri)
+                .addOnSuccessListener {
+                    it.metadata?.reference?.downloadUrl?.addOnSuccessListener {
+                        //這層的it才會帶到firebase return 的 Url
+    //                    Timber.d("edited uri: $it => take it to upload url")
+    //                    Timber.d("newTag $tag")
+
+                        val post = hashMapOf(
+                            "id" to postPath.id,
+                            "photoId" to "photo_id",
+                            "ownerId" to UserManager.user.userId,
+                            "title" to title,
+                            "catalog" to tag,
+                            "resources" to res,
+                            "createdTime" to Date(Calendar.getInstance().timeInMillis),
+                            "url" to it,
+                            "imageWidth" to width,
+                            "imageHeight" to height
+                        )
+                        //put into firebase_storage
+                        postPath.set(post)
+                        userPath.update("postQuantity", FieldValue.arrayUnion(postPath.id))
+                        Timber.d("to firebase => Publish Done: POST ${postPath.id} \n USER ${userPath.id}")
+                    }
                 }
-            }
-            .addOnFailureListener {
-                Timber.d("Error-> ${it.message}")
-            }
+                .addOnFailureListener {
+                    Timber.d("Error-> ${it.message}")
+                }
+        }
     }
 }

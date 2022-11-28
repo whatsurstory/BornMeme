@@ -4,16 +4,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/tr_black">
 
     <ScrollView
         android:id="@+id/img_detail_user_scroll"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintVertical_bias="1.0">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -23,9 +26,9 @@
                 android:id="@+id/img_detail_user_img"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:layout_marginStart="16dp"
-                android:scaleType="centerCrop"
+                android:layout_marginStart="12dp"
                 android:layout_marginTop="8dp"
+                android:scaleType="centerCrop"
                 android:src="@drawable/dino"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -38,13 +41,12 @@
                 android:layout_height="0dp"
                 android:layout_marginStart="8dp"
                 android:gravity="center_vertical"
-                android:text="Beva"
-                android:fontFamily="@font/arista_pro_bold_trial"
+                android:fontFamily="@font/round_border"
                 android:maxLines="1"
-                android:textSize="20sp"
-                android:textColor="@color/blue_gray"
-                app:layout_constraintEnd_toStartOf="@id/detail_guideline"
+                android:textColor="@color/tr_pink"
+                android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@id/img_detail_user_img"
+                app:layout_constraintEnd_toStartOf="@id/detail_guideline"
                 app:layout_constraintStart_toEndOf="@id/img_detail_user_img"
                 app:layout_constraintTop_toTopOf="@+id/img_detail_user_img" />
 
@@ -52,95 +54,111 @@
                 android:id="@+id/follow_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:gravity="center"
-                android:text="follow"
                 android:fontFamily="@font/arista_pro_bold_trial"
+                android:gravity="center"
+                android:text="@string/img_detail_follow_text"
+                android:textColor="@color/tr_pink"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@color/blue_gray"
+                android:paddingHorizontal="4dp"
                 app:layout_constraintBottom_toBottomOf="@+id/img_detail_user_name"
                 app:layout_constraintEnd_toStartOf="@+id/report_btn"
                 app:layout_constraintStart_toEndOf="@+id/detail_guideline"
                 app:layout_constraintTop_toTopOf="@+id/img_detail_user_name" />
 
-<!--            <TextView-->
-<!--                android:id="@+id/unfollow_btn"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="following"-->
-<!--                android:gravity="center"-->
-<!--                android:visibility="gone"-->
-<!--                app:layout_constraintBottom_toBottomOf="@+id/img_detail_user_name"-->
-<!--                app:layout_constraintEnd_toStartOf="@+id/report_btn"-->
-<!--                app:layout_constraintStart_toEndOf="@+id/detail_guideline"-->
-<!--                app:layout_constraintTop_toTopOf="@+id/img_detail_user_name" />-->
+            <!--            <TextView-->
+            <!--                android:id="@+id/unfollow_btn"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:text="following"-->
+            <!--                android:gravity="center"-->
+            <!--                android:visibility="gone"-->
+            <!--                app:layout_constraintBottom_toBottomOf="@+id/img_detail_user_name"-->
+            <!--                app:layout_constraintEnd_toStartOf="@+id/report_btn"-->
+            <!--                app:layout_constraintStart_toEndOf="@+id/detail_guideline"-->
+            <!--                app:layout_constraintTop_toTopOf="@+id/img_detail_user_name" />-->
 
             <ImageButton
                 android:id="@+id/report_btn"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:background="@color/woo"
-                android:rotation="90"
                 android:layout_marginEnd="4dp"
-                android:scaleType="centerCrop"
+                android:background="@color/woo"
                 android:padding="6dp"
+                android:rotation="90"
+                android:scaleType="centerCrop"
                 android:src="@drawable/ic_baseline_more_vert_24"
                 app:layout_constraintBottom_toBottomOf="@+id/follow_btn"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/follow_btn"
-                app:tint="@color/dark_blue" />
+                app:tint="@color/tr_pink" />
 
             <ImageButton
-                android:id="@+id/like_btn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@color/woo"
-                android:padding="10dp"
-                android:layout_marginStart="6dp"
-                android:scaleType="centerInside"
-                android:src="@drawable/before_thumbup"
+                android:id="@+id/before_thumbup_btn"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/img_detail_image"
-                app:tint="@color/dark_blue" />
+                app:backgroundTint="@color/tr_pink" />
+
+            <!--            <ImageButton-->
+            <!--                android:id="@+id/after_thumpup_btn"-->
+            <!--                android:layout_width="36dp"-->
+            <!--                android:layout_height="36dp"-->
+            <!--                android:layout_marginStart="12dp"-->
+            <!--                android:layout_marginTop="8dp"-->
+            <!--                android:background="@drawable/after_thumpup"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@id/img_detail_image"-->
+            <!--                app:tint="@color/dark_blue"-->
+            <!--                android:visibility="gone"/>-->
+
+            <ImageButton
+                android:id="@+id/download_btn"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/icons8_desktop_download_48"
+                android:scaleType="centerInside"
+                app:layout_constraintBottom_toBottomOf="@+id/before_thumbup_btn"
+                app:layout_constraintStart_toEndOf="@+id/before_thumbup_btn"
+                app:layout_constraintTop_toTopOf="@+id/before_thumbup_btn"
+                app:backgroundTint="@color/tr_pink" />
 
             <ImageButton
                 android:id="@+id/comment_btn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@color/woo"
-                android:src="@drawable/comment"
-                android:scaleType="centerInside"
-                android:padding="10dp"
-                app:layout_constraintBottom_toBottomOf="@id/like_btn"
-                app:layout_constraintStart_toEndOf="@id/like_btn"
-                app:layout_constraintTop_toTopOf="@id/like_btn"
-                app:tint="@color/dark_blue" />
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/icons8_comments_48"
+                app:layout_constraintBottom_toBottomOf="@+id/download_btn"
+                app:layout_constraintStart_toEndOf="@+id/download_btn"
+                app:layout_constraintTop_toTopOf="@+id/download_btn"
+                app:backgroundTint="@color/tr_pink" />
 
             <ImageButton
                 android:id="@+id/collection_btn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@color/woo"
-                android:src="@drawable/collection"
-                android:scaleType="centerInside"
-                android:padding="12dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/icons8_folder_48"
                 app:layout_constraintBottom_toBottomOf="@id/share_btn"
                 app:layout_constraintEnd_toStartOf="@id/share_btn"
                 app:layout_constraintTop_toTopOf="@id/share_btn"
-                app:tint="@color/dark_blue" />
+                app:backgroundTint="@color/tr_pink" />
 
             <ImageButton
                 android:id="@+id/share_btn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginEnd="8dp"
-                android:background="@color/woo"
-                android:src="@drawable/share"
-                android:scaleType="centerInside"
-                android:padding="10dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/icons8_share_rounded_48"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/img_detail_image"
-                app:tint="@color/dark_blue" />
+                app:backgroundTint="@color/tr_pink" />
 
 
             <ImageView
@@ -159,77 +177,86 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="18dp"
-                android:fontFamily="@font/arista_pro_bold_trial"
-                android:text="Title"
-                android:textColor="@color/blue_gray"
-                android:textSize="24sp"
+                android:maxLines="1"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="4dp"
+                android:fontFamily="@font/round_border"
+                android:textColor="@color/tr_pink"
+                android:textSize="18sp"
+                tools:text="@string/default_text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/img_detail_user_img"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/share_btn" />
 
             <TextView
                 android:id="@+id/img_detail_description"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:maxLines="2"
-                android:fontFamily="@font/arista_pro_light_trial"
+                android:letterSpacing="0.02"
+                android:paddingVertical="4dp"
+                android:layout_marginHorizontal="12dp"
+                android:textColor="@color/tr_pink"
+                android:fontFamily="@font/round_border"
                 android:textSize="16sp"
-                android:textColor="@color/blue_gray"
+                android:gravity="start|top"
+                app:layout_constraintBottom_toTopOf="@id/img_detail_line"
                 app:layout_constraintEnd_toEndOf="@+id/img_detail_title"
                 app:layout_constraintStart_toStartOf="@id/img_detail_title"
                 app:layout_constraintTop_toBottomOf="@+id/img_detail_title"
-                tools:text="Picture Description Text" />
+                tools:text="12345,.!?*%$#Picture Description Text Picture Description TextPicture Description TextPicture Description TextPicture Description Text" />
 
             <TextView
-                android:id="@+id/view_text"
+                android:id="@+id/comment_num_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:fontFamily="@font/round_border"
+                tools:text="9527 comments"
                 android:textColor="@color/blue_gray"
-                android:text="9527 views"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toTopOf="@id/img_detail_line"
-                android:fontFamily="@font/chenyuluoyan_thin"
-                app:layout_constraintStart_toStartOf="@+id/img_detail_description"
-                app:layout_constraintTop_toBottomOf="@+id/img_detail_description" />
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/img_detail_line" />
 
             <View
                 android:id="@+id/img_detail_line"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_marginTop="8dp"
-                android:background="@color/blue_gray"
-                app:layout_constraintEnd_toEndOf="@id/img_detail_description"
-                app:layout_constraintStart_toStartOf="@id/img_detail_description"
-                app:layout_constraintTop_toBottomOf="@id/view_text" />
+                android:layout_marginVertical="8dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="24dp"
+                android:background="@color/gray_white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/img_detail_description" />
 
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/comments_recycler"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/img_detail_line"
-                tools:listitem="@layout/item_detail_comment_parent"
-                android:layout_margin="8dp"/>
+                app:layout_constraintTop_toBottomOf="@+id/img_detail_line"
+                tools:listitem="@layout/item_detail_comment_parent" />
 
-            <TextView
+            <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/no_see_text"
-                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:text="Although it's a little bit quiet in here ..."
-                android:visibility="gone"
-                android:layout_margin="16dp"
-                android:fontFamily="@font/arista_pro_bold_trial"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/img_detail_line"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:textColor="@color/gray_white"
+                android:textSize="16sp"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                android:visibility="visible"
+                app:layout_constraintTop_toBottomOf="@+id/img_detail_line"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/img_detail_line"
+                app:layout_constraintStart_toStartOf="@id/img_detail_line" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/detail_guideline"

@@ -3,6 +3,7 @@ package com.beva.bornmeme
 
 import android.animation.Animator
 import android.app.Activity
+import android.content.Context
 import android.graphics.ColorFilter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -18,6 +19,7 @@ import android.view.animation.AnimationUtils
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieProperty
@@ -30,6 +32,7 @@ import com.beva.bornmeme.model.UserManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.ktx.firestore
@@ -41,6 +44,7 @@ class SplashFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
     lateinit var binding: FragmentSplashBinding
+    private lateinit var viewModel: SplashViewModel
 
 //    override fun onCreate(savedInstanceState: Bundle?) {
 //        super.onCreate(savedInstanceState)
@@ -59,7 +63,7 @@ class SplashFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSplashBinding.inflate(layoutInflater)
-
+        viewModel = SplashViewModel()
         auth = FirebaseAuth.getInstance()
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -102,6 +106,16 @@ class SplashFragment : Fragment() {
             binding.loginLoading.setAnimation(R.raw.bouncing_balls)
             signInGoogle()
         }
+
+        viewModel.leave.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+//                    navigateToBackStack()
+                    viewModel.onLeaveCompleted()
+                }
+            }
+        )
 
 
         return binding.root
@@ -171,12 +185,16 @@ class SplashFragment : Fragment() {
         Firebase.firestore.runTransaction { transaction ->
             val snapshot = transaction.get(ref)
 //            val loginTimes = n + 1
-            Timber.d("snapshot ??? $snapshot")
+//            Timber.d("snapshot ??? $snapshot")
             if (snapshot.data != null) {
-                Timber.d("ID: ${snapshot.id} snapshot.data != null ${snapshot.data}")
+                Timber.d("ID: ${snapshot.id} snapshot.data != null")
                 val checkUser = snapshot.toObject(User::class.java)
                 UserManager.user = checkUser!!
-                Timber.d("UserManager ${UserManager.user}")
+                //when the member come back
+                Snackbar.make(requireView(), "Nice to See you Again! ${UserManager.user.userName}",
+                    Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null).show()
+//                Timber.d("UserManager ${UserManager.user}")
 //                transaction.update(ref,FieldValue.arrayUnion(loginTimes))
             } else {
                 Timber.d("ID: ${snapshot.id} snapshot.data == null")
@@ -193,13 +211,19 @@ class SplashFragment : Fragment() {
                     emptyList(),
                     emptyList(),
                     emptyList(),
+                    emptyList(),
                     emptyList()
                 )
                 transaction.set(ref,userData)
                 UserManager.user = userData
+                //when new comer sign-in
+                Snackbar.make(requireView(), "WelCome to Join! ${UserManager.user.userName}",
+                    Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null).show()
             }
         }.addOnSuccessListener {
             Timber.d("Success to adding $ref")
+            viewModel.leave()
             findNavController().navigate(MobileNavigationDirections.navigateToHomeFragment())
 
         }.addOnFailureListener {

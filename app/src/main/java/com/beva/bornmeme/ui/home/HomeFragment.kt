@@ -55,12 +55,10 @@ class HomeFragment : Fragment() {
 
         viewModel.display.observe(viewLifecycleOwner, Observer {
             it?.let {
-                adapter.submitList(it)
+                adapter.submitList(it.filterBlock())
                 adapter.notifyDataSetChanged()
             }
         })
-
-
 
 //        viewModel.display.observe(viewLifecycleOwner, Observer {
 //            Timber.d("viewModel display value $it")

@@ -8,6 +8,7 @@ import com.beva.bornmeme.model.Post
 import com.beva.bornmeme.model.User
 import com.beva.bornmeme.model.UserManager
 import com.bumptech.glide.Glide.init
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
@@ -41,9 +42,10 @@ class UserDetailViewModel(userId: String) : ViewModel() {
         Firebase.firestore
             .collection("Users")
             .document(UserManager.user.userId.toString())
-            .update("followList",userId)
-            .addOnCompleteListener {
-                Timber.d("it = $it \n result = ${it.result}")
+            .update("followList",FieldValue.arrayUnion(userId))
+            .addOnSuccessListener {
+                Firebase.firestore.collection("Users").document(userId)
+                    .update("followers", FieldValue.arrayUnion(UserManager.user.userId))
             }
     }
 

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentFavoriteBinding
+import com.beva.bornmeme.ui.home.filterBlock
 
 class FavoriteFragment : Fragment() {
 
@@ -44,7 +45,7 @@ class FavoriteFragment : Fragment() {
         binding.favoriteRecycler.adapter = adapter
 
         viewModel.likeData.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
+            adapter.submitList(it.filterBlock())
         }
 
         viewModel.navigateToDetail.observe(

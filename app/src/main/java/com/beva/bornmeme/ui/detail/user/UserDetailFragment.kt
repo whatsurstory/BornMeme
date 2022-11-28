@@ -66,21 +66,28 @@ class UserDetailFragment : Fragment() {
             .into(binding.userDetailImg)
         binding.userDetailName.text = user.userName
 
+        //粉絲數
         if (user.followers.isNullOrEmpty()) {
             binding.followersText.text = "0"
         } else {
             binding.followersText.text = user.followers.size.toString()
         }
-
+        //自我介紹
         binding.introduceText.text = user.introduce
-        binding.likesText.text = ""
-
+        //被喜歡
+        if (user.likeId.isNullOrEmpty()){
+            binding.likesText.text = "0"
+        }else {
+            binding.likesText.text = user.likeId.size.toString()
+        }
+        //po文數
         if (user.postQuantity.isNullOrEmpty()) {
             binding.postsText.text = "0"
         } else {
             binding.postsText.text = user.postQuantity.size.toString()
         }
 
+        //被追蹤及編輯
         if (user.userId != UserManager.user.userId) {
             binding.editIcon.visibility = View.GONE
             for (item in user.followers) {
@@ -102,7 +109,10 @@ class UserDetailFragment : Fragment() {
         } else {
             binding.editIcon.visibility = View.VISIBLE
             binding.editIcon.setOnClickListener {
-                findNavController().navigate(MobileNavigationDirections.navigateToEditProfileDialog())
+                viewModel.user.value?.userId?.let { id ->
+                    findNavController().navigate(MobileNavigationDirections
+                        .navigateToEditProfileDialog(id))
+                }
             }
         }
     }
