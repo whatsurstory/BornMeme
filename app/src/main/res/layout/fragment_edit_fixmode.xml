@@ -64,7 +64,7 @@ app:boxStrokeErrorColor="@color/dark_blue"
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/origin_photo"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:src="@drawable/dino"
             android:background="@color/tr_pink"
             app:layout_constraintBottom_toBottomOf="parent"

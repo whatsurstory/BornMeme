@@ -5,36 +5,51 @@
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/drag_img"
-        android:layout_width="match_parent"
+    <com.beva.bornmeme.ui.editFragment.StickerView
+        android:id="@+id/sticker_view"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/dino"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <TextView
-        android:id="@+id/drag_text"
-        android:background="@color/dark_gray"
+    <Button
+        android:id="@+id/add_text_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+<!--    <ImageView-->
+<!--        android:id="@+id/sticker_img"-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="50sp"-->
+<!--        android:visibility="visible"-->
+<!--        android:background="@drawable/heart"-->
+<!--        app:layout_constraintEnd_toEndOf="@+id/drag_img"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/drag_img"-->
+<!--        />-->
+
+    <EditText
+        android:id="@+id/edit_text_box"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="edit text here"
+        android:textColor="@color/light_orange_pink"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/add_text_btn"
+        app:layout_constraintTop_toTopOf="@+id/add_text_btn" />
+
+    <Button
+        android:id="@+id/add_sticker_btn"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="DRAG MEEE"
-        android:textStyle="bold"
-        android:textSize="32sp"
-        android:textColor="@color/light_blue"
-        app:layout_constraintStart_toStartOf="@+id/drag_img"
-        app:layout_constraintTop_toTopOf="@+id/drag_img" />
+        android:text="Add Sticker"
+        app:layout_constraintBottom_toTopOf="@+id/add_text_btn"
+        app:layout_constraintStart_toStartOf="parent"/>
 
-    <ImageView
-        android:id="@+id/sticker_img"
-        android:layout_width="50dp"
-        android:layout_height="50sp"
-        android:visibility="visible"
-        android:background="@drawable/heart"
-        app:layout_constraintEnd_toEndOf="@+id/drag_img"
-        app:layout_constraintBottom_toBottomOf="@+id/drag_img"
-        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

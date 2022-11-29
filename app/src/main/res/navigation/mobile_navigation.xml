@@ -59,6 +59,9 @@
         android:name="com.beva.bornmeme.ui.editFragment.EditDragFragment"
         tools:layout="@layout/fragment_drag_edit">
 
+        <argument
+            android:name="uri"
+            app:argType="android.net.Uri" />
     </fragment>
 
     <fragment

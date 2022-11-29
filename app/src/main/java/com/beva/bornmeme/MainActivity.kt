@@ -2,37 +2,35 @@ package com.beva.bornmeme
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Fragment
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
-import android.system.Os.remove
-import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat.startActivityForResult
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.FileProvider
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.beva.bornmeme.databinding.ActivityMainBinding
+import com.beva.bornmeme.databinding.FragmentEditFixmodeBinding
 import com.beva.bornmeme.model.User
 import com.beva.bornmeme.model.UserManager
 import com.bumptech.glide.Glide
-import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.internal.ContextUtils.getActivity
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -48,12 +46,13 @@ import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
+    val viewModel by viewModels<MainViewModel> { getVmFactory() }
+
 //    TODO: Move data to viewModel
     private var saveUri: Uri? = null
 
     private var isOpen = false
     private lateinit var binding: ActivityMainBinding
-    private lateinit var viewModel: MainViewModel
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     //Animation of fab
@@ -83,8 +82,8 @@ class MainActivity : AppCompatActivity() {
         Timber.plant(Timber.DebugTree())
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        viewModel = MainViewModel()
 
+        Timber.i("activity viewModel ${viewModel}")
         viewModel.user.observe(this, Observer{
             it?.let {
                 Timber.d(("Observe User cell : $it"))
@@ -130,7 +129,7 @@ class MainActivity : AppCompatActivity() {
                 binding.changeModeBtn.visibility = View.VISIBLE
                 binding.changeModeBtn.setOnClickListener {
                     Timber.d("你有按到change")
-                    navController.navigate(MobileNavigationDirections.navigateToDragEditFragment())
+                    navigateToDrag(viewModel.editingImg)
                 }
                 binding.fab.setOnClickListener {
                     toAlbum()
@@ -372,6 +371,7 @@ class MainActivity : AppCompatActivity() {
                     Activity.RESULT_OK -> {
                         val uri = data!!.data
                         Timber.d("PHOTO_FROM_GALLERY uri => $uri")
+                        viewModel.editingImg = uri
                         navigateToEditor(uri)
                     }
                     Activity.RESULT_CANCELED -> {
@@ -384,7 +384,9 @@ class MainActivity : AppCompatActivity() {
                 when (resultCode) {
                     Activity.RESULT_OK -> {
                         Timber.d("PHOTO_FROM_CAMERA uri => $saveUri")
+                        viewModel.editingImg = saveUri
                         navigateToEditor(saveUri)
+
                     }
                     Activity.RESULT_CANCELED -> {
                         Timber.d("getPhotoResult cancel $resultCode")
@@ -398,9 +400,18 @@ class MainActivity : AppCompatActivity() {
     //if we got the photo from camera/gallery, we'll take the arguments of image complete the navigate
     private fun navigateToEditor(uri: Uri?) {
         uri?.let {
-
             findNavController(R.id.nav_host_fragment_content_main)
                 .navigate(MobileNavigationDirections.navigateToEditFragment(it))
+        }
+    }
+
+    @SuppressLint("RestrictedApi")
+    private fun navigateToDrag(uri: Uri?) {
+        Timber.d("Uri -> $uri")
+        uri?.let {
+            findNavController(R.id.nav_host_fragment_content_main)
+                .navigate(MobileNavigationDirections.navigateToDragEditFragment(it))
+
         }
     }
 
@@ -443,4 +454,8 @@ class MainActivity : AppCompatActivity() {
             }.show()
     }
 
+}
+
+fun Activity.getVmFactory(): ViewModelFactory {
+    return ViewModelFactory()
 }

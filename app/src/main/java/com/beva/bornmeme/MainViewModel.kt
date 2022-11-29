@@ -1,5 +1,7 @@
 package com.beva.bornmeme
 
+import android.graphics.Bitmap
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -23,4 +25,7 @@ class MainViewModel: ViewModel() {
     fun setUser(user: User) {
         _user.value = user
     }
+
+    var editingImg: Uri? = null
+
 }

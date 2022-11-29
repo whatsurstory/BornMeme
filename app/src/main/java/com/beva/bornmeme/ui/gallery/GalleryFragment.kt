@@ -20,9 +20,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.beva.bornmeme.MainViewModel
 import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentGalleryBinding
@@ -151,6 +153,10 @@ class GalleryFragment: Fragment() {
                 "com.beva.bornmeme.fileProvider", file
             )
         Timber.d("fileUri -> $newUri")
+
+        val mainViewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
+        Timber.d("mainViewModel $mainViewModel")
+        mainViewModel.editingImg = newUri
         findNavController().navigate(MobileNavigationDirections.navigateToEditFragment(newUri))
     }
 

@@ -30,8 +30,10 @@ import androidx.core.content.FileProvider
 import androidx.databinding.adapters.ViewBindingAdapter.setPadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
+import com.beva.bornmeme.MainViewModel
 import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentImgDetailBinding
@@ -598,6 +600,8 @@ class ImgDetailFragment : Fragment() {
                 "com.beva.bornmeme.fileProvider", file
             )
         Timber.d("fileUri -> $newUri")
+        val mainViewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
+        mainViewModel.editingImg = newUri
         findNavController().navigate(MobileNavigationDirections.navigateToEditFragment(newUri))
     }
 
