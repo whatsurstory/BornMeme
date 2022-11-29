@@ -91,6 +91,9 @@ dependencies {
     implementation 'com.airbnb.android:lottie:3.4.1'
 
     implementation 'com.firebaseui:firebase-ui-storage:7.2.0'
+
+    //sticker
+//    implementation 'com.flying.xiaopo:sticker:1.6.0'
 }
 
 ktlint {

@@ -15,9 +15,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <EditText
-        android:editable="false"
-        android:id="@+id/drag_edit_text"
+    <TextView
+        android:id="@+id/drag_text"
         android:background="@color/dark_gray"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
@@ -32,7 +31,7 @@
         android:id="@+id/sticker_img"
         android:layout_width="50dp"
         android:layout_height="50sp"
-        android:visibility="gone"
+        android:visibility="visible"
         android:background="@drawable/heart"
         app:layout_constraintEnd_toEndOf="@+id/drag_img"
         app:layout_constraintBottom_toBottomOf="@+id/drag_img"
