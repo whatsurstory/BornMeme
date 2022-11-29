@@ -41,7 +41,8 @@ class HomeAdapter(private val onClickListener: OnClickListener,private val uiSta
             Timber.d("density ${deviceDensity}")
             Timber.d("density ${binding.root.context.resources.displayMetrics.densityDpi}")
 
-            val totalLayoutPadding = 40 * deviceDensity
+            //12 * 3
+            val totalLayoutPadding = 36 * deviceDensity
             val itemWidth = (screenWidth - totalLayoutPadding) / 2
             Timber.d("itemWidth ${itemWidth}")
 

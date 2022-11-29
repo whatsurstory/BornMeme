@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.view.MotionEvent
+import android.view.View
 import com.beva.bornmeme.R
 
 /**
@@ -34,6 +35,11 @@ class StickerPresenter(private val stickerView: StickerView) {
                 return true
             }
         }
+//        return backgroundDrawer.onTouchEvent(event)
+        return true
+    }
+
+    fun setOnLongClickListener(long: View.OnLongClickListener): Boolean {
         return true
     }
 

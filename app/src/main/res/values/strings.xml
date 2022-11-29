@@ -35,4 +35,5 @@
     <string name="reply_btn">回覆</string>
     <string name="back_btn">收起回覆</string>
     <string name="block_text">是否將此用戶封鎖?</string>
+    <string name="enter_hint_text">Please Adding Text Here</string>
 </resources>
