@@ -63,16 +63,21 @@ class EditDragFragment: Fragment() {
         displayText.requestFocus()
         binding.addTextBtn.isEnabled = false
 
+
+        //reset the coordinate of scrollview
         binding.verticalScrollView.setOnTouchListener { view, event ->
-            Timber.d("scrollY -> ${binding.verticalScrollView.scrollY}")
-            Timber.d("scrollview event => x: ${event?.x}, y: ${event?.y}")
-            Timber.i("stickerView event => x: ${binding.stickerView.x}, y: ${binding.stickerView.y}")
-            Timber.i("stickerView H -> ${binding.stickerView.height}")
-            Timber.d("screen H -> ${binding.root.context.resources.displayMetrics.widthPixels}")
+
+//            Timber.i("stickerView event => x: ${binding.stickerView.x}, y: ${binding.stickerView.y}")
+//            Timber.i("stickerView H -> ${binding.stickerView.height}")
+//            Timber.d("screen H -> ${binding.root.context.resources.displayMetrics.widthPixels}")
+
             val offset = binding.stickerView.y
             Timber.e("offset => $offset")
-            Timber.e("event.y - offset + binding.verticalScrollView.scrollY => ${event.y - offset + binding.verticalScrollView.scrollY}")
+            Timber.d("scrollview event => x: ${event?.x}, y: ${event?.y}")
             Timber.e("event.y - offset => ${event.y - offset}")
+            Timber.d("scrollY -> ${binding.verticalScrollView.scrollY}")
+            Timber.e("event.y - offset + binding.verticalScrollView.scrollY => ${event.y - offset + binding.verticalScrollView.scrollY}")
+
 
             val newEvent = MotionEvent.obtain(
                 event.downTime,
@@ -85,6 +90,7 @@ class EditDragFragment: Fragment() {
             return@setOnTouchListener binding.stickerView.onTouchEvent(newEvent)
         }
 
+        //let the bitmap's width and height scale the view
         arguments?.let { bundle ->
             uri = bundle.getParcelable("uri")!!
             Timber.d("uri => $uri")

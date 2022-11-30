@@ -9,8 +9,8 @@ class StickerDrawer(stickerView: StickerView, bitmap: Bitmap): Drawer(stickerVie
 
     override fun onInit() {
         //初始化位置
-        matrix.setTranslate(((stickerView.measuredWidth-bitmap.width)/2).toFloat(),
-            ((stickerView.measuredHeight-bitmap.height)/2).toFloat())
-//        matrix.setTranslate(100f,100f)
+//        matrix.setTranslate(((stickerView.measuredWidth-bitmap.width)/2).toFloat(),
+//            ((stickerView.measuredHeight-bitmap.height)/2).toFloat())
+        matrix.setTranslate(100f,100f)
     }
 }

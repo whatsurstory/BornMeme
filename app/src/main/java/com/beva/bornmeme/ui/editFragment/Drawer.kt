@@ -12,6 +12,8 @@ import kotlin.math.tan
 /**
  * 贴纸、背景图抽象成Drawer
  * 实现出界回弹、手势的功能
+ * https://ithelp.ithome.com.tw/articles/10203014
+ * https://ithelp.ithome.com.tw/articles/10190917
  */
 abstract class Drawer(val stickerView: StickerView, var bitmap: Bitmap) {
 
