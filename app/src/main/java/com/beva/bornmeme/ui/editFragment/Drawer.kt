@@ -4,6 +4,7 @@ import android.animation.ValueAnimator
 import android.graphics.*
 import android.view.MotionEvent
 import android.view.animation.AccelerateDecelerateInterpolator
+import timber.log.Timber
 import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.tan
@@ -58,8 +59,11 @@ abstract class Drawer(val stickerView: StickerView, var bitmap: Bitmap) {
             MotionEvent.ACTION_MOVE -> {
                 //单指移动背景
                 if (event.pointerCount == 1 && canMove && consumeTapOne) {
+                    Timber.d("event => x: ${event.x}, y: ${event.y}")
+                    Timber.d("point1 => x: ${point1.x}, y: ${point1.y}")
                     val dx = event.x - point1.x
                     val dy = event.y - point1.y
+                    Timber.d(" => dx: ${dx}, dy: ${dy}")
                     matrix.postTranslate(dx, dy)
                     point1.x = event.x
                     point1.y = event.y

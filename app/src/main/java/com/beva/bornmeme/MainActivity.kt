@@ -131,9 +131,13 @@ class MainActivity : AppCompatActivity() {
                     Timber.d("你有按到change")
                     navigateToDrag(viewModel.editingImg)
                 }
-                binding.fab.setOnClickListener {
-                    toAlbum()
-                }
+            } else  if (destination.id == R.id.fragmentEditDrag) {
+                supportActionBar?.show()
+                binding.changeModeBtn.visibility = View.GONE
+                binding.fab.visibility = View.GONE
+                binding.profileBtn.visibility = View.GONE
+                binding.moduleTitleText.visibility = View.GONE
+                binding.greeting.visibility = View.GONE
             } else {
                 supportActionBar?.show()
                 binding.greeting.visibility = View.GONE
@@ -399,6 +403,7 @@ class MainActivity : AppCompatActivity() {
 
     //if we got the photo from camera/gallery, we'll take the arguments of image complete the navigate
     private fun navigateToEditor(uri: Uri?) {
+        binding.fab.visibility = View.GONE
         uri?.let {
             findNavController(R.id.nav_host_fragment_content_main)
                 .navigate(MobileNavigationDirections.navigateToEditFragment(it))
@@ -407,6 +412,7 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("RestrictedApi")
     private fun navigateToDrag(uri: Uri?) {
+        binding.fab.visibility = View.GONE
         Timber.d("Uri -> $uri")
         uri?.let {
             findNavController(R.id.nav_host_fragment_content_main)

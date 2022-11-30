@@ -7,6 +7,7 @@ import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import timber.log.Timber
 
 class StickerView @JvmOverloads constructor(
     context: Context,
