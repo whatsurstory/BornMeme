@@ -24,6 +24,7 @@ import android.view.*
 import android.widget.*
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -44,6 +45,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FieldValue.arrayUnion
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -80,21 +82,56 @@ class ImgDetailFragment : Fragment() {
             ).into(binding.imgDetailImage)
         binding.imgDetailDescription.text = post.resources[1].url?.trim()
 
-        if (post.like?.isEmpty() == true) {
-            Timber.d("Post Like ${post.like}")
-            binding.beforeThumbupBtn.setBackgroundResource(R.drawable._heart)
-        } else {
+
+        val postRef = FirebaseFirestore.getInstance()
+            .collection("Posts").document(post.id)
+        val userRef = FirebaseFirestore.getInstance()
+            .collection("Users").document(UserManager.user.userId!!)
+        if (post.like?.isNotEmpty() == true) {
+            //like list is not empty
             for (item in post.like!!) {
                 if (item == UserManager.user.userId) {
                     Timber.d("item $item")
                     binding.beforeThumbupBtn.setBackgroundResource(R.drawable.heart)
+                    binding.beforeThumbupBtn.setOnClickListener {
+
+                        userRef.update("likeId", FieldValue.arrayRemove(post.id))
+                        postRef.update("like", FieldValue.arrayRemove(UserManager.user.userId))
+                            .addOnSuccessListener {
+                                Timber.d("Success Remove like")
+                                binding.beforeThumbupBtn.setBackgroundResource(R.drawable._heart)
+                            }.addOnFailureListener {
+                                Timber.d("Error ${it.message}")
+                            }
+                    }
                 } else {
                     binding.beforeThumbupBtn.setBackgroundResource(R.drawable._heart)
+                    binding.beforeThumbupBtn.setOnClickListener {
+                        userRef.update("likeId", FieldValue.arrayUnion(post.id))
+                        postRef.update("like", FieldValue.arrayUnion(UserManager.user.userId))
+                            .addOnSuccessListener {
+                                Timber.d("Success add like")
+                                binding.beforeThumbupBtn.setBackgroundResource(R.drawable.heart)
+                            }.addOnFailureListener {
+                                Timber.d("Error ${it.message}")
+                            }
+                    }
                 }
             }
-        }
-
-    }
+        } else {
+                    binding.beforeThumbupBtn.setBackgroundResource(R.drawable._heart)
+                    binding.beforeThumbupBtn.setOnClickListener {
+                    userRef.update("likeId", FieldValue.arrayUnion(post.id))
+                    postRef.update("like", FieldValue.arrayUnion(UserManager.user.userId))
+                        .addOnSuccessListener {
+                            Timber.d("Success add like")
+                            binding.beforeThumbupBtn.setBackgroundResource(R.drawable.heart)
+                        }.addOnFailureListener {
+                            Timber.d("Error ${it.message}")
+                        }
+                    }
+                }
+            }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
@@ -106,7 +143,6 @@ class ImgDetailFragment : Fragment() {
         viewModel.getComments(post.id)
 
         viewModel.userData.observe(viewLifecycleOwner, Observer {
-            it?.let {
                 Glide.with(this)
                     .load(it[0].profilePhoto)
                     .apply(
@@ -116,26 +152,23 @@ class ImgDetailFragment : Fragment() {
                     ).into(binding.imgDetailUserImg)
                 binding.imgDetailUserName.text = it[0].userName
 
-                //follow button
-                if (post.ownerId == UserManager.user.userId) {
+                //TODO:follow button
+                if (it[0].userId == UserManager.user.userId) {
                     binding.followBtn.visibility = View.GONE
                 } else {
+                    binding.followBtn.visibility = View.VISIBLE
                     for (item in it[0].followers) {
                         if (item == UserManager.user.userId) {
                             binding.followBtn.text = "Following"
-                            binding.followBtn.setOnClickListener {
-                                Toast.makeText(context, "已經追蹤該作者", Toast.LENGTH_SHORT).show()
-                            }
                         } else {
                             binding.followBtn.text = "Follow"
-                            //the button to follow other users
                             binding.followBtn.setOnClickListener {
-                                viewModel.onClickToFollow(post.ownerId, binding)
+                                viewModel.onClickToFollow(post.ownerId)
+                                binding.followBtn.text = "Following"
                             }
                         }
                     }
                 }
-             }
         })
 
 
@@ -177,6 +210,7 @@ class ImgDetailFragment : Fragment() {
                 viewModel.initCells(it)
             }
         }
+
         //the button to see user information
         binding.imgDetailUserImg.setOnClickListener {
             findNavController().navigate(
@@ -184,21 +218,24 @@ class ImgDetailFragment : Fragment() {
                     .navigateToUserDetailFragment(post.ownerId)
             )
         }
+
         //the button to like post
-        val postRef = FirebaseFirestore.getInstance().collection("Posts").document(post.id)
-        val userRef = FirebaseFirestore.getInstance().collection("Users").document(UserManager.user.userId!!)
-        binding.beforeThumbupBtn.setOnClickListener {
-                userRef.update("likeId", FieldValue.arrayUnion(post.id))
-                postRef.update("like", FieldValue.arrayUnion(UserManager.user.userId))
-                .addOnSuccessListener {
-                    Timber.d("Success add like")
-                    binding.beforeThumbupBtn.setBackgroundResource(R.drawable.heart)
-//                    Snackbar.make(this.requireView(), "喜歡喜歡~~~", Snackbar.LENGTH_SHORT)
-//                        .setAction("Action", null).show()
-                }.addOnFailureListener {
-                    Timber.d("Error ${it.message}")
-                }
-        }
+//        val postRef = FirebaseFirestore.getInstance().collection("Posts").document(post.id)
+//        val userRef = FirebaseFirestore.getInstance().collection("Users").document(UserManager.user.userId!!)
+//        binding.beforeThumbupBtn.setOnClickListener {
+//
+//            if ()
+//                userRef.update("likeId", FieldValue.arrayUnion(post.id))
+//                postRef.update("like", FieldValue.arrayUnion(UserManager.user.userId))
+//                .addOnSuccessListener {
+//                    Timber.d("Success add like")
+//                    binding.beforeThumbupBtn.setBackgroundResource(R.drawable.heart)
+//                }.addOnFailureListener {
+//                    Timber.d("Error ${it.message}")
+//                }
+//        }
+
+
         //the button to post comments
         binding.commentBtn.setOnClickListener {
             findNavController().navigate(

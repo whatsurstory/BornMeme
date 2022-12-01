@@ -16,6 +16,7 @@ import com.beva.bornmeme.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -58,6 +59,7 @@ class StickerSender(
      * @param file
      */
     fun sendSticker(file: File) {
+        Timber.i("beva \n sendSticker file $file")
         val stickerType = Utils.getMimeType(file)
         if (stickerType == null || stickerType !in this.supportedMimes) {
             CoroutineScope(Dispatchers.Main).launch { doFallbackCommitContent(file) }
@@ -74,6 +76,7 @@ class StickerSender(
      * @param file: File
      */
     private suspend fun doFallbackCommitContent(file: File) {
+        Timber.i("beva \n doFallbackCommitContent file $file")
         // PNG might not be supported
         if ("image/png" !in this.supportedMimes) {
             this.toaster.toast(context.getString(R.string.fallback_040, file.extension))
@@ -108,6 +111,7 @@ class StickerSender(
         remSticker?.let {
             File(this.internalDir,
                 "__compatSticker__/$remSticker.png").delete() }
+        Timber.i("beva \n doFallbackCommitContent remSticker $remSticker")
     }
 
     /**
@@ -116,6 +120,7 @@ class StickerSender(
      * @param file File
      */
     private fun doCommitContent(mimeType: String, file: File) {
+        Timber.i("beva \n doCommitContent mimeType $mimeType \n file $file")
         // ContentUri, ClipDescription, linkUri
         val inputContentInfoCompat =
             InputContentInfoCompat(
@@ -146,6 +151,7 @@ class StickerSender(
      * @return boolean - is the mimetype supported?
      */
     private fun isCommitContentSupported(editorInfo: EditorInfo?, mimeType: String?): Boolean {
+        Timber.i("beva \n isCommitContentSupported editorInfo $editorInfo \n mimeType $mimeType")
         editorInfo?.packageName ?: return false
         mimeType ?: return false
         this.currentInputConnection ?: return false

@@ -25,6 +25,7 @@ class SettingFragment: Fragment() {
     private lateinit var binding: FragmentSettingBinding
 
     private val register = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        Timber.i("beva \n register running")
         if (result.resultCode == Activity.RESULT_OK) {
             val editor = PreferenceManager.getDefaultSharedPreferences(requireContext()).edit()
             val stickerDirPath = result.data?.data.toString()
@@ -67,10 +68,12 @@ class SettingFragment: Fragment() {
         binding = FragmentSettingBinding.inflate(layoutInflater)
 
         binding.settingOpenKeyboard.setOnClickListener {
+            Timber.i("beva \n click settingOpenKeyboard")
             enableKeyboard(it)
         }
 
         binding.updateStickerPackInfoBtn.setOnClickListener {
+            Timber.i("beva \n click updateStickerPackInfoBtn")
             chooseDir(it)
         }
 
@@ -78,11 +81,13 @@ class SettingFragment: Fragment() {
     }
 
     private fun enableKeyboard(view: View) {
+        Timber.i("beva \n enableKeyboard running")
         val intent = Intent(Settings.ACTION_INPUT_METHOD_SETTINGS)
         startActivity(intent)
     }
 
     private fun chooseDir(view: View) {
+        Timber.i("beva \n chooseDir running")
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)

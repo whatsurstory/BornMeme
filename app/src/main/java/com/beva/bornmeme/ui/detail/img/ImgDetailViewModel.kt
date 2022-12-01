@@ -224,22 +224,19 @@ data class UiState (
         }
     }
 
-    fun onClickToFollow(userId: String, binding: FragmentImgDetailBinding){
+    fun onClickToFollow(userId: String){
         Timber.d("UserID $userId")
         val db = Firebase.firestore.collection("Users")
-        if (userId != UserManager.user.userId){
         db.document(UserManager.user.userId!!)
             .update("followList", FieldValue.arrayUnion(userId))
             .addOnSuccessListener {
                 db.document(userId)
                     .update("followers", FieldValue.arrayUnion(UserManager.user.userId))
-                binding.followBtn.text = "Following"
             }
             .addOnFailureListener {
                 Timber.d("ERROR ${it.message}")
             }
         }
-    }
 
     init {
         getUser(postOwnerId)

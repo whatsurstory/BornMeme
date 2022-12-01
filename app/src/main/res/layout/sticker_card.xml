@@ -14,5 +14,5 @@
         android:background="@color/sticker"
         android:contentDescription="@string/sticker_icon"
         android:cropToPadding="true"
-        android:scaleType="fitCenter" />
+        android:scaleType="centerCrop" />
 </androidx.cardview.widget.CardView>

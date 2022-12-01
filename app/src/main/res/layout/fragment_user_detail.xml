@@ -76,7 +76,7 @@
             android:layout_marginStart="6dp"
             android:layout_marginTop="4dp"
             android:gravity="start|center_vertical"
-            android:maxLength="8"
+            android:maxLength="14"
             android:maxLines="2"
             android:text="@string/default_text"
             android:textColor="@color/tr_pink"

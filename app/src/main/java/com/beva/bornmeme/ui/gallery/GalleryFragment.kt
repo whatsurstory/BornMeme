@@ -80,8 +80,8 @@ class GalleryFragment: Fragment() {
             val document = fireStore.document()
             val publish = Image(
                 document.id,
-                "我大哥",
-                "https://memeprod.ap-south-1.linodeobjects.com/user-template/1bd1165b953a44c9ef68761073dfbe1d.png",
+                "生無可戀",
+                "https://memeprod.ap-south-1.linodeobjects.com/user-template/7a089306962a82b0b7ec0ff1673a4d5f.png",
                 emptyList(),
                 emptyList()
             )

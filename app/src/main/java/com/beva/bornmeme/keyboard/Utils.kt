@@ -2,6 +2,7 @@ package com.beva.bornmeme.keyboard
 
 
 import android.webkit.MimeTypeMap
+import timber.log.Timber
 import java.io.File
 
 /** Class to provide utils that are shared across ewesticker. */
@@ -13,6 +14,7 @@ object Utils {
      * @return String? Return the mimetype or none if it cannot be determined
      */
     fun getMimeType(file: File): String? {
+        Timber.w("beva \n getMimeType file $file")
         return MimeTypeMap.getSingleton().getMimeTypeFromExtension(file.extension)
     }
 
@@ -22,6 +24,7 @@ object Utils {
      * @return MutableList of EweSticker Supported mimetypes
      */
     fun getSupportedMimes(): MutableList<String> {
+        Timber.w("beva \n getSupportedMimes running")
         return mutableListOf(
             "image/gif",
             "image/png",

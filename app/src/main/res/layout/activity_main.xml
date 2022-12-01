@@ -46,7 +46,7 @@
             android:fontFamily="@font/arista_pro_light_trial"
             android:text="@string/module_text"
             android:textColor="@color/tr_pink"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/include"
             app:layout_constraintEnd_toEndOf="parent"

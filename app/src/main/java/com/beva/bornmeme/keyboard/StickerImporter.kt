@@ -36,7 +36,7 @@ class StickerImporter(
 	 * @param stickerDirPath a URI to the stickers directory to import into EweSticker
 	 */
 	fun importStickers(stickerDirPath: String): Int {
-		Timber.e("bmkb, importStickers: $stickerDirPath")
+		Timber.e("beva \n importStickers stickerDirPath$stickerDirPath")
 		try {
 
 			File(this.context.filesDir, "stickers").deleteRecursively()
@@ -49,7 +49,7 @@ class StickerImporter(
 				importSticker(file)
 			}
 		} catch (exception: Exception) {
-			Timber.e("bmkb, exception=$exception")
+			Timber.e("beva \n exception=$exception")
 
 		}
 		return this.totalStickers
@@ -63,6 +63,7 @@ class StickerImporter(
 	 * @return 1 if sticker imported successfully else 0
 	 */
 	private fun importSticker(sticker: DocumentFile) {
+		Timber.e("beva \n importSticker sticker$sticker")
 		// Exit if sticker is unsupported or if pack size > MAX_PACK_SIZE
 		val parentDir = sticker.parentFile?.name ?: "__default__"
 		val packSize = this.packSizes[parentDir] ?: 0
@@ -92,6 +93,7 @@ class StickerImporter(
 	 * @return MutableSet<DocumentFile> set of files
 	 */
 	private fun fileWalk(rootNode: DocumentFile?): MutableSet<DocumentFile> {
+		Timber.e("beva \n fileWalk rootNode$rootNode")
 		val leafNodes = mutableSetOf<DocumentFile>()
 		if (rootNode == null || this.filesLeft < 0) {
 			return leafNodes

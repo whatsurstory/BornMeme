@@ -21,6 +21,7 @@ import coil.decode.GifDecoder
 import coil.imageLoader
 import coil.load
 import com.beva.bornmeme.R
+import timber.log.Timber
 import java.io.File
 import java.util.*
 import kotlin.math.min
@@ -70,9 +71,13 @@ class ImageKeyboard : InputMethodService() {
      * loaded-packs
      */
     override fun onCreate() {
+
         // Misc
         super.onCreate()
+
+        Timber.d("beva \n InputMethodService running")
         val scale = baseContext.resources.displayMetrics.density
+        Timber.d("beva \n InputMethodService scale $scale")
         // Setup coil
         val imageLoader =
             ImageLoader.Builder(baseContext)
@@ -86,6 +91,7 @@ class ImageKeyboard : InputMethodService() {
                 }
                 .build()
         Coil.setImageLoader(imageLoader)
+        Timber.d("beva \n InputMethodService imageLoader $imageLoader")
         //  Shared Preferences
         this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(baseContext)
         this.vertical = this.sharedPreferences.getBoolean("vertical", false)
@@ -102,6 +108,7 @@ class ImageKeyboard : InputMethodService() {
             })
                 .toInt()
         this.toaster = Toaster(baseContext)
+
         //  Load Packs
         this.loadedPacks = HashMap()
         val packs =
@@ -123,6 +130,8 @@ class ImageKeyboard : InputMethodService() {
         this.sharedPreferences.getString("compatCache", "")?.let {
             this.compatCache.fromSharedPref(it)
         }
+        Timber.d("beva \n InputMethodService loadedPacks $loadedPacks")
+        Timber.d("beva \n InputMethodService packs $packs")
     }
 
     /**
@@ -134,6 +143,7 @@ class ImageKeyboard : InputMethodService() {
      * @return View keyboardLayout
      */
     override fun onCreateInputView(): View {
+        Timber.e("beva \n onCreateInputView running")
         val keyboardLayout = View.inflate(baseContext, R.layout.keyboard_layout, null)
         this.keyboardRoot = keyboardLayout.findViewById(R.id.keyboardRoot)
         this.packsList = keyboardLayout.findViewById(R.id.packsList)
@@ -172,6 +182,7 @@ class ImageKeyboard : InputMethodService() {
      * @param restarting
      */
     override fun onStartInput(info: EditorInfo?, restarting: Boolean) {
+        Timber.e("beva \n onStartInput running")
         this.stickerSender = StickerSender(
             this.baseContext,
             this.toaster,
@@ -181,15 +192,18 @@ class ImageKeyboard : InputMethodService() {
             this.compatCache,
             this.imageLoader
         )
+        Timber.e("beva \n onStartInput StickerSender ${this.stickerSender}")
     }
 
     /** When leaving some input field update the caches */
     override fun onFinishInput() {
+        Timber.e("beva \n onFinishInput running")
         val editor = this.sharedPreferences.edit()
         editor.putString("recentCache", this.recentCache.toSharedPref())
         editor.putString("compatCache", this.compatCache.toSharedPref())
         editor.putString("activePack", this.activePack)
         editor.apply()
+        Timber.e("beva \n onFinishInput editor $editor")
         super.onFinishInput()
     }
 
@@ -200,6 +214,7 @@ class ImageKeyboard : InputMethodService() {
      * @param packName String
      */
     private fun switchPackLayout(packName: String) {
+        Timber.e("beva \n switchPackLayout running")
         // Set the active pack and do highlighting
         this.activePack = packName
         for (packCard in this.packsList) {
@@ -240,6 +255,7 @@ class ImageKeyboard : InputMethodService() {
      * @return Pair<FrameLayout, GridLayout> packContainer to pack
      */
     private fun createPartialPackLayout(): Pair<FrameLayout, androidx.gridlayout.widget.GridLayout> {
+        Timber.e("beva \n createPartialPackLayout running")
         if (this.vertical) {
             val packContainer =
                 layoutInflater.inflate(R.layout.pack_vertical, this.packContent, false) as
@@ -261,6 +277,7 @@ class ImageKeyboard : InputMethodService() {
      * @param stickers
      */
     private fun createPackLayout(stickers: Array<File>): FrameLayout {
+        Timber.e("beva \n createPackLayout running")
         val (packContainer, pack) = createPartialPackLayout()
         for (sticker in stickers) {
             val imageCard =
@@ -302,6 +319,7 @@ class ImageKeyboard : InputMethodService() {
     }
 
     private fun addPackButton(tag: Any): ImageButton {
+        Timber.e("beva \n addPackButton running")
         val packCard = layoutInflater.inflate(R.layout.pack_card, this.packsList, false)
         val packButton = packCard.findViewById<ImageButton>(R.id.stickerButton)
         packButton.tag = tag
@@ -313,6 +331,7 @@ class ImageKeyboard : InputMethodService() {
     /** Create the pack icons (image buttons) that when tapped switch the pack (switchPackLayout) */
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun createPackIcons() {
+        Timber.e("beva \n createPackIcons running")
         this.packsList.removeAllViewsInLayout()
         // Back button
         if (this.sharedPreferences.getBoolean("showBackButton", true)) {
@@ -330,6 +349,7 @@ class ImageKeyboard : InputMethodService() {
         }
         // Recent
         val recentButton = addPackButton("__recentSticker__")
+        Timber.e("beva \n createPackIcons recentButton $recentButton")
         recentButton.load(getDrawable(R.drawable.ic_clock))
         recentButton.setOnClickListener { switchPackLayout(it?.tag as String) }
         // Packs
@@ -347,5 +367,6 @@ class ImageKeyboard : InputMethodService() {
                 else -> switchPackLayout(sortedPackNames[0])
             }
         }
+        Timber.e("beva \n createPackIcons sortedPackNames $sortedPackNames")
     }
 }
