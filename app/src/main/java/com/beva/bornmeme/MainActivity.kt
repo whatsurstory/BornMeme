@@ -2,11 +2,13 @@ package com.beva.bornmeme
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.Fragment
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
 import android.provider.Settings
 import android.view.MenuItem
@@ -15,22 +17,24 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.preference.PreferenceManager
 import com.beva.bornmeme.databinding.ActivityMainBinding
-import com.beva.bornmeme.databinding.FragmentEditFixmodeBinding
-import com.beva.bornmeme.model.User
+import com.beva.bornmeme.keyboard.StickerImporter
+import com.beva.bornmeme.keyboard.Toaster
 import com.beva.bornmeme.model.UserManager
 import com.bumptech.glide.Glide
-import com.google.android.material.internal.ContextUtils.getActivity
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -43,6 +47,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
+import java.util.Calendar
+import java.util.concurrent.Executors
 
 class MainActivity : AppCompatActivity() {
 
@@ -104,7 +110,6 @@ class MainActivity : AppCompatActivity() {
         //toolbar support action bar
         setSupportActionBar(binding.toolbar)
         supportActionBar?.title = null
-
 
         appBarConfiguration = AppBarConfiguration(
             setOf(R.id.splash_screen, R.id.nav_home)) //  IDs of fragments you want without the ActionBar home/up button
@@ -255,6 +260,9 @@ class MainActivity : AppCompatActivity() {
                     binding.greeting.typeWrite(this,
                         "BornMeme.",
                         100L)
+                    binding.greeting.setOnClickListener {
+                        navController.navigate(MobileNavigationDirections.navigateToFragmentSetting())
+                    }
                 } else if (destination.id == R.id.fragment_gallery) {
                     binding.moduleTitleText.visibility = View.VISIBLE
                 } else {
@@ -270,11 +278,100 @@ class MainActivity : AppCompatActivity() {
                     .navigateToUserDetailFragment(id))
             }
         }
+
+//        setupKeyboard()
+//        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+//        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+//        intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
+//        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+//            if (result.resultCode == Activity.RESULT_OK) {
+//                val editor = PreferenceManager.getDefaultSharedPreferences(this).edit()
+//                val stickerDirPath = result.data?.data.toString()
+//                editor.putString("stickerDirPath", stickerDirPath)
+//                editor.putString("lastUpdateDate", Calendar.getInstance().time.toString())
+//                editor.putString("recentCache", "")
+//                editor.putString("compatCache", "")
+//                editor.apply()
+//                Timber.i("bmkb, stickerDirPath: $stickerDirPath")
+//                val toaster = Toaster(baseContext)
+//                val executor = Executors.newSingleThreadExecutor()
+//                val handler = Handler(Looper.getMainLooper())
+//                Toast.makeText(this, "嘻嘻", Toast.LENGTH_SHORT).show()
+//                executor.execute {
+//                    val totalStickers =
+//                        StickerImporter(baseContext, toaster).importStickers(
+//                            stickerDirPath
+//                        )
+//                    handler.post {
+//                        toaster.toastOnState(
+//                            arrayOf(
+//                                getString(R.string.imported_020, totalStickers),
+//                                getString(R.string.imported_031, totalStickers),
+//                                getString(R.string.imported_032, totalStickers),
+//                                getString(R.string.imported_033, totalStickers),
+//                            )
+//                        )
+//                        editor.putInt("numStickersImported", totalStickers)
+//                        editor.apply()
+//
+//                    }
+//                }
+//            }
+//        }.launch(intent)
     }
 
-    fun updateUser(user: User) {
-        viewModel.setUser(user)
-    }
+//    fun setupKeyboard() {
+//        Timber.i("bmkb, setupKeyboard")
+//
+//        val toaster = Toaster(baseContext)
+//        val editor = PreferenceManager.getDefaultSharedPreferences(this).edit()
+//        var stickerDirPath =
+//            Uri.parse(getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!.absolutePath).toString() ?: ""
+//
+//
+//        DocumentFile.fromFile().parentFile.uri
+//
+//        Timber.i("bmkb, stickerDirPath=$stickerDirPath")
+//
+////        stickerDirPath = "content://com.android.externalstorage.documents/tree/primary%3APictures"
+//        editor.putString("stickerDirPath", stickerDirPath)
+//        editor.putString("lastUpdateDate", Calendar.getInstance().time.toString())
+//        editor.putString("recentCache", "")
+//        editor.putString("compatCache", "")
+//        editor.apply()
+//
+//        this.contentResolver.takePersistableUriPermission(
+//            Uri.parse(getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!.absolutePath),
+//            Intent.FLAG_GRANT_READ_URI_PERMISSION
+//        )
+//
+//        val executor = Executors.newSingleThreadExecutor()
+//        val handler = Handler(Looper.getMainLooper())
+//        Toast.makeText(this, "嘻嘻", Toast.LENGTH_SHORT).show()
+//        executor.execute {
+//            val totalStickers =
+//                StickerImporter(baseContext, toaster).importStickers(
+//                    stickerDirPath
+//                )
+//            handler.post {
+//                toaster.toastOnState(
+//                    arrayOf(
+//                        getString(R.string.imported_020, totalStickers),
+//                        getString(R.string.imported_031, totalStickers),
+//                        getString(R.string.imported_032, totalStickers),
+//                        getString(R.string.imported_033, totalStickers),
+//                    )
+//                )
+//                editor.putInt("numStickersImported", totalStickers)
+//                editor.apply()
+//
+//            }
+//        }
+//    }
+
+//    fun updateUser(user: User) {
+//        viewModel.setUser(user)
+//    }
 
 
     private fun galleryCheckPermission() {

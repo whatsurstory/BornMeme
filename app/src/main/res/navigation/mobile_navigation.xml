@@ -27,7 +27,6 @@
         app:argType="android.graphics.Bitmap" />
     </dialog>
 
-
     <dialog
         android:id="@+id/dialogComment"
         android:name="com.beva.bornmeme.ui.detail.dialog.PublishCommentDialog"
@@ -108,6 +107,12 @@
             app:argType="com.beva.bornmeme.model.Folder" />
     </dialog>
 
+    <fragment
+        android:id="@+id/fragment_setting"
+        android:name="com.beva.bornmeme.keyboard.SettingFragment"
+        tools:layout="@layout/fragment_setting">
+    </fragment>
+
     <action android:id="@+id/navigate_to_edit_fragment"
         app:destination="@+id/fragmentEditFixmode"/>
     <action android:id="@+id/navigate_to_fragment_gallery" app:destination="@+id/fragment_gallery"/>
@@ -116,7 +121,7 @@
     <action android:id="@+id/navigate_to_preview_dialog" app:destination="@+id/dialogPreview"/>
     <action android:id="@+id/navigate_to_comment_dialog" app:destination="@+id/dialogComment"/>
     <action android:id="@+id/navigate_to_slide_dialog" app:destination="@+id/dialogSlide"/>
-
+    <action android:id="@+id/navigate_to_fragment_setting" app:destination="@+id/fragment_setting"/>
     <action android:id="@+id/navigate_to_img_detail_fragment" app:destination="@+id/img_detail_fragment" />
     <action android:id="@+id/navigate_to_user_detail_fragment" app:destination="@+id/user_detail_fragment" />
 

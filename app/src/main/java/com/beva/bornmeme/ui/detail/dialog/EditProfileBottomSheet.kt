@@ -18,7 +18,9 @@ import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.NonNull
+import androidx.lifecycle.ViewModelProvider
 import com.beva.bornmeme.MainActivity
+import com.beva.bornmeme.MainViewModel
 import com.beva.bornmeme.databinding.BottomsheetEditProfileBinding
 import com.beva.bornmeme.model.User
 import com.beva.bornmeme.model.UserManager
@@ -149,6 +151,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment()
         })
 
         binding.saveButton.setOnClickListener {
+            Timber.d("save btn uri $uri")
             val originIntro = binding.desc.text.toString()
             val originName = binding.name.text.toString()
             if (originIntro != UserManager.user.introduce ||
@@ -158,6 +161,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment()
             }
             //TODO: uri not initialize
             if (isChange) {
+                Timber.d("isChange uri $uri")
                 uploadProfile2Db(uri)
             }
             dismiss()
@@ -193,31 +197,6 @@ class EditProfileBottomSheet : BottomSheetDialogFragment()
         binding.registerTime.text =
             "Register Time: " + Date(user.registerTime?.toDate()?.time!!).toLocaleString()
 
-//        binding.saveButton.setOnClickListener {
-//            val originIntro = binding.desc.text.toString()
-//            val originName = binding.name.text.toString()
-//            if (originIntro != UserManager.user.introduce ||
-//                originName != UserManager.user.userName) {
-//                db.update("introduce", originIntro)
-//                db.update("userName", originName)
-//            }
-//            uploadProfile2Db(uri)
-//            dismiss()
-//        }
-//
-//        binding.changePhoto.setOnClickListener {
-//            toAlbum()
-//        }
-//
-//        binding.blockListBtn.setOnClickListener {
-//            //see the list in dialog within recycle view
-//        }
-//        binding.followersListBtn.setOnClickListener {
-//            //see the list in dialog within recycle view
-//        }
-//        binding.followListBtn.setOnClickListener {
-//            //see the list in dialog within recycle view
-//        }
 
     }
 
@@ -226,6 +205,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment()
         intent.type = "image/*"
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         requestImageLauncher.launch(intent)
+
     }
 
     private val requestImageLauncher =
@@ -233,10 +213,12 @@ class EditProfileBottomSheet : BottomSheetDialogFragment()
             .StartActivityForResult()) {
             uri = it.data?.data as Uri
             binding.profileImg.setImageURI(uri)
+            Timber.d("requestImageLauncher uri $uri")
             isChange = true
         }
 
     private fun uploadProfile2Db(data: Uri) {
+        Timber.d("uploadProfile2Db uri $data")
         val ref = FirebaseStorage.getInstance().reference
         ref.child("profile_img/" + System.currentTimeMillis() + ".jpg")
             .putFile(data)
@@ -250,7 +232,9 @@ class EditProfileBottomSheet : BottomSheetDialogFragment()
                         .update("profilePhoto", it)
                         .addOnCompleteListener {
 
-                            (activity as MainActivity).updateUser(UserManager.user)
+//                            (activity as MainActivity).updateUser(UserManager.user)
+//                            val mainViewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
+//                            mainViewModel.setUser(UserManager.user)
 
                         }
                 }

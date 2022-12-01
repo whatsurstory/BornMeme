@@ -516,6 +516,7 @@ class ImgDetailFragment : Fragment() {
 
     //need permission of write in
     private fun downLoad(fileName: String, desc: String, url: String) {
+        Timber.d("file name $fileName")
         val downloadManager = context?.getSystemService(DOWNLOAD_SERVICE) as DownloadManager
         val request = DownloadManager.Request(Uri.parse(url))
             .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE or DownloadManager.Request.NETWORK_WIFI)

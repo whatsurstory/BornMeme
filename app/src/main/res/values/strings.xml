@@ -36,4 +36,20 @@
     <string name="back_btn">收起回覆</string>
     <string name="block_text">是否將此用戶封鎖?</string>
     <string name="enter_hint_text">Please Adding Text Here</string>
+
+
+    <string name="pack_icon">Pack icon</string>
+    <string name="sticker_icon">Sticker icon</string>
+    <string name="close_sticker_preview">[tap to close sticker preview]</string>
+    <string name="fallback_040">E040: %1$s not supported here</string>
+    <string name="fallback_041">E041: Unexpected IOException when converting sticker</string>
+    <string name="switch_050">E050: IllegalStateException when switching packs. Try switching away from and back to EweSticker</string>
+
+    <string name="imported_020">Imported %1$d stickers. Reload the keyboard for new stickers to show</string>
+    <string name="imported_031">E031: Some stickers failed to import (%1$d imported). Max stickers reached</string>
+    <string name="imported_032">E032: Some stickers failed to import (%1$d imported). Max pack size reached</string>
+    <string name="imported_033">E033: Some stickers failed to import (%1$d imported). Unsupported formats found</string>
+
+
+
 </resources>

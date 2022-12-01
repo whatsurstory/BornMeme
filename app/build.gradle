@@ -68,8 +68,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     //user permission
     implementation 'com.karumi:dexter:6.2.2'
-    //coil
-    implementation("io.coil-kt:coil:1.1.1")
 
     // Glide
     implementation "com.github.bumptech.glide:glide:$version_glide"
@@ -91,6 +89,13 @@ dependencies {
     implementation 'com.airbnb.android:lottie:3.4.1'
 
     implementation 'com.firebaseui:firebase-ui-storage:7.2.0'
+    implementation "androidx.preference:preference-ktx:1.2.0"
+    implementation "androidx.gridlayout:gridlayout:1.0.0"
+
+    //coil
+    implementation "io.coil-kt:coil:1.4.0"
+    implementation "io.coil-kt:coil-gif:1.4.0"
+    implementation "io.coil-kt:coil-video:1.4.0"
 
     //sticker
 //    implementation 'com.flying.xiaopo:sticker:1.6.0'
