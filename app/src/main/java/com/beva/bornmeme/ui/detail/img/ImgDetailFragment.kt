@@ -351,7 +351,7 @@ class ImgDetailFragment : Fragment() {
 
         //the permission problem in samsung, maybe due to the version of android
         binding.downloadBtn.setOnClickListener {
-            downLoad("${post.id}.jpg", "File Desc", post.url.toString())
+            downLoad("${post.id}.jpg", "BornMeme.", post.url.toString())
         }
 
         //BUG: the argument can't be rendering on newView
@@ -393,29 +393,29 @@ class ImgDetailFragment : Fragment() {
         cancel.setOnClickListener { alertDialog.dismiss() }
     }
 
-//    private fun requestPermission() {
-//
-//        if (SDK_INT >= Build.VERSION_CODES.R) {
-//            try {
-//                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
-//                intent.addCategory("android.intent.category.DEFAULT")
-//                intent.data = Uri.parse(
-//                    String.format(
-//                        "package:%s",
-//                        getApplicationContext<Context>().packageName
-//                    )
-//                )
-//                startActivityForResult(intent, 2296)
-//
-//
-//            } catch (e: Exception) {
-//                val intent = Intent()
-//                intent.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
-//                startActivityForResult(intent, 2296)
-//
-//            }
-//        }
-//    }
+    private fun requestPermission() {
+
+        if (SDK_INT >= Build.VERSION_CODES.R) {
+            try {
+                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+                intent.addCategory("android.intent.category.DEFAULT")
+                intent.data = Uri.parse(
+                    String.format(
+                        "package:%s",
+                        getApplicationContext<Context>().packageName
+                    )
+                )
+                startActivityForResult(intent, 2)
+
+
+            } catch (e: Exception) {
+                val intent = Intent()
+                intent.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
+                startActivityForResult(intent, 2)
+
+            }
+        }
+    }
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(
@@ -462,15 +462,10 @@ class ImgDetailFragment : Fragment() {
                 //the dialog is interface, which is int, isChecked is boolean
                 if (isChecked) {
                     isCheckedIndex.add(index)
-//                    Toast.makeText(context, "You Choose The ${folderNames.toTypedArray()[index]}",Toast.LENGTH_SHORT).show()
                     list.add(folderNames.toTypedArray()[index])
-
-//                    Timber.d("check index list $isCheckedIndex")
-//                    Timber.d("check selected item $list")
 
                 } else if (isCheckedIndex.contains(index)) {
                     isCheckedIndex.remove(index)
-//                    Toast.makeText(context, "You Cancel The ${folderNames.toTypedArray()[index]}",Toast.LENGTH_SHORT).show()
                     list.remove(folderNames.toTypedArray()[index])
 
                 }
@@ -570,17 +565,6 @@ class ImgDetailFragment : Fragment() {
         Toast.makeText(context, "下載完成",Toast.LENGTH_SHORT).show()
     }
 
-//    private fun TextView.typeWrite(lifecycleOwner: LifecycleOwner, text: String, intervalMs: Long) {
-//        this@typeWrite.text = ""
-//        lifecycleOwner.lifecycleScope.launch {
-//            repeat(text.length) {
-//                delay(intervalMs)
-//                this@typeWrite.text = text.take(it + 1)
-//            }
-//        }
-//    }
-
-
     private fun longClick2edit (img: Post) {
         val builder = AlertDialog.Builder(requireContext(),R.style.AlertDialogTheme)
         val inflater = requireActivity().layoutInflater
@@ -676,14 +660,12 @@ class ImgDetailFragment : Fragment() {
                     findNavController().navigateUp()
                 }
             }
-            layout.addView(bind.root)
+            layout.addView(bind.root, 0)
             customSnack.setBackgroundTint(ContextCompat.getColor(requireContext(), android.R.color.white))
             customSnack.view.layoutParams = (customSnack.view.layoutParams as FrameLayout.LayoutParams)
                 .apply {
                 gravity = Gravity.TOP
-            }
-
-            layout.setPadding(0,0,0,0)
+                }
             customSnack.show()
         }
         builder.setNegativeButton("取消") { dialog, i ->

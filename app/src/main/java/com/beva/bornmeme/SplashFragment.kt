@@ -172,7 +172,6 @@ class SplashFragment : Fragment() {
                 Timber.d("task ERROR ${it.exception}")
                 Toast.makeText(this.requireContext(), it.exception.toString(), Toast.LENGTH_SHORT)
                     .show()
-
             }
         }
     }
@@ -191,9 +190,9 @@ class SplashFragment : Fragment() {
                 val checkUser = snapshot.toObject(User::class.java)
                 UserManager.user = checkUser!!
                 //when the member come back
-                Snackbar.make(requireView(), "Nice to See you Again! ${UserManager.user.userName}",
-                    Snackbar.LENGTH_SHORT)
-                    .setAction("Action", null).show()
+//                Snackbar.make(requireView(), "Nice to See you Again! ${UserManager.user.userName}",
+//                    Snackbar.LENGTH_SHORT)
+//                    .setAction("Action", null).show()
 //                Timber.d("UserManager ${UserManager.user}")
 //                transaction.update(ref,FieldValue.arrayUnion(loginTimes))
             } else {
@@ -217,9 +216,9 @@ class SplashFragment : Fragment() {
                 transaction.set(ref,userData)
                 UserManager.user = userData
                 //when new comer sign-in
-                Snackbar.make(requireView(), "WelCome to Join! ${UserManager.user.userName}",
-                    Snackbar.LENGTH_SHORT)
-                    .setAction("Action", null).show()
+//                Snackbar.make(requireView(), "WelCome to Join! ${UserManager.user.userName}",
+//                    Snackbar.LENGTH_SHORT)
+//                    .setAction("Action", null).show()
             }
         }.addOnSuccessListener {
             Timber.d("Success to adding $ref")

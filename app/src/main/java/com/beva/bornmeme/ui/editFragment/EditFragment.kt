@@ -21,6 +21,7 @@ import androidx.collection.arrayMapOf
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.accessibility.AccessibilityEventCompat.setAction
+import androidx.core.view.setPadding
 import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -76,7 +77,7 @@ class EditFragment : Fragment() {
         tag.doOnTextChanged { text, start, count, after ->
             // action which will be invoked when the text is changing
             if (text.isNullOrEmpty()) {
-                binding.catalogCard.error = "No word in here"
+                binding.catalogCard.error = "標籤文字尚未輸入"
             } else {
                 binding.catalogCard.error = null
             }
@@ -85,7 +86,7 @@ class EditFragment : Fragment() {
         title.doOnTextChanged { text, start, count, after ->
             // action which will be invoked when the text is changing
             if (text.isNullOrEmpty()) {
-                binding.titleCard.error = "No word in here"
+                binding.titleCard.error = "標題文字尚未輸入"
             } else {
                 binding.titleCard.error = null
             }
@@ -103,33 +104,40 @@ class EditFragment : Fragment() {
         //to preview
         binding.previewBtn.setOnClickListener {
             Timber.d("onClick Preview")
-            Timber.d("editTextCatalog ${tag.text}")
-            Timber.d("editTextTitle ${title.text}")
 
             if (upperText.text.isNullOrEmpty() || bottomText.text.isNullOrEmpty()) {
-                Snackbar.make(it, "Not Adding Text Yet", Snackbar.LENGTH_SHORT)
-                    .setAction("Action", null).show()
+                val contentText = Snackbar.make(it,"不想填寫內容可以輸入空格唷~(･8･)",Snackbar.LENGTH_LONG)
+                contentText.animationMode = BaseTransientBottomBar.ANIMATION_MODE_FADE
+                contentText.setBackgroundTint(Color.parseColor("#EADDDB"))
+                contentText.setTextColor(Color.parseColor("#181A19"))
+
+                val snackBarView = contentText.view
+                val params = snackBarView.layoutParams as FrameLayout.LayoutParams
+                params.gravity =  Gravity.CENTER_HORIZONTAL and Gravity.TOP
+                snackBarView.layoutParams = params
+
+                contentText.show()
             } else {
 
 //                val baseBitmap = getBitmapByUri(uri)
-                binding.originPhoto.buildDrawingCache()
-                val baseBitmap = binding.originPhoto.drawingCache
-                upperText.buildDrawingCache()
-                val upperBitmap = upperText.drawingCache
-                bottomText.buildDrawingCache()
-                val bottomBitmap = bottomText.drawingCache
-                val previewBitmap = viewModel
-                    .mergeBitmap(baseBitmap, upperBitmap, bottomBitmap)
+            binding.originPhoto.buildDrawingCache()
+            val baseBitmap = binding.originPhoto.drawingCache
+            upperText.buildDrawingCache()
+            val upperBitmap = upperText.drawingCache
+            bottomText.buildDrawingCache()
+            val bottomBitmap = bottomText.drawingCache
+            val previewBitmap = viewModel
+                .mergeBitmap(baseBitmap, upperBitmap, bottomBitmap)
 
-                //buidDrawingCache() only catch the first time data
-                //only to destroy the origin data to render new view
-                upperText.destroyDrawingCache()
-                bottomText.destroyDrawingCache()
-                binding.originPhoto.destroyDrawingCache()
+            //buidDrawingCache() only catch the first time data
+            //only to destroy the origin data to render new view
+            upperText.destroyDrawingCache()
+            bottomText.destroyDrawingCache()
+            binding.originPhoto.destroyDrawingCache()
 
-                findNavController().navigate(
-                    MobileNavigationDirections.navigateToPreviewDialog(
-                        previewBitmap
+            findNavController().navigate(
+                MobileNavigationDirections.navigateToPreviewDialog(
+                    previewBitmap
                     )
                 )
             }
@@ -139,35 +147,56 @@ class EditFragment : Fragment() {
         binding.publishBtn.setOnClickListener {
             Timber.d("onClick publish")
             if (upperText.text.isNullOrEmpty() || bottomText.text.isNullOrEmpty()) {
-                Snackbar.make(it, "Not Adding Text Yet", Snackbar.LENGTH_SHORT)
-                    .setAction("Action", null).show()
+                val contentText = Snackbar.make(it,"不想填寫內容可以輸入空格唷~(･8･)",Snackbar.LENGTH_LONG)
+                contentText.animationMode = BaseTransientBottomBar.ANIMATION_MODE_FADE
+                contentText.setBackgroundTint(Color.parseColor("#EADDDB"))
+                contentText.setTextColor(Color.parseColor("#181A19"))
+
+                val snackBarView = contentText.view
+                val params = snackBarView.layoutParams as FrameLayout.LayoutParams
+                params.gravity =  Gravity.CENTER_HORIZONTAL and Gravity.TOP
+                params.setMargins(params.leftMargin,
+                    params.topMargin,
+                    params.rightMargin,
+                    params.bottomMargin + 100)
+                snackBarView.layoutParams = params
+                contentText.show()
             } else if (title.text.trim().isEmpty()) {
                 //Snackbar ani
-                val titleSnack = Snackbar.make(it,"資料未完成將填入預設值，不客氣",Snackbar.LENGTH_INDEFINITE)
+                val titleSnack = Snackbar.make(it,"資料未完成將填入預設值，免客氣",Snackbar.LENGTH_INDEFINITE)
                 titleSnack.animationMode = BaseTransientBottomBar.ANIMATION_MODE_FADE
                 titleSnack.setBackgroundTint(Color.parseColor("#EADDDB"))
                 titleSnack.setTextColor(Color.parseColor("#181A19"))
                 titleSnack.setAction("感恩的心") {
                         title.setText(UserManager.user.userName)
                     }
+                    .setActionTextColor(Color.parseColor("#181A19"))
                 val snackBarView = titleSnack.view
                 val params = snackBarView.layoutParams as FrameLayout.LayoutParams
                 params.gravity =  Gravity.CENTER_HORIZONTAL and Gravity.TOP
+                params.setMargins(params.leftMargin,
+                    params.topMargin,
+                    params.rightMargin,
+                    params.bottomMargin + 100)
                 snackBarView.layoutParams = params
                 titleSnack.show()
 
             } else if (tag.text.trim().isEmpty()) {
                 val tagSnack =
-                    Snackbar.make( it,"資料未完成將填入預設值，不客氣", Snackbar.LENGTH_INDEFINITE)
+                    Snackbar.make( it,"資料未完成將填入預設值，免客氣", Snackbar.LENGTH_INDEFINITE)
                     .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
                     .setBackgroundTint(Color.parseColor("#EADDDB"))
                     .setTextColor(Color.parseColor("#181A19"))
                     .setAction("感謝有你") {
                         tag.setText("傻逼日常")
-                    }
+                    }.setActionTextColor(Color.parseColor("#181A19"))
                 val snackBarView = tagSnack.view
                 val params = snackBarView.layoutParams as FrameLayout.LayoutParams
                 params.gravity =  Gravity.CENTER_HORIZONTAL and Gravity.TOP
+                params.setMargins(params.leftMargin,
+                    params.topMargin,
+                    params.rightMargin,
+                    params.bottomMargin + 100)
                 snackBarView.layoutParams = params
                 tagSnack.show()
             } else {

@@ -40,17 +40,16 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/user_img"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginVertical="6dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/ic_baseline_tag_faces_24"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="6dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@id/home_img"
                 app:layout_constraintTop_toBottomOf="@+id/home_img"
-                app:layout_constraintBottom_toTopOf="@+id/like_btn"
-                app:shapeAppearanceOverlay="@style/circle"
-                />
+                app:shapeAppearanceOverlay="@style/circle" />
 
             <TextView
                 android:id="@+id/user_name"
@@ -70,34 +69,40 @@
                 app:layout_constraintStart_toEndOf="@+id/user_img"
                 app:layout_constraintTop_toTopOf="@+id/user_img"
                 tools:text="Beva Lin" />
-
-            <ImageView
-                android:id="@+id/like_btn"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginVertical="6dp"
-                android:src="@drawable/heart"
-                app:layout_constraintEnd_toEndOf="@+id/user_img"
-                app:layout_constraintStart_toStartOf="@+id/user_img"
-                app:layout_constraintTop_toBottomOf="@+id/user_img"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:tint="@color/tr_black"/>
-
-            <TextView
-                android:id="@+id/like_num"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/rounded_mplus_medium"
-                android:gravity="center_vertical"
-                android:maxLength="20"
-                android:textColor="@color/tr_black"
-                app:layout_constraintBottom_toBottomOf="@+id/like_btn"
-                app:layout_constraintEnd_toEndOf="@+id/user_name"
-                app:layout_constraintStart_toStartOf="@+id/user_name"
-                app:layout_constraintTop_toTopOf="@+id/like_btn"
-                tools:text="1000000000000000000000000" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
-
+    <com.google.android.material.card.MaterialCardView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_margin="6dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:padding="4dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@drawable/text_round_corner">
+        <ImageView
+            android:id="@+id/like_btn"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:padding="2dp"
+            android:src="@drawable/heart"
+            android:layout_marginEnd="2dp"
+            app:tint="@color/tr_pink"
+            android:background="@color/woo"/>
+        <TextView
+            android:id="@+id/like_num"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/rounded_mplus_medium"
+            android:maxLength="5"
+            android:textSize="12sp"
+            android:textColor="@color/tr_pink"
+            android:text="10000" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

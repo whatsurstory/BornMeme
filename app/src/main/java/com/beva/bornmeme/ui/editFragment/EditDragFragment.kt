@@ -15,6 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.view.marginTop
 import androidx.core.view.updateLayoutParams
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -202,6 +203,10 @@ class EditDragFragment: Fragment() {
                 val snackBarView = titleSnack.view
                 val params = snackBarView.layoutParams as FrameLayout.LayoutParams
                 params.gravity =  Gravity.CENTER_HORIZONTAL and Gravity.TOP
+                params.setMargins(params.leftMargin,
+                    params.topMargin,
+                    params.rightMargin,
+                    params.bottomMargin + 100)
                 snackBarView.layoutParams = params
                 titleSnack.show()
 
@@ -218,7 +223,12 @@ class EditDragFragment: Fragment() {
                 val snackBarView = tagSnack.view
                 val params = snackBarView.layoutParams as FrameLayout.LayoutParams
                 params.gravity =  Gravity.CENTER_HORIZONTAL and Gravity.TOP
+                params.setMargins(params.leftMargin,
+                    params.topMargin,
+                    params.rightMargin,
+                    params.bottomMargin + 100)
                 snackBarView.layoutParams = params
+//                snackBarView.setPadding(0,100,0,0)
                 tagSnack.show()
             } else {
                 binding.lottiePublishLoading.visibility = View.VISIBLE
@@ -351,7 +361,7 @@ class EditDragFragment: Fragment() {
 
     private fun chooseSticker(selectedSticker: Bitmap) {
 //        val sticker = BitmapFactory.decodeResource(resources, selectedSticker)
-        val reSizeSticker = Bitmap.createScaledBitmap(selectedSticker, 180, 180, false)
+        val reSizeSticker = Bitmap.createScaledBitmap(selectedSticker, 220, 200, false)
         binding.stickerView.addSticker(reSizeSticker)
     }
 

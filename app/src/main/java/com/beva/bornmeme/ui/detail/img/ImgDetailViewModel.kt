@@ -42,13 +42,12 @@ data class UiState (
         { comment ->
             val collection =FirebaseFirestore.getInstance().collection("Comments")
 
-            collection.whereEqualTo("like", "cNXUG5FShzYesEOltXUZ")
+            collection.whereEqualTo("like", UserManager.user.userId)
                 .addSnapshotListener { snapshot, e ->
-                    Timber.d("wewewewewe $comment")
-                    collection.document(comment).update("dislike", FieldValue.arrayRemove("cNXUG5FShzYesEOltXUZ"))
+                    collection.document(comment).update("dislike", FieldValue.arrayRemove(UserManager.user.userId))
                         .addOnSuccessListener {
                             collection.document(comment)
-                                .update("like", FieldValue.arrayUnion("cNXUG5FShzYesEOltXUZ"))
+                                .update("like", FieldValue.arrayUnion(UserManager.user.userId))
                                 .addOnSuccessListener {
                                     Timber.d("Success add comment like $comment")
                                 }.addOnFailureListener {
@@ -60,13 +59,12 @@ data class UiState (
         { comment ->
             val collection =FirebaseFirestore.getInstance().collection("Comments")
 
-            collection.whereEqualTo("like", "cNXUG5FShzYesEOltXUZ")
+            collection.whereEqualTo("like", UserManager.user.userId)
                 .addSnapshotListener { snapshot, e ->
-                    Timber.d("wewewewewe $comment")
-                    collection.document(comment).update("like", FieldValue.arrayRemove("cNXUG5FShzYesEOltXUZ"))
+                    collection.document(comment).update("like", FieldValue.arrayRemove(UserManager.user.userId))
                         .addOnSuccessListener {
                         collection.document(comment)
-                            .update("dislike", FieldValue.arrayUnion("cNXUG5FShzYesEOltXUZ"))
+                            .update("dislike", FieldValue.arrayUnion(UserManager.user.userId))
                             .addOnSuccessListener {
                                 Timber.d("Success add comment dislike $comment")
                             }.addOnFailureListener {
