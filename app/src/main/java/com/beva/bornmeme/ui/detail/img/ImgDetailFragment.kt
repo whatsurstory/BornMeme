@@ -2,12 +2,10 @@ package com.beva.bornmeme.ui.detail.img
 
 
 import android.annotation.SuppressLint
-import android.app.Dialog
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Context.DOWNLOAD_SERVICE
 import android.content.DialogInterface
-import android.content.DialogInterface.OnMultiChoiceClickListener
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -24,11 +22,9 @@ import android.view.*
 import android.widget.*
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.databinding.adapters.ViewBindingAdapter.setPadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -45,7 +41,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FieldValue.arrayUnion
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -152,23 +147,28 @@ class ImgDetailFragment : Fragment() {
                     ).into(binding.imgDetailUserImg)
                 binding.imgDetailUserName.text = it[0].userName
 
-                //TODO:follow button
-                if (it[0].userId == UserManager.user.userId) {
-                    binding.followBtn.visibility = View.GONE
-                } else {
-                    binding.followBtn.visibility = View.VISIBLE
-                    for (item in it[0].followers) {
-                        if (item == UserManager.user.userId) {
+            //follow button
+            if (post.ownerId == UserManager.user.userId) {
+                binding.followBtn.visibility = View.GONE
+            } else {
+                binding.followBtn.visibility = View.VISIBLE
+                for (item in it[0].followers) {
+                    if (item == UserManager.user.userId) {
+                        binding.followBtn.text = "Following"
+                        binding.followBtn.setOnClickListener {
+                            Toast.makeText(context, "已經追蹤該作者", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        binding.followBtn.text = "Follow"
+                        //the button to follow other users
+                        binding.followBtn.setOnClickListener {
+                            viewModel.onClickToFollow(post.ownerId)
                             binding.followBtn.text = "Following"
-                        } else {
-                            binding.followBtn.text = "Follow"
-                            binding.followBtn.setOnClickListener {
-                                viewModel.onClickToFollow(post.ownerId)
-                                binding.followBtn.text = "Following"
-                            }
                         }
                     }
                 }
+            }
+
         })
 
 
@@ -188,17 +188,11 @@ class ImgDetailFragment : Fragment() {
         //Observe the view of comments recycler
         viewModel.commentCells.observe(viewLifecycleOwner, Observer {
             it?.let {
-//                if (it.isEmpty()) {
-//                    binding.noSeeText.visibility = View.VISIBLE
-//                    binding.noSeeText.typeWrite(viewLifecycleOwner,
-//                        "it's a little bit quiet in here ...",
-//                        80L)
-//                } else {
+
                     binding.noSeeText.visibility = View.GONE
                     Timber.d(("Observe comment cell : $it"))
                     adapter.submitList(it)
                     adapter.notifyDataSetChanged()
-//                }
             }
 
         })
@@ -218,23 +212,6 @@ class ImgDetailFragment : Fragment() {
                     .navigateToUserDetailFragment(post.ownerId)
             )
         }
-
-        //the button to like post
-//        val postRef = FirebaseFirestore.getInstance().collection("Posts").document(post.id)
-//        val userRef = FirebaseFirestore.getInstance().collection("Users").document(UserManager.user.userId!!)
-//        binding.beforeThumbupBtn.setOnClickListener {
-//
-//            if ()
-//                userRef.update("likeId", FieldValue.arrayUnion(post.id))
-//                postRef.update("like", FieldValue.arrayUnion(UserManager.user.userId))
-//                .addOnSuccessListener {
-//                    Timber.d("Success add like")
-//                    binding.beforeThumbupBtn.setBackgroundResource(R.drawable.heart)
-//                }.addOnFailureListener {
-//                    Timber.d("Error ${it.message}")
-//                }
-//        }
-
 
         //the button to post comments
         binding.commentBtn.setOnClickListener {
@@ -260,7 +237,7 @@ class ImgDetailFragment : Fragment() {
 
         viewModel.folderData.observe(viewLifecycleOwner, Observer {
             it?.let {
-                showAlert(it)
+                showFolderDialog(it)
             }
         })
         //the button to take post to collection
@@ -300,43 +277,75 @@ class ImgDetailFragment : Fragment() {
         }
 
         binding.shareBtn.setOnClickListener {
-                if (SDK_INT >= Build.VERSION_CODES.R) {
-                    if (Environment.isExternalStorageManager()) {
 
-                        val uri = FirebaseStorage.getInstance().reference.child("img_edited/" + post.id + ".jpg")
-                        val filePath = requireContext().filesDir.absolutePath + "/" + post.id + ".jpg"
-                        Timber.d("filePath -> $filePath")
+            val uri = FirebaseStorage.getInstance().reference.child("img_edited/" + post.id + ".jpg")
+            val filePath = requireContext().filesDir.absolutePath + "/" + post.id + ".jpg"
+            Timber.d("filePath -> $filePath")
 
-                        uri.getFile(Uri.parse(filePath))
-                            .addOnCompleteListener {
-                                if (it.isSuccessful) {
-                                    Timber.d("success")
-                                    //get Uri by file path
+            uri.getFile(Uri.parse(filePath))
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        Timber.d("success")
+                        //get Uri by file path
 //                        Uri.parse("content:/$filePath")
 //                        val fileUri = Uri.fromFile(File(filePath))
-                                    val file = File(filePath)
-                                    val newUri =
-                                        FileProvider.getUriForFile(
-                                            requireContext(),
-                                            "com.beva.bornmeme.fileProvider", file
-                                        )
-                                    Timber.d("fileUri -> $newUri")
-                                    val intent = Intent(Intent.ACTION_SEND)
-                                    intent.type = "image/*"
-                                    intent.putExtra(
-                                        Intent.EXTRA_STREAM,
-                                        newUri
-                                    )
-                                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or
-                                            Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                        val file = File(filePath)
+                        val newUri =
+                            FileProvider.getUriForFile(
+                                requireContext(),
+                                "com.beva.bornmeme.fileProvider", file
+                            )
+                        Timber.d("fileUri -> $newUri")
+                        val intent = Intent(Intent.ACTION_SEND)
+                        intent.type = "image/*"
+                        intent.putExtra(
+                            Intent.EXTRA_STREAM,
+                            newUri
+                        )
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or
+                                Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
 //                                    startActivity(Intent.createChooser (intent, "Share Image"))
-                                    startActivity(intent)
-                                }
-                            }
-                } else {
-                        requestPermission()
+                        startActivity(intent)
+                    }
                 }
-            }
+
+//                if (SDK_INT >= Build.VERSION_CODES.R) {
+//                    if (Environment.isExternalStorageManager()) {
+//
+//                        val uri = FirebaseStorage.getInstance().reference.child("img_edited/" + post.id + ".jpg")
+//                        val filePath = requireContext().filesDir.absolutePath + "/" + post.id + ".jpg"
+//                        Timber.d("filePath -> $filePath")
+//
+//                        uri.getFile(Uri.parse(filePath))
+//                            .addOnCompleteListener {
+//                                if (it.isSuccessful) {
+//                                    Timber.d("success")
+//                                    //get Uri by file path
+////                        Uri.parse("content:/$filePath")
+////                        val fileUri = Uri.fromFile(File(filePath))
+//                                    val file = File(filePath)
+//                                    val newUri =
+//                                        FileProvider.getUriForFile(
+//                                            requireContext(),
+//                                            "com.beva.bornmeme.fileProvider", file
+//                                        )
+//                                    Timber.d("fileUri -> $newUri")
+//                                    val intent = Intent(Intent.ACTION_SEND)
+//                                    intent.type = "image/*"
+//                                    intent.putExtra(
+//                                        Intent.EXTRA_STREAM,
+//                                        newUri
+//                                    )
+//                                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or
+//                                            Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+////                                    startActivity(Intent.createChooser (intent, "Share Image"))
+//                                    startActivity(intent)
+//                                }
+//                            }
+//                } else {
+//                        requestPermission()
+//                }
+//            }
 
         }
 
@@ -384,36 +393,29 @@ class ImgDetailFragment : Fragment() {
         cancel.setOnClickListener { alertDialog.dismiss() }
     }
 
-    private fun requestPermission() {
-
-        if (SDK_INT >= Build.VERSION_CODES.R) {
-            try {
-                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
-                intent.addCategory("android.intent.category.DEFAULT")
-                intent.data = Uri.parse(
-                    String.format(
-                        "package:%s",
-                        getApplicationContext<Context>().packageName
-                    )
-                )
-                startActivityForResult(intent, 2296)
-
-
-            } catch (e: Exception) {
-                val intent = Intent()
-                intent.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
-                startActivityForResult(intent, 2296)
-
-            }
-        } else {
-            //below android 11
-//            ActivityCompat.requestPermissions(
-//                this.requireActivity(),
-//                arrayOf(WRITE_EXTERNAL_STORAGE),
-//                2296
-//            )
-        }
-    }
+//    private fun requestPermission() {
+//
+//        if (SDK_INT >= Build.VERSION_CODES.R) {
+//            try {
+//                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+//                intent.addCategory("android.intent.category.DEFAULT")
+//                intent.data = Uri.parse(
+//                    String.format(
+//                        "package:%s",
+//                        getApplicationContext<Context>().packageName
+//                    )
+//                )
+//                startActivityForResult(intent, 2296)
+//
+//
+//            } catch (e: Exception) {
+//                val intent = Intent()
+//                intent.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
+//                startActivityForResult(intent, 2296)
+//
+//            }
+//        }
+//    }
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(
@@ -439,7 +441,7 @@ class ImgDetailFragment : Fragment() {
     }
 
     @SuppressLint("ResourceAsColor")
-    private fun showAlert(folderNames: List<String>) {
+    private fun showFolderDialog(folderNames: List<String>) {
         val builder: AlertDialog.Builder =
             AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
 //Make you can't dismiss by default -> builder.setCancelable(false)

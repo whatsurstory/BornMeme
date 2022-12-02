@@ -87,7 +87,7 @@
                 android:id="@+id/like_num"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/round_border"
+                android:fontFamily="@font/rounded_mplus_medium"
                 android:gravity="center_vertical"
                 android:maxLength="20"
                 android:textColor="@color/tr_black"

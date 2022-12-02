@@ -15,8 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintTop_toTopOf="parent" >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -197,9 +196,9 @@
                 android:paddingVertical="4dp"
                 android:layout_marginHorizontal="12dp"
                 android:textColor="@color/tr_pink"
-                android:fontFamily="@font/round_border"
+                android:fontFamily="@font/rounded_mplus_medium"
                 android:textSize="16sp"
-                android:gravity="start|top"
+                android:gravity="start"
                 app:layout_constraintBottom_toTopOf="@id/img_detail_line"
                 app:layout_constraintEnd_toEndOf="@+id/img_detail_title"
                 app:layout_constraintStart_toStartOf="@id/img_detail_title"
@@ -225,7 +224,7 @@
                 android:layout_marginVertical="8dp"
                 android:paddingTop="8dp"
                 android:paddingBottom="24dp"
-                android:background="@color/gray_white"
+                android:background="@color/dark_gray"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/img_detail_description" />

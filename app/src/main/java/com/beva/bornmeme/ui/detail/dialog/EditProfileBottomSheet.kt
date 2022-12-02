@@ -151,6 +151,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment()
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         intent.type = "image/*"
         intent.addCategory(Intent.CATEGORY_OPENABLE)
+        //TODO: Error handle the uri is empty
         requestImageLauncher.launch(intent)
     }
 

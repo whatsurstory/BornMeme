@@ -79,9 +79,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:maxLines="1"
-                android:autofillHints="天很藍，雲很白，不寫簡介，我就爛"
                 android:textColor="@color/tr_black"
-                android:fontFamily="@font/round_border" />
+                android:fontFamily="@font/rounded_mplus_medium" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -104,7 +103,7 @@
                 android:layout_height="match_parent"
                 android:maxLines="2"
                 app:errorEnabled="true"
-                android:fontFamily="@font/round_border"
+                android:fontFamily="@font/rounded_mplus_medium"
                 android:textColor="@color/tr_black" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -125,7 +124,7 @@
                 android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/round_border"
+                android:fontFamily="@font/rounded_mplus_medium"
                 android:textColorHint="@color/tr_black"
                 android:text="@string/default_text" />
 
@@ -222,7 +221,7 @@
             android:padding="16dp"
             android:text="Register Time: "
             android:textColor="@color/tr_black"
-            android:fontFamily="@font/round_border"
+            android:fontFamily="@font/rounded_mplus_medium"
             app:layout_constraintBottom_toTopOf="@+id/saveButton"
             app:layout_constraintEnd_toEndOf="@+id/block_list"
             app:layout_constraintStart_toStartOf="@+id/block_list"
