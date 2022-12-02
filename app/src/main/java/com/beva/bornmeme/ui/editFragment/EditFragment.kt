@@ -93,6 +93,7 @@ class EditFragment : Fragment() {
 
         (tag.parent.parent as ViewGroup).setBackgroundColor(Color.parseColor("#EADDDB"))
         (title.parent.parent as ViewGroup).setBackgroundColor(Color.parseColor("#EADDDB"))
+
         return binding.root
     }
 

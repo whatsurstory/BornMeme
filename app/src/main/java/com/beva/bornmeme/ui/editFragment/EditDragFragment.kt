@@ -1,39 +1,48 @@
 package com.beva.bornmeme.ui.editFragment
 
 import android.annotation.SuppressLint
-import android.graphics.Matrix
-import android.graphics.PointF
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
-import android.util.FloatMath
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.collection.arrayMapOf
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
+import androidx.core.view.updateLayoutParams
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import com.beva.bornmeme.MainViewModel
+import com.beva.bornmeme.MobileNavigationDirections
+import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentDragEditBinding
+import com.beva.bornmeme.model.UserManager
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
+import com.google.common.base.Strings.isNullOrEmpty
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import timber.log.Timber
-import java.lang.Math.sqrt
-import java.lang.StrictMath.sqrt
-import kotlin.math.sqrt
+import kotlin.math.roundToInt
+import kotlin.properties.Delegates
 
 
-class EditDragFragment: Fragment(), View.OnTouchListener {
+class EditDragFragment: Fragment() {
 
     lateinit var binding: FragmentDragEditBinding
-    // 縮放控制
-    private val matrix: Matrix = Matrix()
-    private val savedMatrix: Matrix = Matrix()
-    // 不同状态的表示：
-    private val NONE = 0
-    private val DRAG = 1
-    private val ZOOM = 2
-    private var mode = NONE
-    // 定义第一个按下的点，两只接触点的重点，以及出事的两指按下的距离：
-    private val startPoint = PointF()
-    private var midPoint = PointF()
-    private var oriDis = 1f
+//    private var xDown = 0f
+//    private var yDown = 0f
+    private lateinit var uri: Uri
+    private val fireStore = FirebaseFirestore.getInstance().collection("Posts")
+    private val document = fireStore.document()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,119 +52,307 @@ class EditDragFragment: Fragment(), View.OnTouchListener {
 
         return binding.root
     }
-    @SuppressLint("ClickableViewAccessibility")
+
+    @SuppressLint("ClickableViewAccessibility", "UseCompatLoadingForDrawables", "ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = FragmentDragEditBinding.inflate(layoutInflater)
-        val text = binding.dragEditText
-        var isMove = true
-//        binding.stickerImg.setOnTouchListener(this)
+
+        val displayText = binding.editTextBox
+        //let the text won't have underline
+        displayText.requestFocus()
+        binding.addTextBtn.isEnabled = false
 
 
-        text.setOnClickListener{
-         if (!isMove){
-             Timber.d("setOnTouchListener $isMove")
+        //reset the coordinate of scrollview
+        binding.verticalScrollView.setOnTouchListener { view, event ->
+
+//            Timber.i("stickerView event => x: ${binding.stickerView.x}, y: ${binding.stickerView.y}")
+//            Timber.i("stickerView H -> ${binding.stickerView.height}")
+//            Timber.d("screen H -> ${binding.root.context.resources.displayMetrics.widthPixels}")
+
+            val offset = binding.stickerView.y
+            Timber.e("offset => $offset")
+            Timber.d("scrollview event => x: ${event?.x}, y: ${event?.y}")
+            Timber.e("event.y - offset => ${event.y - offset}")
+            Timber.d("scrollY -> ${binding.verticalScrollView.scrollY}")
+            Timber.e("event.y - offset + binding.verticalScrollView.scrollY => ${event.y - offset + binding.verticalScrollView.scrollY}")
+
+
+            val newEvent = MotionEvent.obtain(
+                event.downTime,
+                event.eventTime,
+                event.action,
+                event.x,
+                event.y - offset + binding.verticalScrollView.scrollY,
+                event.metaState
+            )
+            return@setOnTouchListener binding.stickerView.onTouchEvent(newEvent)
+        }
+
+        //let the bitmap's width and height scale the view
+        arguments?.let { bundle ->
+            uri = bundle.getParcelable("uri")!!
+            Timber.d("uri => $uri")
+            val bitmap = StickerUtils.getImage(requireContext(), uri)
+            if (bitmap != null) {
+                binding.stickerView.setBackground(bitmap)
+                Timber.d("width ${binding.stickerView.width}")
+                Timber.d("height ${binding.stickerView.height}")
+                Timber.i("bitmap W ${bitmap.width}")
+                Timber.i("bitmap H ${bitmap.height}")
+
+                val width = bitmap.width
+                var height = bitmap.height
+                val screenWidth = binding.root.context.resources.displayMetrics.widthPixels
+                Timber.w("=====================================================")
+                Timber.d("screenWidth $screenWidth")
+                val deviceDensity = binding.root.context.resources.displayMetrics.density
+                Timber.d("density $deviceDensity")
+                Timber.d("density ${binding.root.context.resources.displayMetrics.densityDpi}")
+
+                val itemWidth = screenWidth
+                Timber.d("itemWidth ${itemWidth}")
+
+
+                if (width > height) {
+                    Timber.d("寬大於高")
+                    Timber.d("origin width: $width")
+                    Timber.d("origin height: $height")
+                    height = ((itemWidth.toFloat() / bitmap.width.toFloat()) * bitmap.height).roundToInt()
+
+                    Timber.d("after width: $itemWidth")
+                    Timber.d("after height: $height")
+
+                } else if (width <= height) {
+                    Timber.d("寬小於高")
+                    Timber.d("origin width: $width")
+                    Timber.d("origin height: $height")
+//                    if (height > itemWidth * 1.3){
+//                        height = (itemWidth * 1.3).roundToInt()
+//                    }
+
+                    height = (screenWidth.toFloat() / bitmap.width.toFloat()
+                            * bitmap.height.toFloat()).roundToInt()
+                    Timber.d("after width: $itemWidth")
+                    Timber.d("after height: $height")
+                }
+
+
+                val params = ConstraintLayout
+                    .LayoutParams(ConstraintLayout
+                        .LayoutParams.MATCH_PARENT, height)
+
+
+                binding.stickerView.layoutParams = params
+                binding.stickerView.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                    topToBottom = binding.addTextBtn.id
+                    bottomToTop = binding.dragTitleCard.id
+                    //add other constraints if needed
+                }
+
             }
         }
 
-        var startX = 0
-        var startY = 0
-//
-        text.setOnTouchListener { v, event ->
-            when(event.action){
+        displayText.doOnTextChanged { text, start, count, after ->
+            // action which will be invoked when the text is changing
+            if (text?.trim().isNullOrEmpty()) {
+                binding.editTextBox.setHintTextColor(R.color.whit_alpha)
+                binding.addTextBtn.isEnabled = false
+                Timber.d("text $text")
+            } else {
+                binding.addTextBtn.isEnabled = true
+                binding.editTextBox.setHintTextColor(R.color.transparent)
+            }
+        }
 
-                MotionEvent.ACTION_DOWN -> {
-                    startX = event.rawX.toInt()
-                    startY = event.rawY.toInt()
-                    isMove = false
+        binding.addTextBtn.setOnClickListener {
+            displayText.destroyDrawingCache()
+            displayText.buildDrawingCache()
+            val bitmap = displayText.drawingCache.copy(Bitmap.Config.ARGB_8888, false)
+            binding.stickerView.addSticker(bitmap)
+        }
+
+        binding.clearButton.setOnClickListener {
+            binding.stickerView.clearSticker()
+        }
+
+        binding.dragPreviewBtn.setOnClickListener {
+            binding.stickerView.destroyDrawingCache()
+            binding.stickerView.buildDrawingCache()
+            val bitmap = binding.stickerView.drawingCache.copy(Bitmap.Config.ARGB_8888, false)
+            findNavController().navigate(
+                MobileNavigationDirections.navigateToPreviewDialog(
+                    bitmap
+                )
+            )
+        }
+
+        binding.dragPublishBtn.setOnClickListener {
+            if (binding.dragTitleCard.text.toString().isEmpty()) {
+                //Snackbar ani
+                val titleSnack = Snackbar.make(it,"資料未完成將填入預設值，不客氣", Snackbar.LENGTH_INDEFINITE)
+                titleSnack.animationMode = BaseTransientBottomBar.ANIMATION_MODE_FADE
+                titleSnack.setBackgroundTint(Color.parseColor("#EADDDB"))
+                titleSnack.setTextColor(Color.parseColor("#181A19"))
+                titleSnack.setAction("感恩的心") {
+                    binding.dragTitleCard.setText(UserManager.user.userName)
                 }
+                titleSnack.setActionTextColor(ContextCompat.getColor(requireContext(), R.color.tr_black))
+                val snackBarView = titleSnack.view
+                val params = snackBarView.layoutParams as FrameLayout.LayoutParams
+                params.gravity =  Gravity.CENTER_HORIZONTAL and Gravity.TOP
+                snackBarView.layoutParams = params
+                titleSnack.show()
 
-                MotionEvent.ACTION_MOVE -> {
+            } else if (binding.dragTextCatalog.text.toString().isEmpty()) {
+                val tagSnack =
+                    Snackbar.make( it,"資料未完成將填入預設值，不客氣", Snackbar.LENGTH_INDEFINITE)
+                        .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
+                        .setBackgroundTint(Color.parseColor("#EADDDB"))
+                        .setTextColor(Color.parseColor("#181A19"))
+                        .setAction("感謝有你") {
+                            binding.dragTextCatalog.setText("傻逼日常")
+                        }
+                        .setActionTextColor(ContextCompat.getColor(requireContext(), R.color.tr_black))
+                val snackBarView = tagSnack.view
+                val params = snackBarView.layoutParams as FrameLayout.LayoutParams
+                params.gravity =  Gravity.CENTER_HORIZONTAL and Gravity.TOP
+                snackBarView.layoutParams = params
+                tagSnack.show()
+            } else {
+                binding.lottiePublishLoading.visibility = View.VISIBLE
+                binding.lottiePublishLoading.setAnimation(R.raw.dancing_pallbearers)
 
-                    val endX: Int = event.rawX.toInt()
-                    val endY: Int = event.rawY.toInt()
+                val ref = FirebaseStorage.getInstance().reference
+                ref.child("img_origin/" + document.id + ".jpg")
+                    .putFile(uri)
+                    .addOnSuccessListener {
+                        it.metadata?.reference?.downloadUrl?.addOnSuccessListener {
+                            //這層的it才會帶到firebase return 的 Uri
+                            Timber.d("origin uri: $it => take it to base url")
 
-                    val spaceX = endX - startX
-                    val spaceY = endY - startY
+//                            Timber.d("newTag $newTag")
+                            val res = listOf(
+                                arrayMapOf("type" to "base", "url" to it),
+                                arrayMapOf(
+                                    "type" to "text",
+                                    "url" to ""
+                                )
+                            )
 
-                    val left = text.left + spaceX
-                    val top = text.top + spaceY
-                    val right = text.right + spaceX
-                    val bottom = text.bottom + spaceY
+                            binding.stickerView.destroyDrawingCache()
+                            binding.stickerView.buildDrawingCache()
+                            val bitmap = binding.stickerView.drawingCache.copy(Bitmap.Config.ARGB_8888, false)
 
-                    text.layout(left,top,right, bottom)
-                    startX = endX
-                    startY = endY
+                            //saving to gallery and return the path(uri)
+                            val viewModel = ViewModelProvider(requireActivity())[EditViewModel::class.java]
+                            val newUri = viewModel.getImageUri(activity?.application, bitmap)
+                            viewModel.addNewPost(
+                                newUri,
+                                res,
+                                binding.dragTitleCard.text.toString(),
+                                binding.dragTextCatalog.text.toString(),
+                                bitmap.width,
+                                bitmap.height)
+                            findNavController().navigate(MobileNavigationDirections.navigateToHomeFragment())
 
-                    if (spaceX > 5 || spaceY > 5){
-                        isMove = true
+                        }?.addOnFailureListener {
+                            Timber.d("upload uri Error => $it")
+                        }
+
                     }
-                }
-
-                MotionEvent.ACTION_UP -> {
-
-                }
-
-                MotionEvent.ACTION_CANCEL -> {
-
-                }
-
-                else ->{
-
-                }
-            }
-            return@setOnTouchListener false
-        }
-    }
-
-    override fun onTouch(v: View, event: MotionEvent): Boolean {
-        val view = v as ImageView
-        when (event.action and MotionEvent.ACTION_MASK) {
-            MotionEvent.ACTION_DOWN -> {
-                matrix.set(v.imageMatrix)
-                savedMatrix.set(matrix)
-                startPoint.set(event.x, event.y)
-                mode = DRAG
-            }
-            MotionEvent.ACTION_POINTER_DOWN -> {
-                oriDis = distance(event)
-                if (oriDis > 10f) {
-                    savedMatrix.set(matrix)
-                    midPoint = middle(event)
-                    mode = ZOOM
-                }
-            }
-            MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> mode = NONE
-            MotionEvent.ACTION_MOVE -> if (mode == DRAG) {
-//                 是一个手指拖动
-                matrix.set(savedMatrix)
-                matrix.postTranslate(event.x - startPoint.x, event.y - startPoint.y)
-            } else if (mode == ZOOM) {
-//                 两个手指滑动
-                val newDist = distance(event)
-                if (newDist > 10f) {
-                    matrix.set(savedMatrix)
-                    val scale: Float = newDist / oriDis
-                    matrix.postScale(scale, scale, midPoint.x, midPoint.y)
-                }
             }
         }
-        // 设置ImageView的Matrix
-        view.imageMatrix = matrix
-        return true
+
+        //adding default sticker
+        binding.memeAwkwardLookMonkeyPuppet.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeBabyYodaDrinkingSoup.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeCatBeingYelledAt.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeCryingCat.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeCryingKimKardashian.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeCryingMichaelJordan.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeDogeDog.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeFacepalm.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeHandsomeSquidward.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeHideThePainHarold.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeHomerSimpsonBushes.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeIsThisAPigeon.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeKermitNotMyBusiness.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeNortonSmirking.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memePatrickIHave3Dollars.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeLeonardoDicaprioLaughing.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memePoliteCat.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeRalphWiggumDivingThroughWindow.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeRollSafe.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeSadFrog.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeSaltBae.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeSurprisedShockedPikachu.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeThisIsFineDog.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeWomanYelling.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeYaoMing.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+
+//        binding.addStickerBtn.setOnClickListener {
+//            val sticker = BitmapFactory.decodeResource(resources, R.drawable.heart)
+//            val reSizeSticker = Bitmap.createScaledBitmap(sticker, 100, 100, false)
+//            binding.stickerView.addSticker(reSizeSticker)
+//        }
     }
 
-    // 计算两个触摸点之间的距离
-    private fun distance(event: MotionEvent): Float {
-        val x = event.getX(0) - event.getX(1)
-        val y = event.getY(0) - event.getY(1)
-        return sqrt(x * x + y * y)
+    private fun chooseSticker(selectedSticker: Bitmap) {
+//        val sticker = BitmapFactory.decodeResource(resources, selectedSticker)
+        val reSizeSticker = Bitmap.createScaledBitmap(selectedSticker, 180, 180, false)
+        binding.stickerView.addSticker(reSizeSticker)
     }
 
-    // 计算两个触摸点的中点
-    private fun middle(event: MotionEvent): PointF {
-        val x = event.getX(0) + event.getX(1)
-        val y = event.getY(0) + event.getY(1)
-        return PointF(x / 2, y / 2)
-    }
 }

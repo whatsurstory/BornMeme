@@ -45,6 +45,13 @@
     <color name="tr_pink">#EADDDB</color>
     <color name="gray_white">#fff7f7</color>
 
-
+    <!-- Base application theme. -->
+    <color name="bg">#f0f0f1</color>
+    <color name="fg">#383a42</color>
+    <color name="sticker">#e7e7e9</color>
+    <bool name="light_theme">true</bool>
+    <color name="accent">#00796B</color>
+    <color name="accent_a">#8800796B</color>
+    <color name="onAccent">#e6e6e6</color>
 
 </resources>

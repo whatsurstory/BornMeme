@@ -30,38 +30,57 @@ class HomeAdapter(private val onClickListener: OnClickListener,private val uiSta
         @SuppressLint("SetTextI18n")
         fun bind(item: Post, uiState: HomeViewModel.UiState) {
 
+            //
             val width = item.imageWidth
             var height = item.imageHeight
-            if (width > height) {
-//                Timber.d("寬大於高")
-//                Timber.d("origin width: $width")
-//                Timber.d("origin height: $height")
-//                Timber.d("iv width: ${binding.homeImg.width}")
-//                Timber.d("iv height: ${binding.homeImg.height}")
-//                Timber.d("iv x: ${(binding.homeImg.width.toFloat() / item.imageWidth.toFloat())}")
-                height = ((binding.homeImg.width.toFloat() / item.imageWidth.toFloat()) * item.imageHeight).roundToInt()
+            val screenWidth = binding.root.context.resources.displayMetrics.widthPixels
+            Timber.w("=====================================================")
+            Timber.i("image position=${adapterPosition}")
+            Timber.d("screenWidth $screenWidth")
+            val deviceDensity = binding.root.context.resources.displayMetrics.density
+            Timber.d("density ${deviceDensity}")
+            Timber.d("density ${binding.root.context.resources.displayMetrics.densityDpi}")
 
-//                Timber.d("after width: ${binding.homeImg.width}")
-//                Timber.d("after height: $height")
+            //12 * 3
+            val totalLayoutPadding = 36 * deviceDensity
+            val itemWidth = (screenWidth - totalLayoutPadding) / 2
+            Timber.d("itemWidth ${itemWidth}")
+
+
+            if (width > height) {
+                Timber.d("寬大於高")
+                Timber.d("origin width: $width")
+                Timber.d("origin height: $height")
+                height = ((itemWidth.toFloat() / item.imageWidth.toFloat()) * item.imageHeight).roundToInt()
+
+                Timber.d("after width: $itemWidth")
+                Timber.d("after height: $height")
+
             } else if (width <= height) {
-                if (height > binding.homeImg.width * 1.3){
-                    height = (binding.homeImg.width * 1.3).roundToInt()
+                Timber.d("寬小於高")
+                Timber.d("origin width: $width")
+                Timber.d("origin height: $height")
+                if (height > itemWidth * 1.3){
+                    height = (itemWidth * 1.3).roundToInt()
                 }
-//                Timber.d("寬小於高 $height")
+                Timber.d("after width: $itemWidth")
+                Timber.d("after height: $height")
             }
 
             val layoutParams = Constraints.LayoutParams(
                 Constraints.LayoutParams.MATCH_PARENT,
                 height
             )
-//            Timber.d("check image in params 寬$width 高$height")
+            Timber.d("check image in params 寬$width 高$height")
             binding.homeImg.layoutParams = layoutParams
             binding.homeImg.scaleType = ImageView.ScaleType.CENTER_CROP
-//            Timber.d("image 寬${binding.homeImg.width} 高 ${binding.homeImg.height}")
 
             Glide.with(binding.homeImg.context)
                 .load(item.url).centerCrop()
                 .into(binding.homeImg)
+
+            Timber.d("image 寬${binding.homeImg.width} 高 ${binding.homeImg.height}")
+            Timber.w("=====================================================")
 
             binding.userName.text = item.title
             if (item.like.isNullOrEmpty()) {
