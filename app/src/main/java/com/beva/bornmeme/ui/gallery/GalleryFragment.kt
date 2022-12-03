@@ -2,15 +2,15 @@ package com.beva.bornmeme.ui.gallery
 
 
 import android.annotation.SuppressLint
+import android.content.ContentValues
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
-import android.media.MediaScannerConnection
-import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,9 +34,7 @@ import com.bumptech.glide.Glide
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.Dispatchers
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
@@ -72,7 +70,6 @@ class GalleryFragment: Fragment() {
             adapter.notifyDataSetChanged()
         })
 
-
         //加照片用
         binding.addNewImgBtn.visibility = View.GONE
         binding.addNewImgBtn.setOnClickListener {
@@ -80,8 +77,8 @@ class GalleryFragment: Fragment() {
             val document = fireStore.document()
             val publish = Image(
                 document.id,
-                "生無可戀",
-                "https://memeprod.ap-south-1.linodeobjects.com/user-template/7a089306962a82b0b7ec0ff1673a4d5f.png",
+                "斯卡羅電梯",
+                "https://memeprod.sgp1.digitaloceanspaces.com/user-wtf/1631331130313.jpg",
                 emptyList(),
                 emptyList()
             )
@@ -96,7 +93,7 @@ class GalleryFragment: Fragment() {
         val view = inflater.inflate(R.layout.dialog_image, null)
         builder.setView(view)
         val image = view.findViewById<ImageView>(R.id.gallery_img)
-        Glide.with(image).load(img.url).placeholder(R.drawable._50).into(image)
+        Glide.with(image).load(img.url).placeholder(R.drawable.place_holder).into(image)
 
         builder.setMessage("就決定是${img.title}了嗎?(・∀・)つ⑩")
         builder.setPositiveButton("對沒錯") { dialog, _ ->
@@ -162,5 +159,33 @@ class GalleryFragment: Fragment() {
 
 }
 
+
+//https://medium.com/@iansc/%E5%9C%A8-scoped-storage-%E5%AF%A6%E4%BD%9C%E4%B8%8B%E8%BC%89%E5%AA%92%E9%AB%94%E6%AA%94%E6%A1%88%E7%9A%84%E6%96%B9%E6%B3%95%E8%88%87%E7%B6%93%E9%A9%97%E5%88%86%E4%BA%AB-483d9250ba33
+//suspend fun createImageUri(context: Context, fileName: String, dateTaken: Long): Uri? {
+//    return withContext(Dispatchers.IO) {
+//
+//        // 使用 MediaStore 的 API 取得 ImageCollection 的 Content Uri
+//        val imageCollection = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//            MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+//        } else {
+//            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+//        }
+//
+//        // 使用 ContentValue 對要儲存的圖片檔案進行設定
+//        val newImage = ContentValues().apply {
+//            // 檔案名
+//            put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
+//            // 檔案類型
+//            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+//            // 檔案儲存時間
+//            put(MediaStore.Images.Media.DATE_TAKEN, dateTaken)
+//            // 檔案儲存路徑，API Level 需要在 29 以上，不指定會自動儲存在 Pictures 㡳下
+//            put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/Sample")
+//        }
+//
+//        // 透過 ContentResolver 產生並回傳圖片的 ContentUri
+//        context.applicationContext.contentResolver.insert(imageCollection, newImage)
+//    }
+//}
 
 

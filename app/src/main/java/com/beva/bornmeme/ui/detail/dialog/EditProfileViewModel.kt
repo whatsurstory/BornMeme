@@ -4,7 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.beva.bornmeme.model.User
+import com.beva.bornmeme.model.UserManager
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import timber.log.Timber
 
 class EditProfileViewModel(userId: String): ViewModel() {
@@ -13,6 +17,10 @@ class EditProfileViewModel(userId: String): ViewModel() {
         private val _user = MutableLiveData<User>()
         val user: LiveData<User>
                 get() = _user
+
+        var blockUser = emptyList<String>()
+        var follower = emptyList<String>()
+        var followUser = emptyList<String>()
 
         init {
                 getData(userId)
@@ -30,4 +38,5 @@ class EditProfileViewModel(userId: String): ViewModel() {
                         _user.value = user
                 }
         }
+
 }

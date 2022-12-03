@@ -22,7 +22,7 @@ class PostAdapter(private val onClickListener: OnClickListener) : ListAdapter<Po
             fun bind(item: Post){
                 Glide.with(binding.postsImg.context)
                     .load(item.url)
-                    .placeholder(R.drawable._50)
+                    .placeholder(R.drawable.place_holder)
                     .into(binding.postsImg)
             }
         }

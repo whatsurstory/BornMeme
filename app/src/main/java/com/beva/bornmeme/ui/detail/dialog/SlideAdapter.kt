@@ -31,7 +31,7 @@ class SlideAdapter(private val onClickListener: OnClickListener): ListAdapter<Fo
         fun bind (item: FolderData) {
             Glide.with(binding.slideImage)
                 .load(item.url)
-                .placeholder(R.drawable._50)
+                .placeholder(R.drawable.place_holder)
                 .into(binding.slideImage)
         }
     }

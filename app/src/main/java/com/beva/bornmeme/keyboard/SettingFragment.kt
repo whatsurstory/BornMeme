@@ -12,15 +12,20 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentSettingBinding
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import timber.log.Timber
 import java.util.Calendar
 import java.util.concurrent.Executors
 
-class SettingFragment: Fragment() {
+class SettingFragment: BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentSettingBinding
 
@@ -60,11 +65,17 @@ class SettingFragment: Fragment() {
         }
     }
 
+    override fun getTheme() = R.style.CustomBottomSheetDialog
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        dialog?.let {
+            val sheet = it as BottomSheetDialog
+            sheet.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        }
         binding = FragmentSettingBinding.inflate(layoutInflater)
 
         binding.settingOpenKeyboard.setOnClickListener {

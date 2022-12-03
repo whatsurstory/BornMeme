@@ -1,13 +1,24 @@
 package com.beva.bornmeme.ui.detail.user.fragments.collection
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.widget.Button
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.navigation.fragment.findNavController
+import com.beva.bornmeme.R
 import com.beva.bornmeme.model.Folder
 import com.beva.bornmeme.model.Post
 import com.beva.bornmeme.model.UserManager
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import timber.log.Timber
 
 class CollectionViewModel(userId: String) : ViewModel() {
@@ -48,6 +59,17 @@ class CollectionViewModel(userId: String) : ViewModel() {
         return liveData
     }
 
+    fun deleteFile(item: Folder) {
+        FirebaseFirestore.getInstance()
+            .collection("Users")
+            .document(UserManager.user.userId!!)
+            .collection("Folders")
+            .document(item.name).delete()
+        
+
+
+    }
+
     fun navigateToDetail(item: Folder) {
         _navigateToDetail.value = item
     }
@@ -55,4 +77,6 @@ class CollectionViewModel(userId: String) : ViewModel() {
     fun onDetailNavigated() {
         _navigateToDetail.value = null
     }
+
+
 }

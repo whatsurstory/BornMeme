@@ -82,7 +82,7 @@ class CommentAdapter(private val uiState: ImgDetailViewModel.UiState): ListAdapt
                 Timber.d("img => ${user.profilePhoto}")
                 Glide.with(binding.commentUserImg)
                     .load(user.profilePhoto)
-                    .placeholder(R.drawable._50)
+                    .placeholder(R.drawable.place_holder)
                     .into(binding.commentUserImg)
                 binding.commentUserName.text = user.userName
             }
@@ -134,7 +134,7 @@ class CommentAdapter(private val uiState: ImgDetailViewModel.UiState): ListAdapt
                 Timber.d("img => ${user.profilePhoto}")
                 Glide.with(binding.childUserImg)
                     .load(user.profilePhoto)
-                    .placeholder(R.drawable._50)
+                    .placeholder(R.drawable.place_holder)
                     .into(binding.childUserImg)
                 binding.childUserName.text = user.userName
             }

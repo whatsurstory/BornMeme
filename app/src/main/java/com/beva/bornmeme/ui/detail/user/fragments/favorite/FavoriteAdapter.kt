@@ -21,7 +21,7 @@ class FavoriteAdapter(private val onClickListener: OnClickListener): ListAdapter
         fun bind(item: Post){
             Glide.with(binding.favoriteImg)
                 .load(item.url)
-                .placeholder(R.drawable._50)
+                .placeholder(R.drawable.place_holder)
                 .into(binding.favoriteImg)
         }
     }

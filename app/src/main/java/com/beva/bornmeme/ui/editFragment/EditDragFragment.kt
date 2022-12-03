@@ -60,8 +60,7 @@ class EditDragFragment: Fragment() {
         binding = FragmentDragEditBinding.inflate(layoutInflater)
 
         val displayText = binding.editTextBox
-        //let the text won't have underline
-        displayText.requestFocus()
+//        displayText.requestFocus()
         binding.addTextBtn.isEnabled = false
 
 
@@ -157,14 +156,7 @@ class EditDragFragment: Fragment() {
 
         displayText.doOnTextChanged { text, start, count, after ->
             // action which will be invoked when the text is changing
-            if (text?.trim().isNullOrEmpty()) {
-                binding.editTextBox.setHintTextColor(R.color.whit_alpha)
-                binding.addTextBtn.isEnabled = false
-                Timber.d("text $text")
-            } else {
-                binding.addTextBtn.isEnabled = true
-                binding.editTextBox.setHintTextColor(R.color.transparent)
-            }
+            binding.addTextBtn.isEnabled = !text?.trim().isNullOrEmpty()
         }
 
         binding.addTextBtn.setOnClickListener {
@@ -172,6 +164,7 @@ class EditDragFragment: Fragment() {
             displayText.buildDrawingCache()
             val bitmap = displayText.drawingCache.copy(Bitmap.Config.ARGB_8888, false)
             binding.stickerView.addSticker(bitmap)
+            displayText.setText("")
         }
 
         binding.clearButton.setOnClickListener {
@@ -179,6 +172,7 @@ class EditDragFragment: Fragment() {
         }
 
         binding.dragPreviewBtn.setOnClickListener {
+            Timber.d("displayText.text?.trim() ${binding.dragTextCatalog.text?.trim()}")
             binding.stickerView.destroyDrawingCache()
             binding.stickerView.buildDrawingCache()
             val bitmap = binding.stickerView.drawingCache.copy(Bitmap.Config.ARGB_8888, false)
@@ -203,10 +197,6 @@ class EditDragFragment: Fragment() {
                 val snackBarView = titleSnack.view
                 val params = snackBarView.layoutParams as FrameLayout.LayoutParams
                 params.gravity =  Gravity.CENTER_HORIZONTAL and Gravity.TOP
-                params.setMargins(params.leftMargin,
-                    params.topMargin,
-                    params.rightMargin,
-                    params.bottomMargin + 100)
                 snackBarView.layoutParams = params
                 titleSnack.show()
 
@@ -223,12 +213,7 @@ class EditDragFragment: Fragment() {
                 val snackBarView = tagSnack.view
                 val params = snackBarView.layoutParams as FrameLayout.LayoutParams
                 params.gravity =  Gravity.CENTER_HORIZONTAL and Gravity.TOP
-                params.setMargins(params.leftMargin,
-                    params.topMargin,
-                    params.rightMargin,
-                    params.bottomMargin + 100)
                 snackBarView.layoutParams = params
-//                snackBarView.setPadding(0,100,0,0)
                 tagSnack.show()
             } else {
                 binding.lottiePublishLoading.visibility = View.VISIBLE
@@ -247,7 +232,7 @@ class EditDragFragment: Fragment() {
                                 arrayMapOf("type" to "base", "url" to it),
                                 arrayMapOf(
                                     "type" to "text",
-                                    "url" to ""
+                                    "url" to binding.dragTextCatalog.text?.trim().toString()
                                 )
                             )
 
@@ -351,6 +336,46 @@ class EditDragFragment: Fragment() {
         binding.memeYaoMing.setOnClickListener {
             chooseSticker(it.background.toBitmap())
         }
+        binding.meme28454.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeAngryTrollFace.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeVector.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeTransparent.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeRageFace.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeMeGusta.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeRageFace.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeHappyDerpina.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeDerpina.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeFunnyFaces.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeGirl.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeForeverAlone.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+        binding.memeTrollFace.setOnClickListener {
+            chooseSticker(it.background.toBitmap())
+        }
+
 
 //        binding.addStickerBtn.setOnClickListener {
 //            val sticker = BitmapFactory.decodeResource(resources, R.drawable.heart)

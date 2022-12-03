@@ -33,7 +33,7 @@
                 android:id="@+id/preview_img"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/dino"
+                android:src="@drawable/place_holder"
                 android:layout_gravity="center|top"
                 android:scaleType="center"
                 app:layout_constraintBottom_toBottomOf="parent"

@@ -20,11 +20,10 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/slide_image"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|top"
-                android:scaleType="center"
-                android:src="@drawable/dino"
+                android:src="@drawable/place_holder"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

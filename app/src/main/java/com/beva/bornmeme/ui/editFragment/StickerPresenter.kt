@@ -18,7 +18,7 @@ class StickerPresenter(private val stickerView: StickerView) {
 //        10,
 //        10,
 //        Bitmap.Config.ARGB_8888)
-    private val defaultBg = BitmapFactory.decodeResource(stickerView.context.resources, R.drawable.dino)
+    private val defaultBg = BitmapFactory.decodeResource(stickerView.context.resources, R.drawable.place_holder)
     private val backgroundDrawer = BackgroundDrawer(stickerView,defaultBg)
     private val stickerDrawers = ArrayList<Drawer>()
 

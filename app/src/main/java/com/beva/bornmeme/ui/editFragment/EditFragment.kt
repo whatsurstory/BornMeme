@@ -216,7 +216,7 @@ class EditFragment : Fragment() {
                                 arrayMapOf("type" to "base", "url" to it),
                                 arrayMapOf(
                                     "type" to "text",
-                                    "url" to "${upperText.text}\n${bottomText.text}"
+                                    "url" to "${upperText.text!!.trim()}\n${bottomText.text!!.trim()}"
                                 )
                             )
 
@@ -303,35 +303,4 @@ class EditFragment : Fragment() {
 
     }
 
-    private fun getTextPrams() {
-
-
-        //Gallery Image origin Width &Height
-        val oriWidth = upperText.width
-        val oriHeight = upperText.height
-        Timber.w("oriWidth => $oriWidth")
-        Timber.w("oriHeight => $oriHeight")
-
-//Screen ViewWidth & Height
-        val screenWidth = resources.displayMetrics.widthPixels
-//        val screenHeight = resources.displayMetrics.heightPixels
-//        Log.i("screenWidth", "screenWidth = $screenWidth")
-//        Log.i("screenHeight", "screenHeight = $screenHeight")
-
-        //After combine Image Height
-        //**require number type is float but the return number (after operating) is Int
-        //螢幕寬 除以 圖片寬 乘以 圖片高 = 符合畫面比例高
-        val height = (screenWidth.toFloat() / oriWidth.toFloat() * oriHeight.toFloat()).toInt()
-        //our image will fit the screen width
-        Timber.d("final width => $screenWidth")
-        Timber.d("final height => $height")
-
-        val layoutParam = ConstraintLayout.LayoutParams(
-            screenWidth,
-            height
-        )
-        //let new height and width assign as constraint layout parameter
-        binding.originPhoto.layoutParams = layoutParam
-        binding.originPhoto.scaleType = ImageView.ScaleType.FIT_CENTER
-    }
 }

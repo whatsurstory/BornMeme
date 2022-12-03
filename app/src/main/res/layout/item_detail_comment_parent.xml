@@ -14,7 +14,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/circle"
-        app:srcCompat="@drawable/dino" />
+        app:srcCompat="@drawable/place_holder" />
 
     <androidx.cardview.widget.CardView
         android:layout_height="wrap_content"

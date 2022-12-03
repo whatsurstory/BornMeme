@@ -15,7 +15,7 @@
         app:layout_constraintStart_toEndOf="@id/comment_guideline"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/circle"
-        app:srcCompat="@drawable/dino" />
+        app:srcCompat="@drawable/place_holder" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/child_card"

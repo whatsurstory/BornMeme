@@ -10,30 +10,37 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
 
-                <Button
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/settingOpenKeyboard"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:background="@color/tr_pink"
                     android:text="Go to Open KeyBoard"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:textColor="#616161"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
-                <Button
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/updateStickerPackInfoBtn"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:onClick="chooseDir"
+                    android:layout_margin="16dp"
+                    android:background="@color/tr_pink"
                     android:text="Go to setting Photo"
+                    android:textColor="#616161"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/settingOpenKeyboard" />

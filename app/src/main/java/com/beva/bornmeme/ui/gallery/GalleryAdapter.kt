@@ -18,7 +18,6 @@ class GalleryAdapter(private val onClickListener: OnClickListener): ListAdapter<
         fun bind(item: Image) {
             Glide.with(binding.verticalListImage)
                 .load(item.url)
-                .placeholder(R.drawable._50)
                 .into(binding.verticalListImage)
         }
     }

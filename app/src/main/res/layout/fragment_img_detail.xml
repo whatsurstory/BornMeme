@@ -28,7 +28,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="8dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/dino"
+                android:src="@drawable/place_holder"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:shapeAppearanceOverlay="@style/circle"
@@ -55,7 +55,6 @@
                 android:layout_height="0dp"
                 android:fontFamily="@font/arista_pro_bold_trial"
                 android:gravity="center"
-                android:text="@string/img_detail_follow_text"
                 android:textColor="@color/tr_pink"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -99,6 +98,7 @@
                 android:layout_height="28dp"
                 android:layout_marginStart="14dp"
                 android:layout_marginTop="10dp"
+                android:background="@drawable/_heart"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/img_detail_image"
                 app:backgroundTint="@color/tr_pink" />
@@ -116,11 +116,11 @@
             <!--                android:visibility="gone"/>-->
 
             <ImageButton
-                android:id="@+id/download_btn"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:id="@+id/template_btn"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_marginStart="16dp"
-                android:background="@drawable/icons8_desktop_download_48"
+                android:background="@drawable/add_template"
                 android:scaleType="centerInside"
                 app:layout_constraintBottom_toBottomOf="@+id/before_thumbup_btn"
                 app:layout_constraintStart_toEndOf="@+id/before_thumbup_btn"
@@ -133,9 +133,9 @@
                 android:layout_height="28dp"
                 android:layout_marginStart="16dp"
                 android:background="@drawable/icons8_comments_48"
-                app:layout_constraintBottom_toBottomOf="@+id/download_btn"
-                app:layout_constraintStart_toEndOf="@+id/download_btn"
-                app:layout_constraintTop_toTopOf="@+id/download_btn"
+                app:layout_constraintBottom_toBottomOf="@+id/template_btn"
+                app:layout_constraintStart_toEndOf="@+id/template_btn"
+                app:layout_constraintTop_toTopOf="@+id/template_btn"
                 app:backgroundTint="@color/tr_pink" />
 
             <ImageButton
@@ -166,7 +166,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="10dp"
-                android:scaleType="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/img_detail_user_img"

@@ -41,10 +41,10 @@ class UserDetailFragment : Fragment() {
 
         TabLayoutMediator(binding.userTabs,binding.userViewpager) { tab,position ->
             when(position){
-                0 -> {tab.text = "喜歡"}
-                1 -> {tab.text = "創作"}
-                2 -> {tab.text = "留言"}
-                3 -> {tab.text = "收藏"}
+                0 -> {tab.text = "Likes"}
+                1 -> {tab.text = "Posts"}
+                2 -> {tab.text = "Text"}
+                3 -> {tab.text = "Files"}
             }
         }.attach()
 
@@ -62,7 +62,7 @@ class UserDetailFragment : Fragment() {
         Glide.with(binding.userDetailImg)
             .load(user.profilePhoto)
             .centerCrop()
-            .placeholder(R.drawable._50)
+            .placeholder(R.drawable.place_holder)
             .into(binding.userDetailImg)
         binding.userDetailName.text = user.userName
 

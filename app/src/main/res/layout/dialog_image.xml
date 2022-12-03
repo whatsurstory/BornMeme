@@ -13,5 +13,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/_50" />
+        app:srcCompat="@drawable/place_holder" />
 </androidx.constraintlayout.widget.ConstraintLayout>

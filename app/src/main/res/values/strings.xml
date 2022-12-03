@@ -7,11 +7,11 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="text_click">Click to add some text</string>
+    <string name="text_click">Add Text Here</string>
     <string name="preview_btn">Preview</string>
     <string name="publish_btn">Publish</string>
     <string name="save_btn">Save</string>
-    <string name="module_text">choose the perfect images for editor</string>
+    <string name="module_text">Choose The Perfect Images for Editor</string>
     <string name="profile_name_text">Name</string>
     <string name="default_text">Default</string>
     <string name="introduce_text">Introduce</string>

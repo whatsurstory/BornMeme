@@ -19,11 +19,18 @@
     <color name="gray">#dadada</color>
     <color name="teal_700">#204969</color>
 
+<!--  Android 使用的色碼為 Alpha + HEX，前兩位數字是 Alpha 值，後 6 位數字是 HEX 色碼。
+如 #CC000000 為 80% 黑色。
+100% — FF 95% — F2 90% — E6 85% — D9 80% — CC 75% — BF 70% — B3 65% — A6 60% — 99
+55% — 8C 50% — 80 45% — 73 40% — 66 35% — 59 30% — 4D 25% — 40 20% — 33 15% — 26
+10% — 1A 5% — 0D 0% — 00  -->
+
     <color name="black">#FF000000</color>
     <color name="whit_alpha">#10ffffff</color>
     <color name="white">#FFFFFFFF</color>
     <color name="translucent_80">#cccccccc</color>
     <color name="transparent">#cc000000</color>
+    <color name="trans">#80000000</color>
     <color name="woo">#00000000</color>
 
 <!--  Gentle  -->
@@ -47,7 +54,7 @@
 
     <!-- Base application theme. -->
     <color name="bg">#f0f0f1</color>
-    <color name="fg">#383a42</color>
+    <color name="fg">#616161</color>
     <color name="sticker">#e7e7e9</color>
     <bool name="light_theme">true</bool>
     <color name="accent">#00796B</color>

@@ -93,7 +93,7 @@ class HomeAdapter(private val onClickListener: OnClickListener,private val uiSta
 //                Timber.d("img => ${user.profilePhoto}")
                 Glide.with(binding.userImg)
                     .load(user.profilePhoto)
-                    .placeholder(R.drawable._50)
+                    .placeholder(R.drawable.place_holder)
                     .into(binding.userImg)
             }
 
