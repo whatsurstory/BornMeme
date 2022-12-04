@@ -1,6 +1,8 @@
 package com.beva.bornmeme.ui.detail.dialog
 
 import android.annotation.SuppressLint
+import android.app.Activity.RESULT_CANCELED
+import android.app.Activity.RESULT_OK
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
@@ -190,9 +192,16 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
             ActivityResultContracts
                 .StartActivityForResult()
         ) {
-            uri = it.data?.data as Uri
-            binding.profileImg.setImageURI(uri)
-            isChange = true
+            if (it.resultCode == RESULT_OK){
+                Timber.d("resultCode RESULT_OK")
+                uri = it.data?.data as Uri
+                binding.profileImg.setImageURI(uri)
+                isChange = true
+            } else if (it.resultCode == RESULT_CANCELED) {
+                Timber.d("getImageResult cancel ${it.resultCode}")
+
+            }
+
         }
 
     private fun saveProfileData() {

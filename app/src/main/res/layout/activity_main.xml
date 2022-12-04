@@ -28,7 +28,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginEnd="12dp"
-            android:scaleType="fitCenter"
+            android:scaleType="centerCrop"
             android:layout_marginTop="10dp"
             android:src="@drawable/ic_baseline_tag_faces_24"
             app:layout_constraintBottom_toTopOf="@+id/include"

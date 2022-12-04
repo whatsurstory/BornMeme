@@ -7,7 +7,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="text_click">Add Text Here</string>
+    <string name="text_click">Add Text</string>
     <string name="preview_btn">Preview</string>
     <string name="publish_btn">Publish</string>
     <string name="save_btn">Save</string>
@@ -26,16 +26,16 @@
     <string name="yes_btn">對沒錯</string>
     <string name="no_btn">再想想</string>
     <string name="enter_folder_name">Enter Folder Name</string>
-    <string name="enter_title_hint">Please Enter the Title of Image</string>
-    <string name="enter_tag_hint">Enter the tag of the image</string>
-    <string name="img_detail_follow_text">follow</string>
+    <string name="enter_title_hint">Adding Title Here</string>
+    <string name="enter_tag_hint">Adding Tag Here</string>
+    <string name="img_detail_follow_text">Follow</string>
     <string name="comment_recycle_text">雖然現在這裡有點安靜 ...</string>
     <string name="bornmeme">BornMeme.</string>
     <string name="see_more_text">更多回覆</string>
     <string name="reply_btn">回覆</string>
     <string name="back_btn">收起回覆</string>
     <string name="block_text">是否將此用戶封鎖?</string>
-    <string name="enter_hint_text">Please Adding Text Here</string>
+    <string name="enter_hint_text">Adding Text Here</string>
 
 
     <string name="pack_icon">Pack icon</string>

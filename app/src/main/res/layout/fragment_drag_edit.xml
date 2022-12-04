@@ -53,7 +53,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginStart="8dp">
+                    android:layout_marginStart="16dp">
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/meme_awkward_look_monkey_puppet"
@@ -323,33 +323,64 @@
                 android:id="@+id/add_text_btn"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                app:layout_constraintBottom_toTopOf="@+id/sticker_view"
-                android:src="@drawable/ic_text"
-                android:background="@color/woo"
-                android:scaleType="fitCenter"
                 android:layout_marginVertical="2dp"
-                app:tint="@color/tr_pink"
-                android:padding="8dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/horizontal_scroll" />
+                android:background="@color/woo"
+                android:padding="4dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/add_new"
+                app:layout_constraintBottom_toBottomOf="@id/edit_text_box"
+                app:layout_constraintEnd_toStartOf="@+id/clear_button"
+                app:tint="@color/tr_pink" />
+
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/edit_text_box"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:background="@color/tr_black"
                 android:inputType="textUri|textNoSuggestions"
-                android:padding="8dp"
-                android:hint="click"
+                android:paddingHorizontal="16dp"
+                android:hint="@string/text_click"
                 android:singleLine="true"
                 android:textColor="@color/gray_white"
-                android:textColorHint="@color/gray_white"
+                android:textColorHint="@color/dark_gray"
                 android:fontFamily="@font/round_border"
                 android:textSize="24sp"
-                android:layout_margin="2dp"
-                app:layout_constraintBottom_toBottomOf="@+id/add_text_btn"
-                app:layout_constraintStart_toEndOf="@+id/add_text_btn"
-                app:layout_constraintTop_toTopOf="@+id/add_text_btn" />
+                android:paddingVertical="4dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/horizontal_scroll"
+                app:layout_constraintBottom_toTopOf="@id/sticker_view"/>
+
+<!--            <com.google.android.material.textfield.TextInputLayout-->
+<!--                android:id="@+id/edit_text_box"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:boxBackgroundMode="none"-->
+<!--                app:boxStrokeWidth="0dp"-->
+<!--                android:padding="8dp"-->
+<!--                app:boxCornerRadiusBottomEnd="0dp"-->
+<!--                app:boxCornerRadiusBottomStart="0dp"-->
+<!--                app:boxCornerRadiusTopEnd="0dp"-->
+<!--                app:boxCornerRadiusTopStart="0dp"-->
+<!--                android:textColorHint="@color/tr_pink"-->
+<!--                app:layout_constraintBottom_toTopOf="@+id/sticker_view"-->
+<!--                app:layout_constraintEnd_toStartOf="@+id/add_text_btn"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/horizontal_scroll">-->
+
+<!--                <com.google.android.material.textfield.TextInputEditText-->
+<!--                    android:id="@+id/add_edit_text"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:fontFamily="@font/round_border"-->
+<!--                    android:minWidth="130dp"-->
+<!--                    android:hint="@string/text_click"-->
+<!--                    android:inputType="textUri|textNoSuggestions"-->
+<!--                    android:textColor="@color/gray_white"-->
+<!--                    android:textSize="20sp" />-->
+
+<!--            </com.google.android.material.textfield.TextInputLayout>-->
 
             <ImageButton
                 android:id="@+id/clear_button"
@@ -358,7 +389,7 @@
                 android:src="@drawable/delete"
                 app:tint="@color/tr_pink"
                 android:scaleType="fitCenter"
-                android:padding="8dp"
+                android:padding="10dp"
                 android:background="@color/woo"
                 app:layout_constraintBottom_toBottomOf="@id/add_text_btn"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -379,13 +410,14 @@
                 android:background="@color/tr_pink"
                 android:fontFamily="@font/rounded_mplus_medium"
                 android:hint="@string/enter_title_hint"
-                android:paddingVertical="16dp"
-                android:paddingHorizontal="8dp"
                 android:singleLine="true"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="4dp"
                 android:textColor="@color/tr_black"
                 android:textColorHint="@color/dark_gray"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/sticker_view"
                 app:layout_constraintBottom_toTopOf="@id/drag_text_catalog"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -397,9 +429,9 @@
                 android:background="@color/tr_pink"
                 android:fontFamily="@font/rounded_mplus_medium"
                 android:hint="@string/enter_tag_hint"
-                android:paddingVertical="16dp"
-                android:paddingHorizontal="8dp"
                 android:singleLine="true"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="4dp"
                 android:textStyle="bold"
                 android:textColor="@color/tr_black"
                 android:textColorHint="@color/dark_gray"

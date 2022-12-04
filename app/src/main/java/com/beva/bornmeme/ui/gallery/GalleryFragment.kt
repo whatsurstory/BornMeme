@@ -2,15 +2,18 @@ package com.beva.bornmeme.ui.gallery
 
 
 import android.annotation.SuppressLint
+import android.content.ActivityNotFoundException
 import android.content.ContentValues
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +37,12 @@ import com.bumptech.glide.Glide
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionDeniedResponse
+import com.karumi.dexter.listener.PermissionGrantedResponse
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.single.PermissionListener
 import kotlinx.coroutines.Dispatchers
 import timber.log.Timber
 import java.io.File
@@ -99,7 +108,7 @@ class GalleryFragment: Fragment() {
         builder.setPositiveButton("對沒錯") { dialog, _ ->
             val bitmapDrawable = image.drawable as BitmapDrawable
             val bitmap = bitmapDrawable.bitmap
-            saveImage(bitmap, img.imageId)
+            moduleCheckPermission(bitmap, img)
             Timber.d("filePath -> $bitmap")
         }
         builder.setNegativeButton("再想想", DialogInterface.OnClickListener { dialog, which ->
@@ -112,6 +121,34 @@ class GalleryFragment: Fragment() {
         alertDialog.show()
         alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.parseColor("#181A19"))
         alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#181A19"))
+    }
+
+
+    private fun moduleCheckPermission(bitmap: Bitmap, img: Image) {
+        Dexter.withContext(requireContext()).withPermission(
+            android.Manifest.permission.READ_EXTERNAL_STORAGE
+        ).withListener(
+            object : PermissionListener {
+                override fun onPermissionGranted(
+                    p0: PermissionGrantedResponse?) {
+                    saveImage(bitmap, img.imageId)
+                }
+
+                override fun onPermissionDenied(
+                    p0: PermissionDeniedResponse?) {
+                    Toast.makeText(
+                        context,
+                        "拒絕存取相簿權限",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    showRotationDialogForPermission()
+                }
+
+                override fun onPermissionRationaleShouldBeShown(
+                    p0: PermissionRequest?, p1: PermissionToken?) {
+                    showRotationDialogForPermission()
+                }
+            }).onSameThread().check()
     }
 
     private fun saveImage(image: Bitmap, id:String): String? {
@@ -157,6 +194,28 @@ class GalleryFragment: Fragment() {
         findNavController().navigate(MobileNavigationDirections.navigateToEditFragment(newUri))
     }
 
+    private fun showRotationDialogForPermission() {
+        AlertDialog.Builder(requireContext())
+            .setMessage("看起來你還沒有打開權限"
+                    + "打開之後即可完整使用功能哦!")
+
+            .setPositiveButton("前往設定") { _, _ ->
+
+                try {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    val uri = Uri.fromParts("package", activity?.packageName, null)
+                    intent.data = uri
+                    startActivity(intent)
+
+                } catch (e: ActivityNotFoundException) {
+                    e.printStackTrace()
+                }
+            }
+
+            .setNegativeButton("取消") { dialog, _ ->
+                dialog.dismiss()
+            }.show()
+    }
 }
 
 

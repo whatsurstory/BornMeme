@@ -227,7 +227,8 @@ class MainActivity : AppCompatActivity() {
         Dexter.withContext(this)
             .withPermissions(
                 android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                android.Manifest.permission.CAMERA).withListener(
+                android.Manifest.permission.CAMERA)
+            .withListener(
                 object : MultiplePermissionsListener {
                     override fun onPermissionsChecked(
                         report: MultiplePermissionsReport?) {
