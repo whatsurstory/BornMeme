@@ -78,13 +78,15 @@ class CommentAdapter(private val uiState: ImgDetailViewModel.UiState): ListAdapt
             }
             Timber.d("秒 $seconds 分 $minutes 時 $hour 天 $day")
 
-            uiState.getUserImg(item.comment.userId) { user: User ->
-                Timber.d("img => ${user.profilePhoto}")
-                Glide.with(binding.commentUserImg)
-                    .load(user.profilePhoto)
-                    .placeholder(R.drawable.place_holder)
-                    .into(binding.commentUserImg)
-                binding.commentUserName.text = user.userName
+            item.comment.userId?.let {
+                uiState.getUserImg(it) { user: User ->
+                    Timber.d("img => ${user.profilePhoto}")
+                    Glide.with(binding.commentUserImg)
+                        .load(user.profilePhoto)
+                        .placeholder(R.drawable.place_holder)
+                        .into(binding.commentUserImg)
+                    binding.commentUserName.text = user.userName
+                }
             }
         }
     }
@@ -130,13 +132,15 @@ class CommentAdapter(private val uiState: ImgDetailViewModel.UiState): ListAdapt
             }
             Timber.d("秒 $seconds 分 $minutes 時 $hour 天 $day")
 
-            uiState.getUserImg(item.comment.userId) { user: User ->
-                Timber.d("img => ${user.profilePhoto}")
-                Glide.with(binding.childUserImg)
-                    .load(user.profilePhoto)
-                    .placeholder(R.drawable.place_holder)
-                    .into(binding.childUserImg)
-                binding.childUserName.text = user.userName
+            item.comment.userId?.let {
+                uiState.getUserImg(it) { user: User ->
+                    Timber.d("img => ${user.profilePhoto}")
+                    Glide.with(binding.childUserImg)
+                        .load(user.profilePhoto)
+                        .placeholder(R.drawable.place_holder)
+                        .into(binding.childUserImg)
+                    binding.childUserName.text = user.userName
+                }
             }
         }
     }

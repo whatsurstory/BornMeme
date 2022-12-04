@@ -10,6 +10,7 @@ import com.beva.bornmeme.model.UserManager.user
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.delay
@@ -162,11 +163,13 @@ data class UiState (
                     Timber.w("[${this::class.simpleName}] Error getting documents. ${it.message}")
                 }
                 val list = mutableListOf<Comment>()
-                for (document in querySnapshot!!) {
-                    Timber.d("check data  ${document.id} => ${document.data}")
-                    val commentList = document.toObject(Comment::class.java)
-                    list.add(commentList)
-                    Timber.d("check $list")
+                if (querySnapshot != null) {
+                    for (document in querySnapshot) {
+                        Timber.d("check data  ${document.id} => ${document.data}")
+                        val commentList = document.toObject(Comment::class.java)
+                        list.add(commentList)
+                        Timber.d("check $list")
+                    }
                 }
                 liveData.value = list
             }

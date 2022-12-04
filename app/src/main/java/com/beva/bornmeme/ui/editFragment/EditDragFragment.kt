@@ -61,6 +61,7 @@ class EditDragFragment: Fragment() {
 
         val displayText = binding.editTextBox
 //        displayText.requestFocus()
+        displayText.clearFocus()
         binding.addTextBtn.isEnabled = false
 
 

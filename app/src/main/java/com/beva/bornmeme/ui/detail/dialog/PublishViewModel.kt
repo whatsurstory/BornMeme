@@ -3,6 +3,7 @@ package com.beva.bornmeme.ui.detail.dialog
 import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModel
 import com.beva.bornmeme.databinding.DialogCommentBinding
+import com.beva.bornmeme.model.Comment
 import com.beva.bornmeme.model.UserManager
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
@@ -16,16 +17,14 @@ class PublishViewModel: ViewModel() {
     fun publishComment(postId: String,parentId:String, binding: DialogCommentBinding) {
         val fireStore = FirebaseFirestore.getInstance().collection("Comments")
         val document = fireStore.document()
-        val publish = hashMapOf(
-            "commentId" to document.id,
-            "content" to binding.editPublishContent.text.toString(),
-            "dislike" to null,
-            "like" to null,
-            "parentId" to parentId,
-            "photoUrl" to "",
-            "postId" to postId,
-            "time" to Timestamp.now(),
-            "userId" to UserManager.user.userId
+        val publish = Comment(
+            document.id,
+            UserManager.user.userId,postId,
+            Timestamp.now(),
+            binding.editPublishContent.text.toString(),
+            emptyList(),
+            emptyList(), "",
+            parentId
         )
 
         document.set(publish)

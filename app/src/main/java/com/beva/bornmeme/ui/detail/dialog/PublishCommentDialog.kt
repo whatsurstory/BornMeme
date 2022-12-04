@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
@@ -92,9 +93,7 @@ class PublishCommentDialog: AppCompatDialogFragment() {
         binding.buttonPublish.setOnClickListener {
 
             if (binding.editPublishContent.text.isNullOrEmpty()) {
-                Snackbar.make(it, "Not Adding Text Yet", Snackbar.LENGTH_SHORT)
-                    .setAction("Action", null).show()
-
+                Toast.makeText(context,"還沒有訊息呢",Toast.LENGTH_SHORT).show()
             } else {
                 binding.postCommentLotties.visibility = View.VISIBLE
                 binding.postCommentLotties.setAnimation(R.raw.refresh)

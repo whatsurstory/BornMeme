@@ -104,7 +104,8 @@ class EditFragment : Fragment() {
         //to preview
         binding.previewBtn.setOnClickListener {
             Timber.d("onClick Preview")
-
+            upperText.clearFocus()
+            bottomText.clearFocus()
             if (upperText.text.isNullOrEmpty() || bottomText.text.isNullOrEmpty()) {
                 val contentText = Snackbar.make(it,"不想填寫內容可以輸入空格唷~(･8･)",Snackbar.LENGTH_LONG)
                 contentText.animationMode = BaseTransientBottomBar.ANIMATION_MODE_FADE
@@ -146,6 +147,8 @@ class EditFragment : Fragment() {
         //to publish
         binding.publishBtn.setOnClickListener {
             Timber.d("onClick publish")
+            upperText.clearFocus()
+            bottomText.clearFocus()
             if (upperText.text.isNullOrEmpty() || bottomText.text.isNullOrEmpty()) {
                 val contentText = Snackbar.make(it,"不想填寫內容可以輸入空格唷~(･8･)",Snackbar.LENGTH_LONG)
                 contentText.animationMode = BaseTransientBottomBar.ANIMATION_MODE_FADE
