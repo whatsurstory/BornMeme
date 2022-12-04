@@ -2,9 +2,7 @@ package com.beva.bornmeme.ui.detail.img
 
 
 import android.annotation.SuppressLint
-import android.app.DownloadManager
-import android.content.Context
-import android.content.Context.DOWNLOAD_SERVICE
+import android.content.ActivityNotFoundException
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
@@ -13,24 +11,18 @@ import android.graphics.Color.parseColor
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import android.os.Build
-import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Environment
-import android.provider.MediaStore
 import android.provider.Settings
 import android.view.*
 import android.widget.*
-import androidx.annotation.Nullable
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.beva.bornmeme.MainViewModel
 import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
@@ -38,7 +30,6 @@ import com.beva.bornmeme.databinding.FragmentImgDetailBinding
 import com.beva.bornmeme.databinding.SnackBarCustomBinding
 import com.beva.bornmeme.model.Post
 import com.beva.bornmeme.model.UserManager
-import com.beva.bornmeme.model.UserManager.user
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
@@ -47,6 +38,12 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionDeniedResponse
+import com.karumi.dexter.listener.PermissionGrantedResponse
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.single.PermissionListener
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
@@ -77,7 +74,6 @@ class ImgDetailFragment : Fragment() {
                     .placeholder(R.drawable.place_holder)
             ).into(binding.imgDetailImage)
         binding.imgDetailDescription.text = post.resources[1].url?.trim()
-
 
         val postRef = FirebaseFirestore.getInstance()
             .collection("Posts").document(post.id)
@@ -292,49 +288,125 @@ class ImgDetailFragment : Fragment() {
         }
 
         binding.shareBtn.setOnClickListener {
-
-            val uri =
-                FirebaseStorage.getInstance().reference.child("img_edited/" + post.id + ".jpg")
-            val filePath = requireContext().filesDir.absolutePath + "/" + post.id + ".jpg"
-            Timber.d("filePath -> $filePath")
-
-            uri.getFile(Uri.parse(filePath))
-                .addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        Timber.d("success")
-                        //get Uri by file path
-//                        Uri.parse("content:/$filePath")
-//                        val fileUri = Uri.fromFile(File(filePath))
-                        val file = File(filePath)
-                        val newUri =
-                            FileProvider.getUriForFile(
-                                requireContext(),
-                                "com.beva.bornmeme.fileProvider", file
-                            )
-                        Timber.d("fileUri -> $newUri")
-                        val intent = Intent(Intent.ACTION_SEND)
-                        intent.type = "image/*"
-                        intent.putExtra(
-                            Intent.EXTRA_STREAM,
-                            newUri
-                        )
-                        intent.addFlags(
-                            Intent.FLAG_GRANT_READ_URI_PERMISSION or
-                                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-                        )
-                        startActivity(Intent.createChooser (intent, "Share Image"))
-//                        startActivity(intent)
-                    }
-                }
+            checkSharePermission()
+//            val uri =
+//                FirebaseStorage.getInstance().reference.child("img_edited/" + post.id + ".jpg")
+//            val filePath = requireContext().filesDir.absolutePath + "/" + post.id + ".jpg"
+//            Timber.d("filePath -> $filePath")
+//
+//            uri.getFile(Uri.parse(filePath))
+//                .addOnCompleteListener {
+//                    if (it.isSuccessful) {
+//                        Timber.d("success")
+//                        //get Uri by file path
+////                        Uri.parse("content:/$filePath")
+////                        val fileUri = Uri.fromFile(File(filePath))
+//                        val file = File(filePath)
+//                        val newUri =
+//                            FileProvider.getUriForFile(
+//                                requireContext(),
+//                                "com.beva.bornmeme.fileProvider", file
+//                            )
+//                        Timber.d("fileUri -> $newUri")
+//                        val intent = Intent(Intent.ACTION_SEND)
+//                        intent.type = "image/*"
+//                        intent.putExtra(
+//                            Intent.EXTRA_STREAM,
+//                            newUri
+//                        )
+//                        intent.addFlags(
+//                            Intent.FLAG_GRANT_READ_URI_PERMISSION or
+//                                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+//                        )
+//                        startActivity(Intent.createChooser (intent, "Share Image"))
+////                        startActivity(intent)
+//                    }
+//                }
         }
 
         //the permission problem in samsung, maybe due to the version of android
         binding.templateBtn.setOnClickListener {
 //            downLoad("${post.id}.jpg", "BornMeme.", post.url.toString())
-            longClick2edit(post)
+            checkTemplatePermission()
         }
-
         return binding.root
+    }
+
+    private fun checkTemplatePermission() {
+        Dexter.withContext(requireContext()).withPermission(
+            android.Manifest.permission.READ_EXTERNAL_STORAGE
+        ).withListener(
+            object : PermissionListener {
+                override fun onPermissionGranted(
+                    p0: PermissionGrantedResponse?) {
+                    longClick2edit(post)
+                }
+
+                override fun onPermissionDenied(
+                    p0: PermissionDeniedResponse?) {
+                    Toast.makeText(
+                        context,
+                        "拒絕存取相簿權限",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    showRotationDialogForPermission()
+                }
+
+                override fun onPermissionRationaleShouldBeShown(
+                    p0: PermissionRequest?, p1: PermissionToken?) {
+                    showRotationDialogForPermission()
+                }
+            }).onSameThread().check()
+    }
+
+    private fun checkSharePermission() {
+        Dexter.withContext(requireContext()).withPermission(
+            android.Manifest.permission.READ_EXTERNAL_STORAGE
+        ).withListener(
+            object : PermissionListener {
+                override fun onPermissionGranted(
+                    p0: PermissionGrantedResponse?) {
+                    getUri()
+                }
+
+                override fun onPermissionDenied(
+                    p0: PermissionDeniedResponse?) {
+                    Toast.makeText(
+                        context,
+                        "拒絕存取相簿權限",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    showRotationDialogForPermission()
+                }
+
+                override fun onPermissionRationaleShouldBeShown(
+                    p0: PermissionRequest?, p1: PermissionToken?) {
+                    showRotationDialogForPermission()
+                }
+            }).onSameThread().check()
+    }
+
+    private fun showRotationDialogForPermission() {
+        AlertDialog.Builder(requireContext())
+            .setMessage("看起來你還沒有打開權限"
+                    + "打開之後即可完整使用功能哦!")
+
+            .setPositiveButton("前往設定") { _, _ ->
+
+                try {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    val uri = Uri.fromParts("package", activity?.packageName, null)
+                    intent.data = uri
+                    startActivity(intent)
+
+                } catch (e: ActivityNotFoundException) {
+                    e.printStackTrace()
+                }
+            }
+
+            .setNegativeButton("取消") { dialog, _ ->
+                dialog.dismiss()
+            }.show()
     }
 
     @SuppressLint("SetTextI18n")
@@ -367,52 +439,41 @@ class ImgDetailFragment : Fragment() {
         cancel.setOnClickListener { alertDialog.dismiss() }
     }
 
-//    private fun requestPermission() {
-//
-//        if (SDK_INT >= Build.VERSION_CODES.R) {
-//            try {
-//                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
-//                intent.addCategory("android.intent.category.DEFAULT")
-//                intent.data = Uri.parse(
-//                    String.format(
-//                        "package:%s",
-//                        getApplicationContext<Context>().packageName
-//                    )
-//                )
-//                startActivityForResult(intent, 2)
-//
-//
-//            } catch (e: Exception) {
-//                val intent = Intent()
-//                intent.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
-//                startActivityForResult(intent, 2)
-//
-//            }
-//        }
-//    }
-//
-//    @Deprecated("Deprecated in Java")
-//    override fun onActivityResult(
-//        requestCode: Int,
-//        resultCode: Int,
-//        @Nullable data: Intent?
-//    ) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if (requestCode == 2) {
-//            if (SDK_INT >= Build.VERSION_CODES.R) {
-//                if (Environment.isExternalStorageManager()) {
-//                    // perform action when allow permission success
-//                } else {
-//                    Toast.makeText(
-//                        this.context,
-//                        "接受存取",
-//                        Toast.LENGTH_SHORT
-//                    )
-//                        .show()
-//                }
-//            }
-//        }
-//    }
+    private fun getUri() {
+        val uri =
+            FirebaseStorage.getInstance().reference.child("img_edited/" + post.id + ".jpg")
+        val filePath = requireContext().filesDir.absolutePath + "/" + post.id + ".jpg"
+        Timber.d("filePath -> $filePath")
+
+        uri.getFile(Uri.parse(filePath))
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    Timber.d("success")
+                    //get Uri by file path
+//                        Uri.parse("content:/$filePath")
+//                        val fileUri = Uri.fromFile(File(filePath))
+                    val file = File(filePath)
+                    val newUri =
+                        FileProvider.getUriForFile(
+                            requireContext(),
+                            "com.beva.bornmeme.fileProvider", file
+                        )
+                    Timber.d("fileUri -> $newUri")
+                    val intent = Intent(Intent.ACTION_SEND)
+                    intent.type = "image/*"
+                    intent.putExtra(
+                        Intent.EXTRA_STREAM,
+                        newUri
+                    )
+                    intent.addFlags(
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION or
+                                Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                    )
+                    startActivity(Intent.createChooser (intent, "Share Image"))
+//                        startActivity(intent)
+                }
+            }
+    }
 
     @SuppressLint("ResourceAsColor")
     private fun showFolderDialog(folderNames: List<String>) {

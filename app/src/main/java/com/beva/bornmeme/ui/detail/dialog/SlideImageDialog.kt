@@ -2,15 +2,18 @@ package com.beva.bornmeme.ui.detail.dialog
 
 import android.annotation.SuppressLint
 import android.app.DownloadManager
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
@@ -21,6 +24,13 @@ import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.DialogSlideCollectionBinding
 import com.beva.bornmeme.model.Folder
+import com.beva.bornmeme.model.FolderData
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionDeniedResponse
+import com.karumi.dexter.listener.PermissionGrantedResponse
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.single.PermissionListener
 import timber.log.Timber
 
 
@@ -51,7 +61,7 @@ class SlideImageDialog: AppCompatDialogFragment() {
         binding.dialog = this
 
         val adapter = SlideAdapter(
-            SlideAdapter.OnClickListener {
+            SlideAdapter.OnClickListener { folder ->
 //                val shareIntent = Intent(Intent.ACTION_SEND)
 //                shareIntent.type = "text/plain"
 //                val url = context?.packageName
@@ -63,8 +73,8 @@ class SlideImageDialog: AppCompatDialogFragment() {
 //                    .navigate(MobileNavigationDirections
 //                        .navigateToImgDetailFragment(it.id))
 
-                downLoad("${it.id}.jpg", "BornMeme.", it.url)
-                viewModel.navigateToDetail(it)
+                checkPermission(folder)
+                viewModel.navigateToDetail(folder)
             }
         )
         binding.slideImgRecycler.adapter = adapter
@@ -99,6 +109,32 @@ class SlideImageDialog: AppCompatDialogFragment() {
         return binding.root
     }
 
+    private fun checkPermission(folder: FolderData) {
+        Dexter.withContext(requireContext()).withPermission(
+            android.Manifest.permission.READ_EXTERNAL_STORAGE
+        ).withListener(
+            object : PermissionListener {
+                override fun onPermissionGranted(
+                    p0: PermissionGrantedResponse?) {
+                    downLoad("${folder.id}.jpg", "BornMeme.", folder.url)
+                }
+
+                override fun onPermissionDenied(
+                    p0: PermissionDeniedResponse?) {
+                    Toast.makeText(
+                        context,
+                        "拒絕存取相簿權限",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    showRotationDialogForPermission()
+                }
+
+                override fun onPermissionRationaleShouldBeShown(
+                    p0: PermissionRequest?, p1: PermissionToken?) {
+                    showRotationDialogForPermission()
+                }
+            }).onSameThread().check()
+    }
 
     private fun downLoad(fileName: String, desc: String, url: String) {
         Timber.d("file name $fileName")
@@ -114,6 +150,29 @@ class SlideImageDialog: AppCompatDialogFragment() {
         downloadManager.enqueue(request)
 
         Toast.makeText(context, "下載完成", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showRotationDialogForPermission() {
+        AlertDialog.Builder(requireContext())
+            .setMessage("看起來你還沒有打開權限"
+                    + "打開之後即可完整使用功能哦!")
+
+            .setPositiveButton("前往設定") { _, _ ->
+
+                try {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    val uri = Uri.fromParts("package", activity?.packageName, null)
+                    intent.data = uri
+                    startActivity(intent)
+
+                } catch (e: ActivityNotFoundException) {
+                    e.printStackTrace()
+                }
+            }
+
+            .setNegativeButton("取消") { dialog, _ ->
+                dialog.dismiss()
+            }.show()
     }
 
 }

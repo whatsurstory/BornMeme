@@ -192,6 +192,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
             ActivityResultContracts
                 .StartActivityForResult()
         ) {
+            //判斷在對的條件才傳值
             if (it.resultCode == RESULT_OK){
                 Timber.d("resultCode RESULT_OK")
                 uri = it.data?.data as Uri

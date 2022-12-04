@@ -82,5 +82,4 @@ class CollectionFragment : Fragment() {
         return binding.root
     }
 
-
 }
