@@ -65,9 +65,6 @@ class CollectionViewModel(userId: String) : ViewModel() {
             .document(UserManager.user.userId!!)
             .collection("Folders")
             .document(item.name).delete()
-        
-
-
     }
 
     fun navigateToDetail(item: Folder) {

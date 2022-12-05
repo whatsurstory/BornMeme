@@ -16,8 +16,8 @@ android {
         applicationId "com.beva.bornmeme"
         minSdk 28
         targetSdk 32
-        versionCode 10
-        versionName "1.6"
+        versionCode 11
+        versionName "1.7"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -98,6 +98,7 @@ dependencies {
     implementation "io.coil-kt:coil-gif:1.4.0"
     implementation "io.coil-kt:coil-video:1.4.0"
 
+    implementation "com.squareup.okhttp3:okhttp:4.10.0"
 }
 
 ktlint {

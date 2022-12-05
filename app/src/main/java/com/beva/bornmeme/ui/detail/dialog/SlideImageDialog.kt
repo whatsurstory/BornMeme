@@ -117,6 +117,8 @@ class SlideImageDialog: AppCompatDialogFragment() {
                 override fun onPermissionGranted(
                     p0: PermissionGrantedResponse?) {
                     downLoad("${folder.id}.jpg", "BornMeme.", folder.url)
+//                    viewModel.downloadImage(folder.url)
+
                 }
 
                 override fun onPermissionDenied(
@@ -146,9 +148,8 @@ class SlideImageDialog: AppCompatDialogFragment() {
             .setAllowedOverMetered(true)
             .setAllowedOverRoaming(false)
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-            .setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, fileName)
+            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
         downloadManager.enqueue(request)
-
         Toast.makeText(context, "下載完成", Toast.LENGTH_SHORT).show()
     }
 

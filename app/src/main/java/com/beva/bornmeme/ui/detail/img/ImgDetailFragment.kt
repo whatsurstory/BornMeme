@@ -17,8 +17,10 @@ import android.provider.Settings
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -162,28 +164,6 @@ class ImgDetailFragment : Fragment() {
                 }
             }
 
-//            //follow button
-//            if (post.ownerId == UserManager.user.userId) {
-//                binding.followBtn.visibility = View.GONE
-//            } else {
-//                binding.followBtn.visibility = View.VISIBLE
-//                for (item in it[0].followers) {
-//                    if (item == UserManager.user.userId) {
-//                        binding.followBtn.text = "Following"
-//                        binding.followBtn.setOnClickListener {
-//                            Toast.makeText(context, "已經追蹤該作者", Toast.LENGTH_SHORT).show()
-//                        }
-//                    } else {
-//                        binding.followBtn.text = "Follow"
-//                        //the button to follow other users
-//                        binding.followBtn.setOnClickListener {
-//                            viewModel.onClickToFollow(post.ownerId)
-//                            binding.followBtn.text = "Following"
-//                        }
-//                    }
-//                }
-//            }
-
         })
 
 
@@ -289,39 +269,39 @@ class ImgDetailFragment : Fragment() {
 
         binding.shareBtn.setOnClickListener {
             checkSharePermission()
-//            val uri =
-//                FirebaseStorage.getInstance().reference.child("img_edited/" + post.id + ".jpg")
-//            val filePath = requireContext().filesDir.absolutePath + "/" + post.id + ".jpg"
-//            Timber.d("filePath -> $filePath")
-//
-//            uri.getFile(Uri.parse(filePath))
-//                .addOnCompleteListener {
-//                    if (it.isSuccessful) {
-//                        Timber.d("success")
-//                        //get Uri by file path
-////                        Uri.parse("content:/$filePath")
-////                        val fileUri = Uri.fromFile(File(filePath))
-//                        val file = File(filePath)
-//                        val newUri =
-//                            FileProvider.getUriForFile(
-//                                requireContext(),
-//                                "com.beva.bornmeme.fileProvider", file
-//                            )
-//                        Timber.d("fileUri -> $newUri")
-//                        val intent = Intent(Intent.ACTION_SEND)
-//                        intent.type = "image/*"
-//                        intent.putExtra(
-//                            Intent.EXTRA_STREAM,
-//                            newUri
-//                        )
-//                        intent.addFlags(
-//                            Intent.FLAG_GRANT_READ_URI_PERMISSION or
-//                                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-//                        )
-//                        startActivity(Intent.createChooser (intent, "Share Image"))
-////                        startActivity(intent)
-//                    }
-//                }
+            val uri =
+                FirebaseStorage.getInstance().reference.child("img_edited/" + post.id + ".jpg")
+            val filePath = requireContext().filesDir.absolutePath + "/" + post.id + ".jpg"
+            Timber.d("filePath -> $filePath")
+
+            uri.getFile(Uri.parse(filePath))
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        Timber.d("success")
+                        //get Uri by file path
+//                        Uri.parse("content:/$filePath")
+//                        val fileUri = Uri.fromFile(File(filePath))
+                        val file = File(filePath)
+                        val newUri =
+                            FileProvider.getUriForFile(
+                                requireContext(),
+                                "com.beva.bornmeme.fileProvider", file
+                            )
+                        Timber.d("fileUri -> $newUri")
+                        val intent = Intent(Intent.ACTION_SEND)
+                        intent.type = "image/*"
+                        intent.putExtra(
+                            Intent.EXTRA_STREAM,
+                            newUri
+                        )
+                        intent.addFlags(
+                            Intent.FLAG_GRANT_READ_URI_PERMISSION or
+                                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                        )
+                        startActivity(Intent.createChooser (intent, "Share Image"))
+//                        startActivity(intent)
+                    }
+                }
         }
 
         //the permission problem in samsung, maybe due to the version of android
@@ -339,7 +319,7 @@ class ImgDetailFragment : Fragment() {
             object : PermissionListener {
                 override fun onPermissionGranted(
                     p0: PermissionGrantedResponse?) {
-                    longClick2edit(post)
+                    click2edit(post)
                 }
 
                 override fun onPermissionDenied(
@@ -582,7 +562,7 @@ class ImgDetailFragment : Fragment() {
     }
 
 
-    private fun longClick2edit(img: Post) {
+    private fun click2edit(img: Post) {
         val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
         val inflater = requireActivity().layoutInflater
         val view = inflater.inflate(R.layout.dialog_image, null)
@@ -611,8 +591,8 @@ class ImgDetailFragment : Fragment() {
         var savedImagePath: String? = null
         val imageFileName = "$id.jpg"
         val storageDir = File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                .toString() + "/BornMeme"
+            context?.filesDir,
+            System.currentTimeMillis().toString() + ".jpg"
         )
         var success = true
         if (!storageDir.exists()) {

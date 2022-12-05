@@ -30,11 +30,6 @@ class StickerView @JvmOverloads constructor(
         return presenter.onTouchEvent(event)
     }
 
-//    override fun setOnLongClickListener(l: OnLongClickListener?): Boolean {
-//        super.setOnLongClickListener(l)
-//        return presenter.setOnLongClickListener(l)
-//    }
-
     fun addSticker(bitmap: Bitmap){
         presenter.addSticker(bitmap)
     }

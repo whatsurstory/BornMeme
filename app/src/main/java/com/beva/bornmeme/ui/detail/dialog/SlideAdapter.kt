@@ -1,6 +1,7 @@
 package com.beva.bornmeme.ui.detail.dialog
 
 import android.graphics.drawable.BitmapDrawable
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -13,6 +14,7 @@ import com.beva.bornmeme.model.FolderData
 import com.beva.bornmeme.model.Post
 import com.beva.bornmeme.ui.detail.user.fragments.posts.PostAdapter
 import com.bumptech.glide.Glide
+import java.io.ByteArrayOutputStream
 
 class SlideAdapter(private val onClickListener: OnClickListener): ListAdapter<FolderData, SlideAdapter.ViewHolder>(DiffCallback) {
 
