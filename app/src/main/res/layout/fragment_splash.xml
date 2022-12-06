@@ -11,25 +11,25 @@
         android:id="@+id/lottie"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/gSignInBtn"
+        app:layout_constraintBottom_toTopOf="@+id/greeting_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:lottie_autoPlay="true"
-        app:lottie_speed="1.5"
-        app:lottie_rawRes="@raw/salad_cat" />
+        app:lottie_rawRes="@raw/salad_cat"
+        app:lottie_speed="1.5" />
 
     <TextView
         android:id="@+id/greeting_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="20dp"
         android:fontFamily="@font/arista_pro_bold_trial"
         android:gravity="center"
         android:text="@string/bornmeme"
         android:textColor="@color/tr_black"
         android:textSize="48sp"
-        android:visibility="gone"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/gSignInBtn"
         app:layout_constraintEnd_toEndOf="@+id/gSignInBtn"
         app:layout_constraintStart_toStartOf="@+id/gSignInBtn" />
@@ -39,37 +39,78 @@
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginHorizontal="24dp"
+        android:fontFamily="@font/arista_pro_light_trial"
         android:text="Google Sign In"
+        android:textAllCaps="false"
         android:textColor="@color/tr_black"
         android:textSize="24sp"
-        android:fontFamily="@font/arista_pro_light_trial"
+        android:textStyle="bold"
+        android:visibility="invisible"
         app:backgroundTint="@color/gray_white"
         app:icon="@drawable/icons8_google_48___"
         app:iconGravity="textStart"
-        android:textStyle="bold"
         app:iconPadding="16dp"
         app:iconSize="28dp"
         app:iconTint="@null"
-        android:visibility="gone"
-        android:textAllCaps="false"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="36dp"
+        app:layout_constraintBottom_toTopOf="@+id/policy_btn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.85" />
+        app:layout_constraintStart_toStartOf="parent" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/policy_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="80dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/gSignInBtn"
+        app:layout_constraintStart_toStartOf="@+id/gSignInBtn">
+
+        <TextView
+            android:id="@+id/service_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="使用條款"
+            android:fontFamily="@font/rounded_mplus_regular"
+            android:layout_marginStart="100dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/separate_view"
+            android:layout_width="2dp"
+            android:layout_height="18dp"
+            android:background="@color/dark_gray"
+            app:layout_constraintBottom_toBottomOf="@+id/service_btn"
+            app:layout_constraintStart_toEndOf="@+id/service_btn"
+            app:layout_constraintTop_toTopOf="@+id/service_btn"
+            app:layout_constraintEnd_toStartOf="@+id/private_btn"/>
+
+        <TextView
+            android:id="@+id/private_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="隱私政策"
+            android:layout_marginEnd="100dp"
+            android:fontFamily="@font/rounded_mplus_regular"
+            app:layout_constraintBottom_toBottomOf="@+id/service_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/service_btn" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/login_loading"
-        android:layout_height="100dp"
         android:layout_width="160dp"
-        app:lottie_autoPlay="true"
-        android:visibility="invisible"
-        app:lottie_loop="true"
-        app:lottie_speed="0.9"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_height="100dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/greeting_text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/gSignInBtn"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/lottie"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_speed="0.9" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

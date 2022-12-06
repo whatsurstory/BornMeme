@@ -16,8 +16,8 @@ android {
         applicationId "com.beva.bornmeme"
         minSdk 28
         targetSdk 32
-        versionCode 12
-        versionName "1.8"
+        versionCode 13
+        versionName "1.9"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -80,11 +80,7 @@ dependencies {
 
     //Timber
     implementation 'com.jakewharton.timber:timber:5.0.1'
-
-    //slide nav
-//    implementation 'com.yarolegovich:sliding-root-nav:1.1.1'
-
-//    implementation "com.hootsuite.android:nachos:1.1.1"
+    //slide Dot
     implementation 'me.relex:circleindicator:2.1.6'
     //Lottie
     implementation 'com.airbnb.android:lottie:3.4.1'
@@ -98,7 +94,6 @@ dependencies {
     implementation "io.coil-kt:coil-gif:1.4.0"
     implementation "io.coil-kt:coil-video:1.4.0"
 
-    implementation "com.squareup.okhttp3:okhttp:4.10.0"
 }
 
 ktlint {

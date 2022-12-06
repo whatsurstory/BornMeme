@@ -648,3 +648,4 @@ class ImgDetailFragment : Fragment() {
     }
 }
 
+//Todo: button https://github.com/givemepassxd999/alert_dialog_demo/blob/master/app/src/main/java/com/example/givemepss/alertdailogdemo/MainActivity.kt

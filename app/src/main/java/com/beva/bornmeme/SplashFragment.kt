@@ -3,19 +3,24 @@ package com.beva.bornmeme
 
 import android.animation.Animator
 import android.app.Activity
-import android.content.Context
+import android.app.AlertDialog
+import android.content.DialogInterface
+import android.content.Intent
+import android.graphics.Color
 import android.graphics.ColorFilter
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.GoogleAuthProvider
+import android.net.Uri
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.URLSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -29,15 +34,19 @@ import com.airbnb.lottie.value.LottieValueCallback
 import com.beva.bornmeme.databinding.FragmentSplashBinding
 import com.beva.bornmeme.model.User
 import com.beva.bornmeme.model.UserManager
-import com.google.firebase.auth.FirebaseAuth
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.material.snackbar.Snackbar
+import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import timber.log.Timber
+
 
 class SplashFragment : Fragment() {
 
@@ -75,16 +84,21 @@ class SplashFragment : Fragment() {
         binding.lottie.addAnimatorListener(object: Animator.AnimatorListener {
             override fun onAnimationRepeat(animation: Animator?) {
             }
-
-
             override fun onAnimationEnd(animation: Animator?) {
                 binding.gSignInBtn.visibility = View.VISIBLE
                 binding.greetingText.visibility = View.VISIBLE
+                binding.policyBtn.visibility = View.VISIBLE
+                binding.policyBtn.setOnClickListener {
+                    val url= "https://www.privacypolicies.com/live/679fc734-40b3-47ef-bcca-2c0e5a46483d"
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                    startActivity(intent)
+                }
                 //loading our custom made animations
                 val ani  = AnimationUtils.loadAnimation(context, R.anim.fade_in)
                 //starting the animation
                 binding.greetingText.startAnimation(ani)
                 binding.gSignInBtn.startAnimation(ani)
+//                showAgreeDialog()
             }
 
             override fun onAnimationCancel(animation: Animator?) {
@@ -111,7 +125,6 @@ class SplashFragment : Fragment() {
             viewLifecycleOwner,
             Observer {
                 it?.let {
-//                    navigateToBackStack()
                     viewModel.onLeaveCompleted()
                 }
             }
@@ -120,6 +133,7 @@ class SplashFragment : Fragment() {
 
         return binding.root
     }
+
 
     //change lotties color
     fun LottieAnimationView.changeLayersColor(
@@ -170,7 +184,7 @@ class SplashFragment : Fragment() {
 
             } else {
                 Timber.d("task ERROR ${it.exception}")
-                Toast.makeText(this.requireContext(), it.exception.toString(), Toast.LENGTH_SHORT)
+                Toast.makeText(context, it.exception.toString(), Toast.LENGTH_SHORT)
                     .show()
             }
         }
@@ -199,6 +213,9 @@ class SplashFragment : Fragment() {
 //                transaction.update(ref,FieldValue.arrayUnion(loginTimes))
             } else {
                 Timber.d("ID: ${snapshot.id} snapshot.data == null")
+
+                showAgreeDialog()
+
                 val userData = User(
                     user.uid,
                     user.photoUrl.toString(),
@@ -230,6 +247,28 @@ class SplashFragment : Fragment() {
         }.addOnFailureListener {
             Timber.d("ERROR ${it.message}")
         }
+    }
+
+    private fun showAgreeDialog() {
+
+        val item = LayoutInflater.from(requireContext()).inflate(R.layout.service_text, null)
+        // set up spanned string with url
+        val spannableString = SpannableString("點擊 同意並繼續 即代表您同意並確認您已閱讀我們的服務條款與隱私政策，了解我們如何收集、使用與分享您的資料。")
+        val url= "https://www.privacypolicies.com/live/679fc734-40b3-47ef-bcca-2c0e5a46483d"
+        spannableString.setSpan(URLSpan(url), 25, 34, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        val textView = item.findViewById<TextView>(R.id.url_text)
+        textView.text = spannableString
+        textView.movementMethod = LinkMovementMethod.getInstance() // enable clicking on url span
+
+        AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
+            .setView(item)
+            .setPositiveButton(R.string.agreeAndContinue) { _, _ ->
+                Toast.makeText(context, R.string.agreeAndContinue, Toast.LENGTH_SHORT).show()
+            }
+            .show()
+            .getButton(DialogInterface.BUTTON_POSITIVE)
+            .setTextColor(Color.parseColor("#181A19"))
+
     }
 
 }

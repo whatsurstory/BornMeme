@@ -50,6 +50,6 @@
     <string name="imported_032">E032: Some stickers failed to import (%1$d imported). Max pack size reached</string>
     <string name="imported_033">E033: Some stickers failed to import (%1$d imported). Unsupported formats found</string>
 
-
+    <string name="agreeAndContinue">同意並繼續</string>
 
 </resources>
