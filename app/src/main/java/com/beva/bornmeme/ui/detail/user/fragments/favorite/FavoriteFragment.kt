@@ -52,7 +52,8 @@ class FavoriteFragment : Fragment() {
             viewLifecycleOwner,
             Observer {
                 it?.let {
-                    findNavController().navigate(MobileNavigationDirections.navigateToImgDetailFragment(it))
+                    findNavController()
+                        .navigate(MobileNavigationDirections.navigateToImgDetailFragment(it))
                     viewModel.onDetailNavigated()
                 }
             }

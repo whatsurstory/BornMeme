@@ -29,7 +29,6 @@ class CommentsFragment : Fragment() {
 
     lateinit var binding: FragmentCommentsBinding
     private lateinit var viewModel: CommentsViewModel
-    //TODO: Single Recycler onClick to "the post" view
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

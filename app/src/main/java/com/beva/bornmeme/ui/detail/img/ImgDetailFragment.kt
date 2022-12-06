@@ -269,44 +269,9 @@ class ImgDetailFragment : Fragment() {
 
         binding.shareBtn.setOnClickListener {
             checkSharePermission()
-            val uri =
-                FirebaseStorage.getInstance().reference.child("img_edited/" + post.id + ".jpg")
-            val filePath = requireContext().filesDir.absolutePath + "/" + post.id + ".jpg"
-            Timber.d("filePath -> $filePath")
-
-            uri.getFile(Uri.parse(filePath))
-                .addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        Timber.d("success")
-                        //get Uri by file path
-//                        Uri.parse("content:/$filePath")
-//                        val fileUri = Uri.fromFile(File(filePath))
-                        val file = File(filePath)
-                        val newUri =
-                            FileProvider.getUriForFile(
-                                requireContext(),
-                                "com.beva.bornmeme.fileProvider", file
-                            )
-                        Timber.d("fileUri -> $newUri")
-                        val intent = Intent(Intent.ACTION_SEND)
-                        intent.type = "image/*"
-                        intent.putExtra(
-                            Intent.EXTRA_STREAM,
-                            newUri
-                        )
-                        intent.addFlags(
-                            Intent.FLAG_GRANT_READ_URI_PERMISSION or
-                                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-                        )
-                        startActivity(Intent.createChooser (intent, "Share Image"))
-//                        startActivity(intent)
-                    }
-                }
         }
 
-        //the permission problem in samsung, maybe due to the version of android
         binding.templateBtn.setOnClickListener {
-//            downLoad("${post.id}.jpg", "BornMeme.", post.url.toString())
             checkTemplatePermission()
         }
         return binding.root
@@ -368,8 +333,7 @@ class ImgDetailFragment : Fragment() {
 
     private fun showRotationDialogForPermission() {
         AlertDialog.Builder(requireContext())
-            .setMessage("看起來你還沒有打開權限"
-                    + "打開之後即可完整使用功能哦!")
+            .setMessage("看起來你還沒有打開權限 \n 打開之後即可完整使用功能哦!")
 
             .setPositiveButton("前往設定") { _, _ ->
 
@@ -535,7 +499,7 @@ class ImgDetailFragment : Fragment() {
         //delete for short
         val builder = AlertDialog.Builder(requireContext())
         val inflater = requireActivity().layoutInflater
-        val view = inflater.inflate(com.beva.bornmeme.R.layout.dialog_custom_delete, null)
+        val view = inflater.inflate(R.layout.dialog_custom_delete, null)
         builder.setView(view)
 
         val alertDialog: AlertDialog = builder.create()
@@ -557,7 +521,7 @@ class ImgDetailFragment : Fragment() {
                 .addOnFailureListener { e -> Timber.w("Error deleting document", e) }
         }
 
-        val cancel = view.findViewById<Button>(com.beva.bornmeme.R.id.cancel_button)
+        val cancel = view.findViewById<Button>(R.id.cancel_button)
         cancel.setOnClickListener { alertDialog.dismiss() }
     }
 
@@ -568,7 +532,10 @@ class ImgDetailFragment : Fragment() {
         val view = inflater.inflate(R.layout.dialog_image, null)
         builder.setView(view)
         val image = view.findViewById<ImageView>(R.id.gallery_img)
-        Glide.with(image).load(post.resources[0].url).placeholder(R.drawable.place_holder)
+
+        Glide.with(image)
+            .load(post.resources[0].url)
+            .placeholder(R.drawable.place_holder)
             .into(image)
 
         builder.setMessage("就決定是${post.title}了嗎?(・∀・)つ⑩")
@@ -602,9 +569,9 @@ class ImgDetailFragment : Fragment() {
             val imageFile = File(storageDir, imageFileName)
             savedImagePath = imageFile.absolutePath
             try {
-                val fOut: OutputStream = FileOutputStream(imageFile)
-                image.compress(Bitmap.CompressFormat.JPEG, 100, fOut)
-                fOut.close()
+                val outputStream: OutputStream = FileOutputStream(imageFile)
+                image.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                outputStream.close()
             } catch (e: Exception) {
                 e.printStackTrace()
             }

@@ -180,7 +180,9 @@ class SplashFragment : Fragment() {
     //拿到上一次相同id的 logintimes 數字 -> n = User.logintimes
     private fun queryUserByUid(user: FirebaseUser) {
 
-        val ref = Firebase.firestore.collection("Users").document(user.uid)
+        val ref = Firebase.firestore.collection("Users")
+            .document(user.uid)
+
         Firebase.firestore.runTransaction { transaction ->
             val snapshot = transaction.get(ref)
 //            val loginTimes = n + 1

@@ -14,10 +14,6 @@ import timber.log.Timber
  */
 class StickerPresenter(private val stickerView: StickerView) {
 
-    //    private val defaultBg = Bitmap.createBitmap(
-//        10,
-//        10,
-//        Bitmap.Config.ARGB_8888)
     private val defaultBg = BitmapFactory.decodeResource(stickerView.context.resources, R.drawable.place_holder)
     private val backgroundDrawer = BackgroundDrawer(stickerView,defaultBg)
     private val stickerDrawers = ArrayList<Drawer>()
@@ -47,10 +43,6 @@ class StickerPresenter(private val stickerView: StickerView) {
         return false
     }
 
-    fun setOnLongClickListener(long: View.OnLongClickListener): Boolean {
-        return true
-    }
-
     fun addSticker(bitmap: Bitmap){
         val drawer = StickerDrawer(stickerView,bitmap)
         stickerDrawers.add(drawer)
@@ -60,10 +52,6 @@ class StickerPresenter(private val stickerView: StickerView) {
     fun clearSticker(){
         stickerDrawers.clear()
         stickerView.invalidate()
-    }
-
-    fun deleteSticker(){
-        //todo 贴纸删除方案
     }
 
     fun setBackground(bitmap: Bitmap){

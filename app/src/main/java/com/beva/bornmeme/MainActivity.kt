@@ -44,7 +44,6 @@ class MainActivity : AppCompatActivity() {
 
     val viewModel by viewModels<MainViewModel> { getVmFactory() }
 
-//    TODO: Move data to viewModel
     private var saveUri: Uri? = null
     private var isOpen = false
     private lateinit var binding: ActivityMainBinding
@@ -190,6 +189,8 @@ class MainActivity : AppCompatActivity() {
 //    }
 
 
+    //TODO: reuse permission function
+    //params: activity-> toAlbum(), imgdetail-> AsAModuleBtn & shareBtn, editProfile-> toAlbum(), gallery-> edit, slideimg-> downLoad()
     private fun galleryCheckPermission() {
         Dexter.withContext(this).withPermission(
             android.Manifest.permission.READ_EXTERNAL_STORAGE

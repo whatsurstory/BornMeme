@@ -8,7 +8,7 @@ import com.beva.bornmeme.model.UserManager
 import com.google.firebase.firestore.FirebaseFirestore
 import timber.log.Timber
 
-class PostsViewModel(private val userId: String): ViewModel() {
+class PostsViewModel(userId: String): ViewModel() {
 
     val postData = MutableLiveData<List<Post>>()
 

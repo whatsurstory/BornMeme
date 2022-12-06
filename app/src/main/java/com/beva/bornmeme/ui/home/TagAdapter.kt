@@ -63,7 +63,6 @@ class TagAdapter(private val onClickListener: OnClickListener): ListAdapter<Stri
                 Timber.d("selectItem $selectItem position $position")
                 notifyDataSetChanged()
             }
-//            selectItem != -1
             holder.bind(item, selectItem)
         }
     }

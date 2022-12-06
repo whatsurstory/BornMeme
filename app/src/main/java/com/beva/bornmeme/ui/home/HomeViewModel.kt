@@ -76,7 +76,6 @@ class HomeViewModel : ViewModel() {
             .orderBy("createdTime", Query.Direction.DESCENDING)
         postData.addSnapshotListener { snapshot, exception ->
             Timber.d("You are in HomeViewModel")
-
             exception?.let {
                 Timber.d("Exception ${it.message}")
             }
@@ -140,7 +139,7 @@ class HomeViewModel : ViewModel() {
 }
 
 
-
+//Extension function of block
 fun List<Post>.filterBlock(): List<Post> {
     return this.filter { !UserManager.user.blockList.contains(it.ownerId) }
 }

@@ -30,9 +30,10 @@ import com.google.firebase.ktx.Firebase
 import timber.log.Timber
 
 //
-class CollectionAdapter(private val onClickListener: OnClickListener,
-                        val viewModel:CollectionViewModel,
-                        val userId: String ): ListAdapter<Folder, CollectionAdapter.ViewHolder>(DiffCallback) {
+class CollectionAdapter(
+    private val onClickListener: OnClickListener,
+    val viewModel:CollectionViewModel,
+    val userId: String ): ListAdapter<Folder, CollectionAdapter.ViewHolder>(DiffCallback) {
 
     class ViewHolder(private val binding: ItemUserCollectionBinding) :
         RecyclerView.ViewHolder(binding.root) {

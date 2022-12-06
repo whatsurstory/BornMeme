@@ -60,7 +60,6 @@ class EditDragFragment: Fragment() {
         binding = FragmentDragEditBinding.inflate(layoutInflater)
 
         val displayText = binding.editTextBox
-//        displayText.requestFocus()
         displayText.clearFocus()
         binding.addTextBtn.isEnabled = false
 
@@ -78,7 +77,6 @@ class EditDragFragment: Fragment() {
             Timber.e("event.y - offset => ${event.y - offset}")
             Timber.d("scrollY -> ${binding.verticalScrollView.scrollY}")
             Timber.e("event.y - offset + binding.verticalScrollView.scrollY => ${event.y - offset + binding.verticalScrollView.scrollY}")
-
 
             val newEvent = MotionEvent.obtain(
                 event.downTime,
@@ -113,11 +111,10 @@ class EditDragFragment: Fragment() {
                 Timber.d("density ${binding.root.context.resources.displayMetrics.densityDpi}")
 
                 val itemWidth = screenWidth
-                Timber.d("itemWidth ${itemWidth}")
-
+                Timber.d("itemWidth $itemWidth")
 
                 if (width > height) {
-                    Timber.d("寬大於高")
+                    Timber.d("width > height")
                     Timber.d("origin width: $width")
                     Timber.d("origin height: $height")
                     height = ((itemWidth.toFloat() / bitmap.width.toFloat()) * bitmap.height).roundToInt()
@@ -126,7 +123,7 @@ class EditDragFragment: Fragment() {
                     Timber.d("after height: $height")
 
                 } else if (width <= height) {
-                    Timber.d("寬小於高")
+                    Timber.d("width <= height")
                     Timber.d("origin width: $width")
                     Timber.d("origin height: $height")
 //                    if (height > itemWidth * 1.3){
@@ -261,7 +258,7 @@ class EditDragFragment: Fragment() {
             }
         }
 
-        //adding default sticker
+        //use adapter
         binding.memeAwkwardLookMonkeyPuppet.setOnClickListener {
             chooseSticker(it.background.toBitmap())
         }

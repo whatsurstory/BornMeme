@@ -26,7 +26,7 @@ class UserCommentAdapter(private val uiState: CommentsViewModel.UiState): ListAd
         fun bind(item: Comment, uiState: CommentsViewModel.UiState){
             binding.contentText.text = item.content
             val timeString = item.time?.toDate()?.toLocaleString()
-            binding.timeText.text =timeString
+            binding.timeText.text = timeString
             uiState.getPostImg(item.postId) { post:Post ->
                 Timber.d("img => ${post.url}")
                 Glide.with(binding.commentImg)

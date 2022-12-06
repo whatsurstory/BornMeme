@@ -60,11 +60,6 @@ class HomeFragment : Fragment() {
             }
         })
 
-//        viewModel.display.observe(viewLifecycleOwner, Observer {
-//            Timber.d("viewModel display value $it")
-//          先藉由obeserve知道拿的資料是什麼
-//        })
-
         val tagAdapter = TagAdapter (
             TagAdapter.OnClickListener {
                 Timber.d("observe the click item $it")

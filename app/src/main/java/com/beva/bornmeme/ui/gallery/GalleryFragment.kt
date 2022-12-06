@@ -115,9 +115,6 @@ class GalleryFragment: Fragment() {
 
         })
         val alertDialog: AlertDialog = builder.create()
-//        val metrics: DisplayMetrics = Resources.getSystem().displayMetrics
-//        val width = metrics.widthPixels
-//        val height = metrics.heightPixels
         alertDialog.show()
         alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.parseColor("#181A19"))
         alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#181A19"))
@@ -155,8 +152,8 @@ class GalleryFragment: Fragment() {
         var savedImagePath: String? = null
         val imageFileName = "$id.jpg"
         val storageDir = File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                .toString() + "/BornMeme"
+            context?.filesDir,
+            System.currentTimeMillis().toString() + ".jpg"
         )
         var success = true
         if (!storageDir.exists()) {
@@ -166,19 +163,19 @@ class GalleryFragment: Fragment() {
             val imageFile = File(storageDir, imageFileName)
             savedImagePath = imageFile.absolutePath
             try {
-                val fOut: OutputStream = FileOutputStream(imageFile)
-                image.compress(Bitmap.CompressFormat.JPEG, 100, fOut)
-                fOut.close()
+                val outputStream = FileOutputStream(imageFile)
+                image.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                outputStream.close()
             } catch (e: Exception) {
                 e.printStackTrace()
             }
 
-            // Add the image to the system gallery
             galleryAddPic(savedImagePath)
 
         }
         return savedImagePath
     }
+
     private fun galleryAddPic(imagePath: String) {
         val file = File(imagePath)
         val newUri =

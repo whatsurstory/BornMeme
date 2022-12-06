@@ -18,24 +18,24 @@ class CustomScrollView : ScrollView {
         defStyle
     )
 
-    override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
-        Timber.e("CustomScrollView onInterceptTouchEvent action=${ev?.action}}")
-        if (ev?.action == MotionEvent.ACTION_CANCEL) {
+    override fun onInterceptTouchEvent(event: MotionEvent?): Boolean {
+        Timber.e("CustomScrollView onInterceptTouchEvent action=${event?.action}}")
+        if (event?.action == MotionEvent.ACTION_CANCEL) {
             Timber.e("CustomScrollView onInterceptTouchEvent ACTION_CANCEL}")
-            ev.action = MotionEvent.ACTION_MOVE
+            event.action = MotionEvent.ACTION_MOVE
             return false
         }
-        return super.onInterceptTouchEvent(ev)
+        return super.onInterceptTouchEvent(event)
     }
 
-    override fun onTouchEvent(ev: MotionEvent?): Boolean {
-        Timber.e("CustomScrollView onTouchEvent action=${ev?.action}}")
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        Timber.e("CustomScrollView onTouchEvent action=${event?.action}}")
 
-        if (ev?.action == MotionEvent.ACTION_CANCEL) {
+        if (event?.action == MotionEvent.ACTION_CANCEL) {
             Timber.e("CustomScrollView onTouchEvent ACTION_CANCEL}")
-            ev.action = MotionEvent.ACTION_MOVE
+            event.action = MotionEvent.ACTION_MOVE
             return false
         }
-        return super.onTouchEvent(ev)
+        return super.onTouchEvent(event)
     }
 }

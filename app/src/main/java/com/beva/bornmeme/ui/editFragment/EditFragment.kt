@@ -39,7 +39,6 @@ import timber.log.Timber
 
 
 class EditFragment : Fragment() {
-//TODO: REPOSITORY to be complete
 
     private lateinit var binding: FragmentEditFixmodeBinding
     private lateinit var uri: Uri
@@ -107,19 +106,8 @@ class EditFragment : Fragment() {
             upperText.clearFocus()
             bottomText.clearFocus()
             if (upperText.text.isNullOrEmpty() || bottomText.text.isNullOrEmpty()) {
-                val contentText = Snackbar.make(it,"不想填寫內容可以輸入空格唷~(･8･)",Snackbar.LENGTH_LONG)
-                contentText.animationMode = BaseTransientBottomBar.ANIMATION_MODE_FADE
-                contentText.setBackgroundTint(Color.parseColor("#EADDDB"))
-                contentText.setTextColor(Color.parseColor("#181A19"))
-
-                val snackBarView = contentText.view
-                val params = snackBarView.layoutParams as FrameLayout.LayoutParams
-                params.gravity =  Gravity.CENTER_HORIZONTAL and Gravity.TOP
-                snackBarView.layoutParams = params
-
-                contentText.show()
+                showContentEmptySnackBar(it)
             } else {
-
 //                val baseBitmap = getBitmapByUri(uri)
             binding.originPhoto.buildDrawingCache()
             val baseBitmap = binding.originPhoto.drawingCache
@@ -150,20 +138,7 @@ class EditFragment : Fragment() {
             upperText.clearFocus()
             bottomText.clearFocus()
             if (upperText.text.isNullOrEmpty() || bottomText.text.isNullOrEmpty()) {
-                val contentText = Snackbar.make(it,"不想填寫內容可以輸入空格唷~(･8･)",Snackbar.LENGTH_LONG)
-                contentText.animationMode = BaseTransientBottomBar.ANIMATION_MODE_FADE
-                contentText.setBackgroundTint(Color.parseColor("#EADDDB"))
-                contentText.setTextColor(Color.parseColor("#181A19"))
-
-                val snackBarView = contentText.view
-                val params = snackBarView.layoutParams as FrameLayout.LayoutParams
-                params.gravity =  Gravity.CENTER_HORIZONTAL and Gravity.TOP
-                params.setMargins(params.leftMargin,
-                    params.topMargin,
-                    params.rightMargin,
-                    params.bottomMargin + 100)
-                snackBarView.layoutParams = params
-                contentText.show()
+                showContentEmptySnackBar(it)
             } else if (title.text.trim().isEmpty()) {
                 //Snackbar ani
                 val titleSnack = Snackbar.make(it,"資料未完成將填入預設值，免客氣",Snackbar.LENGTH_INDEFINITE)
@@ -203,6 +178,7 @@ class EditFragment : Fragment() {
                 snackBarView.layoutParams = params
                 tagSnack.show()
             } else {
+
                 binding.lottiePublishLoading.visibility = View.VISIBLE
                 binding.lottiePublishLoading.setAnimation(R.raw.dancing_pallbearers)
 
@@ -214,7 +190,6 @@ class EditFragment : Fragment() {
                             //這層的it才會帶到firebase return 的 Uri
                             Timber.d("origin uri: $it => take it to base url")
 
-//                            Timber.d("newTag $newTag")
                             val res = listOf(
                                 arrayMapOf("type" to "base", "url" to it),
                                 arrayMapOf(
@@ -236,7 +211,6 @@ class EditFragment : Fragment() {
                                 bottomBitmap
                             )
 
-
                             //saving to gallery and return the path(uri)
                             val newUri = viewModel.getImageUri(activity?.application, publishBitmap)
                             viewModel.addNewPost(
@@ -257,7 +231,6 @@ class EditFragment : Fragment() {
                     }
             }
         }
-
     }
 
 //    private fun getBitmapByUri(bitmapUri: Uri): Bitmap {
@@ -304,6 +277,19 @@ class EditFragment : Fragment() {
         binding.originPhoto.scaleType = ImageView.ScaleType.FIT_CENTER
         binding.originPhoto.setImageURI(uri)
 
+    }
+
+    private fun showContentEmptySnackBar(it: View) {
+        val contentText = Snackbar.make(it,"不想填寫內容可以輸入空格唷~(･8･)",
+            Snackbar.LENGTH_LONG)
+        contentText.animationMode = BaseTransientBottomBar.ANIMATION_MODE_FADE
+        contentText.setBackgroundTint(Color.parseColor("#EADDDB"))
+        contentText.setTextColor(Color.parseColor("#181A19"))
+        val snackBarView = contentText.view
+        val params = snackBarView.layoutParams as FrameLayout.LayoutParams
+        params.gravity =  Gravity.CENTER_HORIZONTAL and Gravity.TOP
+        snackBarView.layoutParams = params
+        contentText.show()
     }
 
 }
