@@ -17,7 +17,7 @@ import timber.log.Timber
 
 class MainViewModel: ViewModel() {
 
-    val _user = MutableLiveData<User>(null)
+    private val _user = MutableLiveData<User>(null)
     val user: LiveData<User>
         get() = _user
 

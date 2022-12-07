@@ -189,32 +189,19 @@ class SplashFragment : Fragment() {
                 Timber.d("ID: ${snapshot.id} snapshot.data != null")
                 val checkUser = snapshot.toObject(User::class.java)
                 UserManager.user = checkUser!!
-
 //                transaction.update(ref,FieldValue.arrayUnion(loginTimes))
             } else {
                 Timber.d("ID: ${snapshot.id} snapshot.data == null")
-
-                showAgreeDialog()
-
                 val userData = User(
-                    user.uid,
-                    user.photoUrl.toString(),
-                    user.displayName.toString(),
-                    "",
-                    "",
-                    user.email.toString(),
-                    Timestamp.now(),
-                    emptyList(),
-                    emptyList(),
-                    emptyList(),
-                    emptyList(),
-                    emptyList(),
-                    emptyList(),
-                    emptyList()
+                    userId = user.uid,
+                    profilePhoto = user.photoUrl.toString(),
+                    userName = user.displayName.toString(),
+                    email = user.email.toString(),
+                    registerTime = Timestamp.now()
                 )
                 transaction.set(ref, userData)
                 UserManager.user = userData
-
+                showAgreeDialog()
             }
         }.addOnSuccessListener {
             Timber.d("Success to adding $ref")

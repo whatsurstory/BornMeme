@@ -1,8 +1,6 @@
 package com.beva.bornmeme.ui.home
 
 import android.annotation.SuppressLint
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -10,14 +8,11 @@ import androidx.constraintlayout.widget.Constraints
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.ItemHomeImgBinding
+import com.beva.bornmeme.loadImage
 import com.beva.bornmeme.model.Post
 import com.beva.bornmeme.model.User
 
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.SimpleTarget
-import com.bumptech.glide.request.transition.Transition
 import timber.log.Timber
 import kotlin.math.roundToInt
 
@@ -77,10 +72,7 @@ class HomeAdapter(private val onClickListener: OnClickListener,private val uiSta
             Timber.d("check image in params 寬$width 高$height")
             binding.homeImg.layoutParams = layoutParams
             binding.homeImg.scaleType = ImageView.ScaleType.CENTER_CROP
-
-            Glide.with(binding.homeImg.context)
-                .load(item.url).centerCrop()
-                .into(binding.homeImg)
+            binding.homeImg.loadImage(item.url)
 
             Timber.d("image final width->${binding.homeImg.width} final height->${binding.homeImg.height}")
             Timber.w("=====================================================")
@@ -93,10 +85,7 @@ class HomeAdapter(private val onClickListener: OnClickListener,private val uiSta
             }
 
             uiState.getUserImg(item.ownerId) { user: User ->
-                Glide.with(binding.userImg)
-                    .load(user.profilePhoto)
-                    .placeholder(R.drawable.place_holder)
-                    .into(binding.userImg)
+                binding.userImg.loadImage(user.profilePhoto)
             }
         }
     }
