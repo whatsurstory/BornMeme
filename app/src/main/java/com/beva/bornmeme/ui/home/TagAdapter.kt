@@ -15,19 +15,19 @@ import java.util.*
 
 
 //
-class TagAdapter(private val onClickListener: OnClickListener): ListAdapter<String, TagAdapter.ViewHolder>(DiffCallback) {
+class TagAdapter(private val onClickListener: OnClickListener) :
+    ListAdapter<String, TagAdapter.ViewHolder>(DiffCallback) {
 
     private var selectItem = -1
 
-    class ViewHolder (private val binding: ItemTagBinding): RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(private val binding: ItemTagBinding) : RecyclerView.ViewHolder(binding.root) {
 
         val chipCard = binding.chipCard
+
         @SuppressLint("ResourceAsColor")
-        fun bind(item: String, selectedItem:Int){
+        fun bind(item: String, selectedItem: Int) {
             binding.chipCard.text = item.replaceFirstChar {
-                if (it.isLowerCase()) it.titlecase(
-                    Locale.getDefault()
-                ) else it.toString()
+                if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
             }
             if (adapterPosition == selectedItem) {
                 //recycler reuse if else condition
@@ -50,11 +50,18 @@ class TagAdapter(private val onClickListener: OnClickListener): ListAdapter<Stri
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(ItemTagBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return ViewHolder(
+            ItemTagBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     @SuppressLint("ResourceAsColor", "NotifyDataSetChanged")
-    override fun onBindViewHolder(holder: ViewHolder, @SuppressLint("RecyclerView") position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder,
+                                  @SuppressLint("RecyclerView") position: Int) {
         val item = getItem(position)
         item?.let {
             holder.chipCard.setOnClickListener {

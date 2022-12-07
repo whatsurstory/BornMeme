@@ -16,7 +16,10 @@ import com.beva.bornmeme.model.User
 import timber.log.Timber
 import kotlin.math.roundToInt
 
-class HomeAdapter(private val onClickListener: OnClickListener,private val uiState: HomeViewModel.UiState) : ListAdapter<Post, HomeAdapter.ViewHolder>(
+class HomeAdapter(
+    private val onClickListener: OnClickListener,
+    private val uiState: HomeViewModel.UiState
+) : ListAdapter<Post, HomeAdapter.ViewHolder>(
     DiffCallback
 ) {
     class ViewHolder(private val binding: ItemHomeImgBinding) :
@@ -57,7 +60,7 @@ class HomeAdapter(private val onClickListener: OnClickListener,private val uiSta
                 Timber.d("origin width: $width")
                 Timber.d("origin height: $height")
 
-                if (height > itemWidth * 1.3){
+                if (height > itemWidth * 1.3) {
                     height = (itemWidth * 1.3).roundToInt()
                 }
                 Timber.d("after width: $itemWidth")
@@ -101,13 +104,14 @@ class HomeAdapter(private val onClickListener: OnClickListener,private val uiSta
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ItemHomeImgBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ItemHomeImgBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
         return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item =getItem(position)
+        val item = getItem(position)
         item?.let {
             holder.itemView.setOnClickListener {
                 onClickListener.onClick(item)

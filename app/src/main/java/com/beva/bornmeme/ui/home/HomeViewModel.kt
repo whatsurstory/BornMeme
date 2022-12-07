@@ -25,7 +25,7 @@ class HomeViewModel : ViewModel() {
         val getUserImg: (userId: String, onUserObtained: ((User) -> Unit)) -> Unit
     )
 
-     val liveData = MutableLiveData<List<Post>>()
+    val liveData = MutableLiveData<List<Post>>()
 
     private var _tagSet = MutableLiveData<String>()
     private val tagSet: MutableLiveData<String>
@@ -52,21 +52,21 @@ class HomeViewModel : ViewModel() {
     )
 
 
-        init {
-            getData()
-        }
+    init {
+        getData()
+    }
 
-        val tagCell = Transformations.map(liveData) {
-            val cells = mutableListOf<String>()
-            for (item in it) {
-                val tag = item.catalog
-                //包含了相同的字串就不加入list
-                if (!cells.contains(tag)) {
-                    cells.add(tag)
-                }
+    val tagCell = Transformations.map(liveData) {
+        val cells = mutableListOf<String>()
+        for (item in it) {
+            val tag = item.catalog
+            //包含了相同的字串就不加入list
+            if (!cells.contains(tag)) {
+                cells.add(tag)
             }
-            cells
         }
+        cells
+    }
 
 
     //單獨處理snapshotlistener的方式
@@ -90,7 +90,7 @@ class HomeViewModel : ViewModel() {
         return liveData
     }
 
-    val display = MediatorLiveData<List<Post>>().apply {
+    val postData = MediatorLiveData<List<Post>>().apply {
         addSource(liveData) {
             it.let { posts ->
                 value = if (tagSet.value == null) {
@@ -120,12 +120,12 @@ class HomeViewModel : ViewModel() {
         }
     }
 
-    fun changeTag (tagSet: String) {
+    fun changeTag(tagSet: String) {
         Timber.d("changeTag $tagSet")
         _tagSet.value = tagSet
     }
 
-    fun resetTag () {
+    fun resetTag() {
         _tagSet.value = null
     }
 
@@ -137,7 +137,6 @@ class HomeViewModel : ViewModel() {
         _navigateToDetail.value = null
     }
 }
-
 
 //Extension function of block
 fun List<Post>.filterBlock(): List<Post> {
