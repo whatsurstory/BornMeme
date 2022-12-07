@@ -7,16 +7,16 @@ import androidx.lifecycle.ViewModel
 class SplashViewModel: ViewModel() {
 
     // Handle leave
-    private val _leave = MutableLiveData<Boolean>()
+    private val _leaveSplash = MutableLiveData<Boolean>()
 
-    val leave: LiveData<Boolean>
-        get() = _leave
+    val leaveSplash: LiveData<Boolean>
+        get() = _leaveSplash
 
     fun leave() {
-        _leave.value = true
+        _leaveSplash.value = true
     }
 
     fun onLeaveCompleted() {
-        _leave.value = null
+        _leaveSplash.value = null
     }
 }

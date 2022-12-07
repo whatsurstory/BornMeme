@@ -50,21 +50,11 @@ import timber.log.Timber
 
 class SplashFragment : Fragment() {
 
-    private lateinit var auth: FirebaseAuth
+    private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
     lateinit var binding: FragmentSplashBinding
     private lateinit var viewModel: SplashViewModel
-
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-
-//        Handler(Looper.getMainLooper()).postDelayed({
-//            val intent = Intent(this, MainActivity::class.java)
-//            startActivity(intent)
-//            finish()
-//        }, 1000)
-
-//    }
+    val policyUrl = "https://www.privacypolicies.com/live/679fc734-40b3-47ef-bcca-2c0e5a46483d"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -73,31 +63,31 @@ class SplashFragment : Fragment() {
     ): View? {
         binding = FragmentSplashBinding.inflate(layoutInflater)
         viewModel = SplashViewModel()
-        auth = FirebaseAuth.getInstance()
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        firebaseAuth = FirebaseAuth.getInstance()
+        val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
 
-        googleSignInClient = GoogleSignIn.getClient(this.requireActivity(), gso)
+        googleSignInClient = GoogleSignIn.getClient(this.requireActivity(), googleSignInOptions)
 
-        binding.lottie.addAnimatorListener(object: Animator.AnimatorListener {
+        binding.screenLottieView.addAnimatorListener(object : Animator.AnimatorListener {
             override fun onAnimationRepeat(animation: Animator?) {
             }
+
             override fun onAnimationEnd(animation: Animator?) {
-                binding.gSignInBtn.visibility = View.VISIBLE
+                binding.googleSignInButton.visibility = View.VISIBLE
                 binding.greetingText.visibility = View.VISIBLE
-                binding.policyBtn.visibility = View.VISIBLE
-                binding.policyBtn.setOnClickListener {
-                    val url= "https://www.privacypolicies.com/live/679fc734-40b3-47ef-bcca-2c0e5a46483d"
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                binding.policyButton.visibility = View.VISIBLE
+                binding.policyButton.setOnClickListener {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(policyUrl))
                     startActivity(intent)
                 }
                 //loading our custom made animations
-                val ani  = AnimationUtils.loadAnimation(context, R.anim.fade_in)
+                val logInAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
                 //starting the animation
-                binding.greetingText.startAnimation(ani)
-                binding.gSignInBtn.startAnimation(ani)
+                binding.greetingText.startAnimation(logInAnimation)
+                binding.googleSignInButton.startAnimation(logInAnimation)
 //                showAgreeDialog()
             }
 
@@ -109,19 +99,15 @@ class SplashFragment : Fragment() {
         })
 
         //Button to Login
-        binding.gSignInBtn.setOnClickListener {
-            val color = this.context?.let {requireContext().getColor(R.color.green) }
-            val filter = SimpleColorFilter(color!!)
-            val keyPath = KeyPath("**")
-            val callback: LottieValueCallback<ColorFilter> = LottieValueCallback(filter)
+        binding.googleSignInButton.setOnClickListener {
 
-            binding.loginLoading.addValueCallback(keyPath, LottieProperty.COLOR_FILTER, callback)
-            binding.loginLoading.visibility = View.VISIBLE
-            binding.loginLoading.setAnimation(R.raw.bouncing_balls)
+            binding.loginLoadingAnimation.changeLayersColor(R.color.green)
+            binding.loginLoadingAnimation.visibility = View.VISIBLE
+            binding.loginLoadingAnimation.setAnimation(R.raw.bouncing_balls)
             signInGoogle()
         }
 
-        viewModel.leave.observe(
+        viewModel.leaveSplash.observe(
             viewLifecycleOwner,
             Observer {
                 it?.let {
@@ -130,13 +116,12 @@ class SplashFragment : Fragment() {
             }
         )
 
-
         return binding.root
     }
 
 
     //change lotties color
-    fun LottieAnimationView.changeLayersColor(
+    private fun LottieAnimationView.changeLayersColor(
         @ColorRes colorRes: Int
     ) {
 
@@ -156,16 +141,16 @@ class SplashFragment : Fragment() {
     private val launcher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-                handleResults(task)
+                val signInAccountTask = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+                handleResults(signInAccountTask)
             }
         }
 
     private fun handleResults(task: Task<GoogleSignInAccount>) {
         if (task.isSuccessful) {
-            val account: GoogleSignInAccount? = task.result
-            if (account != null) {
-                updateUI(account)
+            val signInAccount: GoogleSignInAccount? = task.result
+            if (signInAccount != null) {
+                updateUI(signInAccount)
             }
         } else {
             Timber.d("task ERROR ${task.exception}")
@@ -175,11 +160,11 @@ class SplashFragment : Fragment() {
     }
 
     private fun updateUI(account: GoogleSignInAccount) {
-        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-        auth.signInWithCredential(credential).addOnCompleteListener {
+        val authCredential = GoogleAuthProvider.getCredential(account.idToken, null)
+        firebaseAuth.signInWithCredential(authCredential).addOnCompleteListener {
             if (it.isSuccessful) {
                 UserManager.user.userId = it.result.user?.uid
-                Timber.d("check User -> ${UserManager.user.userId}")
+//                Timber.d("check User -> ${UserManager.user.userId}")
                 queryUserByUid(it.result.user!!)
 
             } else {
@@ -200,16 +185,11 @@ class SplashFragment : Fragment() {
         Firebase.firestore.runTransaction { transaction ->
             val snapshot = transaction.get(ref)
 //            val loginTimes = n + 1
-//            Timber.d("snapshot ??? $snapshot")
             if (snapshot.data != null) {
                 Timber.d("ID: ${snapshot.id} snapshot.data != null")
                 val checkUser = snapshot.toObject(User::class.java)
                 UserManager.user = checkUser!!
-                //when the member come back
-//                Snackbar.make(requireView(), "Nice to See you Again! ${UserManager.user.userName}",
-//                    Snackbar.LENGTH_SHORT)
-//                    .setAction("Action", null).show()
-//                Timber.d("UserManager ${UserManager.user}")
+
 //                transaction.update(ref,FieldValue.arrayUnion(loginTimes))
             } else {
                 Timber.d("ID: ${snapshot.id} snapshot.data == null")
@@ -232,12 +212,9 @@ class SplashFragment : Fragment() {
                     emptyList(),
                     emptyList()
                 )
-                transaction.set(ref,userData)
+                transaction.set(ref, userData)
                 UserManager.user = userData
-                //when new comer sign-in
-//                Snackbar.make(requireView(), "WelCome to Join! ${UserManager.user.userName}",
-//                    Snackbar.LENGTH_SHORT)
-//                    .setAction("Action", null).show()
+
             }
         }.addOnSuccessListener {
             Timber.d("Success to adding $ref")
@@ -246,19 +223,23 @@ class SplashFragment : Fragment() {
 
         }.addOnFailureListener {
             Timber.d("ERROR ${it.message}")
+            Toast.makeText(context, it.message.toString(), Toast.LENGTH_SHORT)
+                .show()
         }
     }
 
     private fun showAgreeDialog() {
 
         val item = LayoutInflater.from(requireContext()).inflate(R.layout.service_text, null)
+
         // set up spanned string with url
-        val spannableString = SpannableString("點擊 同意並繼續 即代表您同意並確認您已閱讀我們的服務條款與隱私政策，了解我們如何收集、使用與分享您的資料。")
-        val url= "https://www.privacypolicies.com/live/679fc734-40b3-47ef-bcca-2c0e5a46483d"
-        spannableString.setSpan(URLSpan(url), 25, 34, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        val spannableString = SpannableString(getString(R.string.service_text_with_url))
+
+        spannableString.setSpan(URLSpan(policyUrl), 25, 34, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         val textView = item.findViewById<TextView>(R.id.url_text)
         textView.text = spannableString
-        textView.movementMethod = LinkMovementMethod.getInstance() // enable clicking on url span
+        // enable clicking on url span
+        textView.movementMethod = LinkMovementMethod.getInstance()
 
         AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
             .setView(item)
@@ -268,7 +249,5 @@ class SplashFragment : Fragment() {
             .show()
             .getButton(DialogInterface.BUTTON_POSITIVE)
             .setTextColor(Color.parseColor("#181A19"))
-
     }
-
 }

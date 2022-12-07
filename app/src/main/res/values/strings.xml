@@ -51,5 +51,6 @@
     <string name="imported_033">E033: Some stickers failed to import (%1$d imported). Unsupported formats found</string>
 
     <string name="agreeAndContinue">同意並繼續</string>
+    <string name="service_text_with_url">點擊 同意並繼續 即代表您同意並確認您已閱讀我們的服務條款與隱私政策，了解我們如何收集、使用與分享您的資料。</string>
 
 </resources>
