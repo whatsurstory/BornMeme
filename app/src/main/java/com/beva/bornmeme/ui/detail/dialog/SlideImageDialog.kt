@@ -17,10 +17,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.PagerSnapHelper
-import com.beva.bornmeme.BuildConfig
-import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.DialogSlideCollectionBinding
 import com.beva.bornmeme.model.Folder
@@ -34,7 +31,7 @@ import com.karumi.dexter.listener.single.PermissionListener
 import timber.log.Timber
 
 
-class SlideImageDialog: AppCompatDialogFragment() {
+class SlideImageDialog : AppCompatDialogFragment() {
 
     private lateinit var binding: DialogSlideCollectionBinding
     private lateinit var viewModel: SlideViewModel
@@ -55,7 +52,7 @@ class SlideImageDialog: AppCompatDialogFragment() {
             folder = bundle.getParcelable("folder")!!
             Timber.d("WelCome to FOLDERRR: arg -> $folder")
         }
-//        dialog?.setTransparentBackground()
+
         viewModel = SlideViewModel(folder)
         binding = DialogSlideCollectionBinding.inflate(layoutInflater)
         binding.dialog = this
@@ -78,8 +75,6 @@ class SlideImageDialog: AppCompatDialogFragment() {
             }
         )
         binding.slideImgRecycler.adapter = adapter
-//        val snapHelper: SnapHelper = LinearSnapHelper()
-//        snapHelper.attachToRecyclerView(binding.slideImgRecycler)
 
         val pagerSnapHelper = PagerSnapHelper()
         pagerSnapHelper.attachToRecyclerView(binding.slideImgRecycler)
@@ -89,7 +84,7 @@ class SlideImageDialog: AppCompatDialogFragment() {
 
         adapter.registerAdapterDataObserver(indicator2.adapterDataObserver)
 
-        viewModel.imageItem.observe(viewLifecycleOwner, Observer {
+        viewModel.folderItem.observe(viewLifecycleOwner, Observer {
             Timber.d("observe -> $it")
             adapter.submitList(it)
             adapter.notifyDataSetChanged()
@@ -115,24 +110,27 @@ class SlideImageDialog: AppCompatDialogFragment() {
         ).withListener(
             object : PermissionListener {
                 override fun onPermissionGranted(
-                    p0: PermissionGrantedResponse?) {
+                    p0: PermissionGrantedResponse?
+                ) {
                     downLoad("${folder.id}.jpg", "BornMeme.", folder.url)
-//                    viewModel.downloadImage(folder.url)
+
 
                 }
 
                 override fun onPermissionDenied(
-                    p0: PermissionDeniedResponse?) {
+                    p0: PermissionDeniedResponse?
+                ) {
                     Toast.makeText(
                         context,
-                        "拒絕存取相簿權限",
+                        getString(R.string.refuse_permission),
                         Toast.LENGTH_SHORT
                     ).show()
                     showRotationDialogForPermission()
                 }
 
                 override fun onPermissionRationaleShouldBeShown(
-                    p0: PermissionRequest?, p1: PermissionToken?) {
+                    p0: PermissionRequest?, p1: PermissionToken?
+                ) {
                     showRotationDialogForPermission()
                 }
             }).onSameThread().check()
@@ -155,10 +153,9 @@ class SlideImageDialog: AppCompatDialogFragment() {
 
     private fun showRotationDialogForPermission() {
         AlertDialog.Builder(requireContext())
-            .setMessage("看起來你還沒有打開權限"
-                    + "打開之後即可完整使用功能哦!")
+            .setMessage(getString(R.string.not_allow_prmission))
 
-            .setPositiveButton("前往設定") { _, _ ->
+            .setPositiveButton(getString(R.string.to_setting_text)) { _, _ ->
 
                 try {
                     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
@@ -171,7 +168,7 @@ class SlideImageDialog: AppCompatDialogFragment() {
                 }
             }
 
-            .setNegativeButton("取消") { dialog, _ ->
+            .setNegativeButton(getString(R.string.cancel_text)) { dialog, _ ->
                 dialog.dismiss()
             }.show()
     }

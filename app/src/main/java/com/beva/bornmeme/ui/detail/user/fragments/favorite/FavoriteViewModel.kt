@@ -20,14 +20,13 @@ class FavoriteViewModel(private val userId: String) : ViewModel() {
         getData(userId)
     }
 
-    private fun getData(userId: String):MutableLiveData<List<Post>> {
+    private fun getData(userId: String): MutableLiveData<List<Post>> {
 
-        val collection = FirebaseFirestore.getInstance().collection("Posts")
-
-        collection.whereArrayContains("like", userId)
+        FirebaseFirestore.getInstance().collection("Posts")
+            .whereArrayContains("like", userId)
             .addSnapshotListener { snapshot, e ->
                 val list = mutableListOf<Post>()
-                for (document in snapshot!!){
+                for (document in snapshot!!) {
                     Timber.d("Favorite snapshot ID ->${document.id} list -> ${document.data}")
                     val post = document.toObject(Post::class.java)
                     list.add(post)

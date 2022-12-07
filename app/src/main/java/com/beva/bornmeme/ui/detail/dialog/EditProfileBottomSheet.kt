@@ -15,11 +15,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.BottomsheetEditProfileBinding
+import com.beva.bornmeme.loadImage
 import com.beva.bornmeme.model.User
 import com.beva.bornmeme.model.UserManager
 import com.bumptech.glide.Glide
@@ -31,7 +31,6 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import timber.log.Timber
 import java.sql.Date
-import java.util.ArrayList
 
 
 class EditProfileBottomSheet : BottomSheetDialogFragment() {
@@ -49,7 +48,6 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
         super.onCreate(savedInstanceState)
         arguments?.let { bundle ->
             userId = bundle.getString("userId").toString()
-            Timber.d("get userId from profile $userId")
         }
     }
 
@@ -62,10 +60,12 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
             val sheet = it as BottomSheetDialog
             sheet.behavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
+
         binding = BottomsheetEditProfileBinding.inflate(layoutInflater)
+
         viewModel = EditProfileViewModel(userId)
 
-        viewModel.user.observe(viewLifecycleOwner) {
+        viewModel.userData.observe(viewLifecycleOwner) {
             Timber.d("Observe user $it")
             it?.let {
                 updateUserData(it)
@@ -134,16 +134,8 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
         })
 
         binding.changePhoto.setOnClickListener {
-            //原本相簿就要有圖片不然會crash
             toAlbum()
         }
-
-
-//        viewModel.blockUser.observe(viewLifecycleOwner, Observer {
-//            it?.let {
-//                showBlockListDialog(it)
-//            }
-//        })
 
         binding.blockListBtn.setOnClickListener {
             //see the list in dialog within recycle view
@@ -159,7 +151,8 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
         }
 
         binding.settingBtn.setOnClickListener {
-            findNavController().navigate(MobileNavigationDirections.navigateToFragmentSetting())
+            findNavController()
+                .navigate(MobileNavigationDirections.navigateToFragmentSetting())
         }
 
         return binding.root
@@ -167,10 +160,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
 
     @SuppressLint("SetTextI18n")
     private fun updateUserData(user: User) {
-        Glide.with(binding.profileImg)
-            .load(user.profilePhoto)
-            .placeholder(com.beva.bornmeme.R.drawable.place_holder)
-            .into(binding.profileImg)
+        binding.profileImg.loadImage(user.profilePhoto)
 
         binding.name.setText(user.userName)
         binding.email.setText(user.email)
@@ -192,16 +182,14 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
                 .StartActivityForResult()
         ) {
             //判斷在對的條件才傳值
-            if (it.resultCode == RESULT_OK){
+            if (it.resultCode == RESULT_OK) {
                 Timber.d("resultCode RESULT_OK")
                 uri = it.data?.data as Uri
                 binding.profileImg.setImageURI(uri)
                 isChange = true
             } else if (it.resultCode == RESULT_CANCELED) {
                 Timber.d("getImageResult cancel ${it.resultCode}")
-
             }
-
         }
 
     private fun saveProfileData() {
@@ -250,23 +238,16 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
         ref.child("profile_img/" + System.currentTimeMillis() + ".jpg")
             .putFile(data)
             .addOnSuccessListener {
-                it.metadata?.reference?.downloadUrl?.addOnSuccessListener {
+                it.metadata?.reference?.downloadUrl?.addOnSuccessListener { uri ->
 
-                    UserManager.user.profilePhoto = it.toString()
+                    UserManager.user.profilePhoto = uri.toString()
 
                     Firebase.firestore.collection("Users")
                         .document(UserManager.user.userId!!)
-                        .update("profilePhoto", it)
-                        .addOnCompleteListener {
-
-//                            (activity as MainActivity).updateUser(UserManager.user)
-//                            val mainViewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
-//                            mainViewModel.setUser(UserManager.user)
-
-                        }
+                        .update("profilePhoto", uri)
                 }
             }
-        }
+    }
 
     private fun showBlockListDialog(blockUsers: List<String>) {
         val builder: AlertDialog.Builder =
@@ -277,9 +258,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
             //點擊後的行為
         }
         builder.setNegativeButton("離開",
-            DialogInterface.OnClickListener { _, _ ->
-//            Timber.d("check the selected item -> list size:${list.size} int size: ${isCheckedIndex.size}")
-            })
+            DialogInterface.OnClickListener { _, _ -> })
 
         val alertDialog: AlertDialog = builder.create()
         alertDialog.show()
@@ -288,6 +267,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
             .setTextColor(Color.parseColor("#181A19"))
 
     }
+
     private fun showFollowersDialog(follower: List<String>) {
         val builder: AlertDialog.Builder =
             AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
@@ -297,9 +277,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
             //點擊後的行為
         }
         builder.setNegativeButton("離開",
-            DialogInterface.OnClickListener { _, _ ->
-//            Timber.d("check the selected item -> list size:${list.size} int size: ${isCheckedIndex.size}")
-            })
+            DialogInterface.OnClickListener { _, _ -> })
 
         val alertDialog: AlertDialog = builder.create()
         alertDialog.show()
@@ -308,6 +286,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
             .setTextColor(Color.parseColor("#181A19"))
 
     }
+
     private fun showFollowListDialog(followUser: List<String>) {
         val builder: AlertDialog.Builder =
             AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
@@ -317,9 +296,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
             //點擊後的行為
         }
         builder.setNegativeButton("離開",
-            DialogInterface.OnClickListener { _, _ ->
-//            Timber.d("check the selected item -> list size:${list.size} int size: ${isCheckedIndex.size}")
-            })
+            DialogInterface.OnClickListener { _, _ -> })
 
         val alertDialog: AlertDialog = builder.create()
         alertDialog.show()

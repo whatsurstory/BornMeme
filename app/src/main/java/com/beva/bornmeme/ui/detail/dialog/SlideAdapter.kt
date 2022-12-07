@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.ItemSlideImageBinding
+import com.beva.bornmeme.loadImage
 import com.beva.bornmeme.model.Folder
 import com.beva.bornmeme.model.FolderData
 import com.beva.bornmeme.model.Post
@@ -31,10 +32,7 @@ class SlideAdapter(private val onClickListener: OnClickListener): ListAdapter<Fo
     class ViewHolder(private val binding: ItemSlideImageBinding) :
         RecyclerView.ViewHolder(binding.root){
         fun bind (item: FolderData) {
-            Glide.with(binding.slideImage)
-                .load(item.url)
-                .placeholder(R.drawable.place_holder)
-                .into(binding.slideImage)
+            binding.slideImage.loadImage(item.url)
         }
     }
 

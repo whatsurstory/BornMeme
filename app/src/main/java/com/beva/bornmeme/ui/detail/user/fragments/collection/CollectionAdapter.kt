@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.ItemUserCollectionBinding
+import com.beva.bornmeme.loadImage
 import com.beva.bornmeme.model.Folder
 import com.beva.bornmeme.model.Post
 import com.beva.bornmeme.model.UserManager
@@ -38,10 +39,7 @@ class CollectionAdapter(
     class ViewHolder(private val binding: ItemUserCollectionBinding) :
         RecyclerView.ViewHolder(binding.root) {
             fun bind (item: Folder,viewModel:CollectionViewModel, userId: String ) {
-                    Glide.with(binding.collectionImg)
-                        .load(item.posts[0].url)
-                        .placeholder(R.drawable.place_holder)
-                        .into(binding.collectionImg)
+                binding.collectionImg.loadImage(item.posts[0].url)
                 binding.collectionFolderName.text = item.name
 
                 if (userId == UserManager.user.userId) {

@@ -14,7 +14,10 @@ import timber.log.Timber
 class CommentsViewModel(userId: String) : ViewModel() {
 
     data class UiState(
-        val getPostImg:(postId:String, onPostObtained:((Post) -> Unit)) -> Unit
+        val getPostImg: (
+            postId: String,
+            onPostObtained: ((Post) -> Unit)
+        ) -> Unit
     )
 
     val postData = MutableLiveData<List<Comment>>()
@@ -25,17 +28,13 @@ class CommentsViewModel(userId: String) : ViewModel() {
 
     //Post All Photo in Fragment
     private fun getData(userId: String): MutableLiveData<List<Comment>> {
-        Timber.d("user $userId")
-        val collection = FirebaseFirestore.getInstance()
+        FirebaseFirestore.getInstance()
             .collection("Comments")
-
-        collection.whereEqualTo("userId", userId)
+            .whereEqualTo("userId", userId)
             .addSnapshotListener { snapshot, e ->
-                Timber.d("comment e ->${e?.message}")
                 val list = mutableListOf<Comment>()
-                for (document in snapshot!!){
-                    Timber.d("comment snapshot ID ->${document.id} " +
-                            "list -> ${document.data}")
+                for (document in snapshot!!) {
+
                     val post = document.toObject(Comment::class.java)
                     list.add(post)
                 }
@@ -44,7 +43,7 @@ class CommentsViewModel(userId: String) : ViewModel() {
         return postData
     }
 
-    val uiState = UiState (
+    val uiState = UiState(
         getPostImg = { postId, onPostObtained ->
             Firebase.firestore
                 .collection("Posts")
@@ -56,7 +55,7 @@ class CommentsViewModel(userId: String) : ViewModel() {
                         return@addOnCompleteListener onPostObtained(post)
                     }
                 }
-        }
-    )
+            }
+        )
 
 }

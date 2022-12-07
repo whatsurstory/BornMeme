@@ -12,31 +12,34 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import timber.log.Timber
 
-class PublishViewModel: ViewModel() {
+class PublishViewModel : ViewModel() {
 
-    fun publishComment(postId: String,parentId:String, binding: DialogCommentBinding) {
-        val fireStore = FirebaseFirestore.getInstance().collection("Comments")
+    fun publishComment(
+        postId: String, parentId: String,
+        binding: DialogCommentBinding
+    ) {
+        val fireStore = FirebaseFirestore.getInstance()
+            .collection("Comments")
         val document = fireStore.document()
         val publish = Comment(
-            document.id,
-            UserManager.user.userId,postId,
-            Timestamp.now(),
-            binding.editPublishContent.text.toString(),
-            emptyList(),
-            emptyList(), "",
-            parentId
+            commentId = document.id,
+            userId = UserManager.user.userId,
+            postId = postId,
+            time = Timestamp.now(),
+            content = binding.editPublishContent.text.toString(),
+            parentId = parentId
         )
 
         document.set(publish)
             .addOnSuccessListener {
-            Timber.d("Publish Done")
-            FirebaseFirestore.getInstance()
-                .collection("Users")
-                .document(UserManager.user.userId!!)
-                .update("commentsId", FieldValue.arrayUnion(document.id))
-        }.addOnFailureListener {
-            Timber.d("Error $it")
-        }
+                Timber.d("Publish Done")
+                FirebaseFirestore.getInstance()
+                    .collection("Users")
+                    .document(UserManager.user.userId!!)
+                    .update("commentsId", FieldValue.arrayUnion(document.id))
+            }.addOnFailureListener {
+                Timber.d("Error $it")
+            }
     }
 
     @SuppressLint("SetTextI18n")

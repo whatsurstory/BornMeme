@@ -1,29 +1,16 @@
 package com.beva.bornmeme.ui.detail.user.fragments.collection
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.widget.Button
-import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.navigation.fragment.findNavController
-import com.beva.bornmeme.R
 import com.beva.bornmeme.model.Folder
-import com.beva.bornmeme.model.Post
 import com.beva.bornmeme.model.UserManager
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import timber.log.Timber
 
 class CollectionViewModel(userId: String) : ViewModel() {
 
-    val liveData = MutableLiveData<List<Folder>>()
+    val folderData = MutableLiveData<List<Folder>>()
 
     //Handle navigation to dialog
     private val _navigateToDetail = MutableLiveData<Folder>()
@@ -44,19 +31,19 @@ class CollectionViewModel(userId: String) : ViewModel() {
                 if (snapshot != null) {
                     Timber.d("item ${snapshot.documents}")
                 }
-            exception?.let {
-                Timber.d("Exception ${it.message}")
+                exception?.let {
+                    Timber.d("Exception ${it.message}")
+                }
+                val list = mutableListOf<Folder>()
+                for (document in snapshot!!) {
+                    Timber.d("item ${document.id} ${document.data}")
+                    val item = document.toObject(Folder::class.java)
+                    Timber.d("item $item")
+                    list.add(item)
+                }
+                folderData.value = list
             }
-            val list = mutableListOf<Folder>()
-            for (document in snapshot!!) {
-                Timber.d("item ${document.id} ${document.data}")
-                val item = document.toObject(Folder::class.java)
-                Timber.d("item $item")
-                list.add(item)
-            }
-            liveData.value = list
-        }
-        return liveData
+        return folderData
     }
 
     fun deleteFile(item: Folder) {

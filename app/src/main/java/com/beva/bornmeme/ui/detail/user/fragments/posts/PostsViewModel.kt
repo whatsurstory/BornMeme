@@ -8,7 +8,7 @@ import com.beva.bornmeme.model.UserManager
 import com.google.firebase.firestore.FirebaseFirestore
 import timber.log.Timber
 
-class PostsViewModel(userId: String): ViewModel() {
+class PostsViewModel(userId: String) : ViewModel() {
 
     val postData = MutableLiveData<List<Post>>()
 
@@ -23,20 +23,20 @@ class PostsViewModel(userId: String): ViewModel() {
     }
 
 
-    fun getData(userId: String): MutableLiveData<List<Post>> {
-        val collection =FirebaseFirestore.getInstance().collection("Posts")
-        Timber.d("post ViewModel $userId")
-        collection.whereEqualTo("ownerId", userId)
+    private fun getData(userId: String): MutableLiveData<List<Post>> {
+        FirebaseFirestore.getInstance()
+            .collection("Posts")
+            .whereEqualTo("ownerId", userId)
             .addSnapshotListener { snapshot, e ->
                 val list = mutableListOf<Post>()
-                for (document in snapshot!!){
+                for (document in snapshot!!) {
                     Timber.d("Post snapshot ID ->${document.id} list -> ${document.data}")
                     val post = document.toObject(Post::class.java)
                     list.add(post)
                 }
                 postData.value = list
             }
-         return postData
+        return postData
     }
 
     fun navigateToDetail(item: Post) {

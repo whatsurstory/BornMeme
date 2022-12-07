@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.ItemUserCommentBinding
 import com.beva.bornmeme.databinding.ItemUserPostsBinding
+import com.beva.bornmeme.loadImage
 import com.beva.bornmeme.model.Comment
 import com.beva.bornmeme.model.Post
 import com.beva.bornmeme.model.UserManager.user
@@ -18,21 +19,18 @@ import timber.log.Timber
 import java.sql.Date
 import java.text.ParsePosition
 
-class UserCommentAdapter(private val uiState: CommentsViewModel.UiState): ListAdapter<Comment, UserCommentAdapter.ViewHolder>(DiffCallback) {
+class UserCommentAdapter(private val uiState: CommentsViewModel.UiState) :
+    ListAdapter<Comment, UserCommentAdapter.ViewHolder>(DiffCallback) {
 
     class ViewHolder(private val binding: ItemUserCommentBinding) :
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n", "SimpleDateFormat")
-        fun bind(item: Comment, uiState: CommentsViewModel.UiState){
+        fun bind(item: Comment, uiState: CommentsViewModel.UiState) {
             binding.contentText.text = item.content
             val timeString = item.time?.toDate()?.toLocaleString()
             binding.timeText.text = timeString
-            uiState.getPostImg(item.postId) { post:Post ->
-                Timber.d("img => ${post.url}")
-                Glide.with(binding.commentImg)
-                    .load(post.url)
-                    .placeholder(R.drawable.place_holder)
-                    .into(binding.commentImg)
+            uiState.getPostImg(item.postId) { post: Post ->
+                binding.commentImg.loadImage(post.url)
             }
         }
     }
@@ -49,7 +47,13 @@ class UserCommentAdapter(private val uiState: CommentsViewModel.UiState): ListAd
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(ItemUserCommentBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return ViewHolder(
+            ItemUserCommentBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -64,7 +68,7 @@ class Timestamp {
      * @return String
      */
     @SuppressLint("SimpleDateFormat")
-    fun transToString(time:Long):String{
+    fun transToString(time: Long): String {
         return SimpleDateFormat("YY-MM-DD-hh-mm-ss").format(time)
     }
 
@@ -75,7 +79,7 @@ class Timestamp {
      */
 
     @SuppressLint("SimpleDateFormat")
-    fun transToTimeStamp(date:String):Long{
+    fun transToTimeStamp(date: String): Long {
         return SimpleDateFormat("YY-MM-DD-hh-mm-ss").parse(date, ParsePosition(0)).time
     }
 }
