@@ -41,7 +41,7 @@
     <string name="to_setting_text">前往設定</string>
     <string name="cancel_text">取消</string>
     <string name="refuse_permission">拒絕存取</string>
-
+    <string name="input_yet">標籤文字尚未輸入</string>
     <string name="pack_icon">Pack icon</string>
     <string name="sticker_icon">Sticker icon</string>
     <string name="close_sticker_preview">[tap to close sticker preview]</string>

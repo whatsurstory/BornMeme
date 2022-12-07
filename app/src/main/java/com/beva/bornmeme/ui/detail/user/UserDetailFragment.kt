@@ -1,7 +1,6 @@
 package com.beva.bornmeme.ui.detail.user
 
 import android.annotation.SuppressLint
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,16 +11,18 @@ import androidx.navigation.fragment.findNavController
 import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentUserDetailBinding
+import com.beva.bornmeme.loadImage
 import com.beva.bornmeme.model.User
 import com.beva.bornmeme.model.UserManager
+import com.beva.bornmeme.model.UserManager.user
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
 import timber.log.Timber
 
 class UserDetailFragment : Fragment() {
 
-    lateinit var binding : FragmentUserDetailBinding
-    lateinit var viewModel:UserDetailViewModel
+    lateinit var binding: FragmentUserDetailBinding
+    lateinit var viewModel: UserDetailViewModel
     lateinit var userId: String
 
     @SuppressLint("SetTextI18n")
@@ -39,16 +40,24 @@ class UserDetailFragment : Fragment() {
         val adapter = TabViewPagerAdapter(this, userId)
         binding.userViewpager.adapter = adapter
 
-        TabLayoutMediator(binding.userTabs,binding.userViewpager) { tab,position ->
-            when(position){
-                0 -> {tab.text = "Likes"}
-                1 -> {tab.text = "Posts"}
-                2 -> {tab.text = "Text"}
-                3 -> {tab.text = "Files"}
+        TabLayoutMediator(binding.userTabs, binding.userViewpager) { tab, position ->
+            when (position) {
+                0 -> {
+                    tab.text = "Likes"
+                }
+                1 -> {
+                    tab.text = "Posts"
+                }
+                2 -> {
+                    tab.text = "Text"
+                }
+                3 -> {
+                    tab.text = "Files"
+                }
             }
         }.attach()
 
-        viewModel.user.observe(viewLifecycleOwner) {
+        viewModel.userData.observe(viewLifecycleOwner) {
             Timber.d("Observe user $it")
             it?.let {
                 updateUi(it)
@@ -59,33 +68,21 @@ class UserDetailFragment : Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun updateUi(user: User) {
-        Glide.with(binding.userDetailImg)
-            .load(user.profilePhoto)
-            .centerCrop()
-            .placeholder(R.drawable.place_holder)
-            .into(binding.userDetailImg)
+
+        binding.userDetailImg.loadImage(user.profilePhoto)
+
         binding.userDetailName.text = user.userName
 
-        //粉絲數
-        if (user.followers.isNullOrEmpty()) {
-            binding.followersText.text = "0"
-        } else {
-            binding.followersText.text = user.followers.size.toString()
-        }
-        //自我介紹
+        binding.followersText.text =
+            if (user.followers.isNullOrEmpty()) "0" else user.followers.size.toString()
+
         binding.introduceText.text = user.introduce
-        //被喜歡
-        if (user.likeId.isNullOrEmpty()){
-            binding.likesText.text = "0"
-        }else {
-            binding.likesText.text = user.likeId.size.toString()
-        }
-        //po文數
-        if (user.postQuantity.isNullOrEmpty()) {
-            binding.postsText.text = "0"
-        } else {
-            binding.postsText.text = user.postQuantity.size.toString()
-        }
+
+        binding.likesText.text =
+            if (user.likeId.isNullOrEmpty()) "0" else user.likeId.size.toString()
+
+        binding.postsText.text =
+            if (user.postQuantity.isNullOrEmpty()) "0" else user.postQuantity.size.toString()
 
         //被追蹤及編輯
         if (user.userId != UserManager.user.userId) {
@@ -95,7 +92,7 @@ class UserDetailFragment : Fragment() {
                     binding.add2follow.visibility = View.GONE
                     binding.alreadyFollow.visibility = View.VISIBLE
                     binding.alreadyFollow.setOnClickListener {
-                        Toast.makeText(context, "已經追蹤該作者，退追請等待，加速要加錢", Toast.LENGTH_SHORT).show()
+                        viewModel.cancel2Follow(user.userId.toString())
                     }
                 } else {
                     binding.alreadyFollow.visibility = View.GONE
@@ -109,9 +106,11 @@ class UserDetailFragment : Fragment() {
         } else {
             binding.editIcon.visibility = View.VISIBLE
             binding.editIcon.setOnClickListener {
-                viewModel.user.value?.userId?.let { id ->
-                    findNavController().navigate(MobileNavigationDirections
-                        .navigateToEditProfileDialog(id))
+                viewModel.userData.value?.userId?.let { id ->
+                    findNavController().navigate(
+                        MobileNavigationDirections
+                            .navigateToEditProfileDialog(id)
+                    )
                 }
             }
         }

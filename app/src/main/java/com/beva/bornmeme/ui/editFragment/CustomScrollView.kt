@@ -1,5 +1,6 @@
 package com.beva.bornmeme.ui.editFragment
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -28,6 +29,7 @@ class CustomScrollView : ScrollView {
         return super.onInterceptTouchEvent(event)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         Timber.e("CustomScrollView onTouchEvent action=${event?.action}}")
 

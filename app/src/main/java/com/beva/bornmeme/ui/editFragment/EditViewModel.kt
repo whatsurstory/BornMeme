@@ -1,30 +1,28 @@
 package com.beva.bornmeme.ui.editFragment
 
 import android.app.Application
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
+import android.graphics.Color
 import android.icu.util.Calendar
 import android.net.Uri
 import android.provider.MediaStore
+import android.view.Gravity
+import android.view.View
+import android.widget.EditText
+import android.widget.FrameLayout
 import androidx.lifecycle.ViewModel
 import com.beva.bornmeme.model.UserManager
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.SimpleTarget
-import com.bumptech.glide.request.transition.Transition
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import com.google.rpc.BadRequest
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.util.*
 
 class EditViewModel : ViewModel() {
-
-
 
     fun mergeBitmap(
         firstImage: Bitmap,
@@ -43,24 +41,25 @@ class EditViewModel : ViewModel() {
         return result
     }
 
-    fun getImageUri(inContext: Application?, inImage: Bitmap): Uri? {
+    fun getImageUri(application: Application?, bitmap: Bitmap): Uri? {
         val bytes = ByteArrayOutputStream()
         val title = Calendar.getInstance().timeInMillis.toString()
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-        val path = MediaStore.Images.Media.insertImage(
-            inContext?.contentResolver,
-            inImage,
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val uriString = MediaStore.Images.Media.insertImage(
+            application?.contentResolver,
+            bitmap,
             title,
             null
         )
-        return Uri.parse(path)
+        return Uri.parse(uriString)
     }
 
-    fun addNewPost(uri: Uri?, res: List<Any>, title:String, tag:String, width: Int, height: Int) {
+    fun addNewPost(uri: Uri?, res: List<Any>, title: String, tag: String, width: Int, height: Int) {
         Timber.d("getNewPost")
         Timber.d("publish => $title tag $tag")
         val postPath = FirebaseFirestore.getInstance().collection("Posts").document()
-        val userPath = FirebaseFirestore.getInstance().collection("Users").document(UserManager.user.userId.toString())
+        val userPath = FirebaseFirestore.getInstance().collection("Users")
+            .document(UserManager.user.userId.toString())
         val ref = FirebaseStorage.getInstance().reference
 
         if (uri != null) {
@@ -69,9 +68,6 @@ class EditViewModel : ViewModel() {
                 .addOnSuccessListener {
                     it.metadata?.reference?.downloadUrl?.addOnSuccessListener {
                         //這層的it才會帶到firebase return 的 Url
-    //                    Timber.d("edited uri: $it => take it to upload url")
-    //                    Timber.d("newTag $tag")
-
                         val post = hashMapOf(
                             "id" to postPath.id,
                             "photoId" to "photo_id",
@@ -95,4 +91,58 @@ class EditViewModel : ViewModel() {
                 }
         }
     }
+
+    fun tagSnackbarShow(it: View, tagText: EditText) {
+        val tagSnack =
+            Snackbar.make(it, "資料未完成將填入預設值，免客氣",
+                Snackbar.LENGTH_INDEFINITE
+            )
+                .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
+                .setBackgroundTint(Color.parseColor("#EADDDB"))
+                .setTextColor(Color.parseColor("#181A19"))
+                .setAction("感謝有你") {
+                    tagText.setText("傻逼日常")
+                }.setActionTextColor(Color.parseColor("#181A19"))
+        val snackBarView = tagSnack.view
+        val params = snackBarView.layoutParams as FrameLayout.LayoutParams
+        params.gravity = Gravity.CENTER_HORIZONTAL and Gravity.TOP
+        snackBarView.layoutParams = params
+        tagSnack.show()
+    }
+
+    fun titleSnackbarShow(it: View, titleText: EditText) {
+        //Snackbar ani
+        val titleSnack =
+            Snackbar.make(it, "資料未完成將填入預設值，免客氣",
+                Snackbar.LENGTH_INDEFINITE
+            )
+                .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
+                .setBackgroundTint(Color.parseColor("#EADDDB"))
+                .setTextColor(Color.parseColor("#181A19"))
+                .setAction("感恩的心") {
+                    titleText.setText(UserManager.user.userName)
+                }
+                .setActionTextColor(Color.parseColor("#181A19"))
+        val snackBarView = titleSnack.view
+        val params = snackBarView.layoutParams as FrameLayout.LayoutParams
+        params.gravity = Gravity.CENTER_HORIZONTAL and Gravity.TOP
+        snackBarView.layoutParams = params
+        titleSnack.show()
+    }
+
+    fun showContentEmptySnackBar(it: View) {
+        val contentText = Snackbar.make(
+            it, "不想填寫內容可以輸入空格唷~(･8･)",
+            Snackbar.LENGTH_LONG
+        )
+            .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
+            .setBackgroundTint(Color.parseColor("#EADDDB"))
+            .setTextColor(Color.parseColor("#181A19"))
+        val snackBarView = contentText.view
+        val params = snackBarView.layoutParams as FrameLayout.LayoutParams
+        params.gravity = Gravity.CENTER_HORIZONTAL and Gravity.TOP
+        snackBarView.layoutParams = params
+        contentText.show()
+    }
+
 }
