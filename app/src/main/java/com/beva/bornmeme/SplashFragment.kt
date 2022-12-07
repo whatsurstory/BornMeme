@@ -201,12 +201,10 @@ class SplashFragment : Fragment() {
                 )
                 transaction.set(ref, userData)
                 UserManager.user = userData
-                showAgreeDialog()
             }
         }.addOnSuccessListener {
             Timber.d("Success to adding $ref")
-            viewModel.leave()
-            findNavController().navigate(MobileNavigationDirections.navigateToHomeFragment())
+            showAgreeDialog()
 
         }.addOnFailureListener {
             Timber.d("ERROR ${it.message}")
@@ -232,6 +230,9 @@ class SplashFragment : Fragment() {
             .setView(item)
             .setPositiveButton(R.string.agreeAndContinue) { _, _ ->
                 Toast.makeText(context, R.string.agreeAndContinue, Toast.LENGTH_SHORT).show()
+                viewModel.leave()
+                findNavController().navigate(MobileNavigationDirections.navigateToHomeFragment())
+
             }
             .show()
             .getButton(DialogInterface.BUTTON_POSITIVE)
