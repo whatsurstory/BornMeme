@@ -26,11 +26,11 @@ class StickerPresenter(private val stickerView: StickerView) {
     fun onTouchEvent(event: MotionEvent?):Boolean{
 
         Timber.w("sp event => x: ${event?.x}, y: ${event?.y}")
-        //倒叙遍历，后添加的贴纸先消费事件
+
+        //reverse position
         for (i in stickerDrawers.size-1 downTo 0) {
             val drawer = stickerDrawers[i]
             if (drawer.onTouchEvent(event)) {
-                //当前操作的贴纸将移动到list的尾部，显示在图层最上方
                 stickerDrawers.remove(drawer)
                 stickerDrawers.add(drawer)
 

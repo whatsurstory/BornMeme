@@ -10,8 +10,11 @@
     <string name="user_collection_text">Users</string>
     <string name="post_collection_text">Posts</string>
     <string name="comment_collection_text">Comments</string>
-    <string name="array_text_">Users</string>
 
+    <string name="snack_default_text">資料未完成將填入預設值，免客氣</string>
+    <string name="snack_default_check">感謝有你</string>
+    <string name="silly_usual">傻逼日常</string>
+    <string name="edit_no_input">不想填寫內容可以輸入空格唷~(･8･)</string>
 
     <string name="text_click">Add Text</string>
     <string name="preview_btn">Preview</string>

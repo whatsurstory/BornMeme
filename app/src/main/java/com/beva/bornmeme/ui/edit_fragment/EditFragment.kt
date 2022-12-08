@@ -28,7 +28,7 @@ import timber.log.Timber
 class EditFragment : Fragment() {
 
     private lateinit var binding: FragmentEditFixmodeBinding
-    private lateinit var uri: Uri
+    private var uri: Uri? = null
     private lateinit var upperText: AppCompatEditText
     private lateinit var bottomText: AppCompatEditText
     private lateinit var tagText: EditText
@@ -42,7 +42,7 @@ class EditFragment : Fragment() {
         binding = FragmentEditFixmodeBinding.inflate(layoutInflater)
 
         arguments?.let { bundle ->
-            uri = bundle.getParcelable("uri")!!
+            uri = bundle.getParcelable("uri")
             Timber.d("From Album uri => $uri")
         }
         getLayoutPrams()
@@ -72,10 +72,14 @@ class EditFragment : Fragment() {
                 if (text.isNullOrEmpty()) getString(R.string.input_yet) else null
         }
 
-        (tagText.parent.parent as ViewGroup)
-            .setBackgroundColor(Color.parseColor("#EADDDB"))
-        (titleText.parent.parent as ViewGroup)
-            .setBackgroundColor(Color.parseColor("#EADDDB"))
+        context?.let {
+            (tagText.parent.parent as ViewGroup)
+                .setBackgroundColor(it.getColor(R.color.tr_pink))
+        }
+        context?.let {
+            (titleText.parent.parent as ViewGroup)
+                .setBackgroundColor(it.getColor(R.color.tr_pink))
+        }
 
         return binding.root
     }
@@ -89,7 +93,7 @@ class EditFragment : Fragment() {
             upperText.clearFocus()
             bottomText.clearFocus()
             if (upperText.text.isNullOrEmpty() || bottomText.text.isNullOrEmpty()) {
-                viewModel.showContentEmptySnackBar(it)
+                viewModel.showContentEmptySnackBar(requireContext(),it)
             } else {
 //                val baseBitmap = getBitmapByUri(uri)
                 binding.originPhoto.buildDrawingCache()
@@ -119,63 +123,66 @@ class EditFragment : Fragment() {
             upperText.clearFocus()
             bottomText.clearFocus()
             if (upperText.text.isNullOrEmpty() || bottomText.text.isNullOrEmpty()) {
-                viewModel.showContentEmptySnackBar(it)
+                viewModel.showContentEmptySnackBar(requireContext(),it)
             } else if (titleText.text.trim().isEmpty()) {
-                viewModel.titleSnackbarShow(it, titleText)
+                viewModel.titleSnackbarShow(requireContext(),it, titleText)
             } else if (tagText.text.trim().isEmpty()) {
-                viewModel.tagSnackbarShow(it, tagText)
+                viewModel.tagSnackbarShow(requireContext() ,it, tagText)
             } else {
 
                 binding.lottiePublishLoading.visibility = View.VISIBLE
                 binding.lottiePublishLoading.setAnimation(R.raw.dancing_pallbearers)
 
                 val ref = FirebaseStorage.getInstance().reference
-                ref.child("img_origin/" + document.id + ".jpg")
-                    .putFile(uri)
-                    .addOnSuccessListener {
-                        it.metadata?.reference?.downloadUrl?.addOnSuccessListener {
-                            //這層的it才會帶到firebase return 的 Uri
-                            Timber.d("origin uri: $it => take it to base url")
+                uri?.let { uri ->
+                    ref.child("img_origin/" + document.id + ".jpg")
+                        .putFile(uri)
+                        .addOnSuccessListener {
+                            it.metadata?.reference?.downloadUrl?.addOnSuccessListener {
+                                //這層的it才會帶到firebase return 的 Uri
+                                Timber.d("origin uri: $it => take it to base url")
 
-                            val res = listOf(
-                                arrayMapOf("type" to "base", "url" to it),
-                                arrayMapOf(
-                                    "type" to "text",
-                                    "url" to "${upperText.text!!.trim()}\n${bottomText.text!!.trim()}"
+                                val res = listOf(
+                                    arrayMapOf("type" to "base", "url" to it),
+                                    arrayMapOf(
+                                        "type" to "text",
+                                        "url" to "${upperText.text!!.trim()}\n${bottomText.text!!.trim()}"
+                                    )
                                 )
-                            )
 
-                            binding.originPhoto.buildDrawingCache()
-                            val baseBitmap = binding.originPhoto.drawingCache
-                            upperText.buildDrawingCache()
-                            val upperBitmap = upperText.drawingCache
-                            bottomText.buildDrawingCache()
-                            val bottomBitmap = bottomText.drawingCache
+                                binding.originPhoto.buildDrawingCache()
+                                val baseBitmap = binding.originPhoto.drawingCache
+                                upperText.buildDrawingCache()
+                                val upperBitmap = upperText.drawingCache
+                                bottomText.buildDrawingCache()
+                                val bottomBitmap = bottomText.drawingCache
 
-                            val publishBitmap = viewModel.mergeBitmap(
-                                baseBitmap,
-                                upperBitmap,
-                                bottomBitmap
-                            )
+                                val publishBitmap = viewModel.mergeBitmap(
+                                    baseBitmap,
+                                    upperBitmap,
+                                    bottomBitmap
+                                )
 
-                            //saving to gallery and return the path(uri)
-                            val newUri = viewModel.getImageUri(activity?.application, publishBitmap)
-                            viewModel.addNewPost(
-                                newUri,
-                                res,
-                                titleText.text.toString(),
-                                tagText.text.toString(),
-                                publishBitmap.width,
-                                publishBitmap.height
-                            )
-                            findNavController().navigate(MobileNavigationDirections.navigateToHomeFragment())
+                                //saving to gallery and return the path(uri)
+                                val newUri = viewModel.getImageUri(activity?.application, publishBitmap)
+                                viewModel.addNewPost(
+                                    requireContext(),
+                                    newUri,
+                                    res,
+                                    titleText.text.toString(),
+                                    tagText.text.toString(),
+                                    publishBitmap.width,
+                                    publishBitmap.height
+                                )
+                                findNavController().navigate(MobileNavigationDirections.navigateToHomeFragment())
 
-                        }?.addOnFailureListener {
-                            Timber.d("upload uri Error => $it")
+                            }?.addOnFailureListener {
+                                Timber.d("upload uri Error => $it")
+                            }
+                        }.addOnFailureListener {
+                            Timber.d("TaskSnapshot Error => $it")
                         }
-                    }.addOnFailureListener {
-                        Timber.d("TaskSnapshot Error => $it")
-                    }
+                }
             }
         }
     }
@@ -191,7 +198,9 @@ class EditFragment : Fragment() {
         options.inJustDecodeBounds = true
 
         BitmapFactory.decodeStream(
-            requireContext().contentResolver.openInputStream(uri),
+            uri?.let {
+                requireContext().contentResolver.openInputStream(it)
+                     },
             null,
             options
         )

@@ -9,7 +9,7 @@ import android.graphics.Matrix
 class BackgroundDrawer(stickerView: StickerView, bitmap: Bitmap): Drawer(stickerView,bitmap)  {
 
     override fun onInit() {
-        //缩放图片与view等宽，将图片移动到view中间
+        //let the background view gravity center
         val ratio = stickerView.width.toFloat() / bitmap.width
         matrix.setScale(ratio, ratio, bitmap.width / 2f, bitmap.height / 2f)
         matrix.getValues(array)

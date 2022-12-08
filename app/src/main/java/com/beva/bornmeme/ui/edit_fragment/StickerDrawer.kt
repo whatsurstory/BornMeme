@@ -5,7 +5,10 @@ import android.graphics.Bitmap
 /**
  * 贴纸类，初始位置为view中间
  */
-class StickerDrawer(stickerView: StickerView, bitmap: Bitmap): Drawer(stickerView,bitmap) {
+class StickerDrawer(
+    stickerView: StickerView,
+    bitmap: Bitmap
+): Drawer(stickerView,bitmap) {
 
     override fun onInit() {
         //初始化位置

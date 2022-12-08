@@ -25,7 +25,7 @@ import kotlin.math.roundToInt
 class EditDragFragment : Fragment() {
 
     lateinit var binding: FragmentDragEditBinding
-    private lateinit var uri: Uri
+    private var uri: Uri? = null
     private val fireStore = FirebaseFirestore.getInstance().collection("Posts")
     private val document = fireStore.document()
 
@@ -70,9 +70,13 @@ class EditDragFragment : Fragment() {
 
         //let the bitmap's width and height scale the view
         arguments?.let { bundle ->
-            uri = bundle.getParcelable("uri")!!
+            uri = bundle.getParcelable("uri")
             Timber.d("uri => $uri")
-            val backgroundBitmap = StickerUtils.getImage(requireContext(), uri)
+
+            val backgroundBitmap = uri?.let {
+                StickerUtils.getImage(requireContext(), it)
+            }
+
             if (backgroundBitmap != null) {
                 binding.stickerView.setBackground(backgroundBitmap)
                 Timber.d("width ${binding.stickerView.width}")
@@ -159,55 +163,65 @@ class EditDragFragment : Fragment() {
         }
 
         binding.dragPublishBtn.setOnClickListener {
+
             val viewModel = ViewModelProvider(requireActivity())[EditViewModel::class.java]
+
             if (binding.dragTitleCard.text.toString().isEmpty()) {
-                viewModel.titleSnackbarShow(it, binding.dragTitleCard)
+
+                viewModel.titleSnackbarShow(requireContext() ,it, binding.dragTitleCard)
+
             } else if (binding.dragTextCatalog.text.toString().isEmpty()) {
-                viewModel.tagSnackbarShow(it, binding.dragTextCatalog)
+
+                viewModel.tagSnackbarShow(requireContext(), it, binding.dragTextCatalog)
+
             } else {
+
                 binding.lottiePublishLoading.visibility = View.VISIBLE
                 binding.lottiePublishLoading.setAnimation(R.raw.dancing_pallbearers)
 
                 val ref = FirebaseStorage.getInstance().reference
-                ref.child("img_origin/" + document.id + ".jpg")
-                    .putFile(uri)
-                    .addOnSuccessListener {
-                        it.metadata?.reference?.downloadUrl?.addOnSuccessListener {
-                            //這層的it才會帶到firebase return 的 Uri
-                            Timber.d("origin uri: $it => take it to base url")
+                uri?.let { uri ->
+                    ref.child("img_origin/" + document.id + ".jpg")
+                        .putFile(uri)
+                        .addOnSuccessListener {
+                            it.metadata?.reference?.downloadUrl?.addOnSuccessListener {
+                                //這層的it才會帶到firebase return 的 Uri
+                                Timber.d("origin uri: $it => take it to base url")
 
-//                            Timber.d("newTag $newTag")
-                            val res = listOf(
-                                arrayMapOf("type" to "base", "url" to it),
-                                arrayMapOf(
-                                    "type" to "text",
-                                    "url" to binding.dragTextCatalog.text?.trim().toString()
+            //                            Timber.d("newTag $newTag")
+                                val res = listOf(
+                                    arrayMapOf("type" to "base", "url" to it),
+                                    arrayMapOf(
+                                        "type" to "text",
+                                        "url" to binding.dragTextCatalog.text?.trim().toString()
+                                    )
                                 )
-                            )
 
-                            binding.stickerView.destroyDrawingCache()
-                            binding.stickerView.buildDrawingCache()
-                            val bitmap = binding.stickerView.drawingCache.copy(
-                                Bitmap.Config.ARGB_8888,
-                                false
-                            )
+                                binding.stickerView.destroyDrawingCache()
+                                binding.stickerView.buildDrawingCache()
+                                val bitmap = binding.stickerView.drawingCache.copy(
+                                    Bitmap.Config.ARGB_8888,
+                                    false
+                                )
 
-                            //saving to gallery and return the path(uri)
-                            val newUri = viewModel.getImageUri(activity?.application, bitmap)
-                            viewModel.addNewPost(
-                                newUri,
-                                res,
-                                binding.dragTitleCard.text.toString(),
-                                binding.dragTextCatalog.text.toString(),
-                                bitmap.width,
-                                bitmap.height
-                            )
-                            findNavController().navigate(MobileNavigationDirections.navigateToHomeFragment())
+                                //saving to gallery and return the path(uri)
+                                val newUri = viewModel.getImageUri(activity?.application, bitmap)
+                                viewModel.addNewPost(
+                                    requireContext(),
+                                    newUri,
+                                    res,
+                                    binding.dragTitleCard.text.toString(),
+                                    binding.dragTextCatalog.text.toString(),
+                                    bitmap.width,
+                                    bitmap.height
+                                )
+                                findNavController().navigate(MobileNavigationDirections.navigateToHomeFragment())
 
-                        }?.addOnFailureListener {
-                            Timber.d("upload uri Error => $it")
+                            }?.addOnFailureListener {
+                                Timber.d("upload uri Error => $it")
+                            }
                         }
-                    }
+                }
             }
         }
 

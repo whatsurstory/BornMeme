@@ -1,6 +1,7 @@
 package com.beva.bornmeme.ui.edit_fragment
 
 import android.app.Application
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -12,6 +13,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.FrameLayout
 import androidx.lifecycle.ViewModel
+import com.beva.bornmeme.R
 import com.beva.bornmeme.model.UserManager
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
@@ -29,6 +31,7 @@ class EditViewModel : ViewModel() {
         secondImage: Bitmap,
         thirdImage: Bitmap
     ): Bitmap {
+
         val result = Bitmap.createBitmap(firstImage.width, firstImage.height, firstImage.config)
         val canvas = Canvas(result)
         canvas.drawBitmap(firstImage, 0f, 0f, null)
@@ -54,12 +57,15 @@ class EditViewModel : ViewModel() {
         return Uri.parse(uriString)
     }
 
-    fun addNewPost(uri: Uri?, res: List<Any>, title: String, tag: String, width: Int, height: Int) {
-        Timber.d("getNewPost")
-        Timber.d("publish => $title tag $tag")
-        val postPath = FirebaseFirestore.getInstance().collection("Posts").document()
-        val userPath = FirebaseFirestore.getInstance().collection("Users")
+    fun addNewPost(context: Context, uri: Uri?, res: List<Any>, title: String, tag: String, width: Int, height: Int) {
+//        Timber.d("getNewPost")
+//        Timber.d("publish => $title tag $tag")
+        val postPath = FirebaseFirestore.getInstance()
+            .collection(context.getString(R.string.post_collection_text)).document()
+        val userPath = FirebaseFirestore.getInstance()
+            .collection(context.getString(R.string.user_collection_text))
             .document(UserManager.user.userId.toString())
+
         val ref = FirebaseStorage.getInstance().reference
 
         if (uri != null) {
@@ -83,7 +89,7 @@ class EditViewModel : ViewModel() {
                         //put into firebase_storage
                         postPath.set(post)
                         userPath.update("postQuantity", FieldValue.arrayUnion(postPath.id))
-                        Timber.d("to firebase => Publish Done: POST ${postPath.id} \n USER ${userPath.id}")
+//                        Timber.d("to firebase => Publish Done: POST ${postPath.id} \n USER ${userPath.id}")
                     }
                 }
                 .addOnFailureListener {
@@ -92,17 +98,17 @@ class EditViewModel : ViewModel() {
         }
     }
 
-    fun tagSnackbarShow(it: View, tagText: EditText) {
+    fun tagSnackbarShow(context: Context, it: View, tagText: EditText) {
         val tagSnack =
-            Snackbar.make(it, "資料未完成將填入預設值，免客氣",
+            Snackbar.make(it, context.getString(R.string.snack_default_text),
                 Snackbar.LENGTH_INDEFINITE
             )
                 .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
-                .setBackgroundTint(Color.parseColor("#EADDDB"))
-                .setTextColor(Color.parseColor("#181A19"))
-                .setAction("感謝有你") {
-                    tagText.setText("傻逼日常")
-                }.setActionTextColor(Color.parseColor("#181A19"))
+                .setBackgroundTint(context.getColor(R.color.tr_pink))
+                .setTextColor(context.getColor(R.color.button_balck))
+                .setAction(context.getString(R.string.snack_default_check)) {
+                    tagText.setText(context.getString(R.string.silly_usual))
+                }.setActionTextColor(context.getColor(R.color.button_balck))
         val snackBarView = tagSnack.view
         val params = snackBarView.layoutParams as FrameLayout.LayoutParams
         params.gravity = Gravity.CENTER_HORIZONTAL and Gravity.TOP
@@ -110,19 +116,19 @@ class EditViewModel : ViewModel() {
         tagSnack.show()
     }
 
-    fun titleSnackbarShow(it: View, titleText: EditText) {
+    fun titleSnackbarShow(context:Context,it: View, titleText: EditText) {
         //Snackbar ani
         val titleSnack =
-            Snackbar.make(it, "資料未完成將填入預設值，免客氣",
+            Snackbar.make(it, context.getString(R.string.snack_default_text),
                 Snackbar.LENGTH_INDEFINITE
             )
                 .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
-                .setBackgroundTint(Color.parseColor("#EADDDB"))
-                .setTextColor(Color.parseColor("#181A19"))
-                .setAction("感恩的心") {
+                .setBackgroundTint(context.getColor(R.color.tr_pink))
+                .setTextColor(context.getColor(R.color.button_balck))
+                .setAction(context.getString(R.string.snack_default_check)) {
                     titleText.setText(UserManager.user.userName)
                 }
-                .setActionTextColor(Color.parseColor("#181A19"))
+                .setActionTextColor(context.getColor(R.color.button_balck))
         val snackBarView = titleSnack.view
         val params = snackBarView.layoutParams as FrameLayout.LayoutParams
         params.gravity = Gravity.CENTER_HORIZONTAL and Gravity.TOP
@@ -130,14 +136,14 @@ class EditViewModel : ViewModel() {
         titleSnack.show()
     }
 
-    fun showContentEmptySnackBar(it: View) {
+    fun showContentEmptySnackBar(context: Context, it: View) {
         val contentText = Snackbar.make(
-            it, "不想填寫內容可以輸入空格唷~(･8･)",
+            it, context.getString(R.string.edit_no_input),
             Snackbar.LENGTH_LONG
         )
             .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
-            .setBackgroundTint(Color.parseColor("#EADDDB"))
-            .setTextColor(Color.parseColor("#181A19"))
+            .setBackgroundTint(context.getColor(R.color.tr_pink))
+            .setTextColor(context.getColor(R.color.button_balck))
         val snackBarView = contentText.view
         val params = snackBarView.layoutParams as FrameLayout.LayoutParams
         params.gravity = Gravity.CENTER_HORIZONTAL and Gravity.TOP
