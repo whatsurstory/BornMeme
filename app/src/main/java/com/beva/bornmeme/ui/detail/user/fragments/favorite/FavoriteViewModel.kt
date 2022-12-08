@@ -1,13 +1,15 @@
 package com.beva.bornmeme.ui.detail.user.fragments.favorite
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.beva.bornmeme.R
 import com.beva.bornmeme.model.Post
 import com.google.firebase.firestore.FirebaseFirestore
 import timber.log.Timber
 
-class FavoriteViewModel(private val userId: String) : ViewModel() {
+class FavoriteViewModel(userId: String, context: Context) : ViewModel() {
 
     val likeData = MutableLiveData<List<Post>>()
 
@@ -17,17 +19,18 @@ class FavoriteViewModel(private val userId: String) : ViewModel() {
         get() = _navigateToDetail
 
     init {
-        getData(userId)
+        getData(userId, context)
     }
 
-    private fun getData(userId: String): MutableLiveData<List<Post>> {
+    private fun getData(userId: String, context: Context): MutableLiveData<List<Post>> {
 
-        FirebaseFirestore.getInstance().collection("Posts")
+        FirebaseFirestore.getInstance()
+            .collection(context.getString(R.string.post_collection_text))
             .whereArrayContains("like", userId)
             .addSnapshotListener { snapshot, e ->
                 val list = mutableListOf<Post>()
                 for (document in snapshot!!) {
-                    Timber.d("Favorite snapshot ID ->${document.id} list -> ${document.data}")
+
                     val post = document.toObject(Post::class.java)
                     list.add(post)
                 }

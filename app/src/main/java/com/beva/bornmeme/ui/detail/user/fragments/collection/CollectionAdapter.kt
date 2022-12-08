@@ -1,5 +1,6 @@
 package com.beva.bornmeme.ui.detail.user.fragments.collection
 
+import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -33,45 +34,53 @@ import timber.log.Timber
 //
 class CollectionAdapter(
     private val onClickListener: OnClickListener,
-    val viewModel:CollectionViewModel,
-    val userId: String ): ListAdapter<Folder, CollectionAdapter.ViewHolder>(DiffCallback) {
+    val viewModel: CollectionViewModel,
+    val userId: String,
+    val context: Context
+) : ListAdapter<Folder, CollectionAdapter.ViewHolder>(DiffCallback) {
 
     class ViewHolder(private val binding: ItemUserCollectionBinding) :
         RecyclerView.ViewHolder(binding.root) {
-            fun bind (item: Folder,viewModel:CollectionViewModel, userId: String ) {
-                binding.collectionImg.loadImage(item.posts[0].url)
-                binding.collectionFolderName.text = item.name
+        fun bind(
+            item: Folder,
+            viewModel: CollectionViewModel,
+            userId: String,
+            context: Context
+        ) {
 
-                if (userId == UserManager.user.userId) {
-                    binding.deleteFileBtn.visibility = View.VISIBLE
-                    binding.deleteFileBtn.setOnLongClickListener {
-                        val builder: AlertDialog.Builder =
-                            AlertDialog.Builder(it.context, R.style.AlertDialogTheme)
-                        builder.setTitle("刪除提醒")
-                        builder.setMessage("即將刪除 ${item.name}")
-                        builder.setPositiveButton("確定",
-                            DialogInterface.OnClickListener { _, _ ->
-                            viewModel.deleteFile(item)
+            binding.collectionImg.loadImage(item.posts[0].url)
+            binding.collectionFolderName.text = item.name
+
+            if (userId == UserManager.user.userId) {
+                binding.deleteFileBtn.visibility = View.VISIBLE
+                binding.deleteFileBtn.setOnLongClickListener {
+                    val builder: AlertDialog.Builder =
+                        AlertDialog.Builder(it.context, R.style.AlertDialogTheme)
+                    builder.setTitle(context.getString(R.string.remind_delete_text))
+                    builder.setMessage(context.getString(R.string.check_delete_text) + item.name)
+                    builder.setPositiveButton(context.getString(R.string.sure_text),
+                        DialogInterface.OnClickListener { _, _ ->
+                            viewModel.deleteFile(item, context)
                         })
-                        builder.setNegativeButton("離開",
-                            DialogInterface.OnClickListener { _, _ ->
+
+                    builder.setNegativeButton(context.getString(R.string.cancel_text),
+                        DialogInterface.OnClickListener { _, _ ->
 //            Timber.d("check the selected item -> list size:${list.size} int size: ${isCheckedIndex.size}")
-                            })
+                        })
 
-                        val alertDialog: AlertDialog = builder.create()
-                        alertDialog.show()
+                    val alertDialog: AlertDialog = builder.create()
+                    alertDialog.show()
 
-                        alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
-                            .setTextColor(Color.parseColor("#181A19"))
-                        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
-                            .setTextColor(Color.parseColor("#181A19"))
-                        true
-                    }
+                    alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+                        .setTextColor(context.getColor(R.color.button_balck))
+                    alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+                        .setTextColor(context.getColor(R.color.button_balck))
+                    true
                 }
             }
-
-
+        }
     }
+
     companion object DiffCallback : DiffUtil.ItemCallback<Folder>() {
         override fun areItemsTheSame(oldItem: Folder, newItem: Folder): Boolean {
             return (oldItem == newItem)
@@ -83,18 +92,25 @@ class CollectionAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(ItemUserCollectionBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return ViewHolder(
+            ItemUserCollectionBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
         item?.let {
-        holder.itemView.setOnClickListener {
-            onClickListener.onClick(item)
+            holder.itemView.setOnClickListener {
+                onClickListener.onClick(item)
+            }
+            holder.bind(item, viewModel, userId, context)
         }
-        holder.bind(item, viewModel, userId)
     }
-    }
+
     class OnClickListener(val clickListener: (item: Folder) -> Unit) {
         fun onClick(item: Folder) = clickListener(item)
     }

@@ -1,14 +1,16 @@
 package com.beva.bornmeme.ui.detail.user.fragments.collection
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.beva.bornmeme.R
 import com.beva.bornmeme.model.Folder
 import com.beva.bornmeme.model.UserManager
 import com.google.firebase.firestore.FirebaseFirestore
 import timber.log.Timber
 
-class CollectionViewModel(userId: String) : ViewModel() {
+class CollectionViewModel(userId: String, context: Context) : ViewModel() {
 
     val folderData = MutableLiveData<List<Folder>>()
 
@@ -19,12 +21,12 @@ class CollectionViewModel(userId: String) : ViewModel() {
         get() = _navigateToDetail
 
     init {
-        getData(userId)
+        getData(userId, context)
     }
 
-    private fun getData(userId: String): MutableLiveData<List<Folder>> {
+    private fun getData(userId: String, context: Context): MutableLiveData<List<Folder>> {
         FirebaseFirestore.getInstance()
-            .collection("Users")
+            .collection(context.getString(R.string.user_collection_text))
             .document(userId)
             .collection("Folders")
             .addSnapshotListener { snapshot, exception ->
@@ -35,23 +37,25 @@ class CollectionViewModel(userId: String) : ViewModel() {
                     Timber.d("Exception ${it.message}")
                 }
                 val list = mutableListOf<Folder>()
-                for (document in snapshot!!) {
-                    Timber.d("item ${document.id} ${document.data}")
-                    val item = document.toObject(Folder::class.java)
-                    Timber.d("item $item")
-                    list.add(item)
+                if (snapshot != null) {
+                    for (document in snapshot) {
+                        val item = document.toObject(Folder::class.java)
+                        list.add(item)
+                    }
                 }
                 folderData.value = list
             }
         return folderData
     }
 
-    fun deleteFile(item: Folder) {
-        FirebaseFirestore.getInstance()
-            .collection("Users")
-            .document(UserManager.user.userId!!)
-            .collection("Folders")
-            .document(item.name).delete()
+    fun deleteFile(item: Folder,context: Context) {
+        UserManager.user.userId?.let {
+            FirebaseFirestore.getInstance()
+                .collection(context.getString(R.string.user_collection_text))
+                .document(it)
+                .collection("Folders")
+                .document(item.name).delete()
+        }
     }
 
     fun navigateToDetail(item: Folder) {

@@ -1,8 +1,10 @@
 package com.beva.bornmeme.ui.detail.user
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.beva.bornmeme.R
 import com.beva.bornmeme.model.User
 import com.beva.bornmeme.model.UserManager
 import com.google.firebase.firestore.FieldValue
@@ -11,19 +13,19 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import timber.log.Timber
 
-class UserDetailViewModel(userId: String) : ViewModel() {
+class UserDetailViewModel(userId: String, context: Context) : ViewModel() {
 
     private val _userData = MutableLiveData<User>()
     val userData: LiveData<User>
         get() = _userData
 
     init {
-        getData(userId)
+        getData(userId, context)
     }
 
-    private fun getData(userId: String) {
+    private fun getData(userId: String,context:Context) {
         FirebaseFirestore.getInstance()
-            .collection("Users")
+            .collection(context.getString(R.string.user_collection_text))
             .document(userId)
             .addSnapshotListener { snapshot, exception ->
                 val user = snapshot?.toObject(User::class.java)
@@ -34,24 +36,28 @@ class UserDetailViewModel(userId: String) : ViewModel() {
             }
     }
 
-    fun add2follow(userId: String) {
+    fun add2follow(userId: String, context:Context) {
         Firebase.firestore
-            .collection("Users")
+            .collection(context.getString(R.string.user_collection_text))
             .document(UserManager.user.userId.toString())
             .update("followList", FieldValue.arrayUnion(userId))
             .addOnSuccessListener {
-                Firebase.firestore.collection("Users").document(userId)
+                Firebase.firestore
+                    .collection(context.getString(R.string.user_collection_text))
+                    .document(userId)
                     .update("followers", FieldValue.arrayUnion(UserManager.user.userId))
             }
     }
 
-    fun cancel2Follow(userId: String) {
+    fun cancel2Follow(userId: String, context:Context) {
         Firebase.firestore
-            .collection("Users")
+            .collection(context.getString(R.string.user_collection_text))
             .document(UserManager.user.userId.toString())
             .update("followList", FieldValue.arrayRemove(userId))
             .addOnSuccessListener {
-                Firebase.firestore.collection("Users").document(userId)
+                Firebase.firestore
+                    .collection(context.getString(R.string.user_collection_text))
+                    .document(userId)
                     .update("followers", FieldValue.arrayRemove(UserManager.user.userId))
             }
     }

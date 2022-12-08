@@ -1,14 +1,16 @@
 package com.beva.bornmeme.ui.detail.user.fragments.posts
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.beva.bornmeme.R
 import com.beva.bornmeme.model.Post
 import com.beva.bornmeme.model.UserManager
 import com.google.firebase.firestore.FirebaseFirestore
 import timber.log.Timber
 
-class PostsViewModel(userId: String) : ViewModel() {
+class PostsViewModel(userId: String, context: Context) : ViewModel() {
 
     val postData = MutableLiveData<List<Post>>()
 
@@ -19,13 +21,13 @@ class PostsViewModel(userId: String) : ViewModel() {
 
 
     init {
-        getData(userId)
+        getData(userId, context)
     }
 
 
-    private fun getData(userId: String): MutableLiveData<List<Post>> {
+    private fun getData(userId: String, context: Context): MutableLiveData<List<Post>> {
         FirebaseFirestore.getInstance()
-            .collection("Posts")
+            .collection(context.getString(R.string.post_collection_text))
             .whereEqualTo("ownerId", userId)
             .addSnapshotListener { snapshot, e ->
                 val list = mutableListOf<Post>()

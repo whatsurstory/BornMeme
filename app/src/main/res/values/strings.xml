@@ -11,6 +11,11 @@
     <string name="post_collection_text">Posts</string>
     <string name="comment_collection_text">Comments</string>
 
+    <string name="remind_delete_text">刪除提醒</string>
+    <string name="sure_text">確定</string>
+    <string name="check_delete_text">即將刪除</string>
+
+
     <string name="snack_default_text">資料未完成將填入預設值，免客氣</string>
     <string name="snack_default_check">感謝有你</string>
     <string name="silly_usual">傻逼日常</string>

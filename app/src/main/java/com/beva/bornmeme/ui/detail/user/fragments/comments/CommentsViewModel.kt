@@ -1,7 +1,9 @@
 package com.beva.bornmeme.ui.detail.user.fragments.comments
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.beva.bornmeme.R
 import com.beva.bornmeme.model.Comment
 import com.beva.bornmeme.model.Post
 import com.beva.bornmeme.model.UserManager.user
@@ -11,7 +13,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import timber.log.Timber
 
-class CommentsViewModel(userId: String) : ViewModel() {
+class CommentsViewModel(userId: String, context: Context) : ViewModel() {
 
     data class UiState(
         val getPostImg: (
@@ -23,20 +25,22 @@ class CommentsViewModel(userId: String) : ViewModel() {
     val postData = MutableLiveData<List<Comment>>()
 
     init {
-        getData(userId)
+        getData(userId,context)
     }
 
     //Post All Photo in Fragment
-    private fun getData(userId: String): MutableLiveData<List<Comment>> {
+    private fun getData(userId: String, context:Context): MutableLiveData<List<Comment>> {
         FirebaseFirestore.getInstance()
-            .collection("Comments")
+            .collection(context.getString(R.string.comment_collection_text))
             .whereEqualTo("userId", userId)
             .addSnapshotListener { snapshot, e ->
                 val list = mutableListOf<Comment>()
-                for (document in snapshot!!) {
+                if (snapshot != null) {
+                    for (document in snapshot) {
 
-                    val post = document.toObject(Comment::class.java)
-                    list.add(post)
+                        val post = document.toObject(Comment::class.java)
+                        list.add(post)
+                    }
                 }
                 postData.value = list
             }

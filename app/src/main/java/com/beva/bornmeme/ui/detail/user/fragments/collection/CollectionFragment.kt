@@ -35,12 +35,12 @@ class CollectionFragment : Fragment() {
         binding = FragmentCollectionBinding.inflate(inflater, container, false)
 
         val userId = requireArguments().getString("userIdKey") ?: ""
-        viewModel = CollectionViewModel(userId)
+        viewModel = CollectionViewModel(userId, requireContext())
 
         adapter = CollectionAdapter(
             CollectionAdapter.OnClickListener {
                 viewModel.navigateToDetail(it)
-            }, viewModel, userId
+            }, viewModel, userId, requireContext()
         )
 
         binding.collectionRecycler.adapter = adapter
