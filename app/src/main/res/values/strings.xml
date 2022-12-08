@@ -7,6 +7,12 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+    <string name="user_collection_text">Users</string>
+    <string name="post_collection_text">Posts</string>
+    <string name="comment_collection_text">Comments</string>
+    <string name="array_text_">Users</string>
+
+
     <string name="text_click">Add Text</string>
     <string name="preview_btn">Preview</string>
     <string name="publish_btn">Publish</string>
@@ -44,7 +50,7 @@
     <string name="input_yet">標籤文字尚未輸入</string>
     <string name="pack_icon">Pack icon</string>
     <string name="sticker_icon">Sticker icon</string>
-    <string name="close_sticker_preview">[tap to close sticker preview]</string>
+    <string name="close_sticker_preview">Tap to close sticker preview</string>
     <string name="fallback_040">E040: %1$s not supported here</string>
     <string name="fallback_041">E041: Unexpected IOException when converting sticker</string>
     <string name="switch_050">E050: IllegalStateException when switching packs. Try switching away from and back to EweSticker</string>
@@ -58,5 +64,8 @@
     <string name="not_allow_prmission">看起來你還沒有打開權限，打開之後即可完整使用功能哦!</string>
     <string name="agreeAndContinue">同意並繼續</string>
     <string name="service_text_with_url">點擊 同意並繼續 即代表您同意並確認您已閱讀我們的服務條款與隱私政策，了解我們如何收集、使用與分享您的資料。</string>
+    <string name="open_keyboard">Go to Open KeyBoard</string>
+    <string name="setting_photo">Go to setting Photo</string>
+    <string name="sign_in">Google Sign In</string>
 
 </resources>

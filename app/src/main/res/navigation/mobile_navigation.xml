@@ -45,7 +45,7 @@
 
     <fragment
         android:id="@+id/fragmentEditFixmode"
-        android:name="com.beva.bornmeme.ui.editFragment.EditFragment"
+        android:name="com.beva.bornmeme.ui.edit_fragment.EditFragment"
         tools:layout="@layout/fragment_edit_fixmode">
 
         <argument
@@ -55,7 +55,7 @@
 
     <fragment
         android:id="@+id/fragmentEditDrag"
-        android:name="com.beva.bornmeme.ui.editFragment.EditDragFragment"
+        android:name="com.beva.bornmeme.ui.edit_fragment.EditDragFragment"
         tools:layout="@layout/fragment_drag_edit">
 
         <argument

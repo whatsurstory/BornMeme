@@ -1,4 +1,4 @@
-package com.beva.bornmeme.ui.editFragment
+package com.beva.bornmeme.ui.edit_fragment
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -7,7 +7,6 @@ import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import timber.log.Timber
 
 class StickerView @JvmOverloads constructor(
     context: Context,

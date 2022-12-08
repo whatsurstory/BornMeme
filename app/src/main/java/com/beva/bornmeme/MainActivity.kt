@@ -17,6 +17,8 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.FileProvider
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
@@ -103,7 +105,6 @@ class MainActivity : AppCompatActivity() {
         //  IDs of fragments you want without the ActionBar home/up button
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.splash_screen -> {
@@ -144,11 +145,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.fab.setOnClickListener { view ->
-            if (isOpen) {
-                closeFab()
-            } else {
-                openFab()
-            }
+
+            if (isOpen) closeFab() else openFab()
+
             binding.fabCameraEdit.setOnClickListener {
                 closeFab()
                 Dexter.withContext(this)
@@ -169,7 +168,6 @@ class MainActivity : AppCompatActivity() {
             }
             binding.fabGalleryEdit.setOnClickListener {
                 closeFab()
-
                 Dexter.withContext(this)
                     .withPermission(
                         android.Manifest.permission.READ_EXTERNAL_STORAGE
@@ -185,7 +183,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.profileBtn.setOnClickListener {
-            Timber.d("userid ->")
             viewModel.user.value?.userId?.let { id ->
                 findNavController(R.id.nav_host_fragment_content_main)
                     .navigate(
@@ -212,7 +209,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     private fun setToolbarUi(
         isShowFab: Boolean = true,
         isShowEditMode: Boolean = false,
@@ -222,16 +218,12 @@ class MainActivity : AppCompatActivity() {
     ) {
 
         binding.profileBtn.visibility = if (isShowProfile) View.VISIBLE else View.GONE
-
         changeHomeTitle(isShowProfile, getString(R.string.bornmeme))
-
         binding.moduleTitleText.visibility = if (isShowGalleryTitle) View.VISIBLE else View.GONE
-
         binding.changeModeBtn.visibility = if (isShowEditMode) View.VISIBLE else View.GONE
-
         binding.fab.visibility = if (isShowFab) View.VISIBLE else View.GONE
-
         if (isShowActionBarShow) supportActionBar?.show() else supportActionBar?.hide()
+
     }
 
 //    fun updateUser(user: User) {
@@ -264,12 +256,8 @@ class MainActivity : AppCompatActivity() {
             override fun onPermissionsChecked(
                 report: MultiplePermissionsReport?
             ) {
-                report.let {
-                    if (report != null) {
-                        if (report.areAllPermissionsGranted()) {
-                            toCamera()
-                        }
-                    }
+                if (report != null && report.areAllPermissionsGranted()) {
+                    toCamera()
                 }
             }
 
@@ -279,7 +267,6 @@ class MainActivity : AppCompatActivity() {
             ) {
                 showRotationDialogForPermission()
             }
-
         }
 
     private fun toAlbum() {
@@ -323,8 +310,7 @@ class MainActivity : AppCompatActivity() {
             PHOTO_FROM_GALLERY -> {
                 when (resultCode) {
                     Activity.RESULT_OK -> {
-                        val uri = data!!.data
-//                        Timber.d("PHOTO_FROM_GALLERY uri => $uri")
+                        val uri = data?.data
                         viewModel.editingImg = uri
                         navigateToEditor(uri)
                     }
@@ -337,7 +323,6 @@ class MainActivity : AppCompatActivity() {
             PHOTO_FROM_CAMERA -> {
                 when (resultCode) {
                     Activity.RESULT_OK -> {
-//                        Timber.d("PHOTO_FROM_CAMERA uri => $saveUri")
                         viewModel.editingImg = cameraUri
                         navigateToEditor(cameraUri)
                     }
@@ -349,7 +334,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     //got the photo from camera/gallery, take the arguments of image complete the navigate
     private fun navigateToEditor(uri: Uri?) {
         uri?.let {
@@ -360,10 +344,12 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("RestrictedApi")
     private fun navigateToDrag(uri: Uri?) {
-//        Timber.d("Uri -> $uri")
         uri?.let {
             findNavController(R.id.nav_host_fragment_content_main)
-                .navigate(MobileNavigationDirections.navigateToDragEditFragment(it))
+                .navigate(
+                    MobileNavigationDirections
+                        .navigateToDragEditFragment(it)
+                )
         }
     }
 
@@ -388,7 +374,6 @@ class MainActivity : AppCompatActivity() {
             .setMessage(
                 getString(R.string.not_allow_prmission)
             )
-
             .setPositiveButton(getString(R.string.to_setting_text)) { _, _ ->
 
                 try {
@@ -401,12 +386,12 @@ class MainActivity : AppCompatActivity() {
                     e.printStackTrace()
                 }
             }
-
             .setNegativeButton(getString(R.string.cancel_text)) { dialog, _ ->
                 dialog.dismiss()
             }.show()
     }
 
+    //TODO
     private fun closeFab() {
         binding.fabCameraEdit.startAnimation(fabClose)
         binding.fabModuleEdit.startAnimation(fabClose)

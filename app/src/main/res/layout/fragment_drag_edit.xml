@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:fontFamily="@font/arista_pro_bold_trial"
+        style="@style/eng_bold_font_style"
         android:text="@string/preview_btn"
         android:textColor="@color/tr_pink"
         android:textSize="28sp"
@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:fontFamily="@font/arista_pro_bold_trial"
+        style="@style/eng_bold_font_style"
         android:text="@string/publish_btn"
         android:textColor="@color/tr_pink"
         android:textSize="28sp"
@@ -339,7 +339,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:background="@color/tr_black"
-                android:fontFamily="@font/round_border"
+                style="@style/zh_bold_style"
                 android:hint="@string/text_click"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="4dp"
@@ -356,36 +356,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/horizontal_scroll" />
 
-            <!--            <com.google.android.material.textfield.TextInputLayout-->
-            <!--                android:id="@+id/edit_text_box"-->
-            <!--                android:layout_width="0dp"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                app:boxBackgroundMode="none"-->
-            <!--                app:boxStrokeWidth="0dp"-->
-            <!--                android:padding="8dp"-->
-            <!--                app:boxCornerRadiusBottomEnd="0dp"-->
-            <!--                app:boxCornerRadiusBottomStart="0dp"-->
-            <!--                app:boxCornerRadiusTopEnd="0dp"-->
-            <!--                app:boxCornerRadiusTopStart="0dp"-->
-            <!--                android:textColorHint="@color/tr_pink"-->
-            <!--                app:layout_constraintBottom_toTopOf="@+id/sticker_view"-->
-            <!--                app:layout_constraintEnd_toStartOf="@+id/add_text_btn"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@+id/horizontal_scroll">-->
-
-            <!--                <com.google.android.material.textfield.TextInputEditText-->
-            <!--                    android:id="@+id/add_edit_text"-->
-            <!--                    android:layout_width="wrap_content"-->
-            <!--                    android:layout_height="wrap_content"-->
-            <!--                    android:fontFamily="@font/round_border"-->
-            <!--                    android:minWidth="130dp"-->
-            <!--                    android:hint="@string/text_click"-->
-            <!--                    android:inputType="textUri|textNoSuggestions"-->
-            <!--                    android:textColor="@color/gray_white"-->
-            <!--                    android:textSize="20sp" />-->
-
-            <!--            </com.google.android.material.textfield.TextInputLayout>-->
-
             <ImageButton
                 android:id="@+id/clear_button"
                 android:layout_width="48dp"
@@ -399,7 +369,7 @@
                 app:layout_constraintTop_toTopOf="@id/add_text_btn"
                 app:tint="@color/tr_pink" />
 
-            <com.beva.bornmeme.ui.editFragment.StickerView
+            <com.beva.bornmeme.ui.edit_fragment.StickerView
                 android:id="@+id/sticker_view"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -412,7 +382,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/tr_pink"
-                android:fontFamily="@font/rounded_mplus_medium"
+                style="@style/zh_medium_style"
                 android:hint="@string/enter_title_hint"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="4dp"
@@ -431,7 +401,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/tr_pink"
-                android:fontFamily="@font/rounded_mplus_medium"
+                style="@style/zh_medium_style"
                 android:hint="@string/enter_tag_hint"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="4dp"

@@ -40,7 +40,7 @@
                 android:layout_height="0dp"
                 android:layout_marginStart="8dp"
                 android:gravity="center_vertical"
-                android:fontFamily="@font/round_border"
+                style="@style/zh_bold_style"
                 android:maxLines="1"
                 android:textColor="@color/tr_pink"
                 android:textSize="18sp"
@@ -53,7 +53,7 @@
                 android:id="@+id/follow_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:fontFamily="@font/arista_pro_bold_trial"
+                style="@style/eng_bold_font_style"
                 android:gravity="center"
                 android:textColor="@color/tr_pink"
                 android:textSize="18sp"
@@ -64,18 +64,6 @@
                 app:layout_constraintEnd_toStartOf="@+id/report_btn"
                 app:layout_constraintStart_toEndOf="@+id/detail_guideline"
                 app:layout_constraintTop_toTopOf="@+id/img_detail_user_name" />
-
-            <!--            <TextView-->
-            <!--                android:id="@+id/unfollow_btn"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:text="following"-->
-            <!--                android:gravity="center"-->
-            <!--                android:visibility="gone"-->
-            <!--                app:layout_constraintBottom_toBottomOf="@+id/img_detail_user_name"-->
-            <!--                app:layout_constraintEnd_toStartOf="@+id/report_btn"-->
-            <!--                app:layout_constraintStart_toEndOf="@+id/detail_guideline"-->
-            <!--                app:layout_constraintTop_toTopOf="@+id/img_detail_user_name" />-->
 
             <ImageButton
                 android:id="@+id/report_btn"
@@ -179,7 +167,7 @@
                 android:maxLines="1"
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="4dp"
-                android:fontFamily="@font/round_border"
+                style="@style/zh_bold_style"
                 android:textColor="@color/tr_pink"
                 android:textSize="18sp"
                 tools:text="@string/default_text"
@@ -195,7 +183,7 @@
                 android:letterSpacing="0.02"
                 android:layout_marginHorizontal="12dp"
                 android:textColor="@color/tr_pink"
-                android:fontFamily="@font/rounded_mplus_medium"
+                style="@style/zh_medium_style"
                 android:textSize="16sp"
                 android:gravity="start"
                 app:layout_constraintBottom_toTopOf="@id/img_detail_line"

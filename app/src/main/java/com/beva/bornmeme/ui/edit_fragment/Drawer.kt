@@ -1,4 +1,4 @@
-package com.beva.bornmeme.ui.editFragment
+package com.beva.bornmeme.ui.edit_fragment
 
 import android.animation.ValueAnimator
 import android.graphics.*

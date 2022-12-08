@@ -1,16 +1,14 @@
-package com.beva.bornmeme.ui.editFragment
+package com.beva.bornmeme.ui.edit_fragment
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.view.MotionEvent
-import android.view.View
-import androidx.constraintlayout.widget.ConstraintLayout
 import com.beva.bornmeme.R
 import timber.log.Timber
 
 /**
- * p类,对贴纸、背景进行操作
+ * method to sticker and background
  */
 class StickerPresenter(private val stickerView: StickerView) {
 

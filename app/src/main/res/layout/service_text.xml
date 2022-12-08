@@ -10,7 +10,7 @@
     <TextView
         android:id="@+id/url_text"
         android:padding="16dp"
-        android:fontFamily="@font/rounded_mplus_medium"
+        android:fontFamily="@font/rounded_mplus_regular"
         android:textSize="16sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

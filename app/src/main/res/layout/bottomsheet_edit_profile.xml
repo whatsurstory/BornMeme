@@ -94,7 +94,7 @@
                 android:layout_height="match_parent"
                 android:maxLines="1"
                 android:textColor="@color/tr_black"
-                android:fontFamily="@font/rounded_mplus_medium" />
+                style="@style/zh_medium_style" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -117,7 +117,7 @@
                 android:layout_height="match_parent"
                 android:maxLines="2"
                 app:errorEnabled="true"
-                android:fontFamily="@font/rounded_mplus_medium"
+                style="@style/zh_medium_style"
                 android:textColor="@color/tr_black" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -138,7 +138,7 @@
                 android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/rounded_mplus_medium"
+                style="@style/zh_medium_style"
                 android:textColorHint="@color/tr_black"
                 android:text="@string/default_text" />
 
@@ -149,7 +149,7 @@
             android:id="@+id/block_list"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/arista_pro_light_trial"
+            style="@style/eng_font_style"
             android:padding="16dp"
             android:textStyle="bold"
             android:text="@string/block_list_text"
@@ -177,7 +177,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:fontFamily="@font/arista_pro_light_trial"
+            style="@style/eng_font_style"
             android:textStyle="bold"
             android:padding="16dp"
             android:text="@string/follow_list_text"
@@ -204,7 +204,7 @@
             android:id="@+id/followers_list"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/arista_pro_light_trial"
+            style="@style/eng_font_style"
             android:padding="16dp"
             android:text="@string/followers_list_text"
             android:textColor="@color/tr_black"
@@ -235,7 +235,8 @@
             android:padding="16dp"
             android:text="Register Time: "
             android:textColor="@color/tr_black"
-            android:fontFamily="@font/rounded_mplus_medium"
+            style="@style/zh_light_style"
+            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/saveButton"
             app:layout_constraintEnd_toEndOf="@+id/block_list"
             app:layout_constraintStart_toStartOf="@+id/block_list"
@@ -252,7 +253,7 @@
             android:text="@string/save_profile_text"
             android:backgroundTint="@color/tr_black"
             android:textSize="18sp"
-            android:fontFamily="@font/arista_pro_bold_trial"
+            style="@style/eng_bold_font_style"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

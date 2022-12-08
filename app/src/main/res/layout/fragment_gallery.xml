@@ -6,17 +6,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/tr_black">
 
-<!--    <TextView-->
-<!--        android:textStyle="bold"-->
-<!--        android:text="版主推薦"-->
-<!--        android:padding="8dp"-->
-<!--        android:textColor="@color/tr_pink"-->
-<!--        android:fontFamily="@font/yozai_bold"-->
-<!--        android:textSize="36sp"-->
-<!--        android:id="@+id/gallery_suggest_title"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_width="wrap_content"/>-->
-
     <Button
         android:id="@+id/add_new_img_btn"
         android:layout_width="wrap_content"

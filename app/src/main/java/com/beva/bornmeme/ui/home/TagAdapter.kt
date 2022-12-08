@@ -67,7 +67,6 @@ class TagAdapter(private val onClickListener: OnClickListener) :
             holder.chipCard.setOnClickListener {
                 onClickListener.onClick(item)
                 selectItem = position
-                Timber.d("selectItem $selectItem position $position")
                 notifyDataSetChanged()
             }
             holder.bind(item, selectItem)
@@ -80,7 +79,6 @@ class TagAdapter(private val onClickListener: OnClickListener) :
 
     @SuppressLint("NotifyDataSetChanged")
     fun reset() {
-        Timber.d(("reset function"))
         selectItem = -1
         notifyDataSetChanged()
     }

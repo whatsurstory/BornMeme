@@ -34,7 +34,7 @@ class HomeFragment : Fragment() {
         //The Logic of Tag clicked
         setAllTagEnabled(false)
 
-        viewModel = HomeViewModel()
+        viewModel = HomeViewModel(requireContext())
 
         val layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
 

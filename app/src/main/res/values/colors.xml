@@ -51,6 +51,7 @@
     <color name="dark_gray">#525252</color>
     <color name="tr_pink">#EADDDB</color>
     <color name="gray_white">#fff7f7</color>
+    <color name="button_balck">#181A19</color>
 
     <!-- Base application theme. -->
     <color name="bg">#f0f0f1</color>

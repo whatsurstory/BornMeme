@@ -16,13 +16,6 @@
         <item name="android:fontFamily">@font/round_border</item>
     </style>
 
-<!--    <style name="CustomMenuStyle" parent="Widget.AppCompat.DrawerArrowToggle">-->
-<!--        <item name="spinBars">true</item>-->
-<!--        <item name="color">@color/gray_white</item>-->
-<!--        <item name="gapBetweenBars">8dp</item>-->
-<!--        <item name="barLength">24dp</item>-->
-<!--        <item name="thickness">2dp</item>-->
-<!--    </style>-->
 
     <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
         <!-- Customize color of navigation drawer icon and back arrow -->
@@ -102,6 +95,31 @@
         <item name="fontFamily">@font/arista_pro_bold_trial</item>
         <item name="textAllCaps">false</item>
         <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="eng_bold_font_style">
+        <item name="fontFamily">@font/arista_pro_bold_trial</item>
+        <item name="android:fontFamily">@font/arista_pro_bold_trial</item>
+    </style>
+
+    <style name="eng_font_style">
+        <item name="fontFamily">@font/arista_pro_light_trial</item>
+        <item name="android:fontFamily">@font/arista_pro_light_trial</item>
+    </style>
+
+    <style name="zh_bold_style">
+        <item name="fontFamily">@font/round_border</item>
+        <item name="android:fontFamily">@font/round_border</item>
+    </style>
+
+    <style name="zh_medium_style">
+        <item name="fontFamily">@font/rounded_mplus_medium</item>
+        <item name="android:fontFamily">@font/rounded_mplus_medium</item>
+    </style>
+
+    <style name="zh_light_style">
+        <item name="fontFamily">@font/rounded_mplus_regular</item>
+        <item name="android:fontFamily">@font/rounded_mplus_regular</item>
     </style>
 
 </resources>
