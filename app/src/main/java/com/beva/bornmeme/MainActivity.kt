@@ -141,6 +141,16 @@ class MainActivity : AppCompatActivity() {
                 R.id.user_detail_fragment -> {
                     setToolbarUi()
                 }
+                R.id.fragment_setting -> {
+                    setToolbarUi(
+                        isShowFab = false
+                    )
+                }
+                R.id.fragment_service -> {
+                    setToolbarUi(
+                        isShowFab = false
+                    )
+                }
             }
         }
 

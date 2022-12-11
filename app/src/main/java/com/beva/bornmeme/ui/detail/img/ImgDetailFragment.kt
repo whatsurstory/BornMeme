@@ -30,6 +30,7 @@ import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentImgDetailBinding
 import com.beva.bornmeme.databinding.SnackBarCustomBinding
+import com.beva.bornmeme.loadImage
 import com.beva.bornmeme.model.Post
 import com.beva.bornmeme.model.UserManager
 import com.bumptech.glide.Glide
@@ -127,12 +128,7 @@ class ImgDetailFragment : Fragment() {
         viewModel.getComments(post.id)
 
         viewModel.userData.observe(viewLifecycleOwner, Observer { user ->
-            Glide.with(this)
-                .load(user[0].profilePhoto)
-                .apply(
-                    RequestOptions()
-                        .placeholder(R.drawable.place_holder)
-                ).into(binding.imgDetailUserImg)
+            binding.imgDetailUserImg.loadImage(user[0].profilePhoto)
             binding.imgDetailUserName.text = user[0].userName
             val db = Firebase.firestore.collection("Users")
             if (user[0].followers.isNullOrEmpty()) {
@@ -168,31 +164,27 @@ class ImgDetailFragment : Fragment() {
 
 
         binding.imgDetailTitle.text = post.title
-        Glide.with(this)
-            .load(post.url)
-            .into(binding.imgDetailImage)
+        binding.imgDetailImage.loadImage(post.url)
         binding.imgDetailDescription.text = post.resources[1].url
 
-        val adapter = CommentAdapter(viewModel.uiState)
+        val adapter = CommentAdapter(viewModel.uiState, viewModel, this, requireContext(), inflater)
         binding.commentsRecycler.adapter = adapter
 
         //Observe the view of comments recycler
         viewModel.commentCells.observe(viewLifecycleOwner, Observer {
             it?.let {
-
                 binding.noSeeText.visibility = View.GONE
                 Timber.d(("Observe comment cell : $it"))
                 adapter.submitList(it)
                 adapter.notifyDataSetChanged()
             }
-
         })
 
         //Query All Comments
         viewModel.liveData.observe(viewLifecycleOwner) {
             it?.let {
                 Timber.d(("Observe liveData : $it"))
-                viewModel.initCells(it)
+                viewModel.initCells(it.filterBlock())
             }
         }
 
@@ -616,14 +608,16 @@ class ImgDetailFragment : Fragment() {
             }
             bind.toBlockBtn.setOnClickListener {
                 UserManager.user.blockList += post.ownerId
-                Firebase.firestore.collection("Users")
-                    .document(UserManager.user.userId!!)
-                    .update("blockList", UserManager.user.blockList)
-                    .addOnCompleteListener {
-                        Timber.d("add to block ${post.ownerId}")
-                        customSnack.dismiss()
-                        findNavController().navigateUp()
-                    }
+                UserManager.user.userId?.let { id ->
+                    Firebase.firestore.collection("Users")
+                        .document(id)
+                        .update("blockList", UserManager.user.blockList)
+                        .addOnCompleteListener {
+                            Timber.d("add to block ${post.ownerId}")
+                            customSnack.dismiss()
+                            findNavController().navigateUp()
+                        }
+                }
             }
             layout.addView(bind.root, 0)
             customSnack.setBackgroundTint(

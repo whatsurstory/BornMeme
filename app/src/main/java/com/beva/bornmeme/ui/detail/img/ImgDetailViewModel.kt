@@ -1,12 +1,33 @@
 package com.beva.bornmeme.ui.detail.img
 
+import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.Context
+import android.content.DialogInterface
+import android.graphics.Color.parseColor
+import android.transition.TransitionInflater.from
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.LayoutInflater.from
 import android.view.View
+import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.collection.arrayMapOf
+import androidx.core.app.TaskStackBuilder.from
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.*
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
+import androidx.transition.TransitionInflater.from
+import com.beva.bornmeme.MobileNavigationDirections
+import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentImgDetailBinding
+import com.beva.bornmeme.databinding.SnackBarCustomBinding
 import com.beva.bornmeme.model.*
 import com.beva.bornmeme.model.UserManager.user
+import com.beva.bornmeme.ui.home.filterBlock
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -18,17 +39,17 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 
-
 class ImgDetailViewModel(postOwnerId: String) : ViewModel() {
 
-data class UiState (
-    val onClickToReply: (comment:CommentCell.ParentComment) -> String,
-    val onClickToLike: (comment: String) -> Unit,
-    val onClickToDislike: (comment: String) -> Unit,
-    val onClickToSeeMore: (comment: CommentCell.ParentComment) -> Unit,
-    val onClickToBack: (commentId: String)-> Unit,
-    val getUserImg: (userId:String, onUserObtained: ((User) -> Unit)) -> Unit
-)
+    data class UiState(
+        val onClickToReply: (comment: CommentCell.ParentComment) -> String,
+        val onClickToLike: (comment: String) -> Unit,
+        val onClickToDislike: (comment: String) -> Unit,
+        val onClickToSeeMore: (comment: CommentCell.ParentComment) -> Unit,
+        val onClickToBack: (commentId: String) -> Unit,
+        val getUserImg: (userId: String, onUserObtained: ((User) -> Unit)) -> Unit
+    )
+
     val liveData = MutableLiveData<List<Comment>>()
 
     private val _navigate2Comment = MutableLiveData<CommentCell.ParentComment>()
@@ -41,11 +62,12 @@ data class UiState (
             return@UiState navigate2Comment(it).toString()
         },
         { comment ->
-            val collection =FirebaseFirestore.getInstance().collection("Comments")
+            val collection = FirebaseFirestore.getInstance().collection("Comments")
 
             collection.whereEqualTo("like", UserManager.user.userId)
                 .addSnapshotListener { snapshot, e ->
-                    collection.document(comment).update("dislike", FieldValue.arrayRemove(UserManager.user.userId))
+                    collection.document(comment)
+                        .update("dislike", FieldValue.arrayRemove(UserManager.user.userId))
                         .addOnSuccessListener {
                             collection.document(comment)
                                 .update("like", FieldValue.arrayUnion(UserManager.user.userId))
@@ -58,20 +80,21 @@ data class UiState (
                 }
         },
         { comment ->
-            val collection =FirebaseFirestore.getInstance().collection("Comments")
+            val collection = FirebaseFirestore.getInstance().collection("Comments")
 
             collection.whereEqualTo("like", UserManager.user.userId)
                 .addSnapshotListener { snapshot, e ->
-                    collection.document(comment).update("like", FieldValue.arrayRemove(UserManager.user.userId))
+                    collection.document(comment)
+                        .update("like", FieldValue.arrayRemove(UserManager.user.userId))
                         .addOnSuccessListener {
-                        collection.document(comment)
-                            .update("dislike", FieldValue.arrayUnion(UserManager.user.userId))
-                            .addOnSuccessListener {
-                                Timber.d("Success add comment dislike $comment")
-                            }.addOnFailureListener {
-                                Timber.d("Error ${it.message}")
-                            }
-                    }
+                            collection.document(comment)
+                                .update("dislike", FieldValue.arrayUnion(UserManager.user.userId))
+                                .addOnSuccessListener {
+                                    Timber.d("Success add comment dislike $comment")
+                                }.addOnFailureListener {
+                                    Timber.d("Error ${it.message}")
+                                }
+                        }
                 }
         },
         { comment ->
@@ -151,13 +174,13 @@ data class UiState (
         }
         commentCells.value = cells
 
-            }
+    }
 
     fun getComments(postId: String): MutableLiveData<List<Comment>> {
 
         Firebase.firestore.collection("Comments")
             .whereEqualTo("postId", postId)
-            .addSnapshotListener {  querySnapshot, firebaseFirestoreException ->
+            .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                 Timber.d("check Data $postId")
                 firebaseFirestoreException?.let {
                     Timber.w("[${this::class.simpleName}] Error getting documents. ${it.message}")
@@ -175,6 +198,7 @@ data class UiState (
             }
         return liveData
     }
+
     private fun navigate2Comment(id: CommentCell.ParentComment) {
         _navigate2Comment.value = id
     }
@@ -183,10 +207,10 @@ data class UiState (
         _navigate2Comment.value = null
     }
 
-    fun doneCollection(postId: String){
+    fun doneCollection(postId: String) {
         Firebase.firestore.collection("Posts")
             .document(postId)
-            .update("collection",FieldValue.arrayUnion(UserManager.user.userId))
+            .update("collection", FieldValue.arrayUnion(UserManager.user.userId))
             .addOnSuccessListener {
                 Timber.d("Success Posts adding User ID")
             }.addOnFailureListener {
@@ -194,7 +218,7 @@ data class UiState (
             }
     }
 
-    fun onClickCollection(title:String, postId: String, url: String) {
+    fun onClickCollection(title: String, postId: String, url: String) {
         val ref = Firebase.firestore
             .collection("Users")
             .document(UserManager.user.userId!!)
@@ -207,14 +231,18 @@ data class UiState (
             Timber.d("snapshot ??? $snapshot")
             if (snapshot.data != null) {
                 Timber.d("snapshot.data != null")
-                transaction.update(ref,
-                    "posts", FieldValue.arrayUnion(list))
+                transaction.update(
+                    ref,
+                    "posts", FieldValue.arrayUnion(list)
+                )
             } else {
                 Timber.d("snapshot.data == null")
-                transaction.set(ref, hashMapOf(
-                    "name" to ref.id,
-                    "createTime" to Timestamp.now(),
-                    "posts" to FieldValue.arrayUnion(list))
+                transaction.set(
+                    ref, hashMapOf(
+                        "name" to ref.id,
+                        "createTime" to Timestamp.now(),
+                        "posts" to FieldValue.arrayUnion(list)
+                    )
                 )
             }
         }.addOnSuccessListener {
@@ -225,7 +253,6 @@ data class UiState (
         }
     }
 
-
     init {
         getUser(postOwnerId)
     }
@@ -235,7 +262,7 @@ data class UiState (
     private fun getUser(postOwnerId: String): MutableLiveData<List<User>> {
         Firebase.firestore.collection("Users")
             .whereEqualTo("userId", postOwnerId)
-            .addSnapshotListener {  querySnapshot, firebaseFirestoreException ->
+            .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
 
                 firebaseFirestoreException?.let {
                     Timber.w("[${this::class.simpleName}] Error getting documents. ${it.message}")
@@ -252,7 +279,8 @@ data class UiState (
             }
         return userData
     }
-//
+
+    //
     val folderData = MutableLiveData<List<String>>()
 
     fun getFolder() {
@@ -268,9 +296,73 @@ data class UiState (
                         Timber.d("data ${document.id}")
                     }
                     folderData.value = list
-                    } else {
+                } else {
                     Timber.d(task.exception?.message!!)
-                    }
                 }
             }
-        }
+    }
+
+    fun navigate2UserDetail(fragment: ImgDetailFragment, userId: String) {
+        findNavController(fragment).navigate(
+            MobileNavigationDirections
+                .navigateToUserDetailFragment(userId)
+        )
+    }
+
+    fun reportCommentDialog(id: String, context: Context, fragment: ImgDetailFragment, inflater: LayoutInflater) {
+        @SuppressLint("ResourceAsColor")
+            val data = arrayOf("色情", "暴力", "賭博", "非法交易", "種族歧視")
+
+            val builder = AlertDialog.Builder(context, R.style.AlertDialogTheme)
+            builder.setTitle("請選擇檢舉原因")
+            builder.setMultiChoiceItems(data, null) { dialog, i, b ->
+                val currentItem = data[i]
+            }
+            builder.setPositiveButton("確定") { dialogInterface, j ->
+//            for (i in data.indices) if (selected[i]) {
+//                selected[i] = false
+//            }
+                val customSnack = fragment.view?.let {
+                    Snackbar.make(it, "", Snackbar.LENGTH_INDEFINITE)
+                }
+                val layout = customSnack?.view as Snackbar.SnackbarLayout
+                val bind = SnackBarCustomBinding.inflate(inflater)
+                bind.notToBlockBtn.setOnClickListener {
+                    customSnack.dismiss()
+                }
+                bind.toBlockBtn.setOnClickListener {
+                    UserManager.user.blockList += id
+                    UserManager.user.userId?.let { id ->
+                        Firebase.firestore.collection("Users")
+                            .document(id)
+                            .update("blockList", UserManager.user.blockList)
+                            .addOnCompleteListener {
+                                customSnack.dismiss()
+                                findNavController(fragment).navigateUp()
+                            }
+                    }
+                }
+                layout.addView(bind.root, 0)
+                customSnack.setBackgroundTint(
+                    context.getColor(R.color.white)
+                )
+                customSnack.view.layoutParams =
+                    (customSnack.view.layoutParams as FrameLayout.LayoutParams)
+                        .apply {
+                            gravity = Gravity.TOP
+                        }
+                customSnack.show()
+            }
+            builder.setNegativeButton("取消") { dialog, i ->
+            }
+            val dialog = builder.create()
+            dialog.show()
+            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(context.getColor(R.color.button_balck))
+            dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(context.getColor(R.color.button_balck))
+    }
+
+}
+
+fun List<Comment>.filterBlock(): List<Comment> {
+    return this.filter { !UserManager.user.blockList.contains(it.userId) }
+}

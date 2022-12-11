@@ -113,6 +113,17 @@
         tools:layout="@layout/fragment_setting">
     </fragment>
 
+    <fragment
+        android:id="@+id/fragment_service"
+        android:name="com.beva.bornmeme.ServiceFragment"
+        tools:layout="@layout/fragment_service_policy">
+
+        <argument
+            android:name="agreementKey"
+            app:argType="boolean" />
+    </fragment>
+
+
     <action android:id="@+id/navigate_to_edit_fragment"
         app:destination="@+id/fragmentEditFixmode"/>
     <action android:id="@+id/navigate_to_fragment_gallery" app:destination="@+id/fragment_gallery"/>
@@ -124,7 +135,7 @@
     <action android:id="@+id/navigate_to_fragment_setting" app:destination="@+id/fragment_setting"/>
     <action android:id="@+id/navigate_to_img_detail_fragment" app:destination="@+id/img_detail_fragment" />
     <action android:id="@+id/navigate_to_user_detail_fragment" app:destination="@+id/user_detail_fragment" />
-
+    <action android:id="@+id/navigate_to_service_fragment" app:destination="@+id/fragment_service"/>
     <action android:id="@+id/navigate_to_home_fragment"
         app:destination="@+id/nav_home"
         app:popUpTo="@+id/mobile_navigation"

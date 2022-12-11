@@ -23,7 +23,7 @@ class PublishViewModel : ViewModel() {
         val document = fireStore.document()
         val publish = Comment(
             commentId = document.id,
-            userId = UserManager.user.userId,
+            userId = UserManager.user.userId.toString(),
             postId = postId,
             time = Timestamp.now(),
             content = binding.editPublishContent.text.toString(),

@@ -6,11 +6,11 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -27,7 +27,8 @@
                     android:layout_margin="16dp"
                     android:background="@color/tr_pink"
                     android:text="@string/open_keyboard"
-                    android:textColor="#616161"
+                    android:textColor="@color/tr_black"
+                    style="@style/zh_light_style"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -40,10 +41,25 @@
                     android:layout_margin="16dp"
                     android:background="@color/tr_pink"
                     android:text="@string/setting_photo"
-                    android:textColor="#616161"
+                    android:textColor="@color/tr_black"
+                    style="@style/zh_light_style"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/settingOpenKeyboard" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/policy_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:background="@color/tr_pink"
+                    android:text="@string/service_and_policy_title"
+                    android:textColor="@color/tr_black"
+                    style="@style/zh_light_style"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/updateStickerPackInfoBtn" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

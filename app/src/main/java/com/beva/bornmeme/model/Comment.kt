@@ -10,7 +10,7 @@ import java.util.*
 @Parcelize
 data class Comment(
     val commentId: String = "",
-    val userId: String? = "",
+    val userId: String = "",
     val postId: String = "",
     var time: Timestamp? = null,
     val content: String = "",

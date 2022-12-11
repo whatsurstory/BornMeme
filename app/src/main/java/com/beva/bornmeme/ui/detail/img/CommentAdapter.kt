@@ -1,25 +1,45 @@
 package com.beva.bornmeme.ui.detail.img
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.DialogInterface
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.ItemDetailCommentChildBinding
 import com.beva.bornmeme.databinding.ItemDetailCommentParentBinding
+import com.beva.bornmeme.databinding.SnackBarCustomBinding
+import com.beva.bornmeme.loadImage
 import com.beva.bornmeme.model.Post
 import com.beva.bornmeme.model.User
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import timber.log.Timber
 
-class CommentAdapter(private val uiState: ImgDetailViewModel.UiState): ListAdapter<CommentCell, RecyclerView.ViewHolder>(DiffCallback) {
+class CommentAdapter(private val uiState: ImgDetailViewModel.UiState,
+                     val viewModel: ImgDetailViewModel,
+                     val fragment: ImgDetailFragment,
+                     val context: Context,
+                    val inflater: LayoutInflater): ListAdapter<CommentCell, RecyclerView.ViewHolder>(DiffCallback) {
 
     class ParentViewHolder(private var binding: ItemDetailCommentParentBinding) : RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
-        fun bind(item: CommentCell.ParentComment, uiState: ImgDetailViewModel.UiState) {
+        fun bind(item: CommentCell.ParentComment,
+                 uiState: ImgDetailViewModel.UiState,
+                 viewModel: ImgDetailViewModel,
+                 fragment: ImgDetailFragment,
+                 context:Context,
+                 inflater: LayoutInflater) {
 
             if (item.hasChild) {
                 binding.seeMoreBtn.visibility = View.VISIBLE
@@ -78,15 +98,18 @@ class CommentAdapter(private val uiState: ImgDetailViewModel.UiState): ListAdapt
             }
             Timber.d("秒 $seconds 分 $minutes 時 $hour 天 $day")
 
-            item.comment.userId?.let {
+            item.comment.userId.let {
                 uiState.getUserImg(it) { user: User ->
                     Timber.d("img => ${user.profilePhoto}")
-                    Glide.with(binding.commentUserImg)
-                        .load(user.profilePhoto)
-                        .placeholder(R.drawable.place_holder)
-                        .into(binding.commentUserImg)
+                    binding.commentUserImg.loadImage(user.profilePhoto)
+                    binding.commentUserImg.setOnClickListener {
+                        viewModel.navigate2UserDetail(fragment, item.comment.userId)
+                    }
                     binding.commentUserName.text = user.userName
                 }
+            }
+            binding.commentParentReportBtn.setOnClickListener {
+                viewModel.reportCommentDialog(item.comment.userId ,context, fragment, inflater)
             }
         }
     }
@@ -94,7 +117,12 @@ class CommentAdapter(private val uiState: ImgDetailViewModel.UiState): ListAdapt
     class ChildViewHolder(private var binding: ItemDetailCommentChildBinding) :
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
-        fun bind(item: CommentCell.ChildComment, uiState: ImgDetailViewModel.UiState) {
+        fun bind(item: CommentCell.ChildComment,
+                 uiState: ImgDetailViewModel.UiState,
+                 viewModel: ImgDetailViewModel,
+                 fragment: ImgDetailFragment,
+                 context:Context,
+                inflater: LayoutInflater) {
 
             Timber.d("ChildViewHolder $adapterPosition")
             binding.childDislikeBtn.setOnClickListener {
@@ -132,15 +160,18 @@ class CommentAdapter(private val uiState: ImgDetailViewModel.UiState): ListAdapt
             }
             Timber.d("秒 $seconds 分 $minutes 時 $hour 天 $day")
 
-            item.comment.userId?.let {
+            item.comment.userId.let {
                 uiState.getUserImg(it) { user: User ->
                     Timber.d("img => ${user.profilePhoto}")
-                    Glide.with(binding.childUserImg)
-                        .load(user.profilePhoto)
-                        .placeholder(R.drawable.place_holder)
-                        .into(binding.childUserImg)
+                    binding.childUserImg.loadImage(user.profilePhoto)
+                    binding.childUserImg.setOnClickListener {
+                        viewModel.navigate2UserDetail(fragment, item.comment.userId)
+                    }
                     binding.childUserName.text = user.userName
                 }
+            }
+            binding.commentChildReportBtn.setOnClickListener {
+                viewModel.reportCommentDialog(item.comment.userId ,context, fragment, inflater)
             }
         }
     }
@@ -183,12 +214,12 @@ class CommentAdapter(private val uiState: ImgDetailViewModel.UiState): ListAdapt
         when (holder) {
             is ParentViewHolder -> {
                 val data = getItem(position) as CommentCell.ParentComment
-                holder.bind(data, uiState)
+                holder.bind(data, uiState, viewModel, fragment, context, inflater)
                 Timber.d("data $data position $position")
             }
             is ChildViewHolder -> {
                 val data = getItem(position) as CommentCell.ChildComment
-                holder.bind(data, uiState)
+                holder.bind(data, uiState, viewModel, fragment, context, inflater)
                 Timber.d("data $data position $position")
             }
         }

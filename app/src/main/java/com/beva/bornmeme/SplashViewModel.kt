@@ -3,19 +3,11 @@ package com.beva.bornmeme
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.method.LinkMovementMethod
-import android.text.style.URLSpan
-import android.view.LayoutInflater
-import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
-import androidx.navigation.fragment.findNavController
 import com.beva.bornmeme.model.User
 import com.beva.bornmeme.model.UserManager
 import com.google.firebase.Timestamp
@@ -53,8 +45,8 @@ class SplashViewModel : ViewModel() {
                 val checkUser = snapshot.toObject(User::class.java)
                 if (checkUser != null) {
                     UserManager.user = checkUser
+                    hasData = checkUser.agreement
                 }
-                hasData = true
 //                transaction.update(ref,FieldValue.arrayUnion(loginTimes))
             } else {
                 val userData = User(
@@ -62,11 +54,12 @@ class SplashViewModel : ViewModel() {
                     profilePhoto = user.photoUrl.toString(),
                     userName = user.displayName.toString(),
                     email = user.email.toString(),
-                    registerTime = Timestamp.now()
+                    registerTime = Timestamp.now(),
+                    agreement = false
                 )
                 transaction.set(ref, userData)
                 UserManager.user = userData
-                hasData = false
+                hasData = userData.agreement
             }
         }.addOnSuccessListener {
             getRegisterInfo(hasData, fragment, context)
@@ -78,42 +71,44 @@ class SplashViewModel : ViewModel() {
         }
     }
 
-    private fun getRegisterInfo(hasData: Boolean, fragment: SplashFragment, context: Context) {
+    private fun getRegisterInfo(hasData: Boolean, fragment: SplashFragment,context: Context) {
         if (hasData) {
             leave()
             findNavController(fragment)
                 .navigate(MobileNavigationDirections.navigateToHomeFragment())
         } else {
-            showAgreeDialog(context, fragment)
+            showAgreeDialog(context, fragment, hasData)
         }
     }
 
-    private fun showAgreeDialog(context: Context, fragment: SplashFragment) {
+    private fun showAgreeDialog(context: Context, fragment: SplashFragment, hasData:Boolean) {
 
-        val item = LayoutInflater.from(context)
-            .inflate(R.layout.service_text, null)
-
-        // set up spanned string with url
-        val spannableString =
-            SpannableString(context.getString(R.string.service_text_with_url))
-
-        spannableString
-            .setSpan(
-                URLSpan("https://www.privacypolicies.com/live/679fc734-40b3-47ef-bcca-2c0e5a46483d"),
-                25,
-                34,
-                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-        val textView = item.findViewById<TextView>(R.id.url_text)
-        textView.text = spannableString
-        // enable clicking on url span
-        textView.movementMethod = LinkMovementMethod.getInstance()
+//        val item = LayoutInflater.from(context)
+//            .inflate(R.layout.service_text, null)
+//
+//        // set up spanned string with url
+//        val spannableString =
+//            SpannableString(context.getString(R.string.service_text_with_url))
+//
+//        spannableString
+//            .setSpan(
+//                URLSpan("https://www.privacypolicies.com/live/679fc734-40b3-47ef-bcca-2c0e5a46483d"),
+//                25,
+//                34,
+//                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+//            )
+//        val textView = item.findViewById<TextView>(R.id.url_text)
+//        textView.text = spannableString
+//        // enable clicking on url span
+//        textView.movementMethod = LinkMovementMethod.getInstance()
 
         AlertDialog.Builder(context, R.style.AlertDialogTheme)
-            .setView(item)
-            .setPositiveButton(R.string.agreeAndContinue) { _, _ ->
+            .setMessage("歡迎加入使用BornMeme. 請先詳閱使用條款及隱私政策，勾選同意即可完整使用應用程式")
+//            .setView(item)
+            .setPositiveButton(R.string.continue_text) { _, _ ->
                 leave()
-                findNavController(fragment).navigate(MobileNavigationDirections.navigateToHomeFragment())
+//                findNavController(fragment).navigate(MobileNavigationDirections.navigateToHomeFragment())
+                findNavController(fragment).navigate(MobileNavigationDirections.navigateToServiceFragment(hasData))
             }
             .show()
             .getButton(DialogInterface.BUTTON_POSITIVE)

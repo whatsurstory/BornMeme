@@ -44,15 +44,18 @@
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/fragment_gallery.xml" value="0.14666666666666667" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/fragment_home.xml" value="0.1" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/fragment_img_detail.xml" value="0.22" />
+        <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/fragment_policy.xml" value="0.17101080737444374" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/fragment_posts.xml" value="0.1" />
+        <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/fragment_private_policy.xml" value="0.14010416666666667" />
+        <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/fragment_service_policy.xml" value="0.1" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/fragment_setting.xml" value="0.1" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/fragment_splash.xml" value="0.14666666666666667" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/fragment_user_detail.xml" value="0.1916376306620209" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/item_assignment_dialog_list_layout.xml" value="0.15" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/item_circle.xml" value="0.1" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/item_comment.xml" value="0.18888888888888888" />
-        <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/item_detail_comment_child.xml" value="0.1" />
-        <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/item_detail_comment_parent.xml" value="0.21311475409836064" />
+        <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/item_detail_comment_child.xml" value="0.4466666666666667" />
+        <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/item_detail_comment_parent.xml" value="0.3333333333333333" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/item_home_img.xml" value="0.1" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/item_loading.xml" value="0.153125" />
         <entry key="..\:/Android_18/BornMeme/BornMeme/app/src/main/res/layout/item_slide_image.xml" value="0.1" />

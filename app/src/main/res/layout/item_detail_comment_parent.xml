@@ -11,6 +11,7 @@
         android:layout_height="52dp"
         android:layout_marginStart="6dp"
         android:layout_marginTop="10dp"
+        android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/circle"
@@ -51,33 +52,33 @@
 
             <TextView
                 android:id="@+id/comment_time"
+                style="@style/zh_light_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="end|bottom"
-                style="@style/zh_light_style"
                 android:text="30 min ago"
                 android:textColor="@color/dark_gray"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/comment_dislike_num" />
+                app:layout_constraintEnd_toEndOf="@+id/comment_zone_text" />
 
             <TextView
                 android:id="@+id/comment_zone_text"
+                style="@style/zh_medium_style"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:paddingVertical="4dp"
-                android:textSize="18sp"
                 android:textColor="@color/tr_black"
-                style="@style/zh_medium_style"
-                tools:text="TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description"
-                app:layout_constraintEnd_toEndOf="@+id/comment_dislike_num"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/comment_parent_report_btn"
                 app:layout_constraintStart_toStartOf="@+id/comment_user_name"
-                app:layout_constraintTop_toBottomOf="@id/comment_user_name" />
+                app:layout_constraintTop_toBottomOf="@id/comment_user_name"
+                tools:text="TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description TextPicture Description" />
 
             <ImageButton
                 android:id="@+id/comment_like_btn"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
                 android:background="@color/woo"
                 android:padding="6dp"
                 android:scaleType="centerInside"
@@ -93,8 +94,9 @@
                 android:layout_height="0dp"
                 tools:text="200"
                 style="@style/zh_light_style"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:gravity="center"
+                android:layout_marginEnd="4dp"
                 android:textColor="@color/dark_gray"
                 app:layout_constraintBottom_toBottomOf="@+id/comment_like_btn"
                 app:layout_constraintEnd_toStartOf="@+id/comment_dislike_btn"
@@ -102,8 +104,8 @@
 
             <ImageButton
                 android:id="@+id/comment_dislike_btn"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
                 android:background="@color/woo"
                 android:padding="6dp"
                 android:scaleType="centerInside"
@@ -119,13 +121,27 @@
                 android:layout_height="0dp"
                 tools:text="100"
                 style="@style/zh_light_style"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:gravity="center"
+                android:layout_marginEnd="4dp"
                 android:textColor="@color/dark_gray"
-                android:layout_marginEnd="10dp"
                 app:layout_constraintBottom_toBottomOf="@+id/comment_dislike_btn"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/comment_parent_report_btn"
                 app:layout_constraintTop_toTopOf="@+id/comment_dislike_btn" />
+
+            <ImageButton
+                android:id="@+id/comment_parent_report_btn"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="6dp"
+                android:background="@color/woo"
+                android:scaleType="fitCenter"
+                android:rotation="90"
+                android:src="@drawable/ic_baseline_more_vert_24"
+                app:layout_constraintBottom_toBottomOf="@+id/comment_dislike_num"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/comment_dislike_num"
+                app:tint="@color/tr_black" />
 
             <TextView
                 android:id="@+id/reply_btn"

@@ -5,7 +5,7 @@ import android.webkit.MimeTypeMap
 import timber.log.Timber
 import java.io.File
 
-/** Class to provide utils that are shared across ewesticker. */
+/** Class to provide utils that are shared across application. */
 object Utils {
     /**
      * Get the mimetype of a File

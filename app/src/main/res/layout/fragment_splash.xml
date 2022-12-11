@@ -11,7 +11,7 @@
         android:id="@+id/screen_lottie_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/greeting_text"
+        app:layout_constraintBottom_toBottomOf="@+id/greeting_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -21,10 +21,10 @@
 
     <TextView
         android:id="@+id/greeting_text"
+        style="@style/eng_bold_font_style"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
-        style="@style/eng_bold_font_style"
         android:gravity="center"
         android:text="@string/bornmeme"
         android:textColor="@color/tr_black"
@@ -36,10 +36,11 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/google_sign_in_button"
+        style="@style/eng_font_style"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginHorizontal="24dp"
-        style="@style/eng_font_style"
+        android:layout_marginBottom="160dp"
         android:text="@string/sign_in"
         android:textAllCaps="false"
         android:textColor="@color/tr_black"
@@ -52,60 +53,16 @@
         app:iconPadding="16dp"
         app:iconSize="28dp"
         app:iconTint="@null"
-        android:layout_marginBottom="36dp"
-        app:layout_constraintBottom_toTopOf="@+id/policy_button"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/policy_button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="80dp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/google_sign_in_button"
-        app:layout_constraintStart_toStartOf="@+id/google_sign_in_button">
-
-        <TextView
-            android:id="@+id/service_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/service_text"
-            style="@style/zh_light_style"
-            android:layout_marginStart="100dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <View
-            android:id="@+id/separate_view"
-            android:layout_width="2dp"
-            android:layout_height="18dp"
-            android:background="@color/dark_gray"
-            app:layout_constraintBottom_toBottomOf="@+id/service_btn"
-            app:layout_constraintStart_toEndOf="@+id/service_btn"
-            app:layout_constraintTop_toTopOf="@+id/service_btn"
-            app:layout_constraintEnd_toStartOf="@+id/private_btn"/>
-
-        <TextView
-            android:id="@+id/private_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/private_text"
-            android:layout_marginEnd="100dp"
-            style="@style/zh_light_style"
-            app:layout_constraintBottom_toBottomOf="@+id/service_btn"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/service_btn" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/login_loading_animation"
         android:layout_width="160dp"
         android:layout_height="100dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/greeting_text"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/google_sign_in_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/screen_lottie_view"
