@@ -33,29 +33,28 @@
             android:id="@+id/change_photo"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_margin="8dp"
+            android:layout_margin="6dp"
+            android:background="@color/woo"
             android:padding="10dp"
             android:scaleType="centerInside"
             android:src="@drawable/edit"
-            android:background="@color/woo"
-            app:layout_constraintBottom_toBottomOf="@+id/shapeableImageView"
-            app:layout_constraintEnd_toStartOf="@+id/setting_btn"
+            app:layout_constraintEnd_toEndOf="@+id/shapeableImageView"
             app:layout_constraintTop_toTopOf="@+id/shapeableImageView"
             app:tint="@color/gray_white" />
 
-        <ImageButton
-            android:id="@+id/setting_btn"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_margin="8dp"
-            android:padding="10dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/icons8_setting"
-            android:background="@color/woo"
-            app:layout_constraintBottom_toBottomOf="@+id/change_photo"
-            app:layout_constraintEnd_toEndOf="@+id/shapeableImageView"
-            app:layout_constraintTop_toTopOf="@+id/change_photo"
-            app:tint="@color/gray_white" />
+<!--        <ImageButton-->
+<!--            android:id="@+id/setting_btn"-->
+<!--            android:layout_width="48dp"-->
+<!--            android:layout_height="48dp"-->
+<!--            android:layout_margin="8dp"-->
+<!--            android:padding="10dp"-->
+<!--            android:scaleType="centerInside"-->
+<!--            android:src="@drawable/icons8_setting"-->
+<!--            android:background="@color/woo"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/change_photo"-->
+<!--            app:layout_constraintEnd_toEndOf="@+id/shapeableImageView"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/change_photo"-->
+<!--            app:tint="@color/gray_white" />-->
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/profile_img"

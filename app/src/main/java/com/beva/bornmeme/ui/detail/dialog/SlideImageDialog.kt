@@ -113,8 +113,6 @@ class SlideImageDialog : AppCompatDialogFragment() {
                     p0: PermissionGrantedResponse?
                 ) {
                     downLoad("${folder.id}.jpg", "BornMeme.", folder.url)
-
-
                 }
 
                 override fun onPermissionDenied(

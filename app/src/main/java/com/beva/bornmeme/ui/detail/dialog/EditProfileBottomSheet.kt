@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat.getColor
 import androidx.navigation.fragment.findNavController
 import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
@@ -150,10 +151,10 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
             showFollowListDialog(viewModel.followUser)
         }
 
-        binding.settingBtn.setOnClickListener {
-            findNavController()
-                .navigate(MobileNavigationDirections.navigateToFragmentSetting())
-        }
+//        binding.settingBtn.setOnClickListener {
+//            findNavController()
+//                .navigate(MobileNavigationDirections.navigateToFragmentSetting())
+//        }
 
         return binding.root
     }
@@ -233,7 +234,6 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun uploadProfile2Db(data: Uri) {
-        Timber.d("uploadProfile2Db uri $data")
         val ref = FirebaseStorage.getInstance().reference
         ref.child("profile_img/" + System.currentTimeMillis() + ".jpg")
             .putFile(data)
@@ -302,7 +302,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
         alertDialog.show()
 
         alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
-            .setTextColor(Color.parseColor("#181A19"))
+            .setTextColor(getColor(requireContext(),R.color.button_balck))
 
     }
 
