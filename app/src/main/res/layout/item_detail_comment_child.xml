@@ -12,10 +12,11 @@
         android:layout_height="48dp"
         android:layout_marginStart="6dp"
         android:layout_marginTop="14dp"
+        android:scaleType="centerCrop"
         app:layout_constraintStart_toEndOf="@id/comment_guideline"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/circle"
-        app:srcCompat="@drawable/dino" />
+        app:srcCompat="@drawable/place_holder" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/child_card"
@@ -41,7 +42,7 @@
                 android:layout_marginHorizontal="10dp"
                 android:gravity="center_vertical"
                 tools:text="Mindy"
-                android:fontFamily="@font/rounded_mplus_regular"
+                style="@style/zh_light_style"
                 android:textColor="@color/dark_gray"
                 android:textSize="12sp"
                 android:maxLength="10"
@@ -52,39 +53,38 @@
 
             <TextView
                 android:id="@+id/child_time"
+                style="@style/zh_light_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="8dp"
-                tools:text="30 min ago"
                 android:textColor="@color/dark_gray"
-                android:fontFamily="@font/rounded_mplus_regular"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/child_dislike_num" />
+                app:layout_constraintEnd_toEndOf="@+id/child_zone_text"
+                tools:text="30 min ago" />
 
 
             <TextView
                 android:id="@+id/child_zone_text"
+                style="@style/zh_medium_style"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:paddingVertical="6dp"
-                android:textSize="16sp"
-                android:fontFamily="@font/rounded_mplus_medium"
                 android:textColor="@color/tr_black"
-                tools:text="TextPicture Description TextPicture Description TextPictureTextPicture Description TextPicture"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toTopOf="@+id/child_time"
-                app:layout_constraintEnd_toEndOf="@+id/child_dislike_num"
+                app:layout_constraintEnd_toEndOf="@+id/comment_child_report_btn"
                 app:layout_constraintStart_toStartOf="@+id/child_user_name"
-                app:layout_constraintTop_toBottomOf="@id/child_user_name" />
+                app:layout_constraintTop_toBottomOf="@id/child_user_name"
+                tools:text="TextPicture Description TextPicture Description TextPictureTextPicture Description TextPicture" />
 
             <ImageButton
                 android:id="@+id/child_like_btn"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:padding="4dp"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:padding="6dp"
                 android:background="@color/woo"
                 android:scaleType="centerInside"
-                android:layout_marginEnd="10dp"
                 android:src="@drawable/before_thumbup"
                 app:layout_constraintBottom_toBottomOf="@+id/child_user_name"
                 app:layout_constraintEnd_toStartOf="@+id/child_like_num"
@@ -94,22 +94,22 @@
             <TextView
                 android:id="@+id/child_like_num"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:ignore="200"
+                android:layout_height="0dp"
+                tools:text="200"
                 android:textSize="12sp"
-                android:layout_marginEnd="10dp"
+                android:gravity="center"
+                android:layout_marginEnd="4dp"
                 android:textColor="@color/dark_gray"
-                android:fontFamily="@font/rounded_mplus_medium"
+                style="@style/zh_medium_style"
                 app:layout_constraintBottom_toBottomOf="@+id/child_like_btn"
                 app:layout_constraintEnd_toStartOf="@+id/child_dislike_btn"
                 app:layout_constraintTop_toTopOf="@+id/child_like_btn" />
 
             <ImageButton
                 android:id="@+id/child_dislike_btn"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:padding="4dp"
-                android:layout_marginEnd="10dp"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:padding="6dp"
                 android:background="@color/woo"
                 android:scaleType="centerInside"
                 android:src="@drawable/b4_thumbdown"
@@ -121,15 +121,30 @@
             <TextView
                 android:id="@+id/child_dislike_num"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 tools:text="100"
+                android:gravity="center"
                 android:textSize="12sp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginEnd="4dp"
                 android:textColor="@color/dark_gray"
-                android:fontFamily="@font/rounded_mplus_medium"
+                style="@style/zh_medium_style"
                 app:layout_constraintBottom_toBottomOf="@+id/child_dislike_btn"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/comment_child_report_btn"
                 app:layout_constraintTop_toTopOf="@+id/child_dislike_btn" />
+
+            <ImageButton
+                android:id="@+id/comment_child_report_btn"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="6dp"
+                android:background="@color/woo"
+                android:rotation="90"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_baseline_more_vert_24"
+                app:layout_constraintBottom_toBottomOf="@+id/child_dislike_num"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/child_dislike_num"
+                app:tint="@color/tr_black" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

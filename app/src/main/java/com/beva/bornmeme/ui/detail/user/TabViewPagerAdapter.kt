@@ -11,12 +11,12 @@ import com.beva.bornmeme.ui.detail.user.fragments.comments.CommentsFragment
 import com.beva.bornmeme.ui.detail.user.fragments.favorite.FavoriteFragment
 import com.beva.bornmeme.ui.detail.user.fragments.posts.PostsFragment
 
-class TabViewPagerAdapter(fragment: Fragment, val userId: String): FragmentStateAdapter(fragment) {
+class TabViewPagerAdapter(fragment: Fragment, val userId: String) : FragmentStateAdapter(fragment) {
 
     override fun getItemCount(): Int = 4
 
     override fun createFragment(position: Int): Fragment {
-        return when(position){
+        return when (position) {
             0 -> FavoriteFragment.newInstance(userId)
             1 -> PostsFragment.newInstance(userId)
             2 -> CommentsFragment.newInstance(userId)

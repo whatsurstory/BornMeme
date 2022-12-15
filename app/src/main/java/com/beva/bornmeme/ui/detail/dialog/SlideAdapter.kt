@@ -1,6 +1,7 @@
 package com.beva.bornmeme.ui.detail.dialog
 
 import android.graphics.drawable.BitmapDrawable
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -8,11 +9,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.ItemSlideImageBinding
+import com.beva.bornmeme.loadImage
 import com.beva.bornmeme.model.Folder
 import com.beva.bornmeme.model.FolderData
 import com.beva.bornmeme.model.Post
 import com.beva.bornmeme.ui.detail.user.fragments.posts.PostAdapter
 import com.bumptech.glide.Glide
+import java.io.ByteArrayOutputStream
 
 class SlideAdapter(private val onClickListener: OnClickListener): ListAdapter<FolderData, SlideAdapter.ViewHolder>(DiffCallback) {
 
@@ -29,10 +32,7 @@ class SlideAdapter(private val onClickListener: OnClickListener): ListAdapter<Fo
     class ViewHolder(private val binding: ItemSlideImageBinding) :
         RecyclerView.ViewHolder(binding.root){
         fun bind (item: FolderData) {
-            Glide.with(binding.slideImage)
-                .load(item.url)
-                .placeholder(R.drawable._50)
-                .into(binding.slideImage)
+            binding.slideImage.loadImage(item.url)
         }
     }
 

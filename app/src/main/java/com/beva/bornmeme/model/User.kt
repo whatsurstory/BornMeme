@@ -19,6 +19,7 @@ data class User(
     val followers: List<String> = emptyList(),
     val postQuantity: List<String> = emptyList(),
     var blockList: List<String> = emptyList(),
-    val followList: List<String> = emptyList()
+    val followList: List<String> = emptyList(),
+    val agreement: Boolean = false
 ) : Parcelable
 

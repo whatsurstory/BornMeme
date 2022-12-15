@@ -1,4 +1,4 @@
-package com.beva.bornmeme.ui.editFragment
+package com.beva.bornmeme.ui.edit_fragment
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -7,7 +7,6 @@ import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import timber.log.Timber
 
 class StickerView @JvmOverloads constructor(
     context: Context,
@@ -29,11 +28,6 @@ class StickerView @JvmOverloads constructor(
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         return presenter.onTouchEvent(event)
     }
-
-//    override fun setOnLongClickListener(l: OnLongClickListener?): Boolean {
-//        super.setOnLongClickListener(l)
-//        return presenter.setOnLongClickListener(l)
-//    }
 
     fun addSticker(bitmap: Bitmap){
         presenter.addSticker(bitmap)

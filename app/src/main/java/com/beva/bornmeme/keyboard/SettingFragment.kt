@@ -12,15 +12,23 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
+import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentSettingBinding
+import com.beva.bornmeme.model.UserManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import timber.log.Timber
 import java.util.Calendar
 import java.util.concurrent.Executors
 
-class SettingFragment: Fragment() {
+class SettingFragment: BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentSettingBinding
 
@@ -38,7 +46,7 @@ class SettingFragment: Fragment() {
             val toaster = Toaster(requireContext())
             val executor = Executors.newSingleThreadExecutor()
             val handler = Handler(Looper.getMainLooper())
-            Toast.makeText(context, "嘻嘻", Toast.LENGTH_SHORT).show()
+
             executor.execute {
                 val totalStickers =
                     StickerImporter(requireContext(), toaster).importStickers(
@@ -60,11 +68,17 @@ class SettingFragment: Fragment() {
         }
     }
 
+//    override fun getTheme() = R.style.CustomBottomSheetDialog
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+//        dialog?.let {
+//            val sheet = it as BottomSheetDialog
+//            sheet.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+//        }
         binding = FragmentSettingBinding.inflate(layoutInflater)
 
         binding.settingOpenKeyboard.setOnClickListener {
@@ -77,6 +91,14 @@ class SettingFragment: Fragment() {
             chooseDir(it)
         }
 
+        binding.policyButton.setOnClickListener {
+//                        val intent = Intent(
+//                            Intent.ACTION_VIEW,
+//                            Uri.parse("https://www.privacypolicies.com/live/679fc734-40b3-47ef-bcca-2c0e5a46483d")
+//                        )
+//                        startActivity(intent)
+        findNavController().navigate(MobileNavigationDirections.navigateToServiceFragment(UserManager.user.agreement))
+        }
         return binding.root
     }
 

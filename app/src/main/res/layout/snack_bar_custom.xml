@@ -14,7 +14,7 @@
         android:paddingVertical="8dp"
         android:text="@string/block_text"
         android:textColor="@color/tr_black"
-        android:fontFamily="@font/round_border"
+        style="@style/zh_bold_style"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -14,7 +14,7 @@ import com.beva.bornmeme.databinding.FragmentPostsBinding
 import com.beva.bornmeme.ui.detail.user.UserDetailFragment
 import timber.log.Timber
 
-class PostsFragment: Fragment() {
+class PostsFragment : Fragment() {
 
     companion object {
         fun newInstance(userId: String): PostsFragment {
@@ -32,16 +32,19 @@ class PostsFragment: Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentPostsBinding.inflate(inflater,container,false)
+        binding = FragmentPostsBinding.inflate(inflater, container, false)
+
         val userId = requireArguments().getString("userIdKey") ?: ""
-        Timber.d("UserId $userId")
-        viewModel = PostsViewModel(userId)
-        binding.postRecycler.layoutManager = GridLayoutManager(context,3)
+        viewModel = PostsViewModel(userId, requireContext())
+
+        binding.postRecycler.layoutManager = GridLayoutManager(context, 3)
+
         val adapter = PostAdapter(
             PostAdapter.OnClickListener {
                 viewModel.navigateToDetail(it)
             }
         )
+
         binding.postRecycler.adapter = adapter
 
         viewModel.postData.observe(viewLifecycleOwner) {
@@ -52,7 +55,11 @@ class PostsFragment: Fragment() {
             viewLifecycleOwner,
             Observer {
                 it?.let {
-                    findNavController().navigate(MobileNavigationDirections.navigateToImgDetailFragment(it))
+                    findNavController().navigate(
+                        MobileNavigationDirections.navigateToImgDetailFragment(
+                            it
+                        )
+                    )
                     viewModel.onDetailNavigated()
                 }
             }

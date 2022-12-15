@@ -8,18 +8,18 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.ItemVerticalImageListBinding
+import com.beva.bornmeme.loadImage
 import com.beva.bornmeme.model.Image
 import com.bumptech.glide.Glide
 
-class GalleryAdapter(private val onClickListener: OnClickListener): ListAdapter<Image, GalleryAdapter.ViewHolder>(DiffCallback) {
+class GalleryAdapter(
+    private val onClickListener: OnClickListener
+) : ListAdapter<Image, GalleryAdapter.ViewHolder>(DiffCallback) {
 
-    class ViewHolder (val binding: ItemVerticalImageListBinding):
-        RecyclerView.ViewHolder (binding.root) {
+    class ViewHolder(val binding: ItemVerticalImageListBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Image) {
-            Glide.with(binding.verticalListImage)
-                .load(item.url)
-                .placeholder(R.drawable._50)
-                .into(binding.verticalListImage)
+            binding.verticalListImage.loadImage(item.url)
         }
     }
 
@@ -27,6 +27,7 @@ class GalleryAdapter(private val onClickListener: OnClickListener): ListAdapter<
         override fun areItemsTheSame(oldItem: Image, newItem: Image): Boolean {
             return oldItem === newItem
         }
+
         override fun areContentsTheSame(oldItem: Image, newItem: Image): Boolean {
             return oldItem == newItem
         }
@@ -34,9 +35,11 @@ class GalleryAdapter(private val onClickListener: OnClickListener): ListAdapter<
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(ItemVerticalImageListBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false
-        ))
+        return ViewHolder(
+            ItemVerticalImageListBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -48,6 +51,7 @@ class GalleryAdapter(private val onClickListener: OnClickListener): ListAdapter<
             holder.bind(item)
         }
     }
+
     class OnClickListener(val clickListener: (item: Image) -> Unit) {
         fun onClick(item: Image) = clickListener(item)
     }

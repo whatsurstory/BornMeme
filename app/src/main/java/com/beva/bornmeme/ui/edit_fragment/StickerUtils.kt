@@ -1,4 +1,4 @@
-package com.beva.bornmeme.ui.editFragment
+package com.beva.bornmeme.ui.edit_fragment
 
 import android.content.Context
 import android.content.res.Resources
@@ -51,9 +51,9 @@ object StickerUtils {
     }
 
     /**
-     * p1p2为一条线
-     * 传进来的参数为手机屏幕坐标系 即 x→  y↓
-     * 要将点转化为自然坐标系即 x→ y↑
+     * p1_line p2_line
+     * coordinate argument x→  y↓
+     * turn point to coordinate x→ y↑
      */
     fun calculateDegree(p1: PointF, p2: PointF): Double {
         val p = PointF(p1.x - p2.x, p1.y - p2.y)     //过原点射线

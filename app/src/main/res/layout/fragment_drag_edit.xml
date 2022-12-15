@@ -9,11 +9,11 @@
         android:id="@+id/drag_preview_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:fontFamily="@font/arista_pro_bold_trial"
+        android:layout_marginStart="16dp"
+        style="@style/eng_bold_font_style"
         android:text="@string/preview_btn"
         android:textColor="@color/tr_pink"
-        android:textSize="24sp"
+        android:textSize="28sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -21,256 +21,355 @@
         android:id="@+id/drag_publish_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:fontFamily="@font/arista_pro_bold_trial"
+        android:layout_marginEnd="16dp"
+        style="@style/eng_bold_font_style"
         android:text="@string/publish_btn"
         android:textColor="@color/tr_pink"
-        android:textSize="24sp"
+        android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
         android:id="@+id/vertical_scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/drag_preview_btn">
+        app:layout_constraintTop_toBottomOf="@id/drag_preview_btn"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="-16dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp">
 
             <HorizontalScrollView
                 android:id="@+id/horizontal_scroll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
                     android:orientation="horizontal">
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/meme_awkward_look_monkey_puppet"
-                        android:layout_width="40dp"
-                        android:layout_height="50dp"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/meme_awkward_look_monkey_puppet" />
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/meme_baby_yoda_drinking_soup"
-                        android:layout_width="40dp"
-                        android:layout_height="50dp"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/meme_baby_yoda_drinking_soup" />
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/meme_cat_being_yelled_at"
-                        android:layout_width="40dp"
-                        android:layout_height="50dp"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/meme_cat_being_yelled_at" />
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/meme_crying_cat"
-                        android:layout_width="40dp"
-                        android:layout_height="50dp"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/meme_crying_cat" />
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/meme_crying_kim_kardashian"
-                        android:layout_width="40dp"
-                        android:layout_height="50dp"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/meme_crying_kim_kardashian" />
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/meme_crying_michael_jordan"
-                        android:layout_width="40dp"
-                        android:layout_height="50dp"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/meme_crying_michael_jordan" />
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/meme_doge_dog"
-                        android:layout_width="40dp"
-                        android:layout_height="50dp"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/meme_doge_dog" />
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/meme_facepalm"
-                        android:layout_width="40dp"
-                        android:layout_height="50dp"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/meme_facepalm" />
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/meme_handsome_squidward"
-                        android:layout_width="40dp"
-                        android:layout_height="50dp"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/meme_handsome_squidward" />
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/meme_hide_the_pain_harold"
-                        android:layout_width="40dp"
-                        android:layout_height="50dp"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/meme_hide_the_pain_harold" />
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/meme_homer_simpson_bushes"
-                        android:layout_width="40dp"
-                        android:layout_height="50dp"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/meme_homer_simpson_bushes" />
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/meme_is_this_a_pigeon"
-                        android:layout_width="40dp"
-                        android:layout_height="50dp"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/meme_is_this_a_pigeon" />
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/meme_kermit_not_my_business"
-                        android:layout_width="40dp"
-                        android:layout_height="50dp"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/meme_kermit_not_my_business" />
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/meme_leonardo_dicaprio_laughing"
-                        android:layout_width="40dp"
-                        android:layout_height="50dp"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/meme_leonardo_dicaprio_laughing" />
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/meme_norton_smirking"
-                        android:layout_width="40dp"
-                        android:layout_height="50dp"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/meme_norton_smirking" />
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/meme_patrick_i_have_3_dollars"
-                        android:layout_width="40dp"
-                        android:layout_height="50dp"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/meme_patrick_i_have_3_dollars" />
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/meme_polite_cat"
-                        android:layout_width="40dp"
-                        android:layout_height="50dp"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/meme_polite_cat" />
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/meme_ralph_wiggum_diving_through_window"
-                        android:layout_width="40dp"
-                        android:layout_height="50dp"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/meme_ralph_wiggum_diving_through_window" />
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/meme_roll_safe"
-                        android:layout_width="40dp"
-                        android:layout_height="50dp"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/meme_roll_safe" />
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/meme_sad_frog"
-                        android:layout_width="40dp"
-                        android:layout_height="50dp"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/meme_sad_frog" />
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/meme_salt_bae"
-                        android:layout_width="40dp"
-                        android:layout_height="50dp"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/meme_salt_bae" />
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/meme_surprised_shocked_pikachu"
-                        android:layout_width="40dp"
-                        android:layout_height="50dp"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/meme_surprised_shocked_pikachu" />
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/meme_this_is_fine_dog"
-                        android:layout_width="40dp"
-                        android:layout_height="50dp"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/meme_this_is_fine_dog" />
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/meme_woman_yelling"
-                        android:layout_width="40dp"
-                        android:layout_height="50dp"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/meme_woman_yelling" />
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/meme_yao_ming"
-                        android:layout_width="40dp"
-                        android:layout_height="50dp"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/meme_yao_ming" />
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/meme_28454"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/meme_28454" />
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/meme_angry_troll_face"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/meme_angry_troll_face" />
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/meme_derpina"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/meme_derpina" />
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/meme_forever_alone"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/meme_forever_alone" />
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/meme_girl"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/meme_girl" />
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/meme_funny_faces"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/meme_funny_faces" />
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/meme_happy_derpina"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/meme_happy_derpina" />
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/meme_me_gusta"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/meme_me_gusta" />
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/meme_rage_face"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/meme_rage_face" />
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/meme_transparent"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/meme_transparent" />
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/meme_troll_face"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/meme_troll_face" />
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/meme_vector"
+                        android:layout_width="50dp"
+                        android:layout_height="45dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/meme_vector" />
+
 
                 </LinearLayout>
             </HorizontalScrollView>
 
             <ImageButton
                 android:id="@+id/add_text_btn"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginVertical="8dp"
-                app:layout_constraintBottom_toTopOf="@+id/sticker_view"
-                android:background="@drawable/ic_text"
-                android:backgroundTint="@color/tr_pink"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/horizontal_scroll" />
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginVertical="2dp"
+                android:background="@color/woo"
+                android:padding="4dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/add_new"
+                app:layout_constraintBottom_toBottomOf="@id/edit_text_box"
+                app:layout_constraintEnd_toStartOf="@+id/clear_button"
+                app:tint="@color/tr_pink" />
+
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/edit_text_box"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:background="@color/tr_black"
-                android:inputType="textUri|textNoSuggestions"
-                android:padding="8dp"
-                android:hint="Click"
+                style="@style/zh_bold_style"
+                android:hint="@string/text_click"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="4dp"
                 android:singleLine="true"
                 android:textColor="@color/gray_white"
-                android:textColorHint="@color/gray_white"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@+id/add_text_btn"
-                app:layout_constraintStart_toEndOf="@+id/add_text_btn"
-                app:layout_constraintTop_toTopOf="@+id/add_text_btn" />
+                android:textColorHint="@color/dark_gray"
+                android:textSize="24sp"
+                android:cursorVisible="false"
+                android:textCursorDrawable="@null"
+                android:focusableInTouchMode="true"
+                app:layout_constraintBottom_toTopOf="@id/sticker_view"
+                app:layout_constraintEnd_toStartOf="@+id/add_text_btn"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/horizontal_scroll" />
 
             <ImageButton
                 android:id="@+id/clear_button"
-                android:layout_width="40dp"
+                android:layout_width="48dp"
                 android:layout_height="0dp"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/delete"
-                android:backgroundTint="@color/tr_pink"
+                android:background="@color/woo"
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/delete"
                 app:layout_constraintBottom_toBottomOf="@id/add_text_btn"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/add_text_btn" />
+                app:layout_constraintTop_toTopOf="@id/add_text_btn"
+                app:tint="@color/tr_pink" />
 
-            <com.beva.bornmeme.ui.editFragment.StickerView
+            <com.beva.bornmeme.ui.edit_fragment.StickerView
                 android:id="@+id/sticker_view"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -283,30 +382,34 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/tr_pink"
-                android:fontFamily="@font/rounded_mplus_medium"
+                style="@style/zh_medium_style"
                 android:hint="@string/enter_title_hint"
-                android:padding="8dp"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="4dp"
                 android:singleLine="true"
                 android:textColor="@color/tr_black"
                 android:textColorHint="@color/dark_gray"
-                android:textSize="16sp"
+                android:textSize="18sp"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@id/drag_text_catalog"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sticker_view" />
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/drag_text_catalog"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
                 android:background="@color/tr_pink"
-                android:fontFamily="@font/rounded_mplus_medium"
+                style="@style/zh_medium_style"
                 android:hint="@string/enter_tag_hint"
-                android:padding="8dp"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="4dp"
                 android:singleLine="true"
                 android:textColor="@color/tr_black"
                 android:textColorHint="@color/dark_gray"
-                android:textSize="16sp"
+                android:textSize="18sp"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

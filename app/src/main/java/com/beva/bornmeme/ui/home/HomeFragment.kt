@@ -7,10 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import androidx.recyclerview.widget.StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
 import androidx.recyclerview.widget.StaggeredGridLayoutManager.GAP_HANDLING_NONE
 import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.databinding.FragmentHomeBinding
@@ -36,7 +34,7 @@ class HomeFragment : Fragment() {
         //The Logic of Tag clicked
         setAllTagEnabled(false)
 
-        viewModel = HomeViewModel()
+        viewModel = HomeViewModel(requireContext())
 
         val layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
 
@@ -53,17 +51,12 @@ class HomeFragment : Fragment() {
 
         layoutManager.gapStrategy = GAP_HANDLING_NONE
 
-        viewModel.display.observe(viewLifecycleOwner, Observer {
+        viewModel.postData.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.submitList(it.filterBlock())
                 adapter.notifyDataSetChanged()
             }
         })
-
-//        viewModel.display.observe(viewLifecycleOwner, Observer {
-//            Timber.d("viewModel display value $it")
-//          先藉由obeserve知道拿的資料是什麼
-//        })
 
         val tagAdapter = TagAdapter (
             TagAdapter.OnClickListener {
@@ -89,13 +82,14 @@ class HomeFragment : Fragment() {
             }
         })
 
-
         //click to detail
         viewModel.navigateToDetail.observe(
             viewLifecycleOwner,
             Observer {
                 it?.let {
-                    findNavController().navigate(MobileNavigationDirections.navigateToImgDetailFragment(it))
+                    findNavController()
+                        .navigate(MobileNavigationDirections
+                        .navigateToImgDetailFragment(it))
                     viewModel.onDetailNavigated()
                 }
             }

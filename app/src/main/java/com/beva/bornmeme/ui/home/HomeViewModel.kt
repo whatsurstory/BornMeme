@@ -1,9 +1,11 @@
 package com.beva.bornmeme.ui.home
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build.VERSION_CODES.M
 import android.util.Log
 import androidx.lifecycle.*
+import com.beva.bornmeme.R
 import com.beva.bornmeme.model.Post
 import com.beva.bornmeme.model.Resource
 import com.beva.bornmeme.model.User
@@ -19,13 +21,13 @@ import kotlinx.coroutines.flow.callbackFlow
 import org.checkerframework.checker.units.qual.s
 import timber.log.Timber
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(context: Context) : ViewModel() {
 
     data class UiState(
         val getUserImg: (userId: String, onUserObtained: ((User) -> Unit)) -> Unit
     )
 
-     val liveData = MutableLiveData<List<Post>>()
+    val liveData = MutableLiveData<List<Post>>()
 
     private var _tagSet = MutableLiveData<String>()
     private val tagSet: MutableLiveData<String>
@@ -52,46 +54,45 @@ class HomeViewModel : ViewModel() {
     )
 
 
-        init {
-            getData()
-        }
+    init {
+        getData(context)
+    }
 
-        val tagCell = Transformations.map(liveData) {
-            val cells = mutableListOf<String>()
-            for (item in it) {
-                val tag = item.catalog
-                //包含了相同的字串就不加入list
-                if (!cells.contains(tag)) {
-                    cells.add(tag)
-                }
+    val tagCell = Transformations.map(liveData) {
+        val cells = mutableListOf<String>()
+        for (item in it) {
+            val tag = item.catalog
+            //filter the specific text
+            if (!cells.contains(tag)) {
+                cells.add(tag)
             }
-            cells
         }
+        cells
+    }
 
-
-    //單獨處理snapshotlistener的方式
-    private fun getData(): MutableLiveData<List<Post>> {
+    private fun getData(context: Context): MutableLiveData<List<Post>> {
         val postData = FirebaseFirestore.getInstance()
-            .collection("Posts")
+            .collection(context.getString(R.string.post_collection_text))
             .orderBy("createdTime", Query.Direction.DESCENDING)
         postData.addSnapshotListener { snapshot, exception ->
             Timber.d("You are in HomeViewModel")
-
             exception?.let {
                 Timber.d("Exception ${it.message}")
             }
 
             val list = mutableListOf<Post>()
-            for (document in snapshot!!) {
-                val post = document.toObject(Post::class.java)
-                list.add(post)
+            if (snapshot != null) {
+                for (document in snapshot) {
+                    val post = document.toObject(Post::class.java)
+                    list.add(post)
+                }
             }
             liveData.value = list
         }
         return liveData
     }
 
-    val display = MediatorLiveData<List<Post>>().apply {
+    val postData = MediatorLiveData<List<Post>>().apply {
         addSource(liveData) {
             it.let { posts ->
                 value = if (tagSet.value == null) {
@@ -121,12 +122,11 @@ class HomeViewModel : ViewModel() {
         }
     }
 
-    fun changeTag (tagSet: String) {
-        Timber.d("changeTag $tagSet")
+    fun changeTag(tagSet: String) {
         _tagSet.value = tagSet
     }
 
-    fun resetTag () {
+    fun resetTag() {
         _tagSet.value = null
     }
 
@@ -138,9 +138,8 @@ class HomeViewModel : ViewModel() {
         _navigateToDetail.value = null
     }
 }
-
-
-
+//Todo
+//Extension function of block
 fun List<Post>.filterBlock(): List<Post> {
     return this.filter { !UserManager.user.blockList.contains(it.ownerId) }
 }

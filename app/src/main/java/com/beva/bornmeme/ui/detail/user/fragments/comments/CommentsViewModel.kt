@@ -1,7 +1,9 @@
 package com.beva.bornmeme.ui.detail.user.fragments.comments
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.beva.bornmeme.R
 import com.beva.bornmeme.model.Comment
 import com.beva.bornmeme.model.Post
 import com.beva.bornmeme.model.UserManager.user
@@ -11,40 +13,41 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import timber.log.Timber
 
-class CommentsViewModel(userId: String) : ViewModel() {
+class CommentsViewModel(userId: String, context: Context) : ViewModel() {
 
     data class UiState(
-        val getPostImg:(postId:String, onPostObtained:((Post) -> Unit)) -> Unit
+        val getPostImg: (
+            postId: String,
+            onPostObtained: ((Post) -> Unit)
+        ) -> Unit
     )
 
     val postData = MutableLiveData<List<Comment>>()
 
     init {
-        getData(userId)
+        getData(userId,context)
     }
 
     //Post All Photo in Fragment
-    private fun getData(userId: String): MutableLiveData<List<Comment>> {
-        Timber.d("user $userId")
-        val collection = FirebaseFirestore.getInstance()
-            .collection("Comments")
-
-        collection.whereEqualTo("userId", userId)
+    private fun getData(userId: String, context:Context): MutableLiveData<List<Comment>> {
+        FirebaseFirestore.getInstance()
+            .collection(context.getString(R.string.comment_collection_text))
+            .whereEqualTo("userId", userId)
             .addSnapshotListener { snapshot, e ->
-                Timber.d("comment e ->${e?.message}")
                 val list = mutableListOf<Comment>()
-                for (document in snapshot!!){
-                    Timber.d("comment snapshot ID ->${document.id} " +
-                            "list -> ${document.data}")
-                    val post = document.toObject(Comment::class.java)
-                    list.add(post)
+                if (snapshot != null) {
+                    for (document in snapshot) {
+
+                        val post = document.toObject(Comment::class.java)
+                        list.add(post)
+                    }
                 }
                 postData.value = list
             }
         return postData
     }
 
-    val uiState = UiState (
+    val uiState = UiState(
         getPostImg = { postId, onPostObtained ->
             Firebase.firestore
                 .collection("Posts")
@@ -56,7 +59,7 @@ class CommentsViewModel(userId: String) : ViewModel() {
                         return@addOnCompleteListener onPostObtained(post)
                     }
                 }
-        }
-    )
+            }
+        )
 
 }

@@ -6,33 +6,27 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
-import android.os.Handler
-import android.os.Looper
 import android.provider.MediaStore
 import android.provider.Settings
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.FileProvider
-import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.preference.PreferenceManager
 import com.beva.bornmeme.databinding.ActivityMainBinding
-import com.beva.bornmeme.keyboard.StickerImporter
-import com.beva.bornmeme.keyboard.Toaster
 import com.beva.bornmeme.model.UserManager
 import com.bumptech.glide.Glide
 import com.karumi.dexter.Dexter
@@ -47,16 +41,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
-import java.util.Calendar
-import java.util.concurrent.Executors
 
 class MainActivity : AppCompatActivity() {
 
     val viewModel by viewModels<MainViewModel> { getVmFactory() }
 
-//    TODO: Move data to viewModel
-    private var saveUri: Uri? = null
-
+    private var cameraUri: Uri? = null
     private var isOpen = false
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -65,14 +55,19 @@ class MainActivity : AppCompatActivity() {
     private lateinit var fabOpen: Animation
     private lateinit var fabClose: Animation
     private lateinit var fabRotate: Animation
-    private lateinit var fabRotateAnti: Animation
+    private lateinit var fabAntiRotate: Animation
 
     private companion object {
         const val PHOTO_FROM_GALLERY = 0
         const val PHOTO_FROM_CAMERA = 1
     }
 
-    private fun TextView.typeWrite(lifecycleOwner: LifecycleOwner, text: String, intervalMs: Long) {
+    //TextView Animation
+    private fun TextView.typeWrite(
+        lifecycleOwner: LifecycleOwner,
+        text: String,
+        intervalMs: Long
+    ) {
         this@typeWrite.text = ""
         lifecycleOwner.lifecycleScope.launch {
             repeat(text.length) {
@@ -89,14 +84,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        Timber.i("activity viewModel ${viewModel}")
-        viewModel.user.observe(this, Observer{
+        viewModel.user.observe(this, Observer {
             it?.let {
-                Timber.d(("Observe User cell : $it"))
-            Glide.with(this)
-                .load(it.profilePhoto)
-                .placeholder(R.drawable._50)
-                .into(binding.profileBtn)
+                binding.profileBtn.loadImage(it.profilePhoto)
             }
         })
 
@@ -104,335 +94,195 @@ class MainActivity : AppCompatActivity() {
         fabOpen = AnimationUtils.loadAnimation(this, R.anim.fab_open)
         fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_close)
         fabRotate = AnimationUtils.loadAnimation(this, R.anim.rotate)
-        fabRotateAnti = AnimationUtils.loadAnimation(this, R.anim.rotate_anti)
+        fabAntiRotate = AnimationUtils.loadAnimation(this, R.anim.rotate_anti)
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         //toolbar support action bar
         setSupportActionBar(binding.toolbar)
         supportActionBar?.title = null
 
-        appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.splash_screen, R.id.nav_home)) //  IDs of fragments you want without the ActionBar home/up button
-
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.splash_screen, R.id.nav_home))
+        //  IDs of fragments you want without the ActionBar home/up button
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-
-        //the tool bar showing or not
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id == R.id.splash_screen) {
-                supportActionBar?.hide()
-                binding.greeting.visibility = View.GONE
-                binding.fab.visibility = View.GONE
-                binding.profileBtn.visibility = View.GONE
-                binding.changeModeBtn.visibility = View.GONE
-            } else if (destination.id == R.id.fragmentEditFixmode || destination.id == R.id.dialogPreview) {
-                supportActionBar?.show()
-                binding.greeting.visibility = View.GONE
-                binding.fab.visibility = View.GONE
-                binding.profileBtn.visibility = View.GONE
-                binding.moduleTitleText.visibility = View.GONE
-                binding.changeModeBtn.visibility = View.VISIBLE
-                binding.changeModeBtn.setOnClickListener {
-                    Timber.d("你有按到change")
-                    navigateToDrag(viewModel.editingImg)
+            when (destination.id) {
+                R.id.splash_screen -> {
+                    setToolbarUi(
+                        isShowFab = false,
+                        isShowActionBarShow = false
+                    )
                 }
-            } else  if (destination.id == R.id.fragmentEditDrag) {
-                supportActionBar?.show()
-                binding.changeModeBtn.visibility = View.GONE
-                binding.fab.visibility = View.GONE
-                binding.profileBtn.visibility = View.GONE
-                binding.moduleTitleText.visibility = View.GONE
-                binding.greeting.visibility = View.GONE
-            } else {
-                supportActionBar?.show()
-                binding.greeting.visibility = View.GONE
-                binding.fab.visibility = View.VISIBLE
-                binding.profileBtn.visibility = View.GONE
-                binding.changeModeBtn.visibility = View.GONE
-                //fab expending animation
-                binding.fab.setOnClickListener { view ->
-
-                    if (isOpen) {
-                        binding.fabCameraEdit.startAnimation(fabClose)
-                        binding.fabModuleEdit.startAnimation(fabClose)
-                        binding.fabGalleryEdit.startAnimation(fabClose)
-                        binding.fab.startAnimation(fabRotate)
-
-                        binding.fabCameraEdit.visibility = View.GONE
-                        binding.fabCameraEdit.clearAnimation()
-                        binding.fabModuleEdit.visibility = View.GONE
-                        binding.fabModuleEdit.clearAnimation()
-                        binding.fabGalleryEdit.visibility = View.GONE
-                        binding.fabGalleryEdit.clearAnimation()
-
-                        binding.fabCameraEdit.isEnabled = false
-                        binding.fabModuleEdit.isEnabled = false
-                        binding.fabGalleryEdit.isEnabled = false
-
-                        isOpen = false
-                    } else {
-
-                        binding.fabCameraEdit.startAnimation(fabOpen)
-                        binding.fabModuleEdit.startAnimation(fabOpen)
-                        binding.fabGalleryEdit.startAnimation(fabOpen)
-                        binding.fab.startAnimation(fabRotateAnti)
-
-                        binding.fabCameraEdit.visibility = View.VISIBLE
-                        binding.fabModuleEdit.visibility = View.VISIBLE
-                        binding.fabGalleryEdit.visibility = View.VISIBLE
-
-                        binding.fabCameraEdit.isEnabled = true
-                        binding.fabModuleEdit.isEnabled = true
-                        binding.fabGalleryEdit.isEnabled = true
-
-                        isOpen = true
-                    }
-                    binding.fabCameraEdit.setOnClickListener {
-
-                        fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_close)
-                        fabRotate = AnimationUtils.loadAnimation(this, R.anim.rotate)
-                        binding.fabCameraEdit.startAnimation(fabClose)
-                        binding.fabModuleEdit.startAnimation(fabClose)
-                        binding.fabGalleryEdit.startAnimation(fabClose)
-
-                        binding.fab.startAnimation(fabRotate)
-
-                        binding.fabCameraEdit.visibility = View.GONE
-                        binding.fabCameraEdit.clearAnimation()
-                        binding.fabModuleEdit.visibility = View.GONE
-                        binding.fabModuleEdit.clearAnimation()
-                        binding.fabGalleryEdit.visibility = View.GONE
-                        binding.fabGalleryEdit.clearAnimation()
-
-                        isOpen = false
-
-                        cameraCheckPermission()
-                    }
-                    binding.fabModuleEdit.setOnClickListener {
-
-                        binding.fabCameraEdit.startAnimation(fabClose)
-                        binding.fabModuleEdit.startAnimation(fabClose)
-                        binding.fabGalleryEdit.startAnimation(fabClose)
-                        binding.fab.startAnimation(fabRotate)
-
-                        binding.fabCameraEdit.visibility = View.GONE
-                        binding.fabCameraEdit.clearAnimation()
-                        binding.fabModuleEdit.visibility = View.GONE
-                        binding.fabModuleEdit.clearAnimation()
-                        binding.fabGalleryEdit.visibility = View.GONE
-                        binding.fabGalleryEdit.clearAnimation()
-
-                        binding.fabCameraEdit.isEnabled = false
-                        binding.fabModuleEdit.isEnabled = false
-                        binding.fabGalleryEdit.isEnabled = false
-
-                        isOpen = false
-                        navController.navigate(MobileNavigationDirections.navigateToFragmentGallery())
-                    }
-                    binding.fabGalleryEdit.setOnClickListener {
-
-                        fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_close)
-                        fabRotate = AnimationUtils.loadAnimation(this, R.anim.rotate)
-                        binding.fabCameraEdit.startAnimation(fabClose)
-                        binding.fabModuleEdit.startAnimation(fabClose)
-                        binding.fabGalleryEdit.startAnimation(fabClose)
-
-                        binding.fab.startAnimation(fabRotate)
-
-                        binding.fabCameraEdit.visibility = View.GONE
-                        binding.fabCameraEdit.clearAnimation()
-                        binding.fabModuleEdit.visibility = View.GONE
-                        binding.fabModuleEdit.clearAnimation()
-                        binding.fabGalleryEdit.visibility = View.GONE
-                        binding.fabGalleryEdit.clearAnimation()
-
-                        isOpen = false
-
-                        galleryCheckPermission()
-                    }
-                }
-                if (destination.id == R.id.nav_home) {
+                R.id.nav_home -> {
+                    setToolbarUi(
+                        isShowProfile = true
+                    )
                     viewModel.setUser(UserManager.user)
-                    binding.moduleTitleText.visibility = View.GONE
-                    binding.profileBtn.visibility = View.VISIBLE
-                    binding.changeModeBtn.visibility = View.GONE
-                    binding.greeting.visibility = View.VISIBLE
-                    binding.greeting.typeWrite(this,
-                        "BornMeme.",
-                        100L)
-                    binding.greeting.setOnClickListener {
-                        navController.navigate(MobileNavigationDirections.navigateToFragmentSetting())
-                    }
-                } else if (destination.id == R.id.fragment_gallery) {
-                    binding.moduleTitleText.visibility = View.VISIBLE
-                } else {
-                    binding.moduleTitleText.visibility = View.GONE
+                }
+                R.id.fragmentEditFixmode -> {
+                    setToolbarUi(
+                        isShowFab = false,
+                        isShowEditMode = true
+                    )
+                }
+                R.id.fragmentEditDrag -> {
+                    setToolbarUi(
+                        isShowFab = false
+                    )
+                }
+                R.id.fragment_gallery -> {
+                    setToolbarUi(
+                        isShowGalleryTitle = true
+                    )
+                }
+                R.id.img_detail_fragment -> {
+                    setToolbarUi()
+                }
+                R.id.user_detail_fragment -> {
+                    setToolbarUi()
+                }
+                R.id.fragment_setting -> {
+                    setToolbarUi(
+                        isShowFab = false
+                    )
+                }
+                R.id.fragment_service -> {
+                    setToolbarUi(
+                        isShowFab = false
+                    )
                 }
             }
+        }
+
+        binding.fab.setOnClickListener { view ->
+
+            if (isOpen) closeFab() else openFab()
+
+            binding.fabCameraEdit.setOnClickListener {
+                closeFab()
+                Dexter.withContext(this)
+                    .withPermissions(
+                        android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                        android.Manifest.permission.CAMERA
+                    )
+                    .withListener(
+                        cameraPermissionListener
+                    )
+                    .onSameThread()
+                    .check()
+            }
+            binding.fabModuleEdit.setOnClickListener {
+                closeFab()
+                findNavController(R.id.nav_host_fragment_content_main)
+                    .navigate(MobileNavigationDirections.navigateToFragmentGallery())
+            }
+            binding.fabGalleryEdit.setOnClickListener {
+                closeFab()
+                Dexter.withContext(this)
+                    .withPermission(
+                        android.Manifest.permission.READ_EXTERNAL_STORAGE
+                    )
+                    .withListener(albumPermissionListener)
+                    .onSameThread()
+                    .check()
+            }
+        }
+
+        binding.changeModeBtn.setOnClickListener {
+            navigateToDrag(viewModel.editingImg)
         }
 
         binding.profileBtn.setOnClickListener {
-            Timber.d("userid ->")
             viewModel.user.value?.userId?.let { id ->
-                navController.navigate(MobileNavigationDirections
-                    .navigateToUserDetailFragment(id))
+                findNavController(R.id.nav_host_fragment_content_main)
+                    .navigate(
+                        MobileNavigationDirections
+                            .navigateToUserDetailFragment(id)
+                    )
             }
         }
-
-//        setupKeyboard()
-//        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-//        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-//        intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
-//        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-//            if (result.resultCode == Activity.RESULT_OK) {
-//                val editor = PreferenceManager.getDefaultSharedPreferences(this).edit()
-//                val stickerDirPath = result.data?.data.toString()
-//                editor.putString("stickerDirPath", stickerDirPath)
-//                editor.putString("lastUpdateDate", Calendar.getInstance().time.toString())
-//                editor.putString("recentCache", "")
-//                editor.putString("compatCache", "")
-//                editor.apply()
-//                Timber.i("bmkb, stickerDirPath: $stickerDirPath")
-//                val toaster = Toaster(baseContext)
-//                val executor = Executors.newSingleThreadExecutor()
-//                val handler = Handler(Looper.getMainLooper())
-//                Toast.makeText(this, "嘻嘻", Toast.LENGTH_SHORT).show()
-//                executor.execute {
-//                    val totalStickers =
-//                        StickerImporter(baseContext, toaster).importStickers(
-//                            stickerDirPath
-//                        )
-//                    handler.post {
-//                        toaster.toastOnState(
-//                            arrayOf(
-//                                getString(R.string.imported_020, totalStickers),
-//                                getString(R.string.imported_031, totalStickers),
-//                                getString(R.string.imported_032, totalStickers),
-//                                getString(R.string.imported_033, totalStickers),
-//                            )
-//                        )
-//                        editor.putInt("numStickersImported", totalStickers)
-//                        editor.apply()
-//
-//                    }
-//                }
-//            }
-//        }.launch(intent)
     }
 
-//    fun setupKeyboard() {
-//        Timber.i("bmkb, setupKeyboard")
-//
-//        val toaster = Toaster(baseContext)
-//        val editor = PreferenceManager.getDefaultSharedPreferences(this).edit()
-//        var stickerDirPath =
-//            Uri.parse(getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!.absolutePath).toString() ?: ""
-//
-//
-//        DocumentFile.fromFile().parentFile.uri
-//
-//        Timber.i("bmkb, stickerDirPath=$stickerDirPath")
-//
-////        stickerDirPath = "content://com.android.externalstorage.documents/tree/primary%3APictures"
-//        editor.putString("stickerDirPath", stickerDirPath)
-//        editor.putString("lastUpdateDate", Calendar.getInstance().time.toString())
-//        editor.putString("recentCache", "")
-//        editor.putString("compatCache", "")
-//        editor.apply()
-//
-//        this.contentResolver.takePersistableUriPermission(
-//            Uri.parse(getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!.absolutePath),
-//            Intent.FLAG_GRANT_READ_URI_PERMISSION
-//        )
-//
-//        val executor = Executors.newSingleThreadExecutor()
-//        val handler = Handler(Looper.getMainLooper())
-//        Toast.makeText(this, "嘻嘻", Toast.LENGTH_SHORT).show()
-//        executor.execute {
-//            val totalStickers =
-//                StickerImporter(baseContext, toaster).importStickers(
-//                    stickerDirPath
-//                )
-//            handler.post {
-//                toaster.toastOnState(
-//                    arrayOf(
-//                        getString(R.string.imported_020, totalStickers),
-//                        getString(R.string.imported_031, totalStickers),
-//                        getString(R.string.imported_032, totalStickers),
-//                        getString(R.string.imported_033, totalStickers),
-//                    )
-//                )
-//                editor.putInt("numStickersImported", totalStickers)
-//                editor.apply()
-//
-//            }
-//        }
-//    }
+
+    private fun changeHomeTitle(isGreetingShow: Boolean, text: String?) {
+        if (isGreetingShow) {
+            binding.greeting.visibility = View.VISIBLE
+            if (text != null) {
+                binding.greeting.typeWrite(
+                    this,
+                    text,
+                    100L
+                )
+            }
+        } else {
+            binding.greeting.visibility = View.GONE
+        }
+    }
+
+    private fun setToolbarUi(
+        isShowFab: Boolean = true,
+        isShowEditMode: Boolean = false,
+        isShowGalleryTitle: Boolean = false,
+        isShowProfile: Boolean = false,
+        isShowActionBarShow: Boolean = true
+    ) {
+
+        binding.profileBtn.visibility = if (isShowProfile) View.VISIBLE else View.GONE
+        changeHomeTitle(isShowProfile, getString(R.string.bornmeme))
+        binding.moduleTitleText.visibility = if (isShowGalleryTitle) View.VISIBLE else View.GONE
+        binding.changeModeBtn.visibility = if (isShowEditMode) View.VISIBLE else View.GONE
+        binding.fab.visibility = if (isShowFab) View.VISIBLE else View.GONE
+        if (isShowActionBarShow) supportActionBar?.show() else supportActionBar?.hide()
+
+    }
 
 //    fun updateUser(user: User) {
 //        viewModel.setUser(user)
 //    }
 
-
-    private fun galleryCheckPermission() {
-        Dexter.withContext(this).withPermission(
-            android.Manifest.permission.READ_EXTERNAL_STORAGE
-        ).withListener(
-            object : PermissionListener {
+    private val albumPermissionListener =
+        object : PermissionListener {
             override fun onPermissionGranted(
-                p0: PermissionGrantedResponse?) {
+                p0: PermissionGrantedResponse?
+            ) {
                 toAlbum()
             }
 
             override fun onPermissionDenied(
-                p0: PermissionDeniedResponse?) {
-                Toast.makeText(
-                    this@MainActivity,
-                    "You have denied the storage permission to select image",
-                    Toast.LENGTH_SHORT
-                ).show()
+                p0: PermissionDeniedResponse?
+            ) {
                 showRotationDialogForPermission()
             }
 
             override fun onPermissionRationaleShouldBeShown(
-                p0: PermissionRequest?, p1: PermissionToken?) {
+                p0: PermissionRequest?, p1: PermissionToken?
+            ) {
                 showRotationDialogForPermission()
             }
-        }).onSameThread().check()
-    }
+        }
+
+    private val cameraPermissionListener =
+        object : MultiplePermissionsListener {
+            override fun onPermissionsChecked(
+                report: MultiplePermissionsReport?
+            ) {
+                if (report != null && report.areAllPermissionsGranted()) {
+                    toCamera()
+                }
+            }
+
+            override fun onPermissionRationaleShouldBeShown(
+                p0: MutableList<PermissionRequest>?,
+                p1: PermissionToken?
+            ) {
+                showRotationDialogForPermission()
+            }
+        }
 
     private fun toAlbum() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
         startActivityForResult(intent, PHOTO_FROM_GALLERY)
-    }
-
-    private fun cameraCheckPermission() {
-        Dexter.withContext(this)
-            .withPermissions(
-                android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                android.Manifest.permission.CAMERA).withListener(
-                object : MultiplePermissionsListener {
-                    override fun onPermissionsChecked(
-                        report: MultiplePermissionsReport?) {
-                        report.let {
-                        if (report != null) {
-                            if (report.areAllPermissionsGranted()){
-                                toCamera()
-                            }
-                        }
-                    }
-                }
-
-                override fun onPermissionRationaleShouldBeShown(
-                    p0: MutableList<PermissionRequest>?,
-                    p1: PermissionToken?
-                ) {
-                    showRotationDialogForPermission()
-                }
-
-            }
-        ).onSameThread().check()
     }
 
     private fun toCamera() {
@@ -449,7 +299,7 @@ class MainActivity : AppCompatActivity() {
                 tmpFile
             )
 
-        saveUri = uriForCamera
+        cameraUri = uriForCamera
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uriForCamera)
         startActivityForResult(intent, PHOTO_FROM_CAMERA)
     }
@@ -457,8 +307,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        if (saveUri != null) {
-            val uriString = saveUri.toString()
+        if (cameraUri != null) {
+            val uriString = cameraUri.toString()
             outState.putString("saveUri", uriString)
         }
     }
@@ -470,8 +320,7 @@ class MainActivity : AppCompatActivity() {
             PHOTO_FROM_GALLERY -> {
                 when (resultCode) {
                     Activity.RESULT_OK -> {
-                        val uri = data!!.data
-                        Timber.d("PHOTO_FROM_GALLERY uri => $uri")
+                        val uri = data?.data
                         viewModel.editingImg = uri
                         navigateToEditor(uri)
                     }
@@ -484,10 +333,8 @@ class MainActivity : AppCompatActivity() {
             PHOTO_FROM_CAMERA -> {
                 when (resultCode) {
                     Activity.RESULT_OK -> {
-                        Timber.d("PHOTO_FROM_CAMERA uri => $saveUri")
-                        viewModel.editingImg = saveUri
-                        navigateToEditor(saveUri)
-
+                        viewModel.editingImg = cameraUri
+                        navigateToEditor(cameraUri)
                     }
                     Activity.RESULT_CANCELED -> {
                         Timber.d("getPhotoResult cancel $resultCode")
@@ -497,10 +344,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-    //if we got the photo from camera/gallery, we'll take the arguments of image complete the navigate
+    //got the photo from camera/gallery, take the arguments of image complete the navigate
     private fun navigateToEditor(uri: Uri?) {
-        binding.fab.visibility = View.GONE
         uri?.let {
             findNavController(R.id.nav_host_fragment_content_main)
                 .navigate(MobileNavigationDirections.navigateToEditFragment(it))
@@ -509,12 +354,12 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("RestrictedApi")
     private fun navigateToDrag(uri: Uri?) {
-        binding.fab.visibility = View.GONE
-        Timber.d("Uri -> $uri")
         uri?.let {
             findNavController(R.id.nav_host_fragment_content_main)
-                .navigate(MobileNavigationDirections.navigateToDragEditFragment(it))
-
+                .navigate(
+                    MobileNavigationDirections
+                        .navigateToDragEditFragment(it)
+                )
         }
     }
 
@@ -536,10 +381,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun showRotationDialogForPermission() {
         AlertDialog.Builder(this)
-            .setMessage("It looks like you have turned off permissions"
-                    + "required for this feature. It can be enable under App settings!!!")
-
-            .setPositiveButton("Go TO SETTINGS") { _, _ ->
+            .setMessage(
+                getString(R.string.not_allow_prmission)
+            )
+            .setPositiveButton(getString(R.string.to_setting_text)) { _, _ ->
 
                 try {
                     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
@@ -551,14 +396,57 @@ class MainActivity : AppCompatActivity() {
                     e.printStackTrace()
                 }
             }
-
-            .setNegativeButton("CANCEL") { dialog, _ ->
+            .setNegativeButton(getString(R.string.cancel_text)) { dialog, _ ->
                 dialog.dismiss()
             }.show()
     }
 
+    //TODO
+    private fun closeFab() {
+        binding.fabCameraEdit.startAnimation(fabClose)
+        binding.fabModuleEdit.startAnimation(fabClose)
+        binding.fabGalleryEdit.startAnimation(fabClose)
+        binding.fab.startAnimation(fabRotate)
+
+        binding.fabCameraEdit.visibility = View.GONE
+        binding.fabCameraEdit.clearAnimation()
+        binding.fabModuleEdit.visibility = View.GONE
+        binding.fabModuleEdit.clearAnimation()
+        binding.fabGalleryEdit.visibility = View.GONE
+        binding.fabGalleryEdit.clearAnimation()
+
+        binding.fabCameraEdit.isEnabled = false
+        binding.fabModuleEdit.isEnabled = false
+        binding.fabGalleryEdit.isEnabled = false
+
+        isOpen = false
+    }
+
+    private fun openFab() {
+        binding.fabCameraEdit.startAnimation(fabOpen)
+        binding.fabModuleEdit.startAnimation(fabOpen)
+        binding.fabGalleryEdit.startAnimation(fabOpen)
+        binding.fab.startAnimation(fabAntiRotate)
+
+        binding.fabCameraEdit.visibility = View.VISIBLE
+        binding.fabModuleEdit.visibility = View.VISIBLE
+        binding.fabGalleryEdit.visibility = View.VISIBLE
+
+        binding.fabCameraEdit.isEnabled = true
+        binding.fabModuleEdit.isEnabled = true
+        binding.fabGalleryEdit.isEnabled = true
+
+        isOpen = true
+    }
 }
 
-fun Activity.getVmFactory(): ViewModelFactory {
+fun getVmFactory(): ViewModelFactory {
     return ViewModelFactory()
+}
+
+fun ImageView.loadImage(url: String?) {
+    Glide.with(context)
+        .load(url)
+        .placeholder(R.drawable.place_holder)
+        .into(this)
 }

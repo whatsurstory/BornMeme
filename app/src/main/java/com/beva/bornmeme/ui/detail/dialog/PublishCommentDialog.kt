@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
@@ -20,8 +21,8 @@ import com.google.android.material.snackbar.Snackbar
 import timber.log.Timber
 
 
-class PublishCommentDialog: AppCompatDialogFragment() {
-//TODO: take the data to viewModel -> observe the argument -> complete the post comment with taking user data
+class PublishCommentDialog : AppCompatDialogFragment() {
+
     lateinit var binding: DialogCommentBinding
     lateinit var viewModel: PublishViewModel
     private lateinit var postId: String
@@ -32,9 +33,13 @@ class PublishCommentDialog: AppCompatDialogFragment() {
         super.onCreate(savedInstanceState)
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.PublishDialog)
         binding = DialogCommentBinding.inflate(layoutInflater)
+
         binding.layoutPublish.startAnimation(AnimationUtils.loadAnimation(context, R.anim.slide))
+
         viewModel = PublishViewModel()
+
         binding.dialog = this
+
         binding.editPublishContent.focusAndShowKeyboard()
 
     }
@@ -48,7 +53,8 @@ class PublishCommentDialog: AppCompatDialogFragment() {
                 post {
                     // We still post the call, just in case we are being notified of the windows focus
                     // but InputMethodManager didn't get properly setup yet.
-                    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    val imm =
+                        context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
                 }
             }
@@ -74,14 +80,14 @@ class PublishCommentDialog: AppCompatDialogFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         arguments?.let { bundle ->
             postId = bundle.getString("postId").toString()
-            Timber.d("get postId from post $postId")
             parentId = bundle.getString("parentId").toString()
-            Timber.d("get parentId from post $parentId")
         }
 
         if (parentId.isNotEmpty()) {
@@ -92,13 +98,11 @@ class PublishCommentDialog: AppCompatDialogFragment() {
         binding.buttonPublish.setOnClickListener {
 
             if (binding.editPublishContent.text.isNullOrEmpty()) {
-                Snackbar.make(it, "Not Adding Text Yet", Snackbar.LENGTH_SHORT)
-                    .setAction("Action", null).show()
-
+                Toast.makeText(context, "還沒有訊息呢", Toast.LENGTH_SHORT).show()
             } else {
                 binding.postCommentLotties.visibility = View.VISIBLE
                 binding.postCommentLotties.setAnimation(R.raw.refresh)
-                viewModel.publishComment(postId, parentId ,binding)
+                viewModel.publishComment(postId, parentId, binding)
                 Handler(Looper.getMainLooper()).postDelayed({
                     findNavController().navigateUp()
                 }, 1200)

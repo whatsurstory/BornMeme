@@ -8,21 +8,20 @@ import androidx.recyclerview.widget.RecyclerView
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.ItemUserFavoriteBinding
 import com.beva.bornmeme.databinding.ItemUserPostsBinding
+import com.beva.bornmeme.loadImage
 import com.beva.bornmeme.model.Post
 import com.beva.bornmeme.ui.home.HomeAdapter
 import com.bumptech.glide.Glide
 import timber.log.Timber
 
-class FavoriteAdapter(private val onClickListener: OnClickListener): ListAdapter<Post, FavoriteAdapter.ViewHolder>(DiffCallback) {
+class FavoriteAdapter(private val onClickListener: OnClickListener) :
+    ListAdapter<Post, FavoriteAdapter.ViewHolder>(DiffCallback) {
 
 
     class ViewHolder(private val binding: ItemUserFavoriteBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Post){
-            Glide.with(binding.favoriteImg)
-                .load(item.url)
-                .placeholder(R.drawable._50)
-                .into(binding.favoriteImg)
+        fun bind(item: Post) {
+            binding.favoriteImg.loadImage(item.url)
         }
     }
 
@@ -38,7 +37,13 @@ class FavoriteAdapter(private val onClickListener: OnClickListener): ListAdapter
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(ItemUserFavoriteBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return ViewHolder(
+            ItemUserFavoriteBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -46,12 +51,12 @@ class FavoriteAdapter(private val onClickListener: OnClickListener): ListAdapter
         item?.let {
             holder.itemView.setOnClickListener {
                 onClickListener.onClick(item)
-                Timber.d("click $item position $position")
             }
             holder.bind(item)
         }
 
     }
+
     class OnClickListener(val clickListener: (item: Post) -> Unit) {
         fun onClick(item: Post) = clickListener(item)
     }

@@ -29,7 +29,6 @@ class CommentsFragment : Fragment() {
 
     lateinit var binding: FragmentCommentsBinding
     private lateinit var viewModel: CommentsViewModel
-    //TODO: Single Recycler onClick to "the post" view
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,7 +37,7 @@ class CommentsFragment : Fragment() {
         binding = FragmentCommentsBinding.inflate(inflater, container, false)
 
         val userId = requireArguments().getString("userIdKey") ?: ""
-        viewModel = CommentsViewModel(userId)
+        viewModel = CommentsViewModel(userId, requireContext())
 
         val adapter = UserCommentAdapter(viewModel.uiState)
 

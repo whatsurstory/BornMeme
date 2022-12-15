@@ -17,7 +17,7 @@ import com.beva.bornmeme.ui.home.filterBlock
 class FavoriteFragment : Fragment() {
 
     companion object {
-         fun newInstance(userId: String): FavoriteFragment {
+        fun newInstance(userId: String): FavoriteFragment {
             val fragment = FavoriteFragment()
             val arg = Bundle()
             arg.putString("userIdKey", userId)
@@ -32,16 +32,19 @@ class FavoriteFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentFavoriteBinding.inflate(inflater,container,false)
-        val userId = requireArguments().getString("userIdKey") ?: ""
-        viewModel = FavoriteViewModel(userId)
+        binding = FragmentFavoriteBinding.inflate(inflater, container, false)
 
-        binding.favoriteRecycler.layoutManager = GridLayoutManager(context,3)
+        val userId = requireArguments().getString("userIdKey") ?: ""
+        viewModel = FavoriteViewModel(userId, requireContext())
+
+        binding.favoriteRecycler.layoutManager = GridLayoutManager(context, 3)
+
         val adapter = FavoriteAdapter(
             FavoriteAdapter.OnClickListener {
                 viewModel.navigateToDetail(it)
             }
         )
+
         binding.favoriteRecycler.adapter = adapter
 
         viewModel.likeData.observe(viewLifecycleOwner) {
@@ -52,7 +55,11 @@ class FavoriteFragment : Fragment() {
             viewLifecycleOwner,
             Observer {
                 it?.let {
-                    findNavController().navigate(MobileNavigationDirections.navigateToImgDetailFragment(it))
+                    findNavController()
+                        .navigate(
+                            MobileNavigationDirections
+                                .navigateToImgDetailFragment(it)
+                        )
                     viewModel.onDetailNavigated()
                 }
             }

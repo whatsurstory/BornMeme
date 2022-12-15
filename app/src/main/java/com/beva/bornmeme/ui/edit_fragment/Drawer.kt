@@ -1,4 +1,4 @@
-package com.beva.bornmeme.ui.editFragment
+package com.beva.bornmeme.ui.edit_fragment
 
 import android.animation.ValueAnimator
 import android.graphics.*
@@ -26,8 +26,10 @@ abstract class Drawer(val stickerView: StickerView, var bitmap: Bitmap) {
     private var point1 = PointF(0f, 0f)
     private var point2 = PointF(0f, 0f)
     private var distance = 0f
+
     //用于控制双指缩放或旋转时禁止移动
     private var canMove = true
+
     //是否消费单指或双指时间，用于不同贴纸间的事件拦截处理
     private var consumeTapOne = false
     private var consumeTapTwin = false
@@ -49,8 +51,8 @@ abstract class Drawer(val stickerView: StickerView, var bitmap: Bitmap) {
 
             MotionEvent.ACTION_DOWN -> {
                 if (event.pointerCount == 1) {
-                    consumeTapOne = checkTouch(event.x,event.y)
-                    if(consumeTapOne){
+                    consumeTapOne = checkTouch(event.x, event.y)
+                    if (consumeTapOne) {
                         point1.x = event.x
                         point1.y = event.y
                         return true
@@ -65,7 +67,7 @@ abstract class Drawer(val stickerView: StickerView, var bitmap: Bitmap) {
                     Timber.d("point1 => x: ${point1.x}, y: ${point1.y}")
                     val dx = event.x - point1.x
                     val dy = event.y - point1.y
-                    Timber.d(" => dx: ${dx}, dy: ${dy}")
+                    Timber.d(" => dx: ${dx}, dy: $dy")
                     matrix.postTranslate(dx, dy)
                     point1.x = event.x
                     point1.y = event.y
@@ -84,22 +86,26 @@ abstract class Drawer(val stickerView: StickerView, var bitmap: Bitmap) {
                     val x = array[Matrix.MTRANS_X]
                     val y = array[Matrix.MTRANS_Y]
                     val oldRatio = array[Matrix.MSCALE_X]
-                    if(allowScale()){
+                    if (allowScale()) {
                         //双指缩放
-                        matrix.postScale(newRatio,
+                        matrix.postScale(
+                            newRatio,
                             newRatio,
                             x + bitmap.width * oldRatio / 2,
-                            y + bitmap.height * oldRatio / 2)
+                            y + bitmap.height * oldRatio / 2
+                        )
 //                    }
                         distance = newDistance
                     }
-                    if(allowRotation()){
+                    if (allowRotation()) {
                         //双指旋转
                         val d1 = StickerUtils.calculateDegree(point1, point2)
                         val d2 = StickerUtils.calculateDegree(p1, p2)
-                        matrix.postRotate((d2 - d1).toFloat(),
+                        matrix.postRotate(
+                            (d2 - d1).toFloat(),
                             (rectF.left + rectF.right) / 2,
-                            (rectF.top + rectF.bottom) / 2)
+                            (rectF.top + rectF.bottom) / 2
+                        )
                         point1 = p1
                         point2 = p2
                     }
@@ -115,8 +121,9 @@ abstract class Drawer(val stickerView: StickerView, var bitmap: Bitmap) {
                     point1 = PointF(event.getX(0), event.getY(0))
                     point2 = PointF(event.getX(1), event.getY(1))
                     distance = StickerUtils.calculateDistance(point1, point2)
-                    consumeTapTwin = checkTouch(point1.x,point1.y) && checkTouch(point2.x,point2.y)
-                    if(consumeTapTwin)
+                    consumeTapTwin =
+                        checkTouch(point1.x, point1.y) && checkTouch(point2.x, point2.y)
+                    if (consumeTapTwin)
                         return true
                 }
             }
@@ -128,7 +135,7 @@ abstract class Drawer(val stickerView: StickerView, var bitmap: Bitmap) {
                 val y = rectF.top
                 rebound(x, y)
                 canMove = true
-                if(consumeTapTwin || consumeTapOne)
+                if (consumeTapTwin || consumeTapOne)
                     return true
             }
         }
@@ -226,16 +233,18 @@ abstract class Drawer(val stickerView: StickerView, var bitmap: Bitmap) {
         val dx = (bitmap.width - bitmap.width * array[Matrix.MSCALE_X]) / 2
         val dy = (bitmap.height - bitmap.height * array[Matrix.MSCALE_X]) / 2
         matrix.postTranslate(-1 * dx, -1 * dy)
-        matrix.postTranslate(0f,
-            (stickerView.height - bitmap.height * array[Matrix.MSCALE_X]) / 2)
+        matrix.postTranslate(
+            0f,
+            (stickerView.height - bitmap.height * array[Matrix.MSCALE_X]) / 2
+        )
     }
 
     /**
      * 判断手指是否触碰到对应贴纸
      */
-    private fun checkTouch(x: Float,y: Float): Boolean {
+    private fun checkTouch(x: Float, y: Float): Boolean {
         mapRect()
-        if (x in rectF.left-10..rectF.right+10 && y in rectF.top-10..rectF.bottom+10)
+        if (x in rectF.left - 10..rectF.right + 10 && y in rectF.top - 10..rectF.bottom + 10)
             return true
         return false
     }

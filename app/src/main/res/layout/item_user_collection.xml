@@ -13,7 +13,7 @@
         android:layout_height="180dp"
         android:layout_margin="4dp"
         android:scaleType="centerCrop"
-        android:background="@drawable/dino"
+        android:background="@drawable/place_holder"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,12 +27,23 @@
         tools:text="Folder Name"
         android:gravity="center"
         android:textSize="36sp"
-        android:fontFamily="@font/round_border"
+        style="@style/zh_bold_style"
         android:textColor="@color/tr_pink"
         android:background="@drawable/text_round_corner"
         app:layout_constraintStart_toStartOf="@id/collection_img"
         app:layout_constraintEnd_toEndOf="@+id/collection_img"
         app:layout_constraintTop_toTopOf="@+id/collection_img"
         app:layout_constraintBottom_toBottomOf="@+id/collection_img"/>
+
+    <ImageButton
+        android:id="@+id/delete_file_btn"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_margin="16dp"
+        android:background="@drawable/delete"
+        android:backgroundTint="@color/tr_pink"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

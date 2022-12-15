@@ -1,29 +1,19 @@
 package com.beva.bornmeme.ui.detail.dialog
 
-import android.graphics.Bitmap
-import android.os.Environment
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.FileProvider
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.navigation.fragment.findNavController
-import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.model.Folder
 import com.beva.bornmeme.model.FolderData
-import com.beva.bornmeme.model.Post
 import com.beva.bornmeme.model.UserManager
 import com.google.firebase.firestore.FirebaseFirestore
 import timber.log.Timber
-import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
 
 class SlideViewModel(folder: Folder) : ViewModel() {
 
-    private val _imageItem = MutableLiveData<List<FolderData>>()
-    val imageItem: LiveData<List<FolderData>>
-        get() = _imageItem
+    private val _folderItem = MutableLiveData<List<FolderData>>()
+    val folderItem: LiveData<List<FolderData>>
+        get() = _folderItem
 
     private val _navigateToDetail = MutableLiveData<FolderData>()
 
@@ -52,7 +42,7 @@ class SlideViewModel(folder: Folder) : ViewModel() {
                 for (item in folder.posts) {
                     detailImage.add(item)
                 }
-                _imageItem.value = detailImage
+                _folderItem.value = detailImage
             }
     }
 
@@ -63,6 +53,4 @@ class SlideViewModel(folder: Folder) : ViewModel() {
     fun onDetailNavigated() {
         _navigateToDetail.value = null
     }
-
-
 }

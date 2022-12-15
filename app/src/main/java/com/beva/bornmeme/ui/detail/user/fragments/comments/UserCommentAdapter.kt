@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.ItemUserCommentBinding
 import com.beva.bornmeme.databinding.ItemUserPostsBinding
+import com.beva.bornmeme.loadImage
 import com.beva.bornmeme.model.Comment
 import com.beva.bornmeme.model.Post
 import com.beva.bornmeme.model.UserManager.user
@@ -18,38 +19,18 @@ import timber.log.Timber
 import java.sql.Date
 import java.text.ParsePosition
 
-class UserCommentAdapter(private val uiState: CommentsViewModel.UiState): ListAdapter<Comment, UserCommentAdapter.ViewHolder>(DiffCallback) {
+class UserCommentAdapter(private val uiState: CommentsViewModel.UiState) :
+    ListAdapter<Comment, UserCommentAdapter.ViewHolder>(DiffCallback) {
 
     class ViewHolder(private val binding: ItemUserCommentBinding) :
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n", "SimpleDateFormat")
-        fun bind(item: Comment, uiState: CommentsViewModel.UiState){
+        fun bind(item: Comment, uiState: CommentsViewModel.UiState) {
             binding.contentText.text = item.content
             val timeString = item.time?.toDate()?.toLocaleString()
-            binding.timeText.text =timeString
-//            val commentTime = item.time?.toDate()?.time
-//            val currentTime = System.currentTimeMillis()
-//            val seconds = (currentTime - commentTime!!) / 1000
-//            val minutes = seconds / 60
-//            val hour = minutes / 60
-//            val day = hour / 24
-//            if (seconds <= 50) {
-//                binding.timeText.text = "$seconds seconds ago"
-//            } else if (seconds in 60..3600 ) {
-//                binding.timeText.text = "$minutes minutes ago"
-//            } else if (seconds in 3600..86400) {
-//                binding.timeText.text = "$hour hour ago"
-//            } else if (seconds >= 86400) {
-//                binding.timeText.text = "$day days ago"
-//            }
-//            Timber.d("秒 $seconds 分 $minutes 時 $hour 天 $day")
-//            binding.timeText.text = "$day days ago"
-            uiState.getPostImg(item.postId) { post:Post ->
-                Timber.d("img => ${post.url}")
-                Glide.with(binding.commentImg)
-                    .load(post.url)
-                    .placeholder(R.drawable._50)
-                    .into(binding.commentImg)
+            binding.timeText.text = timeString
+            uiState.getPostImg(item.postId) { post: Post ->
+                binding.commentImg.loadImage(post.url)
             }
         }
     }
@@ -66,7 +47,13 @@ class UserCommentAdapter(private val uiState: CommentsViewModel.UiState): ListAd
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(ItemUserCommentBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return ViewHolder(
+            ItemUserCommentBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -81,7 +68,7 @@ class Timestamp {
      * @return String
      */
     @SuppressLint("SimpleDateFormat")
-    fun transToString(time:Long):String{
+    fun transToString(time: Long): String {
         return SimpleDateFormat("YY-MM-DD-hh-mm-ss").format(time)
     }
 
@@ -92,7 +79,7 @@ class Timestamp {
      */
 
     @SuppressLint("SimpleDateFormat")
-    fun transToTimeStamp(date:String):Long{
+    fun transToTimeStamp(date: String): Long {
         return SimpleDateFormat("YY-MM-DD-hh-mm-ss").parse(date, ParsePosition(0)).time
     }
 }
