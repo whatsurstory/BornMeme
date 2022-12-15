@@ -99,7 +99,6 @@ class SettingFragment: BottomSheetDialogFragment() {
 //                        startActivity(intent)
         findNavController().navigate(MobileNavigationDirections.navigateToServiceFragment(UserManager.user.agreement))
         }
-
         return binding.root
     }
 

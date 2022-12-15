@@ -524,11 +524,7 @@ class ImgDetailFragment : Fragment() {
         val view = inflater.inflate(R.layout.dialog_image, null)
         builder.setView(view)
         val image = view.findViewById<ImageView>(R.id.gallery_img)
-
-        Glide.with(image)
-            .load(post.resources[0].url)
-            .placeholder(R.drawable.place_holder)
-            .into(image)
+        image.loadImage(post.resources[0].url)
 
         builder.setMessage("就決定是${post.title}了嗎?(・∀・)つ⑩")
         builder.setPositiveButton("對沒錯") { dialog, _ ->

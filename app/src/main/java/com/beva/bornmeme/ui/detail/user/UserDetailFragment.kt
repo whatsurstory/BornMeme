@@ -104,8 +104,6 @@ class UserDetailFragment : Fragment() {
             binding.userReportBtn.setOnClickListener {
                 popupMenu.show()
             }
-
-
         }
 
 
