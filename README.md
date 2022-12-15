@@ -12,24 +12,24 @@
 * 分享發布
   - 平台可透過Google帳號登入
   - 以瀑布流的畫面呈現每則貼文
-  - 以標籤方式篩選有興趣的主題
+  - 以標籤方式篩選有興趣的主題<br/>
     <img src="markdown/log_in.png" height="200"/> <img src="markdown/home_page.png" height="200"/> <img src="markdown/image_detail.png" height="200"/>
   
 * 社群互動
   - 與其他使用者留言互動
   - 與其他使用者互相追蹤封鎖
-  - 查看其他使用者創作記錄
+  - 查看其他使用者創作記錄<br/>
   <img src="markdown/comments_detail.png" height="200"/> <img src="markdown/commments_history.png" height="200"/> <img src="markdown/personal_page.png" height="200"/>
 * 梗圖鍵盤
   - 透過設定變更系統鍵盤可選擇梗圖鍵盤
-  - 梗圖鍵盤可設置自己創作的迷因做為發送內容
+  - 梗圖鍵盤可設置自己創作的迷因做為發送內容<br/>
   <img src="markdown/keyboard_choose_1.png" height="200"/> <img src="markdown/keyboard_choose.png" height="200"/> <img src="markdown/keyboard_image.png" height="200"/>
 
 * 編輯預覽
   - 兩種編輯方式
   - 固定模式為上下兩排文字輸入框
   - 客製模式為文字框隨意拖曳、增加，可以新增內建圖庫的貼紙
-  - 透過預覽可了解發佈至平台的狀態是否符合預期
+  - 透過預覽可了解發佈至平台的狀態是否符合預期<br/>
   <img src="markdown/edit_drag.png" height="200"/> <img src="markdown/edit_fix.png" height="200"/> <img src="markdown/preview.png" height="200"/>
 #### **開發環境**
 * Android Studio Chipmunk | 2021.2.1 Patch 1
@@ -43,4 +43,4 @@
 * [Timber](https://github.com/JakeWharton/timber)
 * [ktlint](https://github.com/prolificinteractive/material-calendarview)
 #### **聯絡資訊**
->Beva : bevalin09@gmail.com
+* Beva : bevalin09@gmail.com
