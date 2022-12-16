@@ -18,7 +18,7 @@
   - 與其他使用者留言互動
   - 與其他使用者互相追蹤封鎖
   - 查看其他使用者創作記錄<br/><br/>
-  <img src="markdown/comments_detail.png" height="300"/>&nbsp;&nbsp;<img src="markdown/commments_history.png" height="300"/>&nbsp;&nbsp;<img src="markdown/personal_page.png" height="300"/><br/><br/>
+  <img src="markdown/comments_detail.png" height="300"/>&nbsp;&nbsp;<img src="markdown/user_page.png" height="300"/>&nbsp;&nbsp;<img src="markdown/personal_page.png" height="300"/><br/><br/>
 * 梗圖鍵盤
   - 透過設定變更系統鍵盤可選擇梗圖鍵盤
   - 梗圖鍵盤可設置自己創作的迷因做為發送內容<br/><br/>
