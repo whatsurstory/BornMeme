@@ -10,7 +10,7 @@
         android:id="@+id/add_new_img_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="新增照片"
+        android:text="@string/new_image_button"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

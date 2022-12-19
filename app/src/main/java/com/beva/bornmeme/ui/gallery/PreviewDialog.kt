@@ -24,7 +24,6 @@ class PreviewDialog : AppCompatDialogFragment() {
             bitmapFromEdit = bundle.getParcelable("bitmap")!!
             Timber.d("get bitmap from edit $bitmapFromEdit")
         }
-
     }
 
     override fun onCreateView(

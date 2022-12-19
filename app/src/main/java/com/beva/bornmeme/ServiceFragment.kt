@@ -50,7 +50,6 @@ class ServiceFragment: Fragment() {
                     Firebase.firestore.collection("Users").document(it)
                 }
                 user?.update("agreement", true)?.addOnSuccessListener {
-                    Timber.d("user agreement -> $user")
                     findNavController().navigate(MobileNavigationDirections.navigateToHomeFragment())
                 }
             }

@@ -27,6 +27,7 @@ import com.beva.bornmeme.databinding.SnackBarCustomBinding
 import com.beva.bornmeme.model.*
 import com.beva.bornmeme.model.UserManager.user
 import com.beva.bornmeme.ui.home.filterBlock
+import com.bumptech.glide.Glide.init
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
@@ -39,15 +40,15 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 
-class ImgDetailViewModel(postOwnerId: String) : ViewModel() {
+class ImgDetailViewModel(postOwnerId: String, context: Context) : ViewModel() {
 
     data class UiState(
         val onClickToReply: (comment: CommentCell.ParentComment) -> String,
-        val onClickToLike: (comment: String) -> Unit,
-        val onClickToDislike: (comment: String) -> Unit,
+        val onClickToLike: (comment: String, context:Context) -> Unit,
+        val onClickToDislike: (comment: String, context:Context) -> Unit,
         val onClickToSeeMore: (comment: CommentCell.ParentComment) -> Unit,
         val onClickToBack: (commentId: String) -> Unit,
-        val getUserImg: (userId: String, onUserObtained: ((User) -> Unit)) -> Unit
+        val getUserImg: (context:Context,userId: String, onUserObtained: ((User) -> Unit)) -> Unit
     )
 
     val liveData = MutableLiveData<List<Comment>>()
@@ -61,8 +62,9 @@ class ImgDetailViewModel(postOwnerId: String) : ViewModel() {
         onClickToReply = {
             return@UiState navigate2Comment(it).toString()
         },
-        { comment ->
-            val collection = FirebaseFirestore.getInstance().collection("Comments")
+        { comment, context ->
+            val collection = FirebaseFirestore.getInstance()
+                .collection(context.getString(R.string.comment_collection_text))
 
             collection.whereEqualTo("like", UserManager.user.userId)
                 .addSnapshotListener { snapshot, e ->
@@ -71,16 +73,17 @@ class ImgDetailViewModel(postOwnerId: String) : ViewModel() {
                         .addOnSuccessListener {
                             collection.document(comment)
                                 .update("like", FieldValue.arrayUnion(UserManager.user.userId))
-                                .addOnSuccessListener {
-                                    Timber.d("Success add comment like $comment")
-                                }.addOnFailureListener {
-                                    Timber.d("Error ${it.message}")
-                                }
+//                                .addOnSuccessListener {
+//                                    Timber.d("Success add comment like $comment")
+//                                }.addOnFailureListener {
+//                                    Timber.d("Error ${it.message}")
+//                                }
                         }
                 }
         },
-        { comment ->
-            val collection = FirebaseFirestore.getInstance().collection("Comments")
+        { comment, context ->
+            val collection = FirebaseFirestore.getInstance()
+                .collection(context.getString(R.string.comment_collection_text))
 
             collection.whereEqualTo("like", UserManager.user.userId)
                 .addSnapshotListener { snapshot, e ->
@@ -89,11 +92,11 @@ class ImgDetailViewModel(postOwnerId: String) : ViewModel() {
                         .addOnSuccessListener {
                             collection.document(comment)
                                 .update("dislike", FieldValue.arrayUnion(UserManager.user.userId))
-                                .addOnSuccessListener {
-                                    Timber.d("Success add comment dislike $comment")
-                                }.addOnFailureListener {
-                                    Timber.d("Error ${it.message}")
-                                }
+//                                .addOnSuccessListener {
+//                                    Timber.d("Success add comment dislike $comment")
+//                                }.addOnFailureListener {
+//                                    Timber.d("Error ${it.message}")
+//                                }
                         }
                 }
         },
@@ -123,9 +126,9 @@ class ImgDetailViewModel(postOwnerId: String) : ViewModel() {
             }?.toMutableList()
 
         },
-        getUserImg = { userId, onUserObtained ->
+        getUserImg = {context, userId, onUserObtained ->
             Firebase.firestore
-                .collection("Users")
+                .collection(context.getString(R.string.user_collection_text))
                 .document(userId)
                 .get()
                 .addOnCompleteListener {
@@ -160,7 +163,7 @@ class ImgDetailViewModel(postOwnerId: String) : ViewModel() {
         for (item in parents) {
             val parent = CommentCell.ParentComment(item)
             cells.add(parent)
-            Timber.d("Check viewModel $cells")
+//            Timber.d("Check viewModel $cells")
 
             //we get the comments has parent or not from here
             val subComments = comments.filter { it.parentId == item.commentId }
@@ -173,25 +176,24 @@ class ImgDetailViewModel(postOwnerId: String) : ViewModel() {
 //                }
         }
         commentCells.value = cells
-
     }
 
-    fun getComments(postId: String): MutableLiveData<List<Comment>> {
+    fun getComments(postId: String, context:Context): MutableLiveData<List<Comment>> {
 
-        Firebase.firestore.collection("Comments")
+        Firebase.firestore.collection(context.getString(R.string.comment_collection_text))
             .whereEqualTo("postId", postId)
             .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-                Timber.d("check Data $postId")
+//                Timber.d("check Data $postId")
                 firebaseFirestoreException?.let {
                     Timber.w("[${this::class.simpleName}] Error getting documents. ${it.message}")
                 }
                 val list = mutableListOf<Comment>()
                 if (querySnapshot != null) {
                     for (document in querySnapshot) {
-                        Timber.d("check data  ${document.id} => ${document.data}")
+//                        Timber.d("check data  ${document.id} => ${document.data}")
                         val commentList = document.toObject(Comment::class.java)
                         list.add(commentList)
-                        Timber.d("check $list")
+//                        Timber.d("check $list")
                     }
                 }
                 liveData.value = list
@@ -207,15 +209,15 @@ class ImgDetailViewModel(postOwnerId: String) : ViewModel() {
         _navigate2Comment.value = null
     }
 
-    fun doneCollection(postId: String) {
-        Firebase.firestore.collection("Posts")
+    fun doneCollection(postId: String, context: Context) {
+        Firebase.firestore.collection(context.getString(R.string.post_collection_text))
             .document(postId)
             .update("collection", FieldValue.arrayUnion(UserManager.user.userId))
-            .addOnSuccessListener {
-                Timber.d("Success Posts adding User ID")
-            }.addOnFailureListener {
-                Timber.d("ERROR ${it.message}")
-            }
+//            .addOnSuccessListener {
+//                Timber.d("Success Posts adding User ID")
+//            }.addOnFailureListener {
+//                Timber.d("ERROR ${it.message}")
+//            }
     }
 
     fun onClickCollection(title: String, postId: String, url: String) {
@@ -228,15 +230,13 @@ class ImgDetailViewModel(postOwnerId: String) : ViewModel() {
         Firebase.firestore.runTransaction { transaction ->
             val snapshot = transaction.get(ref)
             val list = arrayMapOf("id" to postId, "url" to url)
-            Timber.d("snapshot ??? $snapshot")
+//            Timber.d("snapshot ??? $snapshot")
             if (snapshot.data != null) {
-                Timber.d("snapshot.data != null")
                 transaction.update(
                     ref,
                     "posts", FieldValue.arrayUnion(list)
                 )
             } else {
-                Timber.d("snapshot.data == null")
                 transaction.set(
                     ref, hashMapOf(
                         "name" to ref.id,
@@ -245,22 +245,17 @@ class ImgDetailViewModel(postOwnerId: String) : ViewModel() {
                     )
                 )
             }
-        }.addOnSuccessListener {
-            Timber.d("Success to adding $ref")
-
-        }.addOnFailureListener {
-            Timber.d("ERROR ${it.message}")
         }
     }
 
     init {
-        getUser(postOwnerId)
+        getUser(postOwnerId, context)
     }
 
     val userData = MutableLiveData<List<User>>()
 
-    private fun getUser(postOwnerId: String): MutableLiveData<List<User>> {
-        Firebase.firestore.collection("Users")
+    private fun getUser(postOwnerId: String, context: Context): MutableLiveData<List<User>> {
+        Firebase.firestore.collection(context.getString(R.string.user_collection_text))
             .whereEqualTo("userId", postOwnerId)
             .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
 
@@ -270,36 +265,37 @@ class ImgDetailViewModel(postOwnerId: String) : ViewModel() {
 
                 val list = mutableListOf<User>()
                 for (document in querySnapshot!!) {
-                    Timber.d("check User in Post -> ${document.id} => ${document.data}")
+//                    Timber.d("check User in Post -> ${document.id} => ${document.data}")
                     val userData = document.toObject(User::class.java)
                     list.add(userData)
-                    Timber.d("check $list")
+//                    Timber.d("check $list")
                 }
                 userData.value = list
             }
         return userData
     }
 
-    //
     val folderData = MutableLiveData<List<String>>()
 
-    fun getFolder() {
-        Firebase.firestore.collection("Users")
-            .document(UserManager.user.userId!!)
-            .collection("Folders")
-            .get()
-            .addOnCompleteListener { task ->
-                val list = mutableListOf<String>()
-                if (task.isSuccessful) {
-                    for (document in task.result!!) {
-                        list.add(document.id)
-                        Timber.d("data ${document.id}")
+    fun getFolder(context:Context) {
+        UserManager.user.userId?.let {
+            Firebase.firestore.collection(context.getString(R.string.user_collection_text))
+                .document(it)
+                .collection(context.getString(R.string.folder_collection_text))
+                .get()
+                .addOnCompleteListener { task ->
+                    val list = mutableListOf<String>()
+                    if (task.isSuccessful) {
+                        for (document in task.result) {
+                            list.add(document.id)
+//                            Timber.d("data ${document.id}")
+                        }
+                        folderData.value = list
+                    } else {
+                        Timber.d(task.exception?.message)
                     }
-                    folderData.value = list
-                } else {
-                    Timber.d(task.exception?.message!!)
                 }
-            }
+        }
     }
 
     fun navigate2UserDetail(fragment: ImgDetailFragment, userId: String) {
@@ -318,7 +314,7 @@ class ImgDetailViewModel(postOwnerId: String) : ViewModel() {
             builder.setMultiChoiceItems(data, null) { dialog, i, b ->
                 val currentItem = data[i]
             }
-            builder.setPositiveButton("確定") { dialogInterface, j ->
+            builder.setPositiveButton(context.getString(R.string.sure_text)) { dialogInterface, j ->
 //            for (i in data.indices) if (selected[i]) {
 //                selected[i] = false
 //            }
@@ -333,7 +329,7 @@ class ImgDetailViewModel(postOwnerId: String) : ViewModel() {
                 bind.toBlockBtn.setOnClickListener {
                     UserManager.user.blockList += id
                     UserManager.user.userId?.let { id ->
-                        Firebase.firestore.collection("Users")
+                        Firebase.firestore.collection(context.getString(R.string.user_collection_text))
                             .document(id)
                             .update("blockList", UserManager.user.blockList)
                             .addOnCompleteListener {
@@ -353,7 +349,7 @@ class ImgDetailViewModel(postOwnerId: String) : ViewModel() {
                         }
                 customSnack.show()
             }
-            builder.setNegativeButton("取消") { dialog, i ->
+            builder.setNegativeButton(context.getString(R.string.cancel_text)) { dialog, i ->
             }
             val dialog = builder.create()
             dialog.show()

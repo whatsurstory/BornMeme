@@ -13,23 +13,24 @@
             android:id="@+id/change_mode_btn"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginEnd="16dp"
-            android:visibility="gone"
             android:layout_marginTop="10dp"
-            android:backgroundTint="@color/tr_pink"
+            android:layout_marginEnd="16dp"
             android:background="@drawable/ic_change_mode"
+            android:backgroundTint="@color/tr_pink"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/include"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/profile_btn"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="12dp"
             android:scaleType="centerCrop"
-            android:layout_marginTop="10dp"
             android:src="@drawable/ic_baseline_tag_faces_24"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/include"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -37,12 +38,12 @@
 
         <TextView
             android:id="@+id/module_title_text"
+            style="@style/eng_font_style"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:gravity="bottom"
-            android:layout_marginBottom="12dp"
             android:layout_marginEnd="12dp"
-            style="@style/eng_font_style"
+            android:layout_marginBottom="12dp"
+            android:gravity="bottom"
             android:text="@string/module_text"
             android:textColor="@color/tr_pink"
             android:textSize="18sp"
@@ -57,15 +58,15 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@color/tr_black"
-            app:theme="@style/ToolbarTheme"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:theme="@style/ToolbarTheme">
 
             <TextView
                 android:id="@+id/greeting"
+                style="@style/eng_bold_font_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/eng_bold_font_style"
                 android:textColor="@color/tr_pink"
                 android:textSize="40sp" />
 
@@ -85,43 +86,43 @@
             android:id="@+id/fab_module_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@+id/fab"
-            app:layout_constraintBottom_toTopOf="@+id/fab_camera_edit"
             android:layout_margin="8dp"
-            app:elevation="6dp"
-            app:fabCustomSize="52dp"
-            app:tint="@color/tr_black"
             android:backgroundTint="@color/tr_pink"
             android:src="@drawable/module_btn"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:elevation="6dp"
+            app:fabCustomSize="52dp"
+            app:layout_constraintBottom_toTopOf="@+id/fab_camera_edit"
+            app:layout_constraintStart_toStartOf="@+id/fab"
+            app:tint="@color/tr_black" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_camera_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@+id/fab"
-            app:layout_constraintBottom_toTopOf="@+id/fab_gallery_edit"
             android:layout_margin="8dp"
-            app:elevation="6dp"
-            app:fabCustomSize="52dp"
-            app:tint="@color/tr_black"
             android:backgroundTint="@color/tr_pink"
             android:src="@drawable/camera_btn"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:elevation="6dp"
+            app:fabCustomSize="52dp"
+            app:layout_constraintBottom_toTopOf="@+id/fab_gallery_edit"
+            app:layout_constraintStart_toStartOf="@+id/fab"
+            app:tint="@color/tr_black" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_gallery_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@+id/fab"
-            app:layout_constraintBottom_toTopOf="@+id/fab"
             android:layout_margin="8dp"
-            app:elevation="6dp"
-            app:fabCustomSize="52dp"
-            app:tint="@color/tr_black"
             android:backgroundTint="@color/tr_pink"
             android:src="@drawable/gallery_btn"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:elevation="6dp"
+            app:fabCustomSize="52dp"
+            app:layout_constraintBottom_toTopOf="@+id/fab"
+            app:layout_constraintStart_toStartOf="@+id/fab"
+            app:tint="@color/tr_black" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
@@ -129,16 +130,15 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/fab_margin"
             android:layout_marginBottom="16dp"
-            app:elevation="6dp"
-            app:fabCustomSize="58dp"
-            app:tint="@color/tr_black"
-            app:borderWidth="0dp"
             android:backgroundTint="@color/tr_pink"
             android:src="@drawable/rotate"
+            android:visibility="gone"
+            app:borderWidth="0dp"
+            app:elevation="6dp"
+            app:fabCustomSize="58dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:visibility="gone"/>
+            app:tint="@color/tr_black" />
 
-        <!--        android:onClick="@{() -> viewModel.navigate2Camera()}"-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

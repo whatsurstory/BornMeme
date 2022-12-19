@@ -7,10 +7,10 @@
 
     <TextView
         android:id="@+id/drag_preview_btn"
+        style="@style/eng_bold_font_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        style="@style/eng_bold_font_style"
         android:text="@string/preview_btn"
         android:textColor="@color/tr_pink"
         android:textSize="28sp"
@@ -19,10 +19,10 @@
 
     <TextView
         android:id="@+id/drag_publish_btn"
+        style="@style/eng_bold_font_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        style="@style/eng_bold_font_style"
         android:text="@string/publish_btn"
         android:textColor="@color/tr_pink"
         android:textSize="28sp"
@@ -33,15 +33,14 @@
         android:id="@+id/vertical_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginVertical="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/drag_preview_btn"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_editor_absoluteX="-16dp">
+        app:layout_constraintTop_toBottomOf="@id/drag_preview_btn">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="8dp">
+            android:paddingBottom="16dp">
 
             <HorizontalScrollView
                 android:id="@+id/horizontal_scroll"
@@ -335,21 +334,21 @@
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/edit_text_box"
+                style="@style/zh_bold_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:background="@color/tr_black"
-                style="@style/zh_bold_style"
+                android:cursorVisible="false"
+                android:focusableInTouchMode="true"
                 android:hint="@string/text_click"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="4dp"
                 android:singleLine="true"
                 android:textColor="@color/gray_white"
                 android:textColorHint="@color/dark_gray"
-                android:textSize="24sp"
-                android:cursorVisible="false"
                 android:textCursorDrawable="@null"
-                android:focusableInTouchMode="true"
+                android:textSize="24sp"
                 app:layout_constraintBottom_toTopOf="@id/sticker_view"
                 app:layout_constraintEnd_toStartOf="@+id/add_text_btn"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -379,10 +378,10 @@
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/drag_title_card"
+                style="@style/zh_medium_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/tr_pink"
-                style="@style/zh_medium_style"
                 android:hint="@string/enter_title_hint"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="4dp"
@@ -398,10 +397,10 @@
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/drag_text_catalog"
+                style="@style/zh_medium_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/tr_pink"
-                style="@style/zh_medium_style"
                 android:hint="@string/enter_tag_hint"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="4dp"
@@ -420,15 +419,15 @@
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottie_publish_loading"
-        android:layout_height="match_parent"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@color/transparent"
-        app:lottie_autoPlay="true"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:visibility="gone"
-        app:lottie_speed="1.6"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_speed="1.6" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

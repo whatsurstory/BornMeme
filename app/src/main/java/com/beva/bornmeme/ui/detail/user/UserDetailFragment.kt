@@ -45,7 +45,7 @@ class UserDetailFragment : Fragment() {
         binding = FragmentUserDetailBinding.inflate(inflater, container, false)
         arguments?.let { bundle ->
             userId = bundle.getString("userId").toString()
-            Timber.d("get postId from post $userId")
+//            Timber.d("get postId from post $userId")
         }
 
         viewModel = UserDetailViewModel(userId,requireContext())
@@ -55,22 +55,22 @@ class UserDetailFragment : Fragment() {
         TabLayoutMediator(binding.userTabs, binding.userViewpager) { tab, position ->
             when (position) {
                 0 -> {
-                    tab.text = "Likes"
+                    tab.text = requireContext().getString(R.string.like_text)
                 }
                 1 -> {
-                    tab.text = "Posts"
+                    tab.text = requireContext().getString(R.string.post_text)
                 }
                 2 -> {
-                    tab.text = "Text"
+                    tab.text = requireContext().getString(R.string.text_text)
                 }
                 3 -> {
-                    tab.text = "Files"
+                    tab.text = requireContext().getString(R.string.file_text)
                 }
             }
         }.attach()
 
         viewModel.userData.observe(viewLifecycleOwner) { user ->
-            Timber.d("Observe user $user")
+//            Timber.d("Observe user $user")
             user?.let {
                 updateUi(it)
             }
@@ -81,8 +81,8 @@ class UserDetailFragment : Fragment() {
             )
             if (user.userId != UserManager.user.userId) {
 
-                popupMenu.menu.add(Menu.NONE, 0, 0, "檢舉")
-                popupMenu.menu.add(Menu.NONE, 1, 1, "封鎖")
+                popupMenu.menu.add(Menu.NONE, 0, 0, getString(R.string.report_text))
+                popupMenu.menu.add(Menu.NONE, 1, 1, getString(R.string.block_text))
                 popupMenu.setOnMenuItemClickListener {
                     when (it.itemId) {
                         0 -> reportDialog(user.userId.toString())
@@ -92,7 +92,7 @@ class UserDetailFragment : Fragment() {
                 }
 
             } else {
-                popupMenu.menu.add(Menu.NONE, 0, 0, "設定")
+                popupMenu.menu.add(Menu.NONE, 0, 0, getString(R.string.setting_text))
                 popupMenu.setOnMenuItemClickListener {
                     when (it.itemId) {
                         0 -> findNavController()
@@ -105,9 +105,6 @@ class UserDetailFragment : Fragment() {
                 popupMenu.show()
             }
         }
-
-
-
         return binding.root
     }
 
@@ -166,11 +163,11 @@ class UserDetailFragment : Fragment() {
         val data = arrayOf("色情", "暴力", "賭博", "非法交易", "種族歧視")
 
         val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
-        builder.setTitle("請選擇檢舉原因")
+        builder.setTitle(getString(R.string.choose_report_text))
         builder.setMultiChoiceItems(data, null) { dialog, i, b ->
             val currentItem = data[i]
         }
-        builder.setPositiveButton("確定") { dialogInterface, j ->
+        builder.setPositiveButton(getString(R.string.sure_text)) { dialogInterface, j ->
 //            for (i in data.indices) if (selected[i]) {
 //                selected[i] = false
 //            }
@@ -183,7 +180,7 @@ class UserDetailFragment : Fragment() {
             bind.toBlockBtn.setOnClickListener {
                 UserManager.user.blockList += userId
                 UserManager.user.userId?.let { id ->
-                    Firebase.firestore.collection("Users")
+                    Firebase.firestore.collection(getString(R.string.user_collection_text))
                         .document(id)
                         .update("blockList", UserManager.user.blockList)
                         .addOnCompleteListener {
@@ -205,7 +202,7 @@ class UserDetailFragment : Fragment() {
                     }
             customSnack.show()
         }
-        builder.setNegativeButton("取消") { dialog, i ->
+        builder.setNegativeButton(getString(R.string.cancel_text)) { dialog, i ->
         }
         val dialog = builder.create()
         dialog.show()
@@ -224,13 +221,13 @@ class UserDetailFragment : Fragment() {
         alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         alertDialog.show()
         val message = view.findViewById<TextView>(R.id.delete_message)
-        message.text = "你確定要封鎖人家嗎...\n再也看不見的那種?"
+        message.text = getString(R.string.block_sure_text)
 
         val okay = view.findViewById<Button>(R.id.okay_delete_btn)
         okay.setOnClickListener {
             //先把資料裝進local 再上傳到firebase
             UserManager.user.blockList += userId
-            Firebase.firestore.collection("Users")
+            Firebase.firestore.collection(getString(R.string.user_collection_text))
                 .document(UserManager.user.userId!!)
                 .update("blockList", UserManager.user.blockList)
                 .addOnCompleteListener {

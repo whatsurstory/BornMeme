@@ -98,19 +98,19 @@ class GalleryFragment : Fragment() {
         image.loadImage(img.url)
 
         builder.setMessage("就決定是${img.title}了嗎?(・∀・)つ⑩")
-        builder.setPositiveButton("對沒錯") { dialog, _ ->
+        builder.setPositiveButton(requireContext().getString(R.string.yes_btn)) { dialog, _ ->
             val bitmapDrawable = image.drawable as BitmapDrawable
             val bitmap = bitmapDrawable.bitmap
             moduleCheckPermission(bitmap, img)
         }
-        builder.setNegativeButton("再想想",
+        builder.setNegativeButton(requireContext().getString(R.string.no_btn),
             DialogInterface.OnClickListener { dialog, which -> })
         val alertDialog: AlertDialog = builder.create()
         alertDialog.show()
         alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
-            .setTextColor(Color.parseColor("#181A19"))
+            .setTextColor(requireContext().getColor(R.color.button_balck))
         alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
-            .setTextColor(Color.parseColor("#181A19"))
+            .setTextColor(requireContext().getColor(R.color.button_balck))
     }
 
 
@@ -179,10 +179,10 @@ class GalleryFragment : Fragment() {
                 requireContext(),
                 "com.beva.bornmeme.fileProvider", file
             )
-        Timber.d("fileUri -> $newUri")
+//        Timber.d("fileUri -> $newUri")
 
         val mainViewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
-        Timber.d("mainViewModel $mainViewModel")
+//        Timber.d("mainViewModel $mainViewModel")
         mainViewModel.editingImg = newUri
         findNavController().navigate(MobileNavigationDirections.navigateToEditFragment(newUri))
     }

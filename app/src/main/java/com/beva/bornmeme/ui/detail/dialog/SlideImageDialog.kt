@@ -50,10 +50,10 @@ class SlideImageDialog : AppCompatDialogFragment() {
     ): View? {
         arguments?.let { bundle ->
             folder = bundle.getParcelable("folder")!!
-            Timber.d("WelCome to FOLDERRR: arg -> $folder")
+//            Timber.d("WelCome to FOLDERRR: arg -> $folder")
         }
 
-        viewModel = SlideViewModel(folder)
+        viewModel = SlideViewModel(folder, requireContext())
         binding = DialogSlideCollectionBinding.inflate(layoutInflater)
         binding.dialog = this
 
@@ -85,7 +85,7 @@ class SlideImageDialog : AppCompatDialogFragment() {
         adapter.registerAdapterDataObserver(indicator2.adapterDataObserver)
 
         viewModel.folderItem.observe(viewLifecycleOwner, Observer {
-            Timber.d("observe -> $it")
+//            Timber.d("observe -> $it")
             adapter.submitList(it)
             adapter.notifyDataSetChanged()
 
@@ -135,7 +135,7 @@ class SlideImageDialog : AppCompatDialogFragment() {
     }
 
     private fun downLoad(fileName: String, desc: String, url: String) {
-        Timber.d("file name $fileName")
+//        Timber.d("file name $fileName")
         val downloadManager = context?.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         val request = DownloadManager.Request(Uri.parse(url))
             .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE or DownloadManager.Request.NETWORK_WIFI)
@@ -146,7 +146,8 @@ class SlideImageDialog : AppCompatDialogFragment() {
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
             .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
         downloadManager.enqueue(request)
-        Toast.makeText(context, "下載完成", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, getString(R.string.download_success_text), Toast.LENGTH_SHORT)
+            .show()
     }
 
     private fun showRotationDialogForPermission() {

@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center_horizontal"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_gravity="center_horizontal">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/collection_img"
         android:layout_width="0dp"
         android:layout_height="180dp"
         android:layout_margin="4dp"
-        android:scaleType="centerCrop"
         android:background="@drawable/place_holder"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,18 +21,18 @@
 
     <TextView
         android:id="@+id/collection_folder_name"
-        android:layout_height="0dp"
-        android:layout_width="0dp"
-        tools:text="Folder Name"
-        android:gravity="center"
-        android:textSize="36sp"
         style="@style/zh_bold_style"
-        android:textColor="@color/tr_pink"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@drawable/text_round_corner"
-        app:layout_constraintStart_toStartOf="@id/collection_img"
+        android:gravity="center"
+        android:textColor="@color/tr_pink"
+        android:textSize="36sp"
+        app:layout_constraintBottom_toBottomOf="@+id/collection_img"
         app:layout_constraintEnd_toEndOf="@+id/collection_img"
+        app:layout_constraintStart_toStartOf="@id/collection_img"
         app:layout_constraintTop_toTopOf="@+id/collection_img"
-        app:layout_constraintBottom_toBottomOf="@+id/collection_img"/>
+        tools:text="Folder Name" />
 
     <ImageButton
         android:id="@+id/delete_file_btn"
@@ -42,8 +41,8 @@
         android:layout_margin="16dp"
         android:background="@drawable/delete"
         android:backgroundTint="@color/tr_pink"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:visibility="gone"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

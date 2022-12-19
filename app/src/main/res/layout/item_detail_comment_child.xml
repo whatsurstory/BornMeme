@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -22,9 +21,9 @@
         android:id="@+id/child_card"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:elevation="8dp"
         android:layout_marginHorizontal="8dp"
         android:layout_marginTop="8dp"
+        android:elevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/child_user_img"
@@ -36,20 +35,20 @@
 
             <TextView
                 android:id="@+id/child_user_name"
+                style="@style/zh_light_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="6dp"
                 android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="6dp"
                 android:gravity="center_vertical"
-                tools:text="Mindy"
-                style="@style/zh_light_style"
-                android:textColor="@color/dark_gray"
-                android:textSize="12sp"
                 android:maxLength="10"
                 android:maxLines="1"
+                android:textColor="@color/dark_gray"
+                android:textSize="12sp"
                 app:layout_constraintBottom_toTopOf="@id/child_zone_text"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@string/default_text" />
 
             <TextView
                 android:id="@+id/child_time"
@@ -61,7 +60,7 @@
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/child_zone_text"
-                tools:text="30 min ago" />
+                tools:text="@string/time_text" />
 
 
             <TextView
@@ -76,14 +75,14 @@
                 app:layout_constraintEnd_toEndOf="@+id/comment_child_report_btn"
                 app:layout_constraintStart_toStartOf="@+id/child_user_name"
                 app:layout_constraintTop_toBottomOf="@id/child_user_name"
-                tools:text="TextPicture Description TextPicture Description TextPictureTextPicture Description TextPicture" />
+                tools:text="@string/default_text" />
 
             <ImageButton
                 android:id="@+id/child_like_btn"
                 android:layout_width="26dp"
                 android:layout_height="26dp"
-                android:padding="6dp"
                 android:background="@color/woo"
+                android:padding="6dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/before_thumbup"
                 app:layout_constraintBottom_toBottomOf="@+id/child_user_name"
@@ -93,24 +92,24 @@
 
             <TextView
                 android:id="@+id/child_like_num"
+                style="@style/zh_medium_style"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                tools:text="200"
-                android:textSize="12sp"
-                android:gravity="center"
                 android:layout_marginEnd="4dp"
+                android:gravity="center"
                 android:textColor="@color/dark_gray"
-                style="@style/zh_medium_style"
+                android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="@+id/child_like_btn"
                 app:layout_constraintEnd_toStartOf="@+id/child_dislike_btn"
-                app:layout_constraintTop_toTopOf="@+id/child_like_btn" />
+                app:layout_constraintTop_toTopOf="@+id/child_like_btn"
+                tools:text="@string/default_number" />
 
             <ImageButton
                 android:id="@+id/child_dislike_btn"
                 android:layout_width="26dp"
                 android:layout_height="26dp"
-                android:padding="6dp"
                 android:background="@color/woo"
+                android:padding="6dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/b4_thumbdown"
                 app:layout_constraintBottom_toBottomOf="@id/child_like_num"
@@ -120,17 +119,17 @@
 
             <TextView
                 android:id="@+id/child_dislike_num"
+                style="@style/zh_medium_style"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                tools:text="100"
-                android:gravity="center"
-                android:textSize="12sp"
                 android:layout_marginEnd="4dp"
+                android:gravity="center"
                 android:textColor="@color/dark_gray"
-                style="@style/zh_medium_style"
+                android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="@+id/child_dislike_btn"
                 app:layout_constraintEnd_toStartOf="@+id/comment_child_report_btn"
-                app:layout_constraintTop_toTopOf="@+id/child_dislike_btn" />
+                app:layout_constraintTop_toTopOf="@+id/child_dislike_btn"
+                tools:text="@string/default_number" />
 
             <ImageButton
                 android:id="@+id/comment_child_report_btn"

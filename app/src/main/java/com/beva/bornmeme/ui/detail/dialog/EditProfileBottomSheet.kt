@@ -50,6 +50,8 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
         arguments?.let { bundle ->
             userId = bundle.getString("userId").toString()
         }
+        binding = BottomsheetEditProfileBinding.inflate(layoutInflater)
+        binding.saveButton.isEnabled = false
     }
 
     override fun onCreateView(
@@ -62,12 +64,10 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
             sheet.behavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
 
-        binding = BottomsheetEditProfileBinding.inflate(layoutInflater)
-
-        viewModel = EditProfileViewModel(userId)
+        viewModel = EditProfileViewModel(userId, requireContext())
 
         viewModel.userData.observe(viewLifecycleOwner) {
-            Timber.d("Observe user $it")
+//            Timber.d("Observe user $it")
             it?.let {
                 updateUserData(it)
                 viewModel.blockUser = it.blockList
@@ -77,7 +77,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
         }
         binding.email.isEnabled = false
         binding.emailBox.setOnClickListener {
-            binding.emailBox.error = "信箱修改開發中，加速要加錢"
+            binding.emailBox.error = getString(R.string.click_email_box_text)
         }
 
         binding.name.addTextChangedListener(object : TextWatcher {
@@ -92,7 +92,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
                     }
                 } else {
                     binding.saveButton.setOnClickListener {
-                        binding.name.error = "普林ドキドキ"
+                        binding.name.error = getString(R.string.name_error_text)
                     }
                 }
             }
@@ -102,7 +102,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (binding.name.text?.length!! > 20) {
-                    binding.nameBox.error = "字數超過了"
+                    binding.nameBox.error = getString(R.string.name_box_error)
                 }
             }
         })
@@ -119,7 +119,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
                     }
                 } else {
                     binding.saveButton.setOnClickListener {
-                        binding.desc.error = "格子放不下，勸施主也放下"
+                        binding.desc.error = getString(R.string.over_text_error)
                     }
                 }
             }
@@ -129,7 +129,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (binding.desc.text?.length!! > 50) {
-                    binding.descBox.error = "我是梗圖APP 不是Tinder"
+                    binding.descBox.error = getString(R.string.not_tinder_text)
                 }
             }
         })
@@ -150,12 +150,6 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
             //see the list in dialog within recycle view
             showFollowListDialog(viewModel.followUser)
         }
-
-//        binding.settingBtn.setOnClickListener {
-//            findNavController()
-//                .navigate(MobileNavigationDirections.navigateToFragmentSetting())
-//        }
-
         return binding.root
     }
 
@@ -167,7 +161,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
         binding.email.setText(user.email)
         binding.desc.setText(user.introduce)
         binding.registerTime.text =
-            "Register Time: " + Date(user.registerTime?.toDate()?.time!!).toLocaleString()
+            getString(R.string.register_time_text) + Date(user.registerTime?.toDate()?.time!!).toLocaleString()
     }
 
     private fun toAlbum() {
@@ -196,41 +190,64 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
     private fun saveProfileData() {
         val db = Firebase.firestore.collection("Users").document(userId)
         val originIntro = if (binding.desc.text?.trim()?.isEmpty() == true) {
-            "天很藍，雲很白，不寫簡介，我就爛"
+            getString(R.string.intro_blank_text)
         } else {
             binding.desc.text.toString()
         }
 
         val originName = if (binding.name.text?.trim()?.isEmpty() == true) {
-            "熬夜小心肝"
+            getString(R.string.name_blank_text)
         } else {
             binding.name.text.toString()
         }
 
-        if (isChange &&
-            originIntro != UserManager.user.introduce &&
-            originName != UserManager.user.userName
-        ) {
-            //All different
-            uploadProfile2Db(uri)
-            db.update("introduce", originIntro)
-            db.update("userName", originName)
-        } else if (!isChange &&
-            (originIntro != UserManager.user.introduce ||
-                    originName != UserManager.user.userName)
-        ) {
-            //text different
-            db.update("introduce", originIntro)
-            db.update("userName", originName)
-        } else if (isChange &&
-            originIntro == UserManager.user.introduce ||
-            originName == UserManager.user.userName
-        ) {
-            //image different
-            uploadProfile2Db(uri)
-            db.update("introduce", originIntro)
-            db.update("userName", originName)
+        when (isChange) {
+            false -> Timber.d("No Image")
+            true -> uploadProfile2Db(uri)
         }
+        when (originIntro == UserManager.user.introduce) {
+            true -> Timber.d("No Intro")
+            false -> db.update("introduce", originIntro)
+        }
+        when (originName == UserManager.user.userName) {
+            true -> Timber.d("No Name")
+            false -> db.update("userName", originName)
+        }
+
+//        if (!isChange &&
+//            originIntro == UserManager.user.introduce ||
+//            originName == UserManager.user.userName
+//        ) {
+//            Timber.d("Not different")
+//            //Not different
+//            dismiss()
+//        } else if (isChange &&
+//            originIntro != UserManager.user.introduce &&
+//            originName != UserManager.user.userName
+//        ) {
+//            Timber.d("All different")
+//            //All different
+//            uploadProfile2Db(uri)
+//            db.update("introduce", originIntro)
+//            db.update("userName", originName)
+//        } else if (!isChange &&
+//            (originIntro != UserManager.user.introduce ||
+//                    originName != UserManager.user.userName)
+//        ) {
+//            Timber.d("Text different")
+//            //text different
+//            db.update("introduce", originIntro)
+//            db.update("userName", originName)
+//        } else if (isChange &&
+//            originIntro == UserManager.user.introduce ||
+//            originName == UserManager.user.userName
+//        ) {
+//            Timber.d("Image different")
+//            //image different
+//            uploadProfile2Db(uri)
+//            db.update("introduce", originIntro)
+//            db.update("userName", originName)
+//        }
     }
 
     private fun uploadProfile2Db(data: Uri) {
@@ -252,57 +269,57 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
     private fun showBlockListDialog(blockUsers: List<String>) {
         val builder: AlertDialog.Builder =
             AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
-        builder.setTitle("封鎖名單")
+        builder.setTitle(getString(R.string.block_list_text))
 
         builder.setItems(blockUsers.toTypedArray()) { dialog, which ->
             //點擊後的行為
         }
-        builder.setNegativeButton("離開",
+        builder.setNegativeButton(getString(R.string.leave_text),
             DialogInterface.OnClickListener { _, _ -> })
 
         val alertDialog: AlertDialog = builder.create()
         alertDialog.show()
 
         alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
-            .setTextColor(Color.parseColor("#181A19"))
+            .setTextColor(requireContext().getColor(R.color.button_balck))
 
     }
 
     private fun showFollowersDialog(follower: List<String>) {
         val builder: AlertDialog.Builder =
             AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
-        builder.setTitle("誰追蹤我")
+        builder.setTitle(getString(R.string.who_follow_me_text))
 
         builder.setItems(follower.toTypedArray()) { dialog, which ->
             //點擊後的行為
         }
-        builder.setNegativeButton("離開",
+        builder.setNegativeButton(getString(R.string.leave_text),
             DialogInterface.OnClickListener { _, _ -> })
 
         val alertDialog: AlertDialog = builder.create()
         alertDialog.show()
 
         alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
-            .setTextColor(Color.parseColor("#181A19"))
+            .setTextColor(requireContext().getColor(R.color.button_balck))
 
     }
 
     private fun showFollowListDialog(followUser: List<String>) {
         val builder: AlertDialog.Builder =
             AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
-        builder.setTitle("追蹤名單")
+        builder.setTitle(getString(R.string.follow_list_text))
 
         builder.setItems(followUser.toTypedArray()) { dialog, which ->
             //點擊後的行為
         }
-        builder.setNegativeButton("離開",
+        builder.setNegativeButton(getString(R.string.leave_text),
             DialogInterface.OnClickListener { _, _ -> })
 
         val alertDialog: AlertDialog = builder.create()
         alertDialog.show()
 
         alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
-            .setTextColor(getColor(requireContext(),R.color.button_balck))
+            .setTextColor(getColor(requireContext(), R.color.button_balck))
 
     }
 

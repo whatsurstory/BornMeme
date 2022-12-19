@@ -103,7 +103,7 @@ class SplashViewModel : ViewModel() {
 //        textView.movementMethod = LinkMovementMethod.getInstance()
 
         AlertDialog.Builder(context, R.style.AlertDialogTheme)
-            .setMessage("歡迎加入使用BornMeme. 請先詳閱使用條款及隱私政策，勾選同意即可完整使用應用程式")
+            .setMessage(context.getString(R.string.welcome_to_use_text))
 //            .setView(item)
             .setPositiveButton(R.string.continue_text) { _, _ ->
                 leave()

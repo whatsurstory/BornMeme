@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -15,7 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -36,34 +35,36 @@
 
             <TextView
                 android:id="@+id/img_detail_user_name"
+                style="@style/zh_bold_style"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="8dp"
                 android:gravity="center_vertical"
-                style="@style/zh_bold_style"
                 android:maxLines="1"
                 android:textColor="@color/tr_pink"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@id/img_detail_user_img"
                 app:layout_constraintEnd_toStartOf="@id/detail_guideline"
                 app:layout_constraintStart_toEndOf="@id/img_detail_user_img"
-                app:layout_constraintTop_toTopOf="@+id/img_detail_user_img" />
+                app:layout_constraintTop_toTopOf="@+id/img_detail_user_img"
+                tools:text="@string/default_text" />
 
             <TextView
                 android:id="@+id/follow_btn"
+                style="@style/eng_bold_font_style"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                style="@style/eng_bold_font_style"
+                android:layout_marginEnd="4dp"
                 android:gravity="center"
+                android:paddingHorizontal="4dp"
                 android:textColor="@color/tr_pink"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:paddingHorizontal="4dp"
-                android:layout_marginEnd="4dp"
                 app:layout_constraintBottom_toBottomOf="@+id/img_detail_user_name"
                 app:layout_constraintEnd_toStartOf="@+id/report_btn"
                 app:layout_constraintStart_toEndOf="@+id/detail_guideline"
-                app:layout_constraintTop_toTopOf="@+id/img_detail_user_name" />
+                app:layout_constraintTop_toTopOf="@+id/img_detail_user_name"
+                tools:text="@string/default_text" />
 
             <ImageButton
                 android:id="@+id/report_btn"
@@ -71,7 +72,7 @@
                 android:layout_height="0dp"
                 android:layout_marginEnd="4dp"
                 android:background="@color/woo"
-                android:padding="6dp"
+                android:padding="10dp"
                 android:rotation="90"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_baseline_more_vert_24"
@@ -87,21 +88,9 @@
                 android:layout_marginStart="14dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/_heart"
+                app:backgroundTint="@color/tr_pink"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/img_detail_image"
-                app:backgroundTint="@color/tr_pink" />
-
-            <!--            <ImageButton-->
-            <!--                android:id="@+id/after_thumpup_btn"-->
-            <!--                android:layout_width="36dp"-->
-            <!--                android:layout_height="36dp"-->
-            <!--                android:layout_marginStart="12dp"-->
-            <!--                android:layout_marginTop="8dp"-->
-            <!--                android:background="@drawable/after_thumpup"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@id/img_detail_image"-->
-            <!--                app:tint="@color/dark_blue"-->
-            <!--                android:visibility="gone"/>-->
+                app:layout_constraintTop_toBottomOf="@id/img_detail_image" />
 
             <ImageButton
                 android:id="@+id/template_btn"
@@ -110,10 +99,10 @@
                 android:layout_marginStart="16dp"
                 android:background="@drawable/add_template"
                 android:scaleType="centerInside"
+                app:backgroundTint="@color/tr_pink"
                 app:layout_constraintBottom_toBottomOf="@+id/before_thumbup_btn"
                 app:layout_constraintStart_toEndOf="@+id/before_thumbup_btn"
-                app:layout_constraintTop_toTopOf="@+id/before_thumbup_btn"
-                app:backgroundTint="@color/tr_pink" />
+                app:layout_constraintTop_toTopOf="@+id/before_thumbup_btn" />
 
             <ImageButton
                 android:id="@+id/comment_btn"
@@ -121,10 +110,10 @@
                 android:layout_height="28dp"
                 android:layout_marginStart="16dp"
                 android:background="@drawable/icons8_comments_48"
+                app:backgroundTint="@color/tr_pink"
                 app:layout_constraintBottom_toBottomOf="@+id/template_btn"
                 app:layout_constraintStart_toEndOf="@+id/template_btn"
-                app:layout_constraintTop_toTopOf="@+id/template_btn"
-                app:backgroundTint="@color/tr_pink" />
+                app:layout_constraintTop_toTopOf="@+id/template_btn" />
 
             <ImageButton
                 android:id="@+id/collection_btn"
@@ -132,10 +121,10 @@
                 android:layout_height="28dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/icons8_folder_48"
+                app:backgroundTint="@color/tr_pink"
                 app:layout_constraintBottom_toBottomOf="@id/share_btn"
                 app:layout_constraintEnd_toStartOf="@id/share_btn"
-                app:layout_constraintTop_toTopOf="@id/share_btn"
-                app:backgroundTint="@color/tr_pink" />
+                app:layout_constraintTop_toTopOf="@id/share_btn" />
 
             <ImageButton
                 android:id="@+id/share_btn"
@@ -144,9 +133,9 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/icons8_share_rounded_48"
+                app:backgroundTint="@color/tr_pink"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/img_detail_image"
-                app:backgroundTint="@color/tr_pink" />
+                app:layout_constraintTop_toBottomOf="@id/img_detail_image" />
 
 
             <ImageView
@@ -161,48 +150,48 @@
 
             <TextView
                 android:id="@+id/img_detail_title"
+                style="@style/zh_bold_style"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:maxLines="1"
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="4dp"
-                style="@style/zh_bold_style"
                 android:textColor="@color/tr_pink"
                 android:textSize="18sp"
-                tools:text="@string/default_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/share_btn" />
+                app:layout_constraintTop_toBottomOf="@id/share_btn"
+                tools:text="@string/default_text" />
 
             <TextView
                 android:id="@+id/img_detail_description"
+                style="@style/zh_medium_style"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:maxLines="2"
-                android:letterSpacing="0.02"
                 android:layout_marginHorizontal="12dp"
-                android:textColor="@color/tr_pink"
-                style="@style/zh_medium_style"
-                android:textSize="16sp"
                 android:gravity="start"
+                android:letterSpacing="0.02"
+                android:maxLines="2"
+                android:textColor="@color/tr_pink"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toTopOf="@id/img_detail_line"
                 app:layout_constraintEnd_toEndOf="@+id/img_detail_title"
                 app:layout_constraintStart_toStartOf="@id/img_detail_title"
                 app:layout_constraintTop_toBottomOf="@+id/img_detail_title"
-                tools:text="12345,.!?*%$#Picture Description Text Picture Description TextPicture Description TextPicture Description TextPicture Description Text" />
+                tools:text="@string/default_text" />
 
             <TextView
                 android:id="@+id/comment_num_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/round_border"
-                tools:text="9527 comments"
                 android:textColor="@color/blue_gray"
                 android:textSize="18sp"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/img_detail_line" />
+                app:layout_constraintTop_toBottomOf="@+id/img_detail_line"
+                tools:text="9527 comments" />
 
             <View
                 android:id="@+id/img_detail_line"
@@ -219,8 +208,8 @@
                 android:id="@+id/comments_recycler"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
                 android:layout_marginTop="2dp"
+                android:layout_marginBottom="8dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -235,13 +224,13 @@
                 android:layout_margin="12dp"
                 android:textColor="@color/gray_white"
                 android:textSize="16sp"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true"
                 android:visibility="visible"
-                app:layout_constraintTop_toBottomOf="@+id/img_detail_line"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/img_detail_line"
-                app:layout_constraintStart_toStartOf="@id/img_detail_line" />
+                app:layout_constraintStart_toStartOf="@id/img_detail_line"
+                app:layout_constraintTop_toBottomOf="@+id/img_detail_line"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/detail_guideline"

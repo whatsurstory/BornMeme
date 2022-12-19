@@ -60,26 +60,3 @@ class UserCommentAdapter(private val uiState: CommentsViewModel.UiState) :
         holder.bind(getItem(position), uiState)
     }
 }
-
-class Timestamp {
-    /**
-     * Timestamp to String
-     * @param Timestamp
-     * @return String
-     */
-    @SuppressLint("SimpleDateFormat")
-    fun transToString(time: Long): String {
-        return SimpleDateFormat("YY-MM-DD-hh-mm-ss").format(time)
-    }
-
-    /**
-     * String to Timestamp
-     * @param String
-     * @return Timestamp
-     */
-
-    @SuppressLint("SimpleDateFormat")
-    fun transToTimeStamp(date: String): Long {
-        return SimpleDateFormat("YY-MM-DD-hh-mm-ss").parse(date, ParsePosition(0)).time
-    }
-}

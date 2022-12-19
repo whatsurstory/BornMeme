@@ -17,7 +17,8 @@ import com.beva.bornmeme.ui.detail.user.fragments.posts.PostAdapter
 import com.bumptech.glide.Glide
 import java.io.ByteArrayOutputStream
 
-class SlideAdapter(private val onClickListener: OnClickListener): ListAdapter<FolderData, SlideAdapter.ViewHolder>(DiffCallback) {
+class SlideAdapter(private val onClickListener: OnClickListener
+): ListAdapter<FolderData, SlideAdapter.ViewHolder>(DiffCallback) {
 
     companion object DiffCallback: DiffUtil.ItemCallback<FolderData>(){
         override fun areItemsTheSame(oldItem: FolderData, newItem: FolderData): Boolean {
