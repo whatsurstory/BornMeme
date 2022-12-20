@@ -63,15 +63,14 @@
 
             <ImageButton
                 android:id="@+id/delete_comment_button"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_margin="8dp"
+                android:visibility="gone"
                 android:background="@drawable/delete"
-                app:layout_constraintBottom_toBottomOf="@+id/time_text"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/time_text"
-                app:layout_constraintTop_toTopOf="@+id/time_text"
                 app:tint="@color/tr_black" />
 
             <androidx.constraintlayout.widget.Guideline

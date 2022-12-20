@@ -220,30 +220,34 @@ class ImgDetailViewModel(postOwnerId: String, context: Context) : ViewModel() {
 //            }
     }
 
-    fun onClickCollection(title: String, postId: String, url: String) {
-        val ref = Firebase.firestore
-            .collection("Users")
-            .document(UserManager.user.userId!!)
-            .collection("Folders")
-            .document(title)
+    fun onClickCollection(context: Context, title: String, postId: String, url: String) {
+        val ref = UserManager.user.userId?.let {
+            Firebase.firestore
+                .collection(context.getString(R.string.user_collection_text))
+                .document(it)
+                .collection(context.getString(R.string.folder_collection_text))
+                .document(title)
+        }
 
         Firebase.firestore.runTransaction { transaction ->
-            val snapshot = transaction.get(ref)
+            val snapshot = ref?.let { transaction.get(it) }
             val list = arrayMapOf("id" to postId, "url" to url)
 //            Timber.d("snapshot ??? $snapshot")
-            if (snapshot.data != null) {
+            if (snapshot?.data != null) {
                 transaction.update(
                     ref,
                     "posts", FieldValue.arrayUnion(list)
                 )
             } else {
-                transaction.set(
-                    ref, hashMapOf(
-                        "name" to ref.id,
-                        "createTime" to Timestamp.now(),
-                        "posts" to FieldValue.arrayUnion(list)
+                ref?.let {
+                    transaction.set(
+                        it, hashMapOf(
+                            "name" to ref?.id,
+                            "createTime" to Timestamp.now(),
+                            "posts" to FieldValue.arrayUnion(list)
+                        )
                     )
-                )
+                }
             }
         }
     }
@@ -310,7 +314,7 @@ class ImgDetailViewModel(postOwnerId: String, context: Context) : ViewModel() {
             val data = arrayOf("色情", "暴力", "賭博", "非法交易", "種族歧視")
 
             val builder = AlertDialog.Builder(context, R.style.AlertDialogTheme)
-            builder.setTitle("請選擇檢舉原因")
+            builder.setTitle(context.getString(R.string.report_reason_text))
             builder.setMultiChoiceItems(data, null) { dialog, i, b ->
                 val currentItem = data[i]
             }

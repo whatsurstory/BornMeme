@@ -26,8 +26,6 @@ class EditDragFragment : Fragment() {
 
     lateinit var binding: FragmentDragEditBinding
     private var uri: Uri? = null
-    private val fireStore = FirebaseFirestore.getInstance().collection("Posts")
-    private val document = fireStore.document()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,10 +66,10 @@ class EditDragFragment : Fragment() {
             return@setOnTouchListener binding.stickerView.onTouchEvent(newEvent)
         }
 
-        //let the bitmap's width and height scale the view
+        //let the bitmaps width and height scale the view
         arguments?.let { bundle ->
             uri = bundle.getParcelable("uri")
-            Timber.d("uri => $uri")
+//            Timber.d("uri => $uri")
 
             val backgroundBitmap = uri?.let {
                 StickerUtils.getImage(requireContext(), it)
@@ -162,6 +160,7 @@ class EditDragFragment : Fragment() {
             )
         }
 
+
         binding.dragPublishBtn.setOnClickListener {
 
             val viewModel = ViewModelProvider(requireActivity())[EditViewModel::class.java]
@@ -179,6 +178,9 @@ class EditDragFragment : Fragment() {
                 binding.lottiePublishLoading.visibility = View.VISIBLE
                 binding.lottiePublishLoading.setAnimation(R.raw.dancing_pallbearers)
 
+                val document = FirebaseFirestore.getInstance()
+                    .collection(getString(R.string.post_collection_text)).document()
+
                 val ref = FirebaseStorage.getInstance().reference
                 uri?.let { uri ->
                     ref.child("img_origin/" + document.id + ".jpg")
@@ -186,7 +188,7 @@ class EditDragFragment : Fragment() {
                         .addOnSuccessListener {
                             it.metadata?.reference?.downloadUrl?.addOnSuccessListener {
                                 //這層的it才會帶到firebase return 的 Uri
-                                Timber.d("origin uri: $it => take it to base url")
+//                                Timber.d("origin uri: $it => take it to base url")
 
             //                            Timber.d("newTag $newTag")
                                 val res = listOf(
@@ -215,7 +217,8 @@ class EditDragFragment : Fragment() {
                                     bitmap.width,
                                     bitmap.height
                                 )
-                                findNavController().navigate(MobileNavigationDirections.navigateToHomeFragment())
+                                findNavController()
+                                    .navigate(MobileNavigationDirections.navigateToHomeFragment())
 
                             }?.addOnFailureListener {
                                 Timber.d("upload uri Error => $it")
@@ -344,7 +347,8 @@ class EditDragFragment : Fragment() {
     }
 
     private fun chooseSticker(selectedSticker: Bitmap) {
-        val reSizeSticker = Bitmap.createScaledBitmap(selectedSticker, 220, 200, false)
+        val reSizeSticker =
+            Bitmap.createScaledBitmap(selectedSticker, 220, 200, false)
         binding.stickerView.addSticker(reSizeSticker)
     }
 

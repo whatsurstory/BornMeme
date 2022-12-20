@@ -83,6 +83,7 @@
                     android:textColorHint="@color/dark_gray"
                     android:textSize="24sp"
                     android:textStyle="bold"
+                    android:maxLength="15"
                     app:layout_constraintBottom_toBottomOf="@+id/origin_photo"
                     app:layout_constraintEnd_toEndOf="@+id/origin_photo"
                     app:layout_constraintStart_toStartOf="@+id/origin_photo" />
@@ -102,6 +103,7 @@
                     android:textColorHint="@color/dark_gray"
                     android:textSize="24sp"
                     android:textStyle="bold"
+                    android:maxLength="15"
                     app:layout_constraintEnd_toEndOf="@+id/origin_photo"
                     app:layout_constraintStart_toStartOf="@+id/origin_photo"
                     app:layout_constraintTop_toTopOf="@+id/origin_photo" />

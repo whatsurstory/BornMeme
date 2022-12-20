@@ -20,9 +20,9 @@ class CustomScrollView : ScrollView {
     )
 
     override fun onInterceptTouchEvent(event: MotionEvent?): Boolean {
-        Timber.e("CustomScrollView onInterceptTouchEvent action=${event?.action}}")
+        Timber.e("CustomScrollView onInterceptTouchEvent action=${event?.action}")
         if (event?.action == MotionEvent.ACTION_CANCEL) {
-            Timber.e("CustomScrollView onInterceptTouchEvent ACTION_CANCEL}")
+            Timber.e("CustomScrollView onInterceptTouchEvent ACTION_CANCEL")
             event.action = MotionEvent.ACTION_MOVE
             return false
         }
@@ -31,10 +31,10 @@ class CustomScrollView : ScrollView {
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        Timber.e("CustomScrollView onTouchEvent action=${event?.action}}")
+        Timber.e("CustomScrollView onTouchEvent action=${event?.action}")
 
         if (event?.action == MotionEvent.ACTION_CANCEL) {
-            Timber.e("CustomScrollView onTouchEvent ACTION_CANCEL}")
+            Timber.e("CustomScrollView onTouchEvent ACTION_CANCEL")
             event.action = MotionEvent.ACTION_MOVE
             return false
         }

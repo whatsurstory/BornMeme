@@ -223,12 +223,12 @@ class CommentAdapter(
             is ParentViewHolder -> {
                 val data = getItem(position) as CommentCell.ParentComment
                 holder.bind(data, uiState, viewModel, fragment, context, inflater)
-                Timber.d("data $data position $position")
+//                Timber.d("data $data position $position")
             }
             is ChildViewHolder -> {
                 val data = getItem(position) as CommentCell.ChildComment
                 holder.bind(data, uiState, viewModel, fragment, context, inflater)
-                Timber.d("data $data position $position")
+//                Timber.d("data $data position $position")
             }
         }
     }

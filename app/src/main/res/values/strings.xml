@@ -15,6 +15,7 @@
     <string name="remind_delete_text">刪除提醒</string>
     <string name="sure_text">確定</string>
     <string name="check_delete_text">即將刪除</string>
+    <string name="delete_text">刪除</string>
     <string name="download_success_text">下載完成</string>
     <string name="click_email_box_text">信箱修改開發中，加速要加錢</string>
     <string name="name_error_text">普林ドキドキ</string>
@@ -57,13 +58,14 @@
     <string name="enter_title_hint">Adding Title Here</string>
     <string name="enter_tag_hint">Adding Tag Here</string>
     <string name="img_detail_follow_text">Follow</string>
+    <string name="img_detail_following_text">Following</string>
     <string name="comment_recycle_text">雖然現在這裡有點安靜 …</string>
     <string name="bornmeme">BornMeme.</string>
     <string name="see_more_text">更多回覆</string>
     <string name="reply_btn">回覆</string>
     <string name="back_btn">收起回覆</string>
     <string name="choose_report_text">請選擇檢舉原因</string>
-    <string name="block_ask_text">是否將此用戶封鎖?</string>
+    <string name="block_ask_text">是否要將此用戶封鎖?</string>
     <string name="block_sure_text">你確定要封鎖人家嗎… \n 再也看不見的那種?</string>
     <string name="enter_hint_text">Adding Text Here</string>
     <string name="service_text">使用條款</string>
@@ -85,7 +87,7 @@
     <string name="imported_033">有些圖片無法成功載入 (%1$d imported)</string>
 
 
-    <string name="not_allow_prmission">看起來你還沒有打開權限，打開之後即可完整使用功能哦!</string>
+    <string name="not_allow_prmission">看起來你還沒有打開權限 \n 打開之後即可完整使用功能哦!</string>
     <string name="continue_text">繼續</string>
     <string name="service_text_with_url">點擊 同意並繼續 即代表您同意並確認您已閱讀我們的服務條款與隱私政策，了解我們如何收集、使用與分享您的資料。</string>
     <string name="open_keyboard">前往設定打開鍵盤</string>
@@ -138,6 +140,10 @@
     <string name="name_blank_text">熬夜小心肝</string>
     <string name="leave_text">離開</string>
     <string name="who_follow_me_text">誰追蹤我</string>
+    <string name="name_the_folder_text">幫收藏夾取名字(*‘ v`*)</string>
+    <string name="really_to_sure_about_delete_text">確定要刪除這麼棒的智慧結晶嗎?</string>
+    <string name="report_reason_text">請選擇檢舉原因</string>
+
 
 
 </resources>

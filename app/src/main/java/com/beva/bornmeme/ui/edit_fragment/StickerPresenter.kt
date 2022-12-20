@@ -12,23 +12,27 @@ import timber.log.Timber
  */
 class StickerPresenter(private val stickerView: StickerView) {
 
-    private val defaultBg = BitmapFactory.decodeResource(stickerView.context.resources, R.drawable.place_holder)
-    private val backgroundDrawer = BackgroundDrawer(stickerView,defaultBg)
+    private val defaultBg =
+        BitmapFactory.decodeResource(
+            stickerView.context.resources,
+            R.drawable.place_holder
+        )
+    private val backgroundDrawer = BackgroundDrawer(stickerView, defaultBg)
     private val stickerDrawers = ArrayList<Drawer>()
 
-    fun onDraw(canvas: Canvas?){
+    fun onDraw(canvas: Canvas?) {
         backgroundDrawer.onDraw(canvas)
         stickerDrawers.forEach {
             it.onDraw(canvas)
         }
     }
 
-    fun onTouchEvent(event: MotionEvent?):Boolean{
+    fun onTouchEvent(event: MotionEvent?): Boolean {
 
         Timber.w("sp event => x: ${event?.x}, y: ${event?.y}")
 
         //reverse position
-        for (i in stickerDrawers.size-1 downTo 0) {
+        for (i in stickerDrawers.size - 1 downTo 0) {
             val drawer = stickerDrawers[i]
             if (drawer.onTouchEvent(event)) {
                 stickerDrawers.remove(drawer)
@@ -41,23 +45,23 @@ class StickerPresenter(private val stickerView: StickerView) {
         return false
     }
 
-    fun addSticker(bitmap: Bitmap){
-        val drawer = StickerDrawer(stickerView,bitmap)
+    fun addSticker(bitmap: Bitmap) {
+        val drawer = StickerDrawer(stickerView, bitmap)
         stickerDrawers.add(drawer)
         stickerView.invalidate()
     }
 
-    fun clearSticker(){
+    fun clearSticker() {
         stickerDrawers.clear()
         stickerView.invalidate()
     }
 
-    fun setBackground(bitmap: Bitmap){
+    fun setBackground(bitmap: Bitmap) {
         backgroundDrawer.bitmap = bitmap
         stickerView.invalidate()
     }
 
-    fun clearBackground(){
+    fun clearBackground() {
         backgroundDrawer.bitmap = defaultBg
         stickerView.invalidate()
     }
