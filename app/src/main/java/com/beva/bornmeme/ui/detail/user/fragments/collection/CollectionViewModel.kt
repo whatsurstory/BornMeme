@@ -28,7 +28,7 @@ class CollectionViewModel(userId: String, context: Context) : ViewModel() {
         FirebaseFirestore.getInstance()
             .collection(context.getString(R.string.user_collection_text))
             .document(userId)
-            .collection("Folders")
+            .collection(context.getString(R.string.folder_collection_text))
             .addSnapshotListener { snapshot, exception ->
                 if (snapshot != null) {
                     Timber.d("item ${snapshot.documents}")
@@ -53,7 +53,7 @@ class CollectionViewModel(userId: String, context: Context) : ViewModel() {
             FirebaseFirestore.getInstance()
                 .collection(context.getString(R.string.user_collection_text))
                 .document(it)
-                .collection("Folders")
+                .collection(context.getString(R.string.folder_collection_text))
                 .document(item.name).delete()
         }
     }

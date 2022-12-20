@@ -77,6 +77,8 @@ class CollectionAdapter(
                         .setTextColor(context.getColor(R.color.button_balck))
                     true
                 }
+            } else {
+                binding.deleteFileBtn.visibility = View.GONE
             }
         }
     }

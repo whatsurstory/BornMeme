@@ -39,17 +39,15 @@ class CommentsFragment : Fragment() {
         val userId = requireArguments().getString("userIdKey") ?: ""
         viewModel = CommentsViewModel(userId, requireContext())
 
-        val adapter = UserCommentAdapter(viewModel.uiState)
+        val adapter = UserCommentAdapter(viewModel.uiState, requireContext())
 
         binding.commentRecycler.adapter = adapter
 
         viewModel.postData.observe(viewLifecycleOwner) {
-            Timber.d("observe comment $it")
+//            Timber.d("observe comment $it")
             adapter.submitList(it)
         }
 
         return binding.root
     }
-
-
 }

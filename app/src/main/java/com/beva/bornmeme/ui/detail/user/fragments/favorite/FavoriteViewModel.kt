@@ -47,6 +47,4 @@ class FavoriteViewModel(userId: String, context: Context) : ViewModel() {
     fun onDetailNavigated() {
         _navigateToDetail.value = null
     }
-
-
 }

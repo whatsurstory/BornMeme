@@ -32,19 +32,18 @@
 
             <TextView
                 android:id="@+id/time_text"
+                style="@style/zh_light_style"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:maxLines="1"
-                style="@style/zh_light_style"
-                android:textColor="@color/dark_blue"
                 android:layout_marginVertical="8dp"
-                android:layout_marginHorizontal="16dp"
                 android:gravity="end"
-                tools:text="yyyy/mm/dd 00:00:00"
+                android:maxLines="1"
+                android:textColor="@color/tr_black"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/gl"
-                app:layout_constraintTop_toBottomOf="@+id/content_text" />
+                app:layout_constraintEnd_toEndOf="@+id/content_text"
+                app:layout_constraintStart_toStartOf="@+id/content_text"
+                app:layout_constraintTop_toBottomOf="@+id/content_text"
+                tools:text="@string/time_text" />
 
             <TextView
                 android:id="@+id/content_text"
@@ -52,15 +51,27 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:layout_marginVertical="8dp"
-                android:layout_marginHorizontal="16dp"
+                android:layout_marginHorizontal="8dp"
                 style="@style/zh_medium_style"
-                android:textColor="@color/dark_blue"
+                android:textColor="@color/tr_black"
                 android:textSize="16sp"
                 android:gravity="end"
-                tools:text="123this is comment content zone"
-                app:layout_constraintEnd_toEndOf="parent"
+                tools:text="@string/default_text"
+                app:layout_constraintEnd_toStartOf="@+id/delete_comment_button"
                 app:layout_constraintStart_toStartOf="@+id/gl"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/delete_comment_button"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_margin="8dp"
+                android:visibility="gone"
+                android:background="@drawable/delete"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/time_text"
+                app:tint="@color/tr_black" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/gl"

@@ -3,7 +3,7 @@ package com.beva.bornmeme.ui.edit_fragment
 import android.graphics.Bitmap
 
 /**
- * 贴纸类，初始位置为view中间
+ * setting the class of sticker initialize position
  */
 class StickerDrawer(
     stickerView: StickerView,
@@ -11,7 +11,6 @@ class StickerDrawer(
 ): Drawer(stickerView,bitmap) {
 
     override fun onInit() {
-        //初始化位置
 //        matrix.setTranslate(((stickerView.measuredWidth-bitmap.width)/2).toFloat(),
 //            ((stickerView.measuredHeight-bitmap.height)/2).toFloat())
         matrix.setTranslate(100f,100f)

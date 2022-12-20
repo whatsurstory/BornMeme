@@ -1,15 +1,17 @@
 package com.beva.bornmeme.ui.detail.dialog
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.beva.bornmeme.R
 import com.beva.bornmeme.model.Folder
 import com.beva.bornmeme.model.FolderData
 import com.beva.bornmeme.model.UserManager
 import com.google.firebase.firestore.FirebaseFirestore
 import timber.log.Timber
 
-class SlideViewModel(folder: Folder) : ViewModel() {
+class SlideViewModel(folder: Folder, context: Context) : ViewModel() {
 
     private val _folderItem = MutableLiveData<List<FolderData>>()
     val folderItem: LiveData<List<FolderData>>
@@ -21,14 +23,14 @@ class SlideViewModel(folder: Folder) : ViewModel() {
         get() = _navigateToDetail
 
     init {
-        getImage(folder)
+        getImage(folder, context)
     }
 
-    private fun getImage(folder: Folder) {
+    private fun getImage(folder: Folder, context: Context) {
         FirebaseFirestore.getInstance()
-            .collection("Users")
+            .collection(context.getString(R.string.user_collection_text))
             .document(UserManager.user.userId.toString())
-            .collection("Folders")
+            .collection(context.getString(R.string.folder_collection_text))
             .document(folder.name)
             .addSnapshotListener { snapshot, exception ->
                 if (snapshot != null) {

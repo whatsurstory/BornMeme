@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.Matrix
 
 /**
- * 贴纸背景
+ * Sticker Background
  */
 class BackgroundDrawer(stickerView: StickerView, bitmap: Bitmap): Drawer(stickerView,bitmap)  {
 

@@ -43,7 +43,7 @@ class EditFragment : Fragment() {
 
         arguments?.let { bundle ->
             uri = bundle.getParcelable("uri")
-            Timber.d("From Album uri => $uri")
+//            Timber.d("From Album uri => $uri")
         }
         getLayoutPrams()
     }
@@ -89,7 +89,7 @@ class EditFragment : Fragment() {
 
         //to preview
         binding.previewBtn.setOnClickListener {
-            Timber.d("onClick Preview")
+//            Timber.d("onClick Preview")
             upperText.clearFocus()
             bottomText.clearFocus()
             if (upperText.text.isNullOrEmpty() || bottomText.text.isNullOrEmpty()) {
@@ -119,7 +119,7 @@ class EditFragment : Fragment() {
 
         //to publish
         binding.publishBtn.setOnClickListener {
-            Timber.d("onClick publish")
+//            Timber.d("onClick publish")
             upperText.clearFocus()
             bottomText.clearFocus()
             if (upperText.text.isNullOrEmpty() || bottomText.text.isNullOrEmpty()) {
@@ -140,7 +140,7 @@ class EditFragment : Fragment() {
                         .addOnSuccessListener {
                             it.metadata?.reference?.downloadUrl?.addOnSuccessListener {
                                 //這層的it才會帶到firebase return 的 Uri
-                                Timber.d("origin uri: $it => take it to base url")
+//                                Timber.d("origin uri: $it => take it to base url")
 
                                 val res = listOf(
                                     arrayMapOf("type" to "base", "url" to it),

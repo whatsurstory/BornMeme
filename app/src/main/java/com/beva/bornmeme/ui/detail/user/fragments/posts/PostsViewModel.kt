@@ -32,7 +32,7 @@ class PostsViewModel(userId: String, context: Context) : ViewModel() {
             .addSnapshotListener { snapshot, e ->
                 val list = mutableListOf<Post>()
                 for (document in snapshot!!) {
-                    Timber.d("Post snapshot ID ->${document.id} list -> ${document.data}")
+//                    Timber.d("Post snapshot ID ->${document.id} list -> ${document.data}")
                     val post = document.toObject(Post::class.java)
                     list.add(post)
                 }

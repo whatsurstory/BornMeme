@@ -65,7 +65,7 @@ class ImgDetailFragment : Fragment() {
         binding = FragmentImgDetailBinding.inflate(layoutInflater)
         arguments?.let { bundle ->
             post = bundle.getParcelable("postKey")!!
-            Timber.d("WelCome to Img Detail: arg -> ${post.id}")
+//            Timber.d("WelCome to Img Detail: arg -> ${post.id}")
         }
 
         binding.imgDetailUserName.text = post.ownerId
@@ -79,13 +79,15 @@ class ImgDetailFragment : Fragment() {
         binding.imgDetailDescription.text = post.resources[1].url?.trim()
 
         val postRef = FirebaseFirestore.getInstance()
-            .collection("Posts").document(post.id)
-        val userRef = FirebaseFirestore.getInstance()
-            .collection("Users").document(UserManager.user.userId!!)
+            .collection(getString(R.string.post_collection_text)).document(post.id)
+        val userRef = UserManager.user.userId?.let {
+            FirebaseFirestore.getInstance()
+                .collection(getString(R.string.user_collection_text)).document(it)
+        }
 
         if (post.like.isNullOrEmpty()) {
             binding.beforeThumbupBtn.setOnClickListener {
-                userRef.update("likeId", FieldValue.arrayUnion(post.id))
+                userRef?.update("likeId", FieldValue.arrayUnion(post.id))
                 postRef.update("like", FieldValue.arrayUnion(UserManager.user.userId))
                 binding.beforeThumbupBtn.setBackgroundResource(R.drawable.heart)
             }
@@ -96,14 +98,14 @@ class ImgDetailFragment : Fragment() {
                     //item = User
                     binding.beforeThumbupBtn.setBackgroundResource(R.drawable.heart)
                     binding.beforeThumbupBtn.setOnClickListener {
-                        userRef.update("likeId", FieldValue.arrayRemove(post.id))
+                        userRef?.update("likeId", FieldValue.arrayRemove(post.id))
                         postRef.update("like", FieldValue.arrayRemove(UserManager.user.userId))
                         binding.beforeThumbupBtn.setBackgroundResource(R.drawable._heart)
                     }
                 } else {
                     //item != User
                     binding.beforeThumbupBtn.setOnClickListener {
-                        userRef.update("likeId", FieldValue.arrayUnion(post.id))
+                        userRef?.update("likeId", FieldValue.arrayUnion(post.id))
                         postRef.update("like", FieldValue.arrayUnion(UserManager.user.userId))
                         binding.beforeThumbupBtn.setBackgroundResource(R.drawable.heart)
                     }
@@ -112,10 +114,10 @@ class ImgDetailFragment : Fragment() {
         }
 
         if (post.ownerId == UserManager.user.userId) {
-                binding.followBtn.visibility = View.GONE
-            } else {
-                binding.followBtn.visibility = View.VISIBLE
-            }
+            binding.followBtn.visibility = View.GONE
+        } else {
+            binding.followBtn.visibility = View.VISIBLE
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -124,37 +126,55 @@ class ImgDetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ImgDetailViewModel(post.ownerId)
-        viewModel.getComments(post.id)
+        viewModel = ImgDetailViewModel(post.ownerId, requireContext())
+        viewModel.getComments(post.id, requireContext())
 
         viewModel.userData.observe(viewLifecycleOwner, Observer { user ->
             binding.imgDetailUserImg.loadImage(user[0].profilePhoto)
             binding.imgDetailUserName.text = user[0].userName
-            val db = Firebase.firestore.collection("Users")
+            val db = Firebase.firestore.collection(getString(R.string.user_collection_text))
             if (user[0].followers.isNullOrEmpty()) {
-                Timber.d("adding")
-                binding.followBtn.text = "Follow"
+                binding.followBtn.text = getString(R.string.img_detail_follow_text)
                 binding.followBtn.setOnClickListener {
-                db.document(UserManager.user.userId!!).update("followList", FieldValue.arrayUnion(user[0].userId))
-                db.document(user[0].userId!!).update("followers", FieldValue.arrayUnion(UserManager.user.userId))
+                    UserManager.user.userId?.let { id ->
+                        db.document(id)
+                            .update("followList", FieldValue.arrayUnion(user[0].userId))
+                    }
+                    user[0].userId?.let { id ->
+                        db.document(id)
+                            .update("followers", FieldValue.arrayUnion(UserManager.user.userId))
+                    }
                 }
             } else {
                 //followers != null or empty
                 for (item in user[0].followers) {
                     if (item == UserManager.user.userId) {
-                        binding.followBtn.text = "Following"
+                        binding.followBtn.text = getString(R.string.img_detail_following_text)
                         binding.followBtn.setOnClickListener {
-                            Timber.d("removing")
-                            db.document(UserManager.user.userId!!).update("followList", FieldValue.arrayRemove(user[0].userId))
-                            db.document(user[0].userId!!).update("followers", FieldValue.arrayRemove(UserManager.user.userId))
-                            binding.followBtn.text = "Follow"
+                            UserManager.user.userId?.let { id ->
+                                db.document(id)
+                                    .update("followList", FieldValue.arrayRemove(user[0].userId))
+                            }
+                            user[0].userId?.let { id ->
+                                db.document(id).update(
+                                    "followers",
+                                    FieldValue.arrayRemove(UserManager.user.userId)
+                                )
+                            }
+                            binding.followBtn.text = getString(R.string.img_detail_follow_text)
                         }
                     } else {
-                        binding.followBtn.text = "Follow"
+                        binding.followBtn.text = getString(R.string.img_detail_follow_text)
                         binding.followBtn.setOnClickListener {
-                            Timber.d("second adding")
-                            db.document(UserManager.user.userId!!).update("followList", FieldValue.arrayUnion(user[0].userId))
-                            db.document(user[0].userId!!).update("followers", FieldValue.arrayUnion(UserManager.user.userId))
+//                            Timber.d("second adding")
+                            UserManager.user.userId?.let { id ->
+                                db.document(id)
+                                    .update("followList", FieldValue.arrayUnion(user[0].userId))
+                            }
+                            user[0].userId?.let { id ->
+                                db.document(id)
+                                    .update("followers", FieldValue.arrayUnion(UserManager.user.userId))
+                            }
                         }
                     }
                 }
@@ -174,7 +194,7 @@ class ImgDetailFragment : Fragment() {
         viewModel.commentCells.observe(viewLifecycleOwner, Observer {
             it?.let {
                 binding.noSeeText.visibility = View.GONE
-                Timber.d(("Observe comment cell : $it"))
+//                Timber.d(("Observe comment cell : $it"))
                 adapter.submitList(it)
                 adapter.notifyDataSetChanged()
             }
@@ -205,7 +225,7 @@ class ImgDetailFragment : Fragment() {
         }
 
         viewModel.navigate2Comment.observe(viewLifecycleOwner) {
-            Timber.d("Observe navigate $it")
+//            Timber.d("Observe navigate $it")
             it?.let {
                 findNavController().navigate(
                     MobileNavigationDirections
@@ -225,7 +245,7 @@ class ImgDetailFragment : Fragment() {
         })
         //the button to take post to collection
         binding.collectionBtn.setOnClickListener {
-            viewModel.getFolder()
+            viewModel.getFolder(requireContext())
         }
 
         //the menu button to report and other feature
@@ -235,8 +255,8 @@ class ImgDetailFragment : Fragment() {
         )
         if (post.ownerId != UserManager.user.userId) {
 
-            popupMenu.menu.add(Menu.NONE, 0, 0, "檢舉圖片")
-            popupMenu.menu.add(Menu.NONE, 1, 1, "封鎖用戶")
+            popupMenu.menu.add(Menu.NONE, 0, 0, getString(R.string.report_text))
+            popupMenu.menu.add(Menu.NONE, 1, 1, getString(R.string.block_text))
             popupMenu.setOnMenuItemClickListener {
                 when (it.itemId) {
                     0 -> reportDialog()
@@ -246,7 +266,7 @@ class ImgDetailFragment : Fragment() {
             }
 
         } else {
-            popupMenu.menu.add(Menu.NONE, 0, 0, "刪除照片")
+            popupMenu.menu.add(Menu.NONE, 0, 0, getString(R.string.delete_text))
             popupMenu.setOnMenuItemClickListener {
                 when (it.itemId) {
                     0 -> showDialog()
@@ -275,22 +295,25 @@ class ImgDetailFragment : Fragment() {
         ).withListener(
             object : PermissionListener {
                 override fun onPermissionGranted(
-                    p0: PermissionGrantedResponse?) {
+                    p0: PermissionGrantedResponse?
+                ) {
                     click2edit(post)
                 }
 
                 override fun onPermissionDenied(
-                    p0: PermissionDeniedResponse?) {
+                    p0: PermissionDeniedResponse?
+                ) {
                     Toast.makeText(
                         context,
-                        "拒絕存取相簿權限",
+                        getString(R.string.refuse_permission),
                         Toast.LENGTH_SHORT
                     ).show()
                     showRotationDialogForPermission()
                 }
 
                 override fun onPermissionRationaleShouldBeShown(
-                    p0: PermissionRequest?, p1: PermissionToken?) {
+                    p0: PermissionRequest?, p1: PermissionToken?
+                ) {
                     showRotationDialogForPermission()
                 }
             }).onSameThread().check()
@@ -302,22 +325,25 @@ class ImgDetailFragment : Fragment() {
         ).withListener(
             object : PermissionListener {
                 override fun onPermissionGranted(
-                    p0: PermissionGrantedResponse?) {
+                    p0: PermissionGrantedResponse?
+                ) {
                     getUri()
                 }
 
                 override fun onPermissionDenied(
-                    p0: PermissionDeniedResponse?) {
+                    p0: PermissionDeniedResponse?
+                ) {
                     Toast.makeText(
                         context,
-                        "拒絕存取相簿權限",
+                        getString(R.string.refuse_permission),
                         Toast.LENGTH_SHORT
                     ).show()
                     showRotationDialogForPermission()
                 }
 
                 override fun onPermissionRationaleShouldBeShown(
-                    p0: PermissionRequest?, p1: PermissionToken?) {
+                    p0: PermissionRequest?, p1: PermissionToken?
+                ) {
                     showRotationDialogForPermission()
                 }
             }).onSameThread().check()
@@ -325,9 +351,9 @@ class ImgDetailFragment : Fragment() {
 
     private fun showRotationDialogForPermission() {
         AlertDialog.Builder(requireContext())
-            .setMessage("看起來你還沒有打開權限 \n 打開之後即可完整使用功能哦!")
+            .setMessage(getString(R.string.not_allow_prmission))
 
-            .setPositiveButton("前往設定") { _, _ ->
+            .setPositiveButton(getString(R.string.to_setting_text)) { _, _ ->
 
                 try {
                     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
@@ -340,7 +366,7 @@ class ImgDetailFragment : Fragment() {
                 }
             }
 
-            .setNegativeButton("取消") { dialog, _ ->
+            .setNegativeButton(getString(R.string.cancel_text)) { dialog, _ ->
                 dialog.dismiss()
             }.show()
     }
@@ -356,17 +382,17 @@ class ImgDetailFragment : Fragment() {
         alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         alertDialog.show()
         val message = view.findViewById<TextView>(R.id.delete_message)
-        message.text = "你確定要封鎖人家嗎...\n再也看不見的那種?"
+        message.text = getString(R.string.block_sure_text)
 
         val okay = view.findViewById<Button>(R.id.okay_delete_btn)
         okay.setOnClickListener {
             //先把資料裝進local 再上傳到firebase
             UserManager.user.blockList += post.ownerId
-            Firebase.firestore.collection("Users")
+            Firebase.firestore.collection(getString(R.string.user_collection_text))
                 .document(UserManager.user.userId!!)
                 .update("blockList", UserManager.user.blockList)
                 .addOnCompleteListener {
-                    Timber.d("add to block ${post.ownerId}")
+//                    Timber.d("add to block ${post.ownerId}")
                     alertDialog.dismiss()
                     findNavController().navigateUp()
                 }
@@ -379,12 +405,12 @@ class ImgDetailFragment : Fragment() {
         val uri =
             FirebaseStorage.getInstance().reference.child("img_edited/" + post.id + ".jpg")
         val filePath = requireContext().filesDir.absolutePath + "/" + post.id + ".jpg"
-        Timber.d("filePath -> $filePath")
+//        Timber.d("filePath -> $filePath")
 
         uri.getFile(Uri.parse(filePath))
             .addOnCompleteListener {
                 if (it.isSuccessful) {
-                    Timber.d("success")
+//                    Timber.d("success")
                     //get Uri by file path
 //                        Uri.parse("content:/$filePath")
 //                        val fileUri = Uri.fromFile(File(filePath))
@@ -394,7 +420,7 @@ class ImgDetailFragment : Fragment() {
                             requireContext(),
                             "com.beva.bornmeme.fileProvider", file
                         )
-                    Timber.d("fileUri -> $newUri")
+//                    Timber.d("fileUri -> $newUri")
                     val intent = Intent(Intent.ACTION_SEND)
                     intent.type = "image/*"
                     intent.putExtra(
@@ -405,7 +431,7 @@ class ImgDetailFragment : Fragment() {
                         Intent.FLAG_GRANT_READ_URI_PERMISSION or
                                 Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                     )
-                    startActivity(Intent.createChooser (intent, "Share Image"))
+                    startActivity(Intent.createChooser(intent, "Share Image"))
 //                        startActivity(intent)
                 }
             }
@@ -421,7 +447,7 @@ class ImgDetailFragment : Fragment() {
         val isCheckedIndex = ArrayList<Int>()
         val list = ArrayList<String>()
 
-        builder.setTitle("幫收藏夾取名字(*‘ v`*)")
+        builder.setTitle(getString(R.string.name_the_folder_text))
         val view = inflater.inflate(R.layout.diaolog_collection, null)
         builder.setView(view)
         val input = view.findViewById<EditText>(R.id.folder_name)
@@ -442,35 +468,35 @@ class ImgDetailFragment : Fragment() {
                 }
             })
 
-        builder.setPositiveButton("確定",
+        builder.setPositiveButton(getString(R.string.sure_text),
             DialogInterface.OnClickListener { dialog, which ->
                 run {
                     var title: String
                     if (list.isNotEmpty() && input.text.toString().isEmpty()) {
                         for (i in 0 until list.size) {
                             title = list[i]
-                            Timber.d("title $title")
-                            viewModel.onClickCollection(title, post.id, post.url.toString())
-                            viewModel.doneCollection(post.id)
+//                            Timber.d("title $title")
+                            viewModel.onClickCollection(requireContext(),title, post.id, post.url.toString())
+                            viewModel.doneCollection(post.id, requireContext())
 //                        Toast.makeText(context, "New Created $input Folder", Toast.LENGTH_SHORT).show()
                         }
                     } else if (list.isEmpty() && input.text.toString().isNotEmpty()) {
                         title = input.text.toString()
-                        viewModel.onClickCollection(title, post.id, post.url.toString())
-                        viewModel.doneCollection(post.id)
+                        viewModel.onClickCollection(requireContext() ,title, post.id, post.url.toString())
+                        viewModel.doneCollection(post.id, requireContext())
 
                     } else if (list.isNotEmpty() && input.text.toString().isNotEmpty()) {
                         list.add(input.text.toString())
                         for (i in 0 until list.size) {
                             title = list[i]
-                            Timber.d("title $title")
-                            viewModel.onClickCollection(title, post.id, post.url.toString())
-                            viewModel.doneCollection(post.id)
+//                            Timber.d("title $title")
+                            viewModel.onClickCollection(requireContext() ,title, post.id, post.url.toString())
+                            viewModel.doneCollection(post.id, requireContext())
                         }
                     }
                 }
             })
-        builder.setNegativeButton("取消",
+        builder.setNegativeButton(getString(R.string.cancel_text),
             DialogInterface.OnClickListener { _, _ ->
 //            Timber.d("check the selected item -> list size:${list.size} int size: ${isCheckedIndex.size}")
             })
@@ -479,10 +505,9 @@ class ImgDetailFragment : Fragment() {
         alertDialog.show()
 
         alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
-            .setTextColor(parseColor("#181A19"))
+            .setTextColor(requireContext().getColor(R.color.button_balck))
         alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
-            .setTextColor(parseColor("#181A19"))
-
+            .setTextColor(requireContext().getColor(R.color.button_balck))
     }
 
 
@@ -498,15 +523,18 @@ class ImgDetailFragment : Fragment() {
         alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         alertDialog.show()
         val message = view.findViewById<TextView>(R.id.delete_message)
-        message.text = "確定要刪除這麼棒的智慧結晶嗎?"
+        message.text = getString(R.string.really_to_sure_about_delete_text)
 
         val okay = view.findViewById<Button>(R.id.okay_delete_btn)
         okay.setOnClickListener {
-            val user = Firebase.firestore.collection("Users").document(post.ownerId)
+            val user = Firebase.firestore.collection(getString(R.string.user_collection_text))
+                .document(post.ownerId)
             user.update("postQuantity", FieldValue.arrayRemove(post.id))
-            val postId = FirebaseFirestore.getInstance().collection("Posts").document(post.id)
+            val postId =
+                FirebaseFirestore.getInstance().collection(getString(R.string.post_collection_text))
+                    .document(post.id)
             postId.delete().addOnSuccessListener {
-                Timber.d("DocumentSnapshot successfully deleted${post.id}!")
+//                Timber.d("DocumentSnapshot successfully deleted${post.id}!")
                 alertDialog.dismiss()
                 findNavController().navigateUp()
             }
@@ -527,19 +555,23 @@ class ImgDetailFragment : Fragment() {
         image.loadImage(post.resources[0].url)
 
         builder.setMessage("就決定是${post.title}了嗎?(・∀・)つ⑩")
-        builder.setPositiveButton("對沒錯") { dialog, _ ->
+        builder.setPositiveButton(getString(R.string.yes_btn)) { dialog, _ ->
             val bitmapDrawable = image.drawable as BitmapDrawable
             val bitmap = bitmapDrawable.bitmap
             saveImage(bitmap, img.id)
-            Timber.d("filePath -> $bitmap")
+//            Timber.d("filePath -> $bitmap")
         }
-        builder.setNegativeButton("再想想", DialogInterface.OnClickListener { dialog, which ->
+        builder.setNegativeButton(
+            getString(R.string.no_btn),
+            DialogInterface.OnClickListener { dialog, which ->
 
-        })
+            })
         val alertDialog: AlertDialog = builder.create()
         alertDialog.show()
-        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(parseColor("#181A19"))
-        alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(parseColor("#181A19"))
+        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+            .setTextColor(requireContext().getColor(R.color.button_balck))
+        alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+            .setTextColor(requireContext().getColor(R.color.button_balck))
     }
 
     private fun saveImage(image: Bitmap, id: String): String? {
@@ -577,7 +609,7 @@ class ImgDetailFragment : Fragment() {
                 requireContext(),
                 "com.beva.bornmeme.fileProvider", file
             )
-        Timber.d("fileUri -> $newUri")
+//        Timber.d("fileUri -> $newUri")
         val mainViewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
         mainViewModel.editingImg = newUri
         findNavController().navigate(MobileNavigationDirections.navigateToEditFragment(newUri))
@@ -588,11 +620,11 @@ class ImgDetailFragment : Fragment() {
         val data = arrayOf("色情", "暴力", "賭博", "非法交易", "種族歧視")
 
         val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
-        builder.setTitle("請選擇檢舉原因")
+        builder.setTitle(getString(R.string.report_reason_text))
         builder.setMultiChoiceItems(data, null) { dialog, i, b ->
             val currentItem = data[i]
         }
-        builder.setPositiveButton("確定") { dialogInterface, j ->
+        builder.setPositiveButton(getString(R.string.sure_text)) { dialogInterface, j ->
 //            for (i in data.indices) if (selected[i]) {
 //                selected[i] = false
 //            }
@@ -605,11 +637,11 @@ class ImgDetailFragment : Fragment() {
             bind.toBlockBtn.setOnClickListener {
                 UserManager.user.blockList += post.ownerId
                 UserManager.user.userId?.let { id ->
-                    Firebase.firestore.collection("Users")
+                    Firebase.firestore.collection(getString(R.string.user_collection_text))
                         .document(id)
                         .update("blockList", UserManager.user.blockList)
                         .addOnCompleteListener {
-                            Timber.d("add to block ${post.ownerId}")
+//                            Timber.d("add to block ${post.ownerId}")
                             customSnack.dismiss()
                             findNavController().navigateUp()
                         }
@@ -629,12 +661,14 @@ class ImgDetailFragment : Fragment() {
                     }
             customSnack.show()
         }
-        builder.setNegativeButton("取消") { dialog, i ->
+        builder.setNegativeButton(getString(R.string.cancel_text)) { dialog, i ->
         }
         val dialog = builder.create()
         dialog.show()
-        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(parseColor("#181A19"))
-        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(parseColor("#181A19"))
+        dialog.getButton(DialogInterface.BUTTON_POSITIVE)
+            .setTextColor(requireContext().getColor(R.color.button_balck))
+        dialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+            .setTextColor(requireContext().getColor(R.color.button_balck))
     }
 }
 

@@ -92,17 +92,17 @@ class PublishCommentDialog : AppCompatDialogFragment() {
 
         if (parentId.isNotEmpty()) {
             binding.replyWhoText.visibility = View.VISIBLE
-            viewModel.getUserName(parentId, binding)
+            viewModel.getUserName(parentId, binding, requireContext())
         }
 
         binding.buttonPublish.setOnClickListener {
 
             if (binding.editPublishContent.text.isNullOrEmpty()) {
-                Toast.makeText(context, "還沒有訊息呢", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.input_yet), Toast.LENGTH_SHORT).show()
             } else {
                 binding.postCommentLotties.visibility = View.VISIBLE
                 binding.postCommentLotties.setAnimation(R.raw.refresh)
-                viewModel.publishComment(postId, parentId, binding)
+                viewModel.publishComment(postId, parentId, binding,requireContext())
                 Handler(Looper.getMainLooper()).postDelayed({
                     findNavController().navigateUp()
                 }, 1200)

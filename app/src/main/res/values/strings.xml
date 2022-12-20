@@ -10,10 +10,16 @@
     <string name="user_collection_text">Users</string>
     <string name="post_collection_text">Posts</string>
     <string name="comment_collection_text">Comments</string>
+    <string name="folder_collection_text">Folders</string>
 
     <string name="remind_delete_text">刪除提醒</string>
     <string name="sure_text">確定</string>
     <string name="check_delete_text">即將刪除</string>
+    <string name="delete_text">刪除</string>
+    <string name="download_success_text">下載完成</string>
+    <string name="click_email_box_text">信箱修改開發中，加速要加錢</string>
+    <string name="name_error_text">普林ドキドキ</string>
+    <string name="name_box_error">字數超過了</string>
 
 
     <string name="snack_default_text">資料未完成將填入預設值，免客氣</string>
@@ -21,6 +27,11 @@
     <string name="silly_usual">傻逼日常</string>
     <string name="edit_no_input">不想填寫內容可以輸入空格唷~(･8･)</string>
 
+
+    <string name="file_text">Files</string>
+    <string name="text_text">Texts</string>
+    <string name="post_text">Posts</string>
+    <string name="like_text">Likes</string>
     <string name="text_click">Add Text</string>
     <string name="preview_btn">Preview</string>
     <string name="publish_btn">Publish</string>
@@ -37,25 +48,32 @@
     <string name="text_to_reply_hint">Adding text to reply …</string>
     <string name="publish_text">Publish</string>
     <string name="chip_reply_to">Reply To:</string>
+    <string name="time_text">yyyy/mm/dd 00:00:00</string>
     <string name="yes_btn">對沒錯</string>
     <string name="no_btn">再想想</string>
+    <string name="report_text">檢舉</string>
+    <string name="block_text">封鎖</string>
+    <string name="setting_text">設定</string>
     <string name="enter_folder_name">Enter Folder Name</string>
     <string name="enter_title_hint">Adding Title Here</string>
     <string name="enter_tag_hint">Adding Tag Here</string>
     <string name="img_detail_follow_text">Follow</string>
+    <string name="img_detail_following_text">Following</string>
     <string name="comment_recycle_text">雖然現在這裡有點安靜 …</string>
     <string name="bornmeme">BornMeme.</string>
     <string name="see_more_text">更多回覆</string>
     <string name="reply_btn">回覆</string>
     <string name="back_btn">收起回覆</string>
-    <string name="block_text">是否將此用戶封鎖?</string>
+    <string name="choose_report_text">請選擇檢舉原因</string>
+    <string name="block_ask_text">是否要將此用戶封鎖?</string>
+    <string name="block_sure_text">你確定要封鎖人家嗎… \n 再也看不見的那種?</string>
     <string name="enter_hint_text">Adding Text Here</string>
     <string name="service_text">使用條款</string>
     <string name="private_text">隱私政策</string>
     <string name="to_setting_text">前往設定</string>
     <string name="cancel_text">取消</string>
     <string name="refuse_permission">拒絕存取</string>
-    <string name="input_yet">標籤文字尚未輸入</string>
+    <string name="input_yet">尚未輸入文字</string>
     <string name="pack_icon">Pack icon</string>
     <string name="sticker_icon">Sticker icon</string>
     <string name="close_sticker_preview"> 點一下關閉預覽 </string>
@@ -69,7 +87,7 @@
     <string name="imported_033">有些圖片無法成功載入 (%1$d imported)</string>
 
 
-    <string name="not_allow_prmission">看起來你還沒有打開權限，打開之後即可完整使用功能哦!</string>
+    <string name="not_allow_prmission">看起來你還沒有打開權限 \n 打開之後即可完整使用功能哦!</string>
     <string name="continue_text">繼續</string>
     <string name="service_text_with_url">點擊 同意並繼續 即代表您同意並確認您已閱讀我們的服務條款與隱私政策，了解我們如何收集、使用與分享您的資料。</string>
     <string name="open_keyboard">前往設定打開鍵盤</string>
@@ -77,6 +95,7 @@
     <string name="sign_in">Google Sign In</string>
 
     <string name="service_and_policy_title">使用條款與隱私權政策</string>
+    <string name="welcome_to_use_text">歡迎加入使用BornMeme. 請先詳閱使用條款及隱私政策，勾選同意即可完整使用應用程式</string>
     <string name="use_policy_text">歡迎使用 BornMeme.！本使用條款（或稱「條款」）係規範您使用 BornMeme. 的行為（除非我們明確聲明另有適用的條款，而非本條款），以及提供 BornMeme. 服務（下稱「服務」）的相關資訊，概要內容如下。若建立 BornMeme. 帳號或使用 BornMeme.，即表示您同意本條款。</string>
     <string name="p_1">我們同意提供您 BornMeme 服務，包括所有產品、功能，拉近您與喜愛的人事物之間的距離。提供的服務包括：讓用戶依個人喜好建立內容、與他人聯繫交流、發掘新事物和分享資訊。\n每個人都有所不同，因此我們協助您建立內容、分享資訊、增加曝光度並與站內的用戶交流。我們也希望透過您所重視並分享的經驗，強化您與他人之間的關係。\n因此，我們打造的系統旨在瞭解您和其他用戶關心的人事物，並運用該等資訊來協助您建立、找到、參與和分享對您而言重要的體驗。我們開發並運用各種工具，為社群成員提供所需資源，包括在我們認為成員可能需要協助時，向其提供協助，使其獲得廣泛的正面體驗。\n我們也建立相關團隊和系統，專門處理濫用、違反使用條款及政策等情事，以及有害及詐欺的行為。我們會使用所有手邊既有的資料（包含您的資料），盡力維護平台安全，同時也可能與其他執法機關分享 濫用或有害內容的相關資訊。\n本服務的一大重點，在於開發並使用尖端技術，使我們大規模地為遍及全球的廣大社群，個人化、保護及改善我們的服務。我們會運用既有資料來分析本服務，並與他人合作研究，一同提升本服務之品質，為我們的社群創造福祉。\n若要使用我們承諾提供的服務，您也必須承諾遵守以下事項。</string>
     <string name="information_policy_title">資料政策</string>
@@ -111,6 +130,20 @@
     <string name="adjust_text">本應用程式隱私權保護政策將因應需求隨時進行修正，修正後的條款將刊登於網站上。</string>
     <string name="contact_title">聯繫管道</string>
     <string name="contact_text">對於本站之隱私權政策有任何疑問，或者想提出變更、移除個人資料之請求，請以此 Email 聯繫我們 bevalin09@gmail.com</string>
+    <string name="default_number">10000</string>
+    <string name="all_tag_text">All Tag</string>
+    <string name="new_image_button">新增照片</string>
+    <string name="over_text_error">格子放不下，勸施主也放下</string>
+    <string name="not_tinder_text">我是梗圖APP 不是Tinder</string>
+    <string name="register_time_text">Register Time: </string>
+    <string name="intro_blank_text">天很藍，雲很白，不寫簡介，我就爛</string>
+    <string name="name_blank_text">熬夜小心肝</string>
+    <string name="leave_text">離開</string>
+    <string name="who_follow_me_text">誰追蹤我</string>
+    <string name="name_the_folder_text">幫收藏夾取名字(*‘ v`*)</string>
+    <string name="really_to_sure_about_delete_text">確定要刪除這麼棒的智慧結晶嗎?</string>
+    <string name="report_reason_text">請選擇檢舉原因</string>
+
 
 
 </resources>

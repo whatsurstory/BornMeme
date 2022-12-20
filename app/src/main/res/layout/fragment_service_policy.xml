@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_gray"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@color/light_gray">
 
-        <ScrollView
-            android:layout_height="0dp"
-            android:layout_width="match_parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -21,12 +22,12 @@
                 android:id="@+id/service_and_policy_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/service_and_policy_title"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/button_balck"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:text="@string/service_and_policy_title"
+                android:textColor="@color/button_balck"
+                android:textSize="16sp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -34,9 +35,9 @@
                 android:id="@+id/welcome_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:text="@string/use_policy_text"
                 android:textSize="12sp"
-                android:layout_marginEnd="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/service_and_policy_title"
                 app:layout_constraintTop_toBottomOf="@+id/service_and_policy_title" />
@@ -45,10 +46,10 @@
                 android:id="@+id/service_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:text="@string/service_text"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:layout_marginTop="16dp"
                 app:layout_constraintStart_toStartOf="@+id/service_and_policy_title"
                 app:layout_constraintTop_toBottomOf="@+id/welcome_text" />
 
@@ -66,10 +67,10 @@
                 android:id="@+id/information_policy_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:textStyle="bold"
                 android:layout_marginTop="12dp"
                 android:text="@string/information_policy_title"
+                android:textSize="12sp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/p_1"
                 app:layout_constraintTop_toBottomOf="@+id/p_1" />
 
@@ -87,10 +88,10 @@
                 android:id="@+id/who_can_use_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
                 android:text="@string/who_can_use_title"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                android:layout_marginTop="12dp"
                 app:layout_constraintStart_toStartOf="@+id/information_policy_text"
                 app:layout_constraintTop_toBottomOf="@+id/information_policy_text" />
 
@@ -108,10 +109,10 @@
                 android:id="@+id/keep_right_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
                 android:text="@string/keep_right_title"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                android:layout_marginTop="12dp"
                 app:layout_constraintStart_toStartOf="@+id/who_can_use_text"
                 app:layout_constraintTop_toBottomOf="@+id/who_can_use_text" />
 
@@ -130,10 +131,10 @@
                 android:id="@+id/userid_delete_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
                 android:text="@string/userid_delete_title"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                android:layout_marginTop="12dp"
                 app:layout_constraintStart_toStartOf="@+id/keep_right_text"
                 app:layout_constraintTop_toBottomOf="@+id/keep_right_text" />
 
@@ -149,14 +150,14 @@
 
             <TextView
                 android:id="@+id/argument_title"
-                android:text="@string/argument_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/argument_title"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                android:layout_marginTop="12dp"
                 app:layout_constraintStart_toStartOf="@+id/userid_delete_text"
-                app:layout_constraintTop_toBottomOf="@+id/userid_delete_text"/>
+                app:layout_constraintTop_toBottomOf="@+id/userid_delete_text" />
 
             <TextView
                 android:id="@+id/argument_text"
@@ -172,10 +173,10 @@
                 android:id="@+id/update_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
                 android:text="@string/update_title"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                android:layout_marginTop="12dp"
                 app:layout_constraintStart_toStartOf="@+id/argument_text"
                 app:layout_constraintTop_toBottomOf="@+id/argument_text" />
 
@@ -194,208 +195,210 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:textSize="8sp"
-                android:textColor="@color/light_gray"
                 android:text="@string/service_date"
+                android:textColor="@color/light_gray"
+                android:textSize="8sp"
                 app:layout_constraintEnd_toEndOf="@+id/update_text"
                 app:layout_constraintTop_toBottomOf="@+id/update_text" />
 
-            <View android:layout_height="1dp"
-                 android:layout_width="match_parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
                 android:layout_marginTop="4dp"
-                app:layout_constraintTop_toBottomOf="@+id/service_date"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/service_date" />
 
             <TextView
                 android:id="@+id/private_text"
-                android:text="@string/private_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/private_text"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@+id/service_date"
-                app:layout_constraintStart_toStartOf="@+id/update_text"/>
+                app:layout_constraintStart_toStartOf="@+id/update_text"
+                app:layout_constraintTop_toBottomOf="@+id/service_date" />
 
             <TextView
                 android:id="@+id/private_text_context"
-                android:text="@string/private_text_context"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:text="@string/private_text_context"
                 android:textSize="12sp"
-                app:layout_constraintTop_toBottomOf="@+id/private_text"
+                app:layout_constraintEnd_toEndOf="@+id/update_text"
                 app:layout_constraintStart_toStartOf="@+id/private_text"
-                app:layout_constraintEnd_toEndOf="@+id/update_text"/>
+                app:layout_constraintTop_toBottomOf="@+id/private_text" />
 
             <TextView
                 android:id="@+id/protect_title"
-                android:text="@string/protect_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/protect_title"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@+id/private_text_context"
-                app:layout_constraintStart_toStartOf="@+id/private_text_context" />
+                app:layout_constraintStart_toStartOf="@+id/private_text_context"
+                app:layout_constraintTop_toBottomOf="@+id/private_text_context" />
 
             <TextView
                 android:id="@+id/protect_text"
-                android:text="@string/protect_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:text="@string/protect_text"
                 android:textSize="12sp"
-                app:layout_constraintTop_toBottomOf="@+id/protect_title"
+                app:layout_constraintEnd_toEndOf="@+id/private_text_context"
                 app:layout_constraintStart_toStartOf="@+id/protect_title"
-                app:layout_constraintEnd_toEndOf="@+id/private_text_context"/>
+                app:layout_constraintTop_toBottomOf="@+id/protect_title" />
 
-           <TextView
-               android:id="@+id/collection_title"
-               android:text="@string/collection_title"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:textSize="12sp"
-               android:textStyle="bold"
-               android:layout_marginTop="16dp"
-               app:layout_constraintTop_toBottomOf="@+id/protect_text"
-               app:layout_constraintStart_toStartOf="@+id/protect_text"/>
+            <TextView
+                android:id="@+id/collection_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/collection_title"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/protect_text"
+                app:layout_constraintTop_toBottomOf="@+id/protect_text" />
 
             <TextView
                 android:id="@+id/collection_text"
-                android:text="@string/collection_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:text="@string/collection_text"
                 android:textSize="12sp"
-                app:layout_constraintTop_toBottomOf="@+id/collection_title"
+                app:layout_constraintEnd_toEndOf="@+id/protect_text"
                 app:layout_constraintStart_toStartOf="@+id/collection_title"
-                app:layout_constraintEnd_toEndOf="@+id/protect_text"/>
+                app:layout_constraintTop_toBottomOf="@+id/collection_title" />
 
             <TextView
                 android:id="@+id/protect_info_title"
-                android:text="@string/protect_info_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/protect_info_title"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@+id/collection_text"
-                app:layout_constraintStart_toStartOf="@+id/collection_text"/>
+                app:layout_constraintStart_toStartOf="@+id/collection_text"
+                app:layout_constraintTop_toBottomOf="@+id/collection_text" />
 
             <TextView
                 android:id="@+id/protect_info_text"
-                android:text="@string/protect_info_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:text="@string/protect_info_text"
                 android:textSize="12sp"
-                app:layout_constraintTop_toBottomOf="@+id/protect_info_title"
+                app:layout_constraintEnd_toEndOf="@+id/collection_text"
                 app:layout_constraintStart_toStartOf="@+id/protect_info_title"
-                app:layout_constraintEnd_toEndOf="@+id/collection_text"/>
+                app:layout_constraintTop_toBottomOf="@+id/protect_info_title" />
 
             <TextView
                 android:id="@+id/link_title"
-                android:text="@string/link_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/link_title"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@+id/protect_info_text"
-                app:layout_constraintStart_toStartOf="@+id/protect_info_text" />
+                app:layout_constraintStart_toStartOf="@+id/protect_info_text"
+                app:layout_constraintTop_toBottomOf="@+id/protect_info_text" />
 
             <TextView
                 android:id="@+id/link_text"
-                android:text="@string/link_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:text="@string/link_text"
                 android:textSize="12sp"
-                app:layout_constraintTop_toBottomOf="@+id/link_title"
+                app:layout_constraintEnd_toEndOf="@+id/protect_info_text"
                 app:layout_constraintStart_toStartOf="@+id/link_title"
-                app:layout_constraintEnd_toEndOf="@+id/protect_info_text"/>
+                app:layout_constraintTop_toBottomOf="@+id/link_title" />
 
             <TextView
                 android:id="@+id/share_title"
-                android:text="@string/share_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/share_title"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@+id/link_text"
-                app:layout_constraintStart_toStartOf="@+id/link_text"/>
+                app:layout_constraintStart_toStartOf="@+id/link_text"
+                app:layout_constraintTop_toBottomOf="@+id/link_text" />
+
             <TextView
                 android:id="@+id/share_text"
-                android:text="@string/share_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:text="@string/share_text"
                 android:textSize="12sp"
-                app:layout_constraintTop_toBottomOf="@+id/share_title"
+                app:layout_constraintEnd_toEndOf="@+id/link_text"
                 app:layout_constraintStart_toStartOf="@+id/share_title"
-                app:layout_constraintEnd_toEndOf="@+id/link_text"/>
+                app:layout_constraintTop_toBottomOf="@+id/share_title" />
 
-    <TextView
-        android:id="@+id/cookie_title"
-        android:text="@string/cookie_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/share_text"
-        app:layout_constraintStart_toStartOf="@+id/share_text"/>
+            <TextView
+                android:id="@+id/cookie_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/cookie_title"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/share_text"
+                app:layout_constraintTop_toBottomOf="@+id/share_text" />
 
-    <TextView
-        android:id="@+id/cookie_text"
-        android:text="@string/cookie_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        app:layout_constraintTop_toBottomOf="@+id/cookie_title"
-        app:layout_constraintStart_toStartOf="@+id/cookie_title"
-        app:layout_constraintEnd_toEndOf="@+id/share_text"/>
+            <TextView
+                android:id="@+id/cookie_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/cookie_text"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@+id/share_text"
+                app:layout_constraintStart_toStartOf="@+id/cookie_title"
+                app:layout_constraintTop_toBottomOf="@+id/cookie_title" />
 
             <TextView
                 android:id="@+id/adjust_title"
-                android:text="@string/adjust_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/adjust_title"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@+id/cookie_text"
-                app:layout_constraintStart_toStartOf="@+id/cookie_text"/>
+                app:layout_constraintStart_toStartOf="@+id/cookie_text"
+                app:layout_constraintTop_toBottomOf="@+id/cookie_text" />
 
             <TextView
                 android:id="@+id/adjust_text"
-                android:text="@string/adjust_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:text="@string/adjust_text"
                 android:textSize="12sp"
-                app:layout_constraintTop_toBottomOf="@+id/adjust_title"
+                app:layout_constraintEnd_toEndOf="@+id/cookie_text"
                 app:layout_constraintStart_toStartOf="@+id/adjust_title"
-                app:layout_constraintEnd_toEndOf="@+id/cookie_text"/>
+                app:layout_constraintTop_toBottomOf="@+id/adjust_title" />
 
             <TextView
                 android:id="@+id/contact_title"
-                android:text="@string/contact_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/contact_title"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@+id/adjust_text"
-                app:layout_constraintStart_toStartOf="@+id/adjust_text" />
+                app:layout_constraintStart_toStartOf="@+id/adjust_text"
+                app:layout_constraintTop_toBottomOf="@+id/adjust_text" />
 
             <TextView
                 android:id="@+id/contact_text"
-                android:text="@string/contact_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="@string/contact_text"
                 android:textSize="12sp"
-                app:layout_constraintTop_toBottomOf="@+id/contact_title"
-                app:layout_constraintStart_toStartOf="@+id/contact_title"
-                app:layout_constraintEnd_toEndOf="@+id/adjust_text"
                 app:layout_constraintBottom_toTopOf="@+id/check_box"
-                android:layout_marginBottom="4dp"/>
+                app:layout_constraintEnd_toEndOf="@+id/adjust_text"
+                app:layout_constraintStart_toStartOf="@+id/contact_title"
+                app:layout_constraintTop_toBottomOf="@+id/contact_title" />
 
 
             <CheckBox
@@ -404,8 +407,8 @@
                 android:layout_height="wrap_content"
                 android:padding="4dp"
                 android:text="@string/service_agree_text"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

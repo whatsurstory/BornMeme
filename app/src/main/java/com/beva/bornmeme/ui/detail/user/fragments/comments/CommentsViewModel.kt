@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModel
 import com.beva.bornmeme.R
 import com.beva.bornmeme.model.Comment
 import com.beva.bornmeme.model.Post
+import com.beva.bornmeme.model.UserManager
 import com.beva.bornmeme.model.UserManager.user
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -17,19 +19,21 @@ class CommentsViewModel(userId: String, context: Context) : ViewModel() {
 
     data class UiState(
         val getPostImg: (
+            context: Context,
             postId: String,
             onPostObtained: ((Post) -> Unit)
-        ) -> Unit
+        ) -> Unit,
+        val deleteComment: (context: Context, commentId: String) -> Unit
     )
 
     val postData = MutableLiveData<List<Comment>>()
 
     init {
-        getData(userId,context)
+        getData(userId, context)
     }
 
     //Post All Photo in Fragment
-    private fun getData(userId: String, context:Context): MutableLiveData<List<Comment>> {
+    private fun getData(userId: String, context: Context): MutableLiveData<List<Comment>> {
         FirebaseFirestore.getInstance()
             .collection(context.getString(R.string.comment_collection_text))
             .whereEqualTo("userId", userId)
@@ -48,9 +52,9 @@ class CommentsViewModel(userId: String, context: Context) : ViewModel() {
     }
 
     val uiState = UiState(
-        getPostImg = { postId, onPostObtained ->
+        getPostImg = { context, postId, onPostObtained ->
             Firebase.firestore
-                .collection("Posts")
+                .collection(context.getString(R.string.post_collection_text))
                 .document(postId)
                 .get()
                 .addOnCompleteListener {
@@ -59,7 +63,21 @@ class CommentsViewModel(userId: String, context: Context) : ViewModel() {
                         return@addOnCompleteListener onPostObtained(post)
                     }
                 }
-            }
-        )
+        },
+        { context, deleteComment ->
+            Firebase.firestore
+                .collection(context.getString(R.string.comment_collection_text))
+                .document(deleteComment)
+                .delete()
+                .addOnCompleteListener {
+                    UserManager.user.userId?.let { id ->
+                        Firebase.firestore
+                            .collection(context.getString(R.string.user_collection_text))
+                            .document(id)
+                            .update("commentsId", FieldValue.arrayRemove(deleteComment))
+                    }
+                }
+        }
+    )
 
 }
