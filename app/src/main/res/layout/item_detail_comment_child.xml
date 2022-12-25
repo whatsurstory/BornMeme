@@ -139,6 +139,7 @@
                 android:background="@color/woo"
                 android:rotation="90"
                 android:scaleType="fitCenter"
+                android:visibility="invisible"
                 android:src="@drawable/ic_baseline_more_vert_24"
                 app:layout_constraintBottom_toBottomOf="@+id/child_dislike_num"
                 app:layout_constraintEnd_toEndOf="parent"

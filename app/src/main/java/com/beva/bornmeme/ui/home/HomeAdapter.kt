@@ -1,6 +1,7 @@
 package com.beva.bornmeme.ui.home
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -18,7 +19,8 @@ import kotlin.math.roundToInt
 
 class HomeAdapter(
     private val onClickListener: OnClickListener,
-    private val uiState: HomeViewModel.UiState
+    private val uiState: HomeViewModel.UiState,
+           val context: Context
 ) : ListAdapter<Post, HomeAdapter.ViewHolder>(
     DiffCallback
 ) {
@@ -26,7 +28,7 @@ class HomeAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         @SuppressLint("SetTextI18n")
-        fun bind(item: Post, uiState: HomeViewModel.UiState) {
+        fun bind(item: Post, uiState: HomeViewModel.UiState, context: Context) {
 
             //setting the height and weight let ui draw the image in begin
             val width = item.imageWidth
@@ -87,7 +89,7 @@ class HomeAdapter(
                 binding.likeNum.text = item.like.size.toString()
             }
 
-            uiState.getUserImg(item.ownerId) { user: User ->
+            uiState.getUserImg(context, item.ownerId) { user: User ->
                 binding.userImg.loadImage(user.profilePhoto)
             }
         }
@@ -116,7 +118,7 @@ class HomeAdapter(
             holder.itemView.setOnClickListener {
                 onClickListener.onClick(item)
             }
-            holder.bind(item, uiState)
+            holder.bind(item, uiState,context)
         }
     }
 

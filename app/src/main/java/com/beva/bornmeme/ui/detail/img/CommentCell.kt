@@ -8,11 +8,11 @@ sealed class CommentCell{
 
     data class ParentComment(val comment: Comment) : CommentCell() {
         override val id: String
-            get() = comment.commentId
+            get() = comment.commentId.toString()
             var hasChild = false
     }
     data class ChildComment(val comment: Comment) : CommentCell() {
         override val id: String
-            get() = comment.commentId
+            get() = comment.commentId.toString()
     }
 }

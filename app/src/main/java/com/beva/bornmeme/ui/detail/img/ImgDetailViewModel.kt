@@ -2,6 +2,7 @@ package com.beva.bornmeme.ui.detail.img
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.app.Application
 import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Color.parseColor
@@ -18,6 +19,7 @@ import androidx.core.app.TaskStackBuilder.from
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.*
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.transition.TransitionInflater.from
 import com.beva.bornmeme.MobileNavigationDirections
@@ -40,7 +42,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 
-class ImgDetailViewModel(postOwnerId: String, context: Context) : ViewModel() {
+class ImgDetailViewModel(postOwnerId: String, application: Application?) : ViewModel() {
 
     data class UiState(
         val onClickToReply: (comment: CommentCell.ParentComment) -> String,
@@ -178,26 +180,28 @@ class ImgDetailViewModel(postOwnerId: String, context: Context) : ViewModel() {
         commentCells.value = cells
     }
 
-    fun getComments(postId: String, context:Context): MutableLiveData<List<Comment>> {
+    fun getComments(postId: String, application: Application?): MutableLiveData<List<Comment>> {
 
-        Firebase.firestore.collection(context.getString(R.string.comment_collection_text))
-            .whereEqualTo("postId", postId)
-            .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-//                Timber.d("check Data $postId")
-                firebaseFirestoreException?.let {
-                    Timber.w("[${this::class.simpleName}] Error getting documents. ${it.message}")
-                }
-                val list = mutableListOf<Comment>()
-                if (querySnapshot != null) {
-                    for (document in querySnapshot) {
-//                        Timber.d("check data  ${document.id} => ${document.data}")
-                        val commentList = document.toObject(Comment::class.java)
-                        list.add(commentList)
-//                        Timber.d("check $list")
+        application?.let { app ->
+            Firebase.firestore.collection(app.getString(R.string.comment_collection_text))
+                .whereEqualTo("postId", postId)
+                .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+    //                Timber.d("check Data $postId")
+                    firebaseFirestoreException?.let {
+                        Timber.w("[${this::class.simpleName}] Error getting documents. ${it.message}")
                     }
+                    val list = mutableListOf<Comment>()
+                    if (querySnapshot != null) {
+                        for (document in querySnapshot) {
+    //                        Timber.d("check data  ${document.id} => ${document.data}")
+                            val commentList = document.toObject(Comment::class.java)
+                            list.add(commentList)
+    //                        Timber.d("check $list")
+                        }
+                    }
+                    liveData.value = list
                 }
-                liveData.value = list
-            }
+        }
         return liveData
     }
 
@@ -209,10 +213,12 @@ class ImgDetailViewModel(postOwnerId: String, context: Context) : ViewModel() {
         _navigate2Comment.value = null
     }
 
-    fun doneCollection(postId: String, context: Context) {
-        Firebase.firestore.collection(context.getString(R.string.post_collection_text))
-            .document(postId)
-            .update("collection", FieldValue.arrayUnion(UserManager.user.userId))
+    fun doneCollection(postId: String, application: Application?) {
+        application?.let { app ->
+            Firebase.firestore.collection(app.getString(R.string.post_collection_text))
+                .document(postId)
+                .update("collection", FieldValue.arrayUnion(UserManager.user.userId))
+        }
 //            .addOnSuccessListener {
 //                Timber.d("Success Posts adding User ID")
 //            }.addOnFailureListener {
@@ -220,13 +226,15 @@ class ImgDetailViewModel(postOwnerId: String, context: Context) : ViewModel() {
 //            }
     }
 
-    fun onClickCollection(context: Context, title: String, postId: String, url: String) {
+    fun onClickCollection(application: Application?, title: String, postId: String, url: String) {
         val ref = UserManager.user.userId?.let {
-            Firebase.firestore
-                .collection(context.getString(R.string.user_collection_text))
-                .document(it)
-                .collection(context.getString(R.string.folder_collection_text))
-                .document(title)
+            application?.let { app ->
+                Firebase.firestore
+                    .collection(app.getString(R.string.user_collection_text))
+                    .document(it)
+                    .collection(app.getString(R.string.folder_collection_text))
+                    .document(title)
+            }
         }
 
         Firebase.firestore.runTransaction { transaction ->
@@ -242,7 +250,7 @@ class ImgDetailViewModel(postOwnerId: String, context: Context) : ViewModel() {
                 ref?.let {
                     transaction.set(
                         it, hashMapOf(
-                            "name" to ref?.id,
+                            "name" to ref.id,
                             "createTime" to Timestamp.now(),
                             "posts" to FieldValue.arrayUnion(list)
                         )
@@ -253,52 +261,56 @@ class ImgDetailViewModel(postOwnerId: String, context: Context) : ViewModel() {
     }
 
     init {
-        getUser(postOwnerId, context)
+        getUser(postOwnerId, application)
     }
 
     val userData = MutableLiveData<List<User>>()
 
-    private fun getUser(postOwnerId: String, context: Context): MutableLiveData<List<User>> {
-        Firebase.firestore.collection(context.getString(R.string.user_collection_text))
-            .whereEqualTo("userId", postOwnerId)
-            .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+    private fun getUser(postOwnerId: String, application: Application?): MutableLiveData<List<User>> {
+        application?.let { app ->
+            Firebase.firestore.collection(app.getString(R.string.user_collection_text))
+                .whereEqualTo("userId", postOwnerId)
+                .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
 
-                firebaseFirestoreException?.let {
-                    Timber.w("[${this::class.simpleName}] Error getting documents. ${it.message}")
-                }
+                    firebaseFirestoreException?.let {
+                        Timber.w("[${this::class.simpleName}] Error getting documents. ${it.message}")
+                    }
 
-                val list = mutableListOf<User>()
-                for (document in querySnapshot!!) {
-//                    Timber.d("check User in Post -> ${document.id} => ${document.data}")
-                    val userData = document.toObject(User::class.java)
-                    list.add(userData)
-//                    Timber.d("check $list")
+                    val list = mutableListOf<User>()
+                    for (document in querySnapshot!!) {
+    //                    Timber.d("check User in Post -> ${document.id} => ${document.data}")
+                        val userData = document.toObject(User::class.java)
+                        list.add(userData)
+    //                    Timber.d("check $list")
+                    }
+                    userData.value = list
                 }
-                userData.value = list
-            }
+        }
         return userData
     }
 
     val folderData = MutableLiveData<List<String>>()
 
-    fun getFolder(context:Context) {
+    fun getFolder(application: Application?) {
         UserManager.user.userId?.let {
-            Firebase.firestore.collection(context.getString(R.string.user_collection_text))
-                .document(it)
-                .collection(context.getString(R.string.folder_collection_text))
-                .get()
-                .addOnCompleteListener { task ->
-                    val list = mutableListOf<String>()
-                    if (task.isSuccessful) {
-                        for (document in task.result) {
-                            list.add(document.id)
-//                            Timber.d("data ${document.id}")
+            application?.let { app ->
+                Firebase.firestore.collection(app.getString(R.string.user_collection_text))
+                    .document(it)
+                    .collection(app.getString(R.string.folder_collection_text))
+                    .get()
+                    .addOnCompleteListener { task ->
+                        val list = mutableListOf<String>()
+                        if (task.isSuccessful) {
+                            for (document in task.result) {
+                                list.add(document.id)
+        //                            Timber.d("data ${document.id}")
+                            }
+                            folderData.value = list
+                        } else {
+                            Timber.d(task.exception?.message)
                         }
-                        folderData.value = list
-                    } else {
-                        Timber.d(task.exception?.message)
                     }
-                }
+            }
         }
     }
 
@@ -308,59 +320,6 @@ class ImgDetailViewModel(postOwnerId: String, context: Context) : ViewModel() {
                 .navigateToUserDetailFragment(userId)
         )
     }
-
-    fun reportCommentDialog(id: String, context: Context, fragment: ImgDetailFragment, inflater: LayoutInflater) {
-        @SuppressLint("ResourceAsColor")
-            val data = arrayOf("色情", "暴力", "賭博", "非法交易", "種族歧視")
-
-            val builder = AlertDialog.Builder(context, R.style.AlertDialogTheme)
-            builder.setTitle(context.getString(R.string.report_reason_text))
-            builder.setMultiChoiceItems(data, null) { dialog, i, b ->
-                val currentItem = data[i]
-            }
-            builder.setPositiveButton(context.getString(R.string.sure_text)) { dialogInterface, j ->
-//            for (i in data.indices) if (selected[i]) {
-//                selected[i] = false
-//            }
-                val customSnack = fragment.view?.let {
-                    Snackbar.make(it, "", Snackbar.LENGTH_INDEFINITE)
-                }
-                val layout = customSnack?.view as Snackbar.SnackbarLayout
-                val bind = SnackBarCustomBinding.inflate(inflater)
-                bind.notToBlockBtn.setOnClickListener {
-                    customSnack.dismiss()
-                }
-                bind.toBlockBtn.setOnClickListener {
-                    UserManager.user.blockList += id
-                    UserManager.user.userId?.let { id ->
-                        Firebase.firestore.collection(context.getString(R.string.user_collection_text))
-                            .document(id)
-                            .update("blockList", UserManager.user.blockList)
-                            .addOnCompleteListener {
-                                customSnack.dismiss()
-                                findNavController(fragment).navigateUp()
-                            }
-                    }
-                }
-                layout.addView(bind.root, 0)
-                customSnack.setBackgroundTint(
-                    context.getColor(R.color.white)
-                )
-                customSnack.view.layoutParams =
-                    (customSnack.view.layoutParams as FrameLayout.LayoutParams)
-                        .apply {
-                            gravity = Gravity.TOP
-                        }
-                customSnack.show()
-            }
-            builder.setNegativeButton(context.getString(R.string.cancel_text)) { dialog, i ->
-            }
-            val dialog = builder.create()
-            dialog.show()
-            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(context.getColor(R.color.button_balck))
-            dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(context.getColor(R.color.button_balck))
-    }
-
 }
 
 fun List<Comment>.filterBlock(): List<Comment> {

@@ -9,15 +9,8 @@ import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.tan
 
-/**
- * 贴纸、背景图抽象成Drawer
- * 实现出界回弹、手势的功能
- * https://ithelp.ithome.com.tw/articles/10203014
- * https://ithelp.ithome.com.tw/articles/10190917
- */
 abstract class Drawer(val stickerView: StickerView, var bitmap: Bitmap) {
 
-    val TAG = javaClass.simpleName
     val matrix = Matrix()
     private val paint = Paint()
     private val rectF = RectF()
@@ -27,10 +20,8 @@ abstract class Drawer(val stickerView: StickerView, var bitmap: Bitmap) {
     private var point2 = PointF(0f, 0f)
     private var distance = 0f
 
-    //用于控制双指缩放或旋转时禁止移动
     private var canMove = true
 
-    //是否消费单指或双指时间，用于不同贴纸间的事件拦截处理
     private var consumeTapOne = false
     private var consumeTapTwin = false
 
@@ -46,7 +37,6 @@ abstract class Drawer(val stickerView: StickerView, var bitmap: Bitmap) {
     }
 
     open fun onTouchEvent(event: MotionEvent?): Boolean {
-        //这里使用actionMasked，只有actionMask才能检测到多指按下
         when (event?.actionMasked) {
 
             MotionEvent.ACTION_DOWN -> {
@@ -61,8 +51,9 @@ abstract class Drawer(val stickerView: StickerView, var bitmap: Bitmap) {
             }
 
             MotionEvent.ACTION_MOVE -> {
-                //单指移动背景
+
                 if (event.pointerCount == 1 && canMove && consumeTapOne) {
+
                     Timber.d("event => x: ${event.x}, y: ${event.y}")
                     Timber.d("point1 => x: ${point1.x}, y: ${point1.y}")
                     val dx = event.x - point1.x
@@ -77,6 +68,7 @@ abstract class Drawer(val stickerView: StickerView, var bitmap: Bitmap) {
                 }
 
                 if (event.pointerCount == 2 && consumeTapTwin) {
+
                     canMove = false
                     val p1 = PointF(event.getX(0), event.getY(0))
                     val p2 = PointF(event.getX(1), event.getY(1))
@@ -86,19 +78,20 @@ abstract class Drawer(val stickerView: StickerView, var bitmap: Bitmap) {
                     val x = array[Matrix.MTRANS_X]
                     val y = array[Matrix.MTRANS_Y]
                     val oldRatio = array[Matrix.MSCALE_X]
+
                     if (allowScale()) {
-                        //双指缩放
+                        //Two Fingers scale
                         matrix.postScale(
                             newRatio,
                             newRatio,
                             x + bitmap.width * oldRatio / 2,
                             y + bitmap.height * oldRatio / 2
                         )
-//                    }
                         distance = newDistance
                     }
+
                     if (allowRotation()) {
-                        //双指旋转
+                        //Two Fingers rotate
                         val d1 = StickerUtils.calculateDegree(point1, point2)
                         val d2 = StickerUtils.calculateDegree(p1, p2)
                         matrix.postRotate(
@@ -143,14 +136,14 @@ abstract class Drawer(val stickerView: StickerView, var bitmap: Bitmap) {
     }
 
     /**
-     * matrix映射成rectF
+     * matrix -> rectF
      */
-    fun mapRect(): RectF {
+    private fun mapRect(): RectF {
         matrix.getValues(array)
         val width = abs(bitmap.width * array[Matrix.MSCALE_X])
         val height = abs(bitmap.height * array[Matrix.MSCALE_X])
         val angle = getRotationDegree()
-        var radian = Math.toRadians(getRotationDegree())
+        val radian = Math.toRadians(getRotationDegree())
         val line = abs(width * tan(abs(radian)).toFloat())  //是那条短的变
 
         when (angle) {
@@ -183,7 +176,7 @@ abstract class Drawer(val stickerView: StickerView, var bitmap: Bitmap) {
     }
 
     /**
-     * 当图片超出view的边界时，回弹到中心
+     * restricting the image included in the custom view range
      */
     private fun rebound(x: Float, y: Float) {
         val vW = stickerView.width
@@ -214,19 +207,12 @@ abstract class Drawer(val stickerView: StickerView, var bitmap: Bitmap) {
         }
     }
 
-    /**
-     * 获取图片旋转角度
-     */
     private fun getRotationDegree(): Double {
         return (atan2(array[Matrix.MSKEW_X], array[Matrix.MSCALE_X]) * (180 / Math.PI))
     }
 
-    //默认放置在view中间、与view等宽，等比缩放
-    /**
-     * 初始化图片位置、缩放等
-     */
     open fun onInit() {
-        //缩放图片与view等宽，将图片移动到view中间
+        //let the sticker image always in middle of view when initialized
         val ratio = stickerView.width.toFloat() / bitmap.width
         matrix.setScale(ratio, ratio, bitmap.width / 2f, bitmap.height / 2f)
         matrix.getValues(array)
@@ -240,7 +226,7 @@ abstract class Drawer(val stickerView: StickerView, var bitmap: Bitmap) {
     }
 
     /**
-     * 判断手指是否触碰到对应贴纸
+     * touching stickers or not
      */
     private fun checkTouch(x: Float, y: Float): Boolean {
         mapRect()

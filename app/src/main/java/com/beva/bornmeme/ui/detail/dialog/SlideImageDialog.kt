@@ -53,7 +53,7 @@ class SlideImageDialog : AppCompatDialogFragment() {
 //            Timber.d("WelCome to FOLDERRR: arg -> $folder")
         }
 
-        viewModel = SlideViewModel(folder, requireContext())
+        viewModel = SlideViewModel(folder, activity?.application)
         binding = DialogSlideCollectionBinding.inflate(layoutInflater)
         binding.dialog = this
 

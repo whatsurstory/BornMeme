@@ -44,7 +44,7 @@ class HomeFragment : Fragment() {
             HomeAdapter.OnClickListener {
                 viewModel.navigateToDetail(it)
             },
-        viewModel.uiState
+        viewModel.uiState, requireContext()
         )
 
         binding.recyclerHome.adapter = adapter

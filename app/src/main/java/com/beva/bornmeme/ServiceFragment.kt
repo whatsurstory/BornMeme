@@ -14,9 +14,9 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import timber.log.Timber
 
-class ServiceFragment: Fragment() {
+class ServiceFragment : Fragment() {
 
-    lateinit var binding:FragmentServicePolicyBinding
+    lateinit var binding: FragmentServicePolicyBinding
     private var agreementKey: Boolean = false
 
 
@@ -46,8 +46,9 @@ class ServiceFragment: Fragment() {
         binding.checkBox.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
 
-               val user = UserManager.user.userId?.let {
-                    Firebase.firestore.collection("Users").document(it)
+                val user = UserManager.user.userId?.let {
+                    Firebase.firestore.collection(getString(R.string.user_collection_text))
+                        .document(it)
                 }
                 user?.update("agreement", true)?.addOnSuccessListener {
                     findNavController().navigate(MobileNavigationDirections.navigateToHomeFragment())

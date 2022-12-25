@@ -17,8 +17,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.DialogCommentBinding
-import com.google.android.material.snackbar.Snackbar
-import timber.log.Timber
 
 
 class PublishCommentDialog : AppCompatDialogFragment() {
@@ -92,7 +90,7 @@ class PublishCommentDialog : AppCompatDialogFragment() {
 
         if (parentId.isNotEmpty()) {
             binding.replyWhoText.visibility = View.VISIBLE
-            viewModel.getUserName(parentId, binding, requireContext())
+            viewModel.getUserName(parentId, binding, activity?.application)
         }
 
         binding.buttonPublish.setOnClickListener {
@@ -102,7 +100,7 @@ class PublishCommentDialog : AppCompatDialogFragment() {
             } else {
                 binding.postCommentLotties.visibility = View.VISIBLE
                 binding.postCommentLotties.setAnimation(R.raw.refresh)
-                viewModel.publishComment(postId, parentId, binding,requireContext())
+                viewModel.publishComment(postId, parentId, binding, activity?.application)
                 Handler(Looper.getMainLooper()).postDelayed({
                     findNavController().navigateUp()
                 }, 1200)

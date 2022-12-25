@@ -37,7 +37,7 @@ class CommentsFragment : Fragment() {
         binding = FragmentCommentsBinding.inflate(inflater, container, false)
 
         val userId = requireArguments().getString("userIdKey") ?: ""
-        viewModel = CommentsViewModel(userId, requireContext())
+        viewModel = CommentsViewModel(userId, activity?.application)
 
         val adapter = UserCommentAdapter(viewModel.uiState, requireContext())
 

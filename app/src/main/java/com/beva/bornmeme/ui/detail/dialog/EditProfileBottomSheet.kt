@@ -5,7 +5,6 @@ import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -16,14 +15,11 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat.getColor
-import androidx.navigation.fragment.findNavController
-import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.BottomsheetEditProfileBinding
 import com.beva.bornmeme.loadImage
 import com.beva.bornmeme.model.User
 import com.beva.bornmeme.model.UserManager
-import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -64,7 +60,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
             sheet.behavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
 
-        viewModel = EditProfileViewModel(userId, requireContext())
+        viewModel = EditProfileViewModel(userId, activity?.application)
 
         viewModel.userData.observe(viewLifecycleOwner) {
 //            Timber.d("Observe user $it")
@@ -214,40 +210,6 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
             false -> db.update("userName", originName)
         }
 
-//        if (!isChange &&
-//            originIntro == UserManager.user.introduce ||
-//            originName == UserManager.user.userName
-//        ) {
-//            Timber.d("Not different")
-//            //Not different
-//            dismiss()
-//        } else if (isChange &&
-//            originIntro != UserManager.user.introduce &&
-//            originName != UserManager.user.userName
-//        ) {
-//            Timber.d("All different")
-//            //All different
-//            uploadProfile2Db(uri)
-//            db.update("introduce", originIntro)
-//            db.update("userName", originName)
-//        } else if (!isChange &&
-//            (originIntro != UserManager.user.introduce ||
-//                    originName != UserManager.user.userName)
-//        ) {
-//            Timber.d("Text different")
-//            //text different
-//            db.update("introduce", originIntro)
-//            db.update("userName", originName)
-//        } else if (isChange &&
-//            originIntro == UserManager.user.introduce ||
-//            originName == UserManager.user.userName
-//        ) {
-//            Timber.d("Image different")
-//            //image different
-//            uploadProfile2Db(uri)
-//            db.update("introduce", originIntro)
-//            db.update("userName", originName)
-//        }
     }
 
     private fun uploadProfile2Db(data: Uri) {
@@ -272,7 +234,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
         builder.setTitle(getString(R.string.block_list_text))
 
         builder.setItems(blockUsers.toTypedArray()) { dialog, which ->
-            //點擊後的行為
+
         }
         builder.setNegativeButton(getString(R.string.leave_text),
             DialogInterface.OnClickListener { _, _ -> })
@@ -291,7 +253,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
         builder.setTitle(getString(R.string.who_follow_me_text))
 
         builder.setItems(follower.toTypedArray()) { dialog, which ->
-            //點擊後的行為
+
         }
         builder.setNegativeButton(getString(R.string.leave_text),
             DialogInterface.OnClickListener { _, _ -> })
@@ -310,7 +272,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
         builder.setTitle(getString(R.string.follow_list_text))
 
         builder.setItems(followUser.toTypedArray()) { dialog, which ->
-            //點擊後的行為
+
         }
         builder.setNegativeButton(getString(R.string.leave_text),
             DialogInterface.OnClickListener { _, _ -> })

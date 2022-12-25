@@ -32,7 +32,8 @@ class SettingFragment: BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentSettingBinding
 
-    private val register = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+    private val register =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         Timber.i("beva \n register running")
         if (result.resultCode == Activity.RESULT_OK) {
             val editor = PreferenceManager.getDefaultSharedPreferences(requireContext()).edit()

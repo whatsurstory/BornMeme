@@ -35,7 +35,7 @@ class CollectionFragment : Fragment() {
         binding = FragmentCollectionBinding.inflate(inflater, container, false)
 
         val userId = requireArguments().getString("userIdKey") ?: ""
-        viewModel = CollectionViewModel(userId, requireContext())
+        viewModel = CollectionViewModel(userId, activity?.application)
 
         adapter = CollectionAdapter(
             CollectionAdapter.OnClickListener {

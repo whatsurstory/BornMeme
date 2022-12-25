@@ -126,8 +126,8 @@ class ImgDetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ImgDetailViewModel(post.ownerId, requireContext())
-        viewModel.getComments(post.id, requireContext())
+        viewModel = ImgDetailViewModel(post.ownerId, activity?.application)
+        viewModel.getComments(post.id, activity?.application)
 
         viewModel.userData.observe(viewLifecycleOwner, Observer { user ->
             binding.imgDetailUserImg.loadImage(user[0].profilePhoto)
@@ -187,7 +187,7 @@ class ImgDetailFragment : Fragment() {
         binding.imgDetailImage.loadImage(post.url)
         binding.imgDetailDescription.text = post.resources[1].url
 
-        val adapter = CommentAdapter(viewModel.uiState, viewModel, this, requireContext(), inflater)
+        val adapter = CommentAdapter(viewModel.uiState, viewModel, this, inflater, requireContext())
         binding.commentsRecycler.adapter = adapter
 
         //Observe the view of comments recycler
@@ -203,7 +203,7 @@ class ImgDetailFragment : Fragment() {
         //Query All Comments
         viewModel.liveData.observe(viewLifecycleOwner) {
             it?.let {
-                Timber.d(("Observe liveData : $it"))
+//                Timber.d(("Observe liveData : $it"))
                 viewModel.initCells(it.filterBlock())
             }
         }
@@ -245,7 +245,7 @@ class ImgDetailFragment : Fragment() {
         })
         //the button to take post to collection
         binding.collectionBtn.setOnClickListener {
-            viewModel.getFolder(requireContext())
+            viewModel.getFolder(activity?.application)
         }
 
         //the menu button to report and other feature
@@ -476,22 +476,22 @@ class ImgDetailFragment : Fragment() {
                         for (i in 0 until list.size) {
                             title = list[i]
 //                            Timber.d("title $title")
-                            viewModel.onClickCollection(requireContext(),title, post.id, post.url.toString())
-                            viewModel.doneCollection(post.id, requireContext())
+                            viewModel.onClickCollection(activity?.application,title, post.id, post.url.toString())
+                            viewModel.doneCollection(post.id, activity?.application)
 //                        Toast.makeText(context, "New Created $input Folder", Toast.LENGTH_SHORT).show()
                         }
                     } else if (list.isEmpty() && input.text.toString().isNotEmpty()) {
                         title = input.text.toString()
-                        viewModel.onClickCollection(requireContext() ,title, post.id, post.url.toString())
-                        viewModel.doneCollection(post.id, requireContext())
+                        viewModel.onClickCollection(activity?.application,title, post.id, post.url.toString())
+                        viewModel.doneCollection(post.id, activity?.application)
 
                     } else if (list.isNotEmpty() && input.text.toString().isNotEmpty()) {
                         list.add(input.text.toString())
                         for (i in 0 until list.size) {
                             title = list[i]
 //                            Timber.d("title $title")
-                            viewModel.onClickCollection(requireContext() ,title, post.id, post.url.toString())
-                            viewModel.doneCollection(post.id, requireContext())
+                            viewModel.onClickCollection(activity?.application ,title, post.id, post.url.toString())
+                            viewModel.doneCollection(post.id, activity?.application)
                         }
                     }
                 }
@@ -671,5 +671,3 @@ class ImgDetailFragment : Fragment() {
             .setTextColor(requireContext().getColor(R.color.button_balck))
     }
 }
-
-//Todo: button https://github.com/givemepassxd999/alert_dialog_demo/blob/master/app/src/main/java/com/example/givemepss/alertdailogdemo/MainActivity.kt

@@ -1,5 +1,6 @@
 package com.beva.bornmeme.ui.detail.user.fragments.favorite
 
+import android.app.Application
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,7 +10,7 @@ import com.beva.bornmeme.model.Post
 import com.google.firebase.firestore.FirebaseFirestore
 import timber.log.Timber
 
-class FavoriteViewModel(userId: String, context: Context) : ViewModel() {
+class FavoriteViewModel(userId: String, application: Application?) : ViewModel() {
 
     val likeData = MutableLiveData<List<Post>>()
 
@@ -19,23 +20,25 @@ class FavoriteViewModel(userId: String, context: Context) : ViewModel() {
         get() = _navigateToDetail
 
     init {
-        getData(userId, context)
+        getData(userId, application)
     }
 
-    private fun getData(userId: String, context: Context): MutableLiveData<List<Post>> {
+    private fun getData(userId: String, application: Application?): MutableLiveData<List<Post>> {
 
-        FirebaseFirestore.getInstance()
-            .collection(context.getString(R.string.post_collection_text))
-            .whereArrayContains("like", userId)
-            .addSnapshotListener { snapshot, e ->
-                val list = mutableListOf<Post>()
-                for (document in snapshot!!) {
+        application?.let { app ->
+            FirebaseFirestore.getInstance()
+                .collection(app.getString(R.string.post_collection_text))
+                .whereArrayContains("like", userId)
+                .addSnapshotListener { snapshot, e ->
+                    val list = mutableListOf<Post>()
+                    for (document in snapshot!!) {
 
-                    val post = document.toObject(Post::class.java)
-                    list.add(post)
+                        val post = document.toObject(Post::class.java)
+                        list.add(post)
+                    }
+                    likeData.value = list
                 }
-                likeData.value = list
-            }
+        }
         return likeData
 
     }

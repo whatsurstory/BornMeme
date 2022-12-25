@@ -54,14 +54,12 @@
                 style="@style/eng_bold_font_style"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_marginEnd="4dp"
                 android:gravity="center"
                 android:paddingHorizontal="4dp"
                 android:textColor="@color/tr_pink"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/img_detail_user_name"
-                app:layout_constraintEnd_toStartOf="@+id/report_btn"
                 app:layout_constraintStart_toEndOf="@+id/detail_guideline"
                 app:layout_constraintTop_toTopOf="@+id/img_detail_user_name"
                 tools:text="@string/default_text" />
@@ -74,11 +72,10 @@
                 android:background="@color/woo"
                 android:padding="10dp"
                 android:rotation="90"
-                android:scaleType="centerCrop"
                 android:src="@drawable/ic_baseline_more_vert_24"
-                app:layout_constraintBottom_toBottomOf="@+id/follow_btn"
+                app:layout_constraintBottom_toTopOf="@+id/img_detail_image"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/follow_btn"
+                app:layout_constraintTop_toTopOf="parent"
                 app:tint="@color/tr_pink" />
 
             <ImageButton
