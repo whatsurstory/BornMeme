@@ -2,18 +2,10 @@ package com.beva.bornmeme.ui.detail.user.fragments.collection
 
 import android.content.Context
 import android.content.DialogInterface
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContentProviderCompat
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -21,15 +13,7 @@ import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.ItemUserCollectionBinding
 import com.beva.bornmeme.loadImage
 import com.beva.bornmeme.model.Folder
-import com.beva.bornmeme.model.Post
 import com.beva.bornmeme.model.UserManager
-import com.beva.bornmeme.model.UserManager.user
-import com.bumptech.glide.Glide
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import timber.log.Timber
 
 //
 class CollectionAdapter(

@@ -24,7 +24,7 @@ import timber.log.Timber
 class HomeViewModel(context: Context) : ViewModel() {
 
     data class UiState(
-        val getUserImg: (userId: String, onUserObtained: ((User) -> Unit)) -> Unit
+        val getUserImg: (context: Context,userId: String, onUserObtained: ((User) -> Unit)) -> Unit
     )
 
     val liveData = MutableLiveData<List<Post>>()
@@ -40,9 +40,9 @@ class HomeViewModel(context: Context) : ViewModel() {
         get() = _navigateToDetail
 
     val uiState = UiState(
-        getUserImg = { userId, onUserObtained ->
+        getUserImg = {context ,userId, onUserObtained ->
             Firebase.firestore
-                .collection("Users")
+                .collection(context.getString(R.string.user_collection_text))
                 .document(userId)
                 .get().addOnCompleteListener {
                     val user = it.result.toObject(User::class.java)

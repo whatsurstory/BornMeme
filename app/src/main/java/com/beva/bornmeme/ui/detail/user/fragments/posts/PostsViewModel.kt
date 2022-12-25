@@ -1,5 +1,6 @@
 package com.beva.bornmeme.ui.detail.user.fragments.posts
 
+import android.app.Application
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,7 +11,7 @@ import com.beva.bornmeme.model.UserManager
 import com.google.firebase.firestore.FirebaseFirestore
 import timber.log.Timber
 
-class PostsViewModel(userId: String, context: Context) : ViewModel() {
+class PostsViewModel(userId: String, application: Application?) : ViewModel() {
 
     val postData = MutableLiveData<List<Post>>()
 
@@ -21,23 +22,25 @@ class PostsViewModel(userId: String, context: Context) : ViewModel() {
 
 
     init {
-        getData(userId, context)
+        getData(userId, application)
     }
 
 
-    private fun getData(userId: String, context: Context): MutableLiveData<List<Post>> {
-        FirebaseFirestore.getInstance()
-            .collection(context.getString(R.string.post_collection_text))
-            .whereEqualTo("ownerId", userId)
-            .addSnapshotListener { snapshot, e ->
-                val list = mutableListOf<Post>()
-                for (document in snapshot!!) {
-//                    Timber.d("Post snapshot ID ->${document.id} list -> ${document.data}")
-                    val post = document.toObject(Post::class.java)
-                    list.add(post)
+    private fun getData(userId: String, application: Application?): MutableLiveData<List<Post>> {
+        application?.let { app ->
+            FirebaseFirestore.getInstance()
+                .collection(app.getString(R.string.post_collection_text))
+                .whereEqualTo("ownerId", userId)
+                .addSnapshotListener { snapshot, e ->
+                    val list = mutableListOf<Post>()
+                    for (document in snapshot!!) {
+    //                    Timber.d("Post snapshot ID ->${document.id} list -> ${document.data}")
+                        val post = document.toObject(Post::class.java)
+                        list.add(post)
+                    }
+                    postData.value = list
                 }
-                postData.value = list
-            }
+        }
         return postData
     }
 

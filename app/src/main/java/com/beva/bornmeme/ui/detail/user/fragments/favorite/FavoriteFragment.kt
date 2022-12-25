@@ -35,7 +35,7 @@ class FavoriteFragment : Fragment() {
         binding = FragmentFavoriteBinding.inflate(inflater, container, false)
 
         val userId = requireArguments().getString("userIdKey") ?: ""
-        viewModel = FavoriteViewModel(userId, requireContext())
+        viewModel = FavoriteViewModel(userId, activity?.application)
 
         binding.favoriteRecycler.layoutManager = GridLayoutManager(context, 3)
 

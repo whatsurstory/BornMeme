@@ -35,7 +35,7 @@ class PostsFragment : Fragment() {
         binding = FragmentPostsBinding.inflate(inflater, container, false)
 
         val userId = requireArguments().getString("userIdKey") ?: ""
-        viewModel = PostsViewModel(userId, requireContext())
+        viewModel = PostsViewModel(userId, activity?.application)
 
         binding.postRecycler.layoutManager = GridLayoutManager(context, 3)
 

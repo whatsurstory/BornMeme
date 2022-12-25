@@ -1,14 +1,17 @@
 package com.beva.bornmeme.ui.edit_fragment
 
 
+import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.collection.arrayMapOf
@@ -20,6 +23,9 @@ import androidx.navigation.fragment.findNavController
 import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentEditFixmodeBinding
+import com.beva.bornmeme.model.UserManager
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import timber.log.Timber
@@ -54,7 +60,7 @@ class EditFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewModel = ViewModelProvider(this).get(EditViewModel::class.java)
+        viewModel = ViewModelProvider(this)[EditViewModel::class.java]
         upperText = binding.upperText
         bottomText = binding.bottomText
         tagText = binding.editTextCatalog
@@ -93,7 +99,7 @@ class EditFragment : Fragment() {
             upperText.clearFocus()
             bottomText.clearFocus()
             if (upperText.text.isNullOrEmpty() || bottomText.text.isNullOrEmpty()) {
-                viewModel.showContentEmptySnackBar(requireContext(),it)
+                showContentEmptySnackBar(it)
             } else {
 //                val baseBitmap = getBitmapByUri(uri)
                 binding.originPhoto.buildDrawingCache()
@@ -123,11 +129,11 @@ class EditFragment : Fragment() {
             upperText.clearFocus()
             bottomText.clearFocus()
             if (upperText.text.isNullOrEmpty() || bottomText.text.isNullOrEmpty()) {
-                viewModel.showContentEmptySnackBar(requireContext(),it)
+                showContentEmptySnackBar(it)
             } else if (titleText.text.trim().isEmpty()) {
-                viewModel.titleSnackbarShow(requireContext(),it, titleText)
+                titleSnackbarShow(it, titleText)
             } else if (tagText.text.trim().isEmpty()) {
-                viewModel.tagSnackbarShow(requireContext() ,it, tagText)
+                tagSnackbarShow(it, tagText)
             } else {
 
                 binding.lottiePublishLoading.visibility = View.VISIBLE
@@ -137,13 +143,13 @@ class EditFragment : Fragment() {
                 uri?.let { uri ->
                     ref.child("img_origin/" + document.id + ".jpg")
                         .putFile(uri)
-                        .addOnSuccessListener {
-                            it.metadata?.reference?.downloadUrl?.addOnSuccessListener {
+                        .addOnSuccessListener { task ->
+                            task.metadata?.reference?.downloadUrl?.addOnSuccessListener { originUri ->
                                 //這層的it才會帶到firebase return 的 Uri
 //                                Timber.d("origin uri: $it => take it to base url")
 
                                 val res = listOf(
-                                    arrayMapOf("type" to "base", "url" to it),
+                                    arrayMapOf("type" to "base", "url" to originUri),
                                     arrayMapOf(
                                         "type" to "text",
                                         "url" to "${upperText.text!!.trim()}\n${bottomText.text!!.trim()}"
@@ -164,9 +170,10 @@ class EditFragment : Fragment() {
                                 )
 
                                 //saving to gallery and return the path(uri)
-                                val newUri = viewModel.getImageUri(activity?.application, publishBitmap)
+                                val newUri =
+                                    viewModel.getImageUri(activity?.application, publishBitmap)
                                 viewModel.addNewPost(
-                                    requireContext(),
+                                    activity?.application,
                                     newUri,
                                     res,
                                     titleText.text.toString(),
@@ -174,13 +181,14 @@ class EditFragment : Fragment() {
                                     publishBitmap.width,
                                     publishBitmap.height
                                 )
-                                findNavController().navigate(MobileNavigationDirections.navigateToHomeFragment())
+                                findNavController()
+                                    .navigate(MobileNavigationDirections.navigateToHomeFragment())
 
-                            }?.addOnFailureListener {
-                                Timber.d("upload uri Error => $it")
+                            }?.addOnFailureListener { e ->
+                                Timber.d("upload uri Error => $e")
                             }
-                        }.addOnFailureListener {
-                            Timber.d("TaskSnapshot Error => $it")
+                        }.addOnFailureListener { e ->
+                            Timber.d("TaskSnapshot Error => $e")
                         }
                 }
             }
@@ -231,6 +239,59 @@ class EditFragment : Fragment() {
         binding.originPhoto.scaleType = ImageView.ScaleType.FIT_CENTER
         binding.originPhoto.setImageURI(uri)
 
+    }
+
+    private fun showContentEmptySnackBar(it: View) {
+        val contentText = Snackbar.make(
+            it, getString(R.string.edit_no_input),
+            Snackbar.LENGTH_LONG
+        )
+            .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
+            .setBackgroundTint(requireContext().getColor(R.color.tr_pink))
+            .setTextColor(requireContext().getColor(R.color.button_balck))
+        val snackBarView = contentText.view
+        val params = snackBarView.layoutParams as FrameLayout.LayoutParams
+        params.gravity = Gravity.CENTER_HORIZONTAL and Gravity.TOP
+        snackBarView.layoutParams = params
+        contentText.show()
+    }
+
+    private fun tagSnackbarShow(it: View, tagText: EditText) {
+        val tagSnack =
+            Snackbar.make(it, getString(R.string.snack_default_text),
+                Snackbar.LENGTH_INDEFINITE)
+                .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
+                .setBackgroundTint(requireContext().getColor(R.color.tr_pink))
+                .setTextColor(requireContext().getColor(R.color.button_balck))
+                .setAction(getString(R.string.snack_default_check)) {
+                    tagText.setText(getString(R.string.silly_usual))
+                }.setActionTextColor(requireContext().getColor(R.color.button_balck))
+
+        val snackBarView = tagSnack.view
+        val params = snackBarView.layoutParams as FrameLayout.LayoutParams
+        params.gravity = Gravity.CENTER_HORIZONTAL and Gravity.TOP
+        snackBarView.layoutParams = params
+        tagSnack.show()
+    }
+
+    private fun titleSnackbarShow(it: View, titleText: EditText) {
+        //Snackbar ani
+        val titleSnack =
+            Snackbar.make(it, getString(R.string.snack_default_text),
+                Snackbar.LENGTH_INDEFINITE
+            )
+                .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
+                .setBackgroundTint(requireContext().getColor(R.color.tr_pink))
+                .setTextColor(requireContext().getColor(R.color.button_balck))
+                .setAction(getString(R.string.snack_default_check)) {
+                    titleText.setText(UserManager.user.userName)
+                }
+                .setActionTextColor(requireContext().getColor(R.color.button_balck))
+        val snackBarView = titleSnack.view
+        val params = snackBarView.layoutParams as FrameLayout.LayoutParams
+        params.gravity = Gravity.CENTER_HORIZONTAL and Gravity.TOP
+        snackBarView.layoutParams = params
+        titleSnack.show()
     }
 
 }

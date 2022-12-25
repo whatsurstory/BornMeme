@@ -115,8 +115,6 @@ class SplashFragment : Fragment() {
             }
         )
 
-
-
         return binding.root
     }
 
@@ -141,7 +139,8 @@ class SplashFragment : Fragment() {
     private val launcher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                val signInAccountTask = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+                val signInAccountTask =
+                    GoogleSignIn.getSignedInAccountFromIntent(result.data)
                 handleResults(signInAccountTask)
             }
         }
@@ -153,7 +152,7 @@ class SplashFragment : Fragment() {
                 updateUI(signInAccount)
             }
         } else {
-            Timber.d("task ERROR ${task.exception}")
+            Timber.d("handleResults task ERROR ${task.exception}")
             Toast.makeText(this.requireContext(), task.exception.toString(), Toast.LENGTH_SHORT)
                 .show()
         }
@@ -166,11 +165,11 @@ class SplashFragment : Fragment() {
                 if (authResult.isSuccessful) {
                     UserManager.user.userId = authResult.result.user?.uid
                     authResult.result.user?.let {
-                        viewModel.queryUserByUid(it, requireContext(), this)
+                        viewModel.queryUserByUid(it, activity?.application, this)
                     }
 
                 } else {
-                    Timber.d("task ERROR ${authResult.exception}")
+                    Timber.d("updateUI task ERROR ${authResult.exception}")
                     Toast.makeText(context, authResult.exception.toString(), Toast.LENGTH_SHORT)
                         .show()
                 }

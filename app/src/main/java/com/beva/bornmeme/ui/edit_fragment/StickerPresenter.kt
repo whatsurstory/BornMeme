@@ -8,6 +8,7 @@ import com.beva.bornmeme.R
 import timber.log.Timber
 
 /**
+ * Presenter
  * method to sticker and background
  */
 class StickerPresenter(private val stickerView: StickerView) {

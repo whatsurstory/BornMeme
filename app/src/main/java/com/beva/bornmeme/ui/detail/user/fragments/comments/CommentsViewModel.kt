@@ -1,5 +1,6 @@
 package com.beva.bornmeme.ui.detail.user.fragments.comments
 
+import android.app.Application
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,7 +16,8 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import timber.log.Timber
 
-class CommentsViewModel(userId: String, context: Context) : ViewModel() {
+class CommentsViewModel(userId: String,
+                        application: Application?) : ViewModel() {
 
     data class UiState(
         val getPostImg: (
@@ -29,25 +31,27 @@ class CommentsViewModel(userId: String, context: Context) : ViewModel() {
     val postData = MutableLiveData<List<Comment>>()
 
     init {
-        getData(userId, context)
+        getData(userId, application)
     }
 
     //Post All Photo in Fragment
-    private fun getData(userId: String, context: Context): MutableLiveData<List<Comment>> {
-        FirebaseFirestore.getInstance()
-            .collection(context.getString(R.string.comment_collection_text))
-            .whereEqualTo("userId", userId)
-            .addSnapshotListener { snapshot, e ->
-                val list = mutableListOf<Comment>()
-                if (snapshot != null) {
-                    for (document in snapshot) {
+    private fun getData(userId: String, application: Application?): MutableLiveData<List<Comment>> {
+        application?.let { app ->
+            FirebaseFirestore.getInstance()
+                .collection(app.getString(R.string.comment_collection_text))
+                .whereEqualTo("userId", userId)
+                .addSnapshotListener { snapshot, e ->
+                    val list = mutableListOf<Comment>()
+                    if (snapshot != null) {
+                        for (document in snapshot) {
 
-                        val post = document.toObject(Comment::class.java)
-                        list.add(post)
+                            val post = document.toObject(Comment::class.java)
+                            list.add(post)
+                        }
                     }
+                    postData.value = list
                 }
-                postData.value = list
-            }
+        }
         return postData
     }
 

@@ -327,8 +327,9 @@
                 android:padding="6dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/add_new"
-                app:layout_constraintBottom_toBottomOf="@id/edit_text_box"
+                app:layout_constraintStart_toEndOf="@+id/drag_gl"
                 app:layout_constraintEnd_toStartOf="@+id/clear_button"
+                app:layout_constraintTop_toBottomOf="@+id/horizontal_scroll"
                 app:tint="@color/tr_pink" />
 
 
@@ -342,15 +343,16 @@
                 android:cursorVisible="false"
                 android:focusableInTouchMode="true"
                 android:hint="@string/text_click"
-                android:paddingHorizontal="16dp"
-                android:paddingVertical="4dp"
+                android:padding="4dp"
                 android:singleLine="true"
                 android:textColor="@color/gray_white"
                 android:textColorHint="@color/dark_gray"
                 android:textCursorDrawable="@null"
                 android:textSize="24sp"
+                android:maxLines="1"
+                android:maxLength="12"
                 app:layout_constraintBottom_toTopOf="@id/sticker_view"
-                app:layout_constraintEnd_toStartOf="@+id/add_text_btn"
+                app:layout_constraintEnd_toStartOf="@+id/drag_gl"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/horizontal_scroll" />
@@ -366,6 +368,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/add_text_btn"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/add_text_btn"
+                app:layout_constraintStart_toEndOf="@+id/add_text_btn"
                 app:tint="@color/tr_pink" />
 
             <com.beva.bornmeme.ui.edit_fragment.StickerView
@@ -383,8 +386,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/tr_pink"
                 android:hint="@string/enter_title_hint"
-                android:paddingHorizontal="16dp"
-                android:paddingVertical="8dp"
+                android:padding="16dp"
                 android:singleLine="true"
                 android:textColor="@color/tr_black"
                 android:textColorHint="@color/dark_gray"
@@ -402,8 +404,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/tr_pink"
                 android:hint="@string/enter_tag_hint"
-                android:paddingHorizontal="16dp"
-                android:paddingVertical="8dp"
+                android:padding="16dp"
                 android:singleLine="true"
                 android:textColor="@color/tr_black"
                 android:textColorHint="@color/dark_gray"
@@ -412,6 +413,13 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/drag_gl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.75"/>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

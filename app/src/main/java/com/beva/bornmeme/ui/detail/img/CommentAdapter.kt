@@ -1,6 +1,7 @@
 package com.beva.bornmeme.ui.detail.img
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.view.Gravity
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +22,7 @@ import com.beva.bornmeme.databinding.SnackBarCustomBinding
 import com.beva.bornmeme.loadImage
 import com.beva.bornmeme.model.Post
 import com.beva.bornmeme.model.User
+import com.beva.bornmeme.model.UserManager
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.ktx.firestore
@@ -30,8 +33,8 @@ class CommentAdapter(
     private val uiState: ImgDetailViewModel.UiState,
     val viewModel: ImgDetailViewModel,
     val fragment: ImgDetailFragment,
-    val context: Context,
-    val inflater: LayoutInflater
+    val inflater: LayoutInflater,
+    val context: Context
 ) : ListAdapter<CommentCell, RecyclerView.ViewHolder>(DiffCallback) {
 
     class ParentViewHolder(private var binding: ItemDetailCommentParentBinding) :
@@ -67,21 +70,21 @@ class CommentAdapter(
 //                Timber.d("Observe replybtn ${item.comment.commentId}")
             }
             binding.commentLikeBtn.setOnClickListener {
-                uiState.onClickToLike(item.comment.commentId, context)
+                item.comment.commentId?.let { id ->
+                    uiState.onClickToLike(id, context)
+                }
             }
             binding.commentDislikeBtn.setOnClickListener {
-                uiState.onClickToDislike(item.comment.commentId, context)
+                item.comment.commentId?.let { id ->
+                    uiState.onClickToDislike(id, context)
+                }
             }
-            if (item.comment.like.isNullOrEmpty()) {
-                binding.commentLikeNum.text = "0"
-            } else {
-                binding.commentLikeNum.text = item.comment.like.size.toString()
-            }
-            if (item.comment.dislike.isNullOrEmpty()) {
-                binding.commentDislikeNum.text = "0"
-            } else {
-                binding.commentDislikeNum.text = item.comment.dislike.size.toString()
-            }
+
+            binding.commentLikeNum.text =
+                if (item.comment.like.isNullOrEmpty()) "0" else item.comment.like.size.toString()
+
+            binding.commentDislikeNum.text =
+                if (item.comment.dislike.isNullOrEmpty()) "0" else item.comment.dislike.size.toString()
 
             binding.commentZoneText.text = item.comment.content
 //            val timeString = item.comment.time?.toDate()?.toString()
@@ -113,10 +116,67 @@ class CommentAdapter(
                     binding.commentUserName.text = user.userName
                 }
             }
-            binding.commentParentReportBtn.setOnClickListener {
-                viewModel.reportCommentDialog(item.comment.userId, context, fragment, inflater)
+            if (item.comment.userId != UserManager.user.userId) {
+                binding.commentParentReportBtn.visibility = View.VISIBLE
+                binding.commentParentReportBtn.setOnClickListener {
+                    reportCommentDialog(item.comment.userId, context, fragment, inflater)
+                }
+            } else {
+                binding.commentParentReportBtn.visibility = View.INVISIBLE
             }
         }
+        private fun reportCommentDialog(id: String, context: Context, fragment: ImgDetailFragment, inflater: LayoutInflater) {
+            @SuppressLint("ResourceAsColor")
+            val data = arrayOf("色情", "暴力", "賭博", "非法交易", "種族歧視")
+
+            val builder = AlertDialog.Builder(context, R.style.AlertDialogTheme)
+            builder.setTitle(context.getString(R.string.report_reason_text))
+            builder.setMultiChoiceItems(data, null) { dialog, i, b ->
+                val currentItem = data[i]
+            }
+            builder.setPositiveButton(context.getString(R.string.sure_text)) { dialogInterface, j ->
+//            for (i in data.indices) if (selected[i]) {
+//                selected[i] = false
+//            }
+                val customSnack = fragment.view?.let {
+                    Snackbar.make(it, "", Snackbar.LENGTH_INDEFINITE)
+                }
+                val layout = customSnack?.view as Snackbar.SnackbarLayout
+                val bind = SnackBarCustomBinding.inflate(inflater)
+                bind.notToBlockBtn.setOnClickListener {
+                    customSnack.dismiss()
+                }
+                bind.toBlockBtn.setOnClickListener {
+                    UserManager.user.blockList += id
+                    UserManager.user.userId?.let { id ->
+                        Firebase.firestore.collection(context.getString(R.string.user_collection_text))
+                            .document(id)
+                            .update("blockList", UserManager.user.blockList)
+                            .addOnCompleteListener {
+                                customSnack.dismiss()
+                                NavHostFragment.findNavController(fragment).navigateUp()
+                            }
+                    }
+                }
+                layout.addView(bind.root, 0)
+                customSnack.setBackgroundTint(
+                    context.getColor(R.color.white)
+                )
+                customSnack.view.layoutParams =
+                    (customSnack.view.layoutParams as FrameLayout.LayoutParams)
+                        .apply {
+                            gravity = Gravity.TOP
+                        }
+                customSnack.show()
+            }
+            builder.setNegativeButton(context.getString(R.string.cancel_text)) { dialog, i ->
+            }
+            val dialog = builder.create()
+            dialog.show()
+            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(context.getColor(R.color.button_balck))
+            dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(context.getColor(R.color.button_balck))
+        }
+
     }
 
     class ChildViewHolder(private var binding: ItemDetailCommentChildBinding) :
@@ -133,21 +193,21 @@ class CommentAdapter(
 
             Timber.d("ChildViewHolder $adapterPosition")
             binding.childDislikeBtn.setOnClickListener {
-                uiState.onClickToDislike(item.comment.commentId, context)
+                item.comment.commentId?.let { id ->
+                    uiState.onClickToDislike(id, context)
+                }
             }
             binding.childLikeBtn.setOnClickListener {
-                uiState.onClickToLike(item.comment.commentId, context)
+                item.comment.commentId?.let { id ->
+                    uiState.onClickToLike(id, context)
+                }
             }
-            if (item.comment.like.isNullOrEmpty()) {
-                binding.childLikeNum.text = "0"
-            } else {
-                binding.childLikeNum.text = item.comment.like.size.toString()
-            }
-            if (item.comment.dislike.isNullOrEmpty()) {
-                binding.childDislikeNum.text = "0"
-            } else {
-                binding.childDislikeNum.text = item.comment.dislike.size.toString()
-            }
+            binding.childLikeNum.text =
+                if (item.comment.like.isNullOrEmpty()) "0" else item.comment.like.size.toString()
+
+            binding.childDislikeNum.text =
+                if (item.comment.dislike.isNullOrEmpty()) "0" else item.comment.dislike.size.toString()
+
             binding.childZoneText.text = item.comment.content
 //            val timeString = item.comment.time?.toDate()?.toString()
             val commentTime = item.comment.time?.toDate()?.time
@@ -177,9 +237,65 @@ class CommentAdapter(
                     binding.childUserName.text = user.userName
                 }
             }
-            binding.commentChildReportBtn.setOnClickListener {
-                viewModel.reportCommentDialog(item.comment.userId, context, fragment, inflater)
+            if (item.comment.userId != UserManager.user.userId) {
+                binding.commentChildReportBtn.visibility = View.VISIBLE
+                binding.commentChildReportBtn.setOnClickListener {
+                    reportCommentDialog(item.comment.userId, context, fragment, inflater)
+                }
+            } else {
+                binding.commentChildReportBtn.visibility = View.INVISIBLE
             }
+        }
+        private fun reportCommentDialog(id: String, context: Context, fragment: ImgDetailFragment, inflater: LayoutInflater) {
+            @SuppressLint("ResourceAsColor")
+            val data = arrayOf("色情", "暴力", "賭博", "非法交易", "種族歧視")
+
+            val builder = AlertDialog.Builder(context, R.style.AlertDialogTheme)
+            builder.setTitle(context.getString(R.string.report_reason_text))
+            builder.setMultiChoiceItems(data, null) { dialog, i, b ->
+                val currentItem = data[i]
+            }
+            builder.setPositiveButton(context.getString(R.string.sure_text)) { dialogInterface, j ->
+//            for (i in data.indices) if (selected[i]) {
+//                selected[i] = false
+//            }
+                val customSnack = fragment.view?.let {
+                    Snackbar.make(it, "", Snackbar.LENGTH_INDEFINITE)
+                }
+                val layout = customSnack?.view as Snackbar.SnackbarLayout
+                val bind = SnackBarCustomBinding.inflate(inflater)
+                bind.notToBlockBtn.setOnClickListener {
+                    customSnack.dismiss()
+                }
+                bind.toBlockBtn.setOnClickListener {
+                    UserManager.user.blockList += id
+                    UserManager.user.userId?.let { id ->
+                        Firebase.firestore.collection(context.getString(R.string.user_collection_text))
+                            .document(id)
+                            .update("blockList", UserManager.user.blockList)
+                            .addOnCompleteListener {
+                                customSnack.dismiss()
+                                NavHostFragment.findNavController(fragment).navigateUp()
+                            }
+                    }
+                }
+                layout.addView(bind.root, 0)
+                customSnack.setBackgroundTint(
+                    context.getColor(R.color.white)
+                )
+                customSnack.view.layoutParams =
+                    (customSnack.view.layoutParams as FrameLayout.LayoutParams)
+                        .apply {
+                            gravity = Gravity.TOP
+                        }
+                customSnack.show()
+            }
+            builder.setNegativeButton(context.getString(R.string.cancel_text)) { dialog, i ->
+            }
+            val dialog = builder.create()
+            dialog.show()
+            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(context.getColor(R.color.button_balck))
+            dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(context.getColor(R.color.button_balck))
         }
     }
 
@@ -204,7 +320,7 @@ class CommentAdapter(
                     LayoutInflater.from(parent.context), parent, false
                 )
             )
-            ITEM_VIEW_TYPE_CHILD -> ChildViewHolder(
+            ITEM_VIEW_TYPE_CHILD -> CommentAdapter.ChildViewHolder(
                 ItemDetailCommentChildBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
                 )

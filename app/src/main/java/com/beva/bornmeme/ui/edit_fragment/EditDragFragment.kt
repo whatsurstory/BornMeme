@@ -1,12 +1,17 @@
 package com.beva.bornmeme.ui.edit_fragment
 
 import android.annotation.SuppressLint
+import android.app.Application
+import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
+import android.widget.EditText
+import android.widget.FrameLayout
 import androidx.collection.arrayMapOf
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat.getColor
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.updateLayoutParams
 import androidx.core.widget.doOnTextChanged
@@ -16,6 +21,9 @@ import androidx.navigation.fragment.findNavController
 import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentDragEditBinding
+import com.beva.bornmeme.model.UserManager
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import timber.log.Timber
@@ -167,11 +175,11 @@ class EditDragFragment : Fragment() {
 
             if (binding.dragTitleCard.text.toString().isEmpty()) {
 
-                viewModel.titleSnackbarShow(requireContext() ,it, binding.dragTitleCard)
+                titleSnackbarShow(it, binding.dragTitleCard)
 
             } else if (binding.dragTextCatalog.text.toString().isEmpty()) {
 
-                viewModel.tagSnackbarShow(requireContext(), it, binding.dragTextCatalog)
+                tagSnackbarShow(it, binding.dragTextCatalog)
 
             } else {
 
@@ -185,14 +193,14 @@ class EditDragFragment : Fragment() {
                 uri?.let { uri ->
                     ref.child("img_origin/" + document.id + ".jpg")
                         .putFile(uri)
-                        .addOnSuccessListener {
-                            it.metadata?.reference?.downloadUrl?.addOnSuccessListener {
+                        .addOnSuccessListener { task ->
+                            task.metadata?.reference?.downloadUrl?.addOnSuccessListener { originUri ->
                                 //這層的it才會帶到firebase return 的 Uri
 //                                Timber.d("origin uri: $it => take it to base url")
 
             //                            Timber.d("newTag $newTag")
                                 val res = listOf(
-                                    arrayMapOf("type" to "base", "url" to it),
+                                    arrayMapOf("type" to "base", "url" to originUri),
                                     arrayMapOf(
                                         "type" to "text",
                                         "url" to binding.dragTextCatalog.text?.trim().toString()
@@ -209,7 +217,7 @@ class EditDragFragment : Fragment() {
                                 //saving to gallery and return the path(uri)
                                 val newUri = viewModel.getImageUri(activity?.application, bitmap)
                                 viewModel.addNewPost(
-                                    requireContext(),
+                                    activity?.application,
                                     newUri,
                                     res,
                                     binding.dragTitleCard.text.toString(),
@@ -220,8 +228,8 @@ class EditDragFragment : Fragment() {
                                 findNavController()
                                     .navigate(MobileNavigationDirections.navigateToHomeFragment())
 
-                            }?.addOnFailureListener {
-                                Timber.d("upload uri Error => $it")
+                            }?.addOnFailureListener { e ->
+                                Timber.d("upload uri Error => $e")
                             }
                         }
                 }
@@ -350,6 +358,43 @@ class EditDragFragment : Fragment() {
         val reSizeSticker =
             Bitmap.createScaledBitmap(selectedSticker, 220, 200, false)
         binding.stickerView.addSticker(reSizeSticker)
+    }
+    private fun tagSnackbarShow(it: View, tagText: EditText) {
+        val tagSnack =
+            Snackbar.make(it, getString(R.string.snack_default_text),
+                    Snackbar.LENGTH_INDEFINITE)
+                    .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
+                    .setBackgroundTint(requireContext().getColor(R.color.tr_pink))
+                    .setTextColor(requireContext().getColor(R.color.button_balck))
+                    .setAction(getString(R.string.snack_default_check)) {
+                        tagText.setText(getString(R.string.silly_usual))
+                    }.setActionTextColor(requireContext().getColor(R.color.button_balck))
+
+        val snackBarView = tagSnack.view
+        val params = snackBarView.layoutParams as FrameLayout.LayoutParams
+        params.gravity = Gravity.CENTER_HORIZONTAL and Gravity.TOP
+        snackBarView.layoutParams = params
+        tagSnack.show()
+    }
+
+    private fun titleSnackbarShow(it: View, titleText: EditText) {
+        //Snackbar ani
+        val titleSnack =
+            Snackbar.make(it, getString(R.string.snack_default_text),
+                Snackbar.LENGTH_INDEFINITE
+            )
+                .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
+                .setBackgroundTint(requireContext().getColor(R.color.tr_pink))
+                .setTextColor(requireContext().getColor(R.color.button_balck))
+                .setAction(getString(R.string.snack_default_check)) {
+                    titleText.setText(UserManager.user.userName)
+                }
+                .setActionTextColor(requireContext().getColor(R.color.button_balck))
+        val snackBarView = titleSnack.view
+        val params = snackBarView.layoutParams as FrameLayout.LayoutParams
+        params.gravity = Gravity.CENTER_HORIZONTAL and Gravity.TOP
+        snackBarView.layoutParams = params
+        titleSnack.show()
     }
 
 }

@@ -33,7 +33,7 @@ class StickerImporter(
 	 * stickerDirPath to the application internal storage for access later on by the
 	 * keyboard
 	 *
-	 * @param stickerDirPath a URI to the stickers directory to import into EweSticker
+	 * @param stickerDirPath a URI to the stickers directory to import into keyboard
 	 */
 	fun importStickers(stickerDirPath: String): Int {
 		Timber.e("beva \n importStickers stickerDirPath$stickerDirPath")

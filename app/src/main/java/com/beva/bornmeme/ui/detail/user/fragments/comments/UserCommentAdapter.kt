@@ -50,7 +50,7 @@ class UserCommentAdapter(private val uiState: CommentsViewModel.UiState,
                     builder.setMessage(context.getString(R.string.check_delete_text) + item.content)
                     builder.setPositiveButton(context.getString(R.string.sure_text),
                         DialogInterface.OnClickListener { _, _ ->
-                            uiState.deleteComment(context, item.commentId)
+                            uiState.deleteComment(context, item.commentId.toString())
                         })
 
                     builder.setNegativeButton(context.getString(R.string.cancel_text),

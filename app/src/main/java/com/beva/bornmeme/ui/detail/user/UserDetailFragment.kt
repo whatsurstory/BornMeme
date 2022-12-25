@@ -48,7 +48,7 @@ class UserDetailFragment : Fragment() {
 //            Timber.d("get postId from post $userId")
         }
 
-        viewModel = UserDetailViewModel(userId,requireContext())
+        viewModel = UserDetailViewModel(userId, activity?.application)
         val adapter = TabViewPagerAdapter(this, userId)
         binding.userViewpager.adapter = adapter
 
@@ -134,13 +134,13 @@ class UserDetailFragment : Fragment() {
                     binding.add2follow.visibility = View.GONE
                     binding.alreadyFollow.visibility = View.VISIBLE
                     binding.alreadyFollow.setOnClickListener {
-                        viewModel.cancel2Follow(user.userId.toString(),requireContext())
+                        viewModel.cancel2Follow(user.userId.toString(), activity?.application)
                     }
                 } else {
                     binding.alreadyFollow.visibility = View.GONE
                     binding.add2follow.visibility = View.VISIBLE
                     binding.add2follow.setOnClickListener {
-                        viewModel.add2follow(user.userId.toString(),requireContext())
+                        viewModel.add2follow(user.userId.toString(),activity?.application)
                     }
                 }
             }

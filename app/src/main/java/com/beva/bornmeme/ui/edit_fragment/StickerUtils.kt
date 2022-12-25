@@ -31,19 +31,21 @@ object StickerUtils {
         }
     }
 
-    fun dp2px(dp: Float): Float {
-        return TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            dp,
-            Resources.getSystem().displayMetrics)
-    }
+/*
+fun dp2px(dp: Float): Float {
+return TypedValue.applyDimension(
+TypedValue.COMPLEX_UNIT_DIP,
+dp,
+Resources.getSystem().displayMetrics)
+}
 
-    fun px2dp(px: Float): Float {
-        return TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_PX,
-            px,
-            Resources.getSystem().displayMetrics)
-    }
+fun px2dp(px: Float): Float {
+return TypedValue.applyDimension(
+TypedValue.COMPLEX_UNIT_PX,
+px,
+Resources.getSystem().displayMetrics)
+}
+*/
 
     fun calculateDistance(point1: PointF, point2: PointF): Float {
         return sqrt((point1.x - point2.x) * (point1.x - point2.x) +
@@ -56,12 +58,8 @@ object StickerUtils {
      * turn point to coordinate x→ y↑
      */
     fun calculateDegree(p1: PointF, p2: PointF): Double {
-        val p = PointF(p1.x - p2.x, p1.y - p2.y)     //过原点射线
-//        p.y = -p.y //屏幕坐标系转换成自然坐标系
-//        val bevelEdge = sqrt(p.x * p.x + p.y * p.y) //斜边
-//        val cos = p.y / bevelEdge
-        val tab = p.y/p.x
-//        return Math.toDegrees(acos(cos).toDouble())
+        val p = PointF(p1.x - p2.x, p1.y - p2.y)
+        val tab = p.y / p.x
         return Math.toDegrees(atan(tab).toDouble())
     }
 }
