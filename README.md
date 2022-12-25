@@ -43,8 +43,5 @@
 * [ktlint](https://github.com/prolificinteractive/material-calendarview)
 #### **聯絡資訊**
 * Beva : bevalin09@gmail.com
-
-
-
-
-<img src="https://memeprod.ap-south-1.linodeobjects.com/user-maker-thumbnail/dfba4177613f8069eb7293ff02610097.gif" width="200" />
+<br/>
+* <img src="https://memeprod.ap-south-1.linodeobjects.com/user-maker-thumbnail/dfba4177613f8069eb7293ff02610097.gif" width="200" />
