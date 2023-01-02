@@ -15,8 +15,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
+import com.beva.bornmeme.MainApplication
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.DialogCommentBinding
+import kotlinx.coroutines.MainScope
 
 
 class PublishCommentDialog : AppCompatDialogFragment() {
@@ -90,7 +92,7 @@ class PublishCommentDialog : AppCompatDialogFragment() {
 
         if (parentId.isNotEmpty()) {
             binding.replyWhoText.visibility = View.VISIBLE
-            viewModel.getUserName(parentId, binding, activity?.application)
+            viewModel.getUserName(parentId, binding, MainApplication.instance)
         }
 
         binding.buttonPublish.setOnClickListener {
@@ -100,7 +102,7 @@ class PublishCommentDialog : AppCompatDialogFragment() {
             } else {
                 binding.postCommentLotties.visibility = View.VISIBLE
                 binding.postCommentLotties.setAnimation(R.raw.refresh)
-                viewModel.publishComment(postId, parentId, binding, activity?.application)
+                viewModel.publishComment(postId, parentId, binding, MainApplication.instance)
                 Handler(Looper.getMainLooper()).postDelayed({
                     findNavController().navigateUp()
                 }, 1200)

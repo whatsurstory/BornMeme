@@ -21,12 +21,10 @@
     <string name="name_error_text">普林ドキドキ</string>
     <string name="name_box_error">字數超過了</string>
 
-
     <string name="snack_default_text">資料未完成將填入預設值，免客氣</string>
     <string name="snack_default_check">感謝有你</string>
     <string name="silly_usual">傻逼日常</string>
     <string name="edit_no_input">不想填寫內容可以輸入空格唷~(･8･)</string>
-
 
     <string name="file_text">Files</string>
     <string name="text_text">Texts</string>
@@ -82,10 +80,9 @@
     <string name="switch_050">E050: IllegalStateException when switching packs. Try switching away from and back to application</string>
 
     <string name="imported_020">找到 %1$d 張梗圖</string>
-    <string name="imported_031">有些圖片無法成功載入 (%1$d 成功)</string>
-    <string name="imported_032">有些圖片無法成功載入 (%1$d imported)</string>
-    <string name="imported_033">有些圖片無法成功載入 (%1$d imported)</string>
-
+    <string name="imported_031"> %1$d 成功</string>
+    <string name="imported_032"> %1$d imported </string>
+    <string name="imported_033"> %1$d imported </string>
 
     <string name="not_allow_prmission">看起來你還沒有打開權限 \n 打開之後即可完整使用功能哦!</string>
     <string name="continue_text">繼續</string>
@@ -143,7 +140,5 @@
     <string name="name_the_folder_text">幫收藏夾取名字(*‘ v`*)</string>
     <string name="really_to_sure_about_delete_text">確定要刪除這麼棒的智慧結晶嗎?</string>
     <string name="report_reason_text">請選擇檢舉原因</string>
-
-
 
 </resources>

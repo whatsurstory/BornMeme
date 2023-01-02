@@ -11,7 +11,7 @@ import com.beva.bornmeme.model.UserManager
 import com.google.firebase.firestore.FirebaseFirestore
 import timber.log.Timber
 
-class PostsViewModel(userId: String, application: Application?) : ViewModel() {
+class PostsViewModel(userId: String, application: Context) : ViewModel() {
 
     val postData = MutableLiveData<List<Post>>()
 
@@ -26,21 +26,26 @@ class PostsViewModel(userId: String, application: Application?) : ViewModel() {
     }
 
 
-    private fun getData(userId: String, application: Application?): MutableLiveData<List<Post>> {
-        application?.let { app ->
+    private fun getData(userId: String, application: Context): MutableLiveData<List<Post>> {
             FirebaseFirestore.getInstance()
-                .collection(app.getString(R.string.post_collection_text))
+                .collection(application.getString(R.string.post_collection_text))
                 .whereEqualTo("ownerId", userId)
                 .addSnapshotListener { snapshot, e ->
                     val list = mutableListOf<Post>()
-                    for (document in snapshot!!) {
-    //                    Timber.d("Post snapshot ID ->${document.id} list -> ${document.data}")
-                        val post = document.toObject(Post::class.java)
-                        list.add(post)
+
+                    e?.let {
+                        Timber.d("Exception ${it.message}")
+                    }
+
+                    if (snapshot != null) {
+                        for (document in snapshot) {
+                            //Timber.d("Post snapshot ID ->${document.id} list -> ${document.data}")
+                            val post = document.toObject(Post::class.java)
+                            list.add(post)
+                        }
                     }
                     postData.value = list
                 }
-        }
         return postData
     }
 

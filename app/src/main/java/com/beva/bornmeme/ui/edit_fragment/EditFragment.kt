@@ -20,6 +20,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.beva.bornmeme.MainApplication
 import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentEditFixmodeBinding
@@ -173,7 +174,7 @@ class EditFragment : Fragment() {
                                 val newUri =
                                     viewModel.getImageUri(activity?.application, publishBitmap)
                                 viewModel.addNewPost(
-                                    activity?.application,
+                                    MainApplication.instance,
                                     newUri,
                                     res,
                                     titleText.text.toString(),

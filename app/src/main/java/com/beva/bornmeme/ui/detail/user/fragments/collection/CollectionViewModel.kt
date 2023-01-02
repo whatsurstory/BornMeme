@@ -12,7 +12,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import timber.log.Timber
 
 class CollectionViewModel(userId: String,
-                          application: Application?) : ViewModel() {
+                          application: Context) : ViewModel() {
 
     val folderData = MutableLiveData<List<Folder>>()
 
@@ -27,13 +27,12 @@ class CollectionViewModel(userId: String,
     }
 
     private fun getData(userId: String,
-                        application: Application?
+                        application: Context
     ): MutableLiveData<List<Folder>> {
-        application?.let { app ->
             FirebaseFirestore.getInstance()
-                .collection(app.getString(R.string.user_collection_text))
+                .collection(application.getString(R.string.user_collection_text))
                 .document(userId)
-                .collection(app.getString(R.string.folder_collection_text))
+                .collection(application.getString(R.string.folder_collection_text))
                 .addSnapshotListener { snapshot, exception ->
                     if (snapshot != null) {
                         Timber.d("item ${snapshot.documents}")
@@ -50,7 +49,6 @@ class CollectionViewModel(userId: String,
                     }
                     folderData.value = list
                 }
-        }
         return folderData
     }
 

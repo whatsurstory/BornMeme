@@ -20,7 +20,7 @@ import kotlin.math.roundToInt
 class HomeAdapter(
     private val onClickListener: OnClickListener,
     private val uiState: HomeViewModel.UiState,
-           val context: Context
+    val context: Context?
 ) : ListAdapter<Post, HomeAdapter.ViewHolder>(
     DiffCallback
 ) {
@@ -28,7 +28,7 @@ class HomeAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         @SuppressLint("SetTextI18n")
-        fun bind(item: Post, uiState: HomeViewModel.UiState, context: Context) {
+        fun bind(item: Post, uiState: HomeViewModel.UiState, context: Context?) {
 
             //setting the height and weight let ui draw the image in begin
             val width = item.imageWidth

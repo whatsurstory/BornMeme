@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.beva.bornmeme.MainApplication
 import com.beva.bornmeme.MainViewModel
 import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
@@ -126,8 +127,8 @@ class ImgDetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ImgDetailViewModel(post.ownerId, activity?.application)
-        viewModel.getComments(post.id, activity?.application)
+        viewModel = ImgDetailViewModel(post.ownerId, MainApplication.instance)
+        viewModel.getComments(post.id, MainApplication.instance)
 
         viewModel.userData.observe(viewLifecycleOwner, Observer { user ->
             binding.imgDetailUserImg.loadImage(user[0].profilePhoto)
@@ -245,7 +246,7 @@ class ImgDetailFragment : Fragment() {
         })
         //the button to take post to collection
         binding.collectionBtn.setOnClickListener {
-            viewModel.getFolder(activity?.application)
+            viewModel.getFolder(MainApplication.instance)
         }
 
         //the menu button to report and other feature
@@ -476,22 +477,22 @@ class ImgDetailFragment : Fragment() {
                         for (i in 0 until list.size) {
                             title = list[i]
 //                            Timber.d("title $title")
-                            viewModel.onClickCollection(activity?.application,title, post.id, post.url.toString())
-                            viewModel.doneCollection(post.id, activity?.application)
+                            viewModel.onClickCollection(MainApplication.instance,title, post.id, post.url.toString())
+                            viewModel.doneCollection(post.id, MainApplication.instance)
 //                        Toast.makeText(context, "New Created $input Folder", Toast.LENGTH_SHORT).show()
                         }
                     } else if (list.isEmpty() && input.text.toString().isNotEmpty()) {
                         title = input.text.toString()
-                        viewModel.onClickCollection(activity?.application,title, post.id, post.url.toString())
-                        viewModel.doneCollection(post.id, activity?.application)
+                        viewModel.onClickCollection(MainApplication.instance, title, post.id, post.url.toString())
+                        viewModel.doneCollection(post.id, MainApplication.instance)
 
                     } else if (list.isNotEmpty() && input.text.toString().isNotEmpty()) {
                         list.add(input.text.toString())
                         for (i in 0 until list.size) {
                             title = list[i]
 //                            Timber.d("title $title")
-                            viewModel.onClickCollection(activity?.application ,title, post.id, post.url.toString())
-                            viewModel.doneCollection(post.id, activity?.application)
+                            viewModel.onClickCollection(MainApplication.instance, title, post.id, post.url.toString())
+                            viewModel.doneCollection(post.id, MainApplication.instance)
                         }
                     }
                 }

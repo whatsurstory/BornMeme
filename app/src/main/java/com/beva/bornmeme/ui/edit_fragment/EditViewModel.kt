@@ -1,6 +1,7 @@
 package com.beva.bornmeme.ui.edit_fragment
 
 import android.app.Application
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.icu.util.Calendar
@@ -49,7 +50,7 @@ class EditViewModel : ViewModel() {
         return Uri.parse(uriString)
     }
 
-    fun addNewPost(application: Application?,
+    fun addNewPost(application: Context?,
                    uri: Uri?,
                    res: List<Any>,
                    title: String,

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.beva.bornmeme.MainApplication
 import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentFavoriteBinding
@@ -35,7 +36,7 @@ class FavoriteFragment : Fragment() {
         binding = FragmentFavoriteBinding.inflate(inflater, container, false)
 
         val userId = requireArguments().getString("userIdKey") ?: ""
-        viewModel = FavoriteViewModel(userId, activity?.application)
+        viewModel = FavoriteViewModel(userId, MainApplication.instance)
 
         binding.favoriteRecycler.layoutManager = GridLayoutManager(context, 3)
 
