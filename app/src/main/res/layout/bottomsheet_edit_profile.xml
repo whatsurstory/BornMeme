@@ -65,6 +65,7 @@
             android:layout_marginTop="8dp"
             android:hint="@string/profile_name_text"
             app:boxBackgroundMode="none"
+            android:textColorHint="@color/dark_gray"
             app:boxStrokeColor="@color/tr_black"
             app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
@@ -88,6 +89,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/introduce_text"
             app:boxBackgroundMode="none"
+            android:textColorHint="@color/dark_gray"
             app:boxStrokeColor="@color/tr_black"
             app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="@id/email_box"
@@ -112,6 +114,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/email_text"
             app:boxBackgroundMode="none"
+            android:textColorHint="@color/dark_gray"
             app:boxStrokeColor="@color/tr_black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -122,7 +125,7 @@
                 style="@style/zh_medium_style"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textColorHint="@color/tr_black"
+                android:textColor="@color/tr_black"
                 tools:text="@string/default_text" />
 
         </com.google.android.material.textfield.TextInputLayout>
