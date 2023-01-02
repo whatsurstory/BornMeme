@@ -62,14 +62,14 @@ class GalleryFragment : Fragment() {
         adapter = GalleryAdapter(
             GalleryAdapter.OnClickListener {
                 showDialog(it)
-                Timber.d("it -> ${it.imageId}")
+//                Timber.d("it -> ${it.imageId}")
             }
         )
         binding.verticalRecycle.layoutManager = GridLayoutManager(context, 3)
         binding.verticalRecycle.adapter = adapter
 
         viewModel.imageData.observe(viewLifecycleOwner, Observer {
-            Timber.d("imageItems observe, $it")
+//            Timber.d("imageItems observe, $it")
             adapter.submitList(it)
             adapter.notifyDataSetChanged()
         })

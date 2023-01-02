@@ -10,9 +10,9 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager.GAP_HANDLING_NONE
+import com.beva.bornmeme.MainApplication
 import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.databinding.FragmentHomeBinding
-import timber.log.Timber
 
 
 class HomeFragment : Fragment() {
@@ -34,7 +34,7 @@ class HomeFragment : Fragment() {
         //The Logic of Tag clicked
         setAllTagEnabled(false)
 
-        viewModel = HomeViewModel(requireContext())
+        viewModel = HomeViewModel(MainApplication.instance)
 
         val layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
 
@@ -44,7 +44,7 @@ class HomeFragment : Fragment() {
             HomeAdapter.OnClickListener {
                 viewModel.navigateToDetail(it)
             },
-        viewModel.uiState, requireContext()
+        viewModel.uiState, MainApplication.instance
         )
 
         binding.recyclerHome.adapter = adapter
@@ -60,7 +60,7 @@ class HomeFragment : Fragment() {
 
         val tagAdapter = TagAdapter (
             TagAdapter.OnClickListener {
-                Timber.d("observe the click item $it")
+//                Timber.d("observe the click item $it")
                 viewModel.changeTag(it)
                 setAllTagEnabled(true)
             }
@@ -76,7 +76,7 @@ class HomeFragment : Fragment() {
 
         viewModel.tagCell.observe(viewLifecycleOwner, Observer {
             it?.let {
-                Timber.d(("Observe cell : $it"))
+//                Timber.d(("Observe cell : $it"))
                 tagAdapter.submitList(it)
                 tagAdapter.notifyDataSetChanged()
             }

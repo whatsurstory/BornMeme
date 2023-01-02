@@ -12,7 +12,7 @@ import com.beva.bornmeme.model.UserManager
 import com.google.firebase.firestore.FirebaseFirestore
 import timber.log.Timber
 
-class SlideViewModel(folder: Folder, application: Application?) : ViewModel() {
+class SlideViewModel(folder: Folder, application: Context) : ViewModel() {
 
     private val _folderItem = MutableLiveData<List<FolderData>>()
     val folderItem: LiveData<List<FolderData>>
@@ -27,12 +27,11 @@ class SlideViewModel(folder: Folder, application: Application?) : ViewModel() {
         getImage(folder, application)
     }
 
-    private fun getImage(folder: Folder, application: Application?) {
-        application?.let {
+    private fun getImage(folder: Folder, application: Context) {
             FirebaseFirestore.getInstance()
-                .collection(it.getString(R.string.user_collection_text))
+                .collection(application.getString(R.string.user_collection_text))
                 .document(UserManager.user.userId.toString())
-                .collection(it.getString(R.string.folder_collection_text))
+                .collection(application.getString(R.string.folder_collection_text))
                 .document(folder.name)
                 .addSnapshotListener { snapshot, exception ->
                     if (snapshot != null) {
@@ -48,7 +47,6 @@ class SlideViewModel(folder: Folder, application: Application?) : ViewModel() {
                     }
                     _folderItem.value = detailImage
                 }
-        }
     }
 
     fun navigateToDetail(item: FolderData) {

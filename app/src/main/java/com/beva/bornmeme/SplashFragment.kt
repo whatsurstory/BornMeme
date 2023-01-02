@@ -4,28 +4,21 @@ package com.beva.bornmeme
 import android.animation.Animator
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
-import android.content.Intent
-import android.graphics.Color
 import android.graphics.ColorFilter
-import android.net.Uri
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.method.LinkMovementMethod
-import android.text.style.URLSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieProperty
 import com.airbnb.lottie.SimpleColorFilter
@@ -81,7 +74,6 @@ class SplashFragment : Fragment() {
                 override fun onAnimationEnd(animation: Animator?) {
                     binding.googleSignInButton.visibility = View.VISIBLE
                     binding.greetingText.visibility = View.VISIBLE
-//                    binding.policyButton.visibility = View.VISIBLE
 
                     //loading our custom made animations
                     val logInAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
@@ -165,7 +157,7 @@ class SplashFragment : Fragment() {
                 if (authResult.isSuccessful) {
                     UserManager.user.userId = authResult.result.user?.uid
                     authResult.result.user?.let {
-                        viewModel.queryUserByUid(it, activity?.application, this)
+                        queryUserByUid(it)
                     }
 
                 } else {
@@ -174,5 +166,71 @@ class SplashFragment : Fragment() {
                         .show()
                 }
             }
+    }
+
+    private fun queryUserByUid(
+        user: FirebaseUser) {
+        var hasData = false
+        val ref =
+            Firebase.firestore
+                .collection(getString(R.string.user_collection_text))
+                .document(user.uid)
+
+        Firebase.firestore.runTransaction { transaction ->
+            val snapshot = ref.let { transaction.get(it) }
+//            val loginTimes = n + 1
+            if (snapshot.data != null) {
+                val checkUser = snapshot.toObject(User::class.java)
+                if (checkUser != null) {
+                    UserManager.user = checkUser
+                    hasData = checkUser.agreement
+                }
+//                transaction.update(ref,FieldValue.arrayUnion(loginTimes))
+            } else {
+                val userData = User(
+                    userId = user.uid,
+                    profilePhoto = user.photoUrl.toString(),
+                    userName = user.displayName.toString(),
+                    email = user.email.toString(),
+                    registerTime = Timestamp.now(),
+                    agreement = false
+                )
+                ref.let { transaction.set(it, userData) }
+                UserManager.user = userData
+                hasData = userData.agreement
+            }
+        }.addOnSuccessListener {
+            getRegisterInfo(hasData)
+        }.addOnFailureListener {
+            Timber.d("ERROR ${it.message}")
+            Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
+                .show()
+        }
+    }
+
+    private fun getRegisterInfo(hasData: Boolean) {
+        if (hasData) {
+            viewModel.leave()
+            NavHostFragment.findNavController(this)
+                .navigate(MobileNavigationDirections.navigateToHomeFragment())
+        } else {
+            showAgreeDialog(hasData)
+        }
+    }
+
+    private fun showAgreeDialog(hasData:Boolean) {
+
+        AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
+            .setMessage(getString(R.string.welcome_to_use_text))
+//            .setView(item)
+            .setPositiveButton(R.string.continue_text) { _, _ ->
+                viewModel.leave()
+//                findNavController(fragment).navigate(MobileNavigationDirections.navigateToHomeFragment())
+                NavHostFragment.findNavController(this)
+                    .navigate(MobileNavigationDirections.navigateToServiceFragment(hasData))
+            }
+            .show()
+            .getButton(DialogInterface.BUTTON_POSITIVE)
+            .setTextColor(requireContext().getColor(R.color.button_balck))
     }
 }

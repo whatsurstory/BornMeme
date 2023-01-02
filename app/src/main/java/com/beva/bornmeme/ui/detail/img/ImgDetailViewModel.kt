@@ -42,7 +42,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 
-class ImgDetailViewModel(postOwnerId: String, application: Application?) : ViewModel() {
+class ImgDetailViewModel(postOwnerId: String, application: Context) : ViewModel() {
 
     data class UiState(
         val onClickToReply: (comment: CommentCell.ParentComment) -> String,
@@ -180,10 +180,9 @@ class ImgDetailViewModel(postOwnerId: String, application: Application?) : ViewM
         commentCells.value = cells
     }
 
-    fun getComments(postId: String, application: Application?): MutableLiveData<List<Comment>> {
+    fun getComments(postId: String, application: Context): MutableLiveData<List<Comment>> {
 
-        application?.let { app ->
-            Firebase.firestore.collection(app.getString(R.string.comment_collection_text))
+            Firebase.firestore.collection(application.getString(R.string.comment_collection_text))
                 .whereEqualTo("postId", postId)
                 .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
     //                Timber.d("check Data $postId")
@@ -201,7 +200,6 @@ class ImgDetailViewModel(postOwnerId: String, application: Application?) : ViewM
                     }
                     liveData.value = list
                 }
-        }
         return liveData
     }
 
@@ -213,12 +211,10 @@ class ImgDetailViewModel(postOwnerId: String, application: Application?) : ViewM
         _navigate2Comment.value = null
     }
 
-    fun doneCollection(postId: String, application: Application?) {
-        application?.let { app ->
-            Firebase.firestore.collection(app.getString(R.string.post_collection_text))
+    fun doneCollection(postId: String, application: Context) {
+            Firebase.firestore.collection(application.getString(R.string.post_collection_text))
                 .document(postId)
                 .update("collection", FieldValue.arrayUnion(UserManager.user.userId))
-        }
 //            .addOnSuccessListener {
 //                Timber.d("Success Posts adding User ID")
 //            }.addOnFailureListener {
@@ -226,15 +222,15 @@ class ImgDetailViewModel(postOwnerId: String, application: Application?) : ViewM
 //            }
     }
 
-    fun onClickCollection(application: Application?, title: String, postId: String, url: String) {
+    fun onClickCollection(application: Context, title: String, postId: String, url: String) {
         val ref = UserManager.user.userId?.let {
-            application?.let { app ->
+
                 Firebase.firestore
-                    .collection(app.getString(R.string.user_collection_text))
+                    .collection(application.getString(R.string.user_collection_text))
                     .document(it)
-                    .collection(app.getString(R.string.folder_collection_text))
+                    .collection(application.getString(R.string.folder_collection_text))
                     .document(title)
-            }
+
         }
 
         Firebase.firestore.runTransaction { transaction ->
@@ -266,9 +262,8 @@ class ImgDetailViewModel(postOwnerId: String, application: Application?) : ViewM
 
     val userData = MutableLiveData<List<User>>()
 
-    private fun getUser(postOwnerId: String, application: Application?): MutableLiveData<List<User>> {
-        application?.let { app ->
-            Firebase.firestore.collection(app.getString(R.string.user_collection_text))
+    private fun getUser(postOwnerId: String, application: Context): MutableLiveData<List<User>> {
+            Firebase.firestore.collection(application.getString(R.string.user_collection_text))
                 .whereEqualTo("userId", postOwnerId)
                 .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
 
@@ -285,18 +280,16 @@ class ImgDetailViewModel(postOwnerId: String, application: Application?) : ViewM
                     }
                     userData.value = list
                 }
-        }
         return userData
     }
 
     val folderData = MutableLiveData<List<String>>()
 
-    fun getFolder(application: Application?) {
+    fun getFolder(application: Context) {
         UserManager.user.userId?.let {
-            application?.let { app ->
-                Firebase.firestore.collection(app.getString(R.string.user_collection_text))
+                Firebase.firestore.collection(application.getString(R.string.user_collection_text))
                     .document(it)
-                    .collection(app.getString(R.string.folder_collection_text))
+                    .collection(application.getString(R.string.folder_collection_text))
                     .get()
                     .addOnCompleteListener { task ->
                         val list = mutableListOf<String>()
@@ -310,7 +303,6 @@ class ImgDetailViewModel(postOwnerId: String, application: Application?) : ViewM
                             Timber.d(task.exception?.message)
                         }
                     }
-            }
         }
     }
 

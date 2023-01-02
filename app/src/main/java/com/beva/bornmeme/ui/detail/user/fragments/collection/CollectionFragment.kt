@@ -8,8 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.beva.bornmeme.MainApplication
 import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.databinding.FragmentCollectionBinding
+import kotlinx.coroutines.MainScope
 
 class CollectionFragment : Fragment() {
 
@@ -35,12 +37,12 @@ class CollectionFragment : Fragment() {
         binding = FragmentCollectionBinding.inflate(inflater, container, false)
 
         val userId = requireArguments().getString("userIdKey") ?: ""
-        viewModel = CollectionViewModel(userId, activity?.application)
+        viewModel = CollectionViewModel(userId, MainApplication.instance)
 
         adapter = CollectionAdapter(
             CollectionAdapter.OnClickListener {
                 viewModel.navigateToDetail(it)
-            }, viewModel, userId, requireContext()
+            }, viewModel, userId, MainApplication.instance
         )
 
         binding.collectionRecycler.adapter = adapter

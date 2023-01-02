@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat.getColor
+import com.beva.bornmeme.MainApplication
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.BottomsheetEditProfileBinding
 import com.beva.bornmeme.loadImage
@@ -60,7 +61,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
             sheet.behavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
 
-        viewModel = EditProfileViewModel(userId, activity?.application)
+        viewModel = EditProfileViewModel(userId, MainApplication.instance)
 
         viewModel.userData.observe(viewLifecycleOwner) {
 //            Timber.d("Observe user $it")
@@ -184,7 +185,8 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
         }
 
     private fun saveProfileData() {
-        val db = Firebase.firestore.collection("Users").document(userId)
+        val db = Firebase.firestore
+            .collection(getString(R.string.user_collection_text)).document(userId)
         val originIntro = if (binding.desc.text?.trim()?.isEmpty() == true) {
             getString(R.string.intro_blank_text)
         } else {
@@ -221,9 +223,11 @@ class EditProfileBottomSheet : BottomSheetDialogFragment() {
 
                     UserManager.user.profilePhoto = uri.toString()
 
-                    Firebase.firestore.collection("Users")
-                        .document(UserManager.user.userId!!)
-                        .update("profilePhoto", uri)
+                    UserManager.user.userId?.let { id ->
+                        Firebase.firestore.collection(getString(R.string.user_collection_text))
+                            .document(id)
+                            .update("profilePhoto", uri)
+                    }
                 }
             }
     }

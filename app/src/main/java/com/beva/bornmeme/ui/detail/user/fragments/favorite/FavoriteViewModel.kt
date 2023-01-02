@@ -10,7 +10,7 @@ import com.beva.bornmeme.model.Post
 import com.google.firebase.firestore.FirebaseFirestore
 import timber.log.Timber
 
-class FavoriteViewModel(userId: String, application: Application?) : ViewModel() {
+class FavoriteViewModel(userId: String, application: Context) : ViewModel() {
 
     val likeData = MutableLiveData<List<Post>>()
 
@@ -23,22 +23,26 @@ class FavoriteViewModel(userId: String, application: Application?) : ViewModel()
         getData(userId, application)
     }
 
-    private fun getData(userId: String, application: Application?): MutableLiveData<List<Post>> {
+    private fun getData(userId: String, application: Context): MutableLiveData<List<Post>> {
 
-        application?.let { app ->
             FirebaseFirestore.getInstance()
-                .collection(app.getString(R.string.post_collection_text))
+                .collection(application.getString(R.string.post_collection_text))
                 .whereArrayContains("like", userId)
                 .addSnapshotListener { snapshot, e ->
-                    val list = mutableListOf<Post>()
-                    for (document in snapshot!!) {
 
-                        val post = document.toObject(Post::class.java)
-                        list.add(post)
+                    e?.let {
+                        Timber.d("Exception ${it.message}")
+                    }
+
+                    val list = mutableListOf<Post>()
+                    if (snapshot != null) {
+                        for (document in snapshot) {
+                            val post = document.toObject(Post::class.java)
+                            list.add(post)
+                        }
                     }
                     likeData.value = list
                 }
-        }
         return likeData
 
     }

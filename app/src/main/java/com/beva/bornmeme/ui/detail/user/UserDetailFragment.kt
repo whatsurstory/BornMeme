@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Gravity
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
@@ -17,7 +16,9 @@ import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat.getColor
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.beva.bornmeme.MainApplication
 import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.FragmentUserDetailBinding
@@ -29,7 +30,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import timber.log.Timber
 
 class UserDetailFragment : Fragment() {
 
@@ -48,7 +48,7 @@ class UserDetailFragment : Fragment() {
 //            Timber.d("get postId from post $userId")
         }
 
-        viewModel = UserDetailViewModel(userId, activity?.application)
+        viewModel = UserDetailViewModel(userId, MainApplication.instance)
         val adapter = TabViewPagerAdapter(this, userId)
         binding.userViewpager.adapter = adapter
 
@@ -134,13 +134,13 @@ class UserDetailFragment : Fragment() {
                     binding.add2follow.visibility = View.GONE
                     binding.alreadyFollow.visibility = View.VISIBLE
                     binding.alreadyFollow.setOnClickListener {
-                        viewModel.cancel2Follow(user.userId.toString(), activity?.application)
+                        viewModel.cancel2Follow(user.userId.toString(), MainApplication.instance)
                     }
                 } else {
                     binding.alreadyFollow.visibility = View.GONE
                     binding.add2follow.visibility = View.VISIBLE
                     binding.add2follow.setOnClickListener {
-                        viewModel.add2follow(user.userId.toString(),activity?.application)
+                        viewModel.add2follow(user.userId.toString(), MainApplication.instance)
                     }
                 }
             }
@@ -191,7 +191,7 @@ class UserDetailFragment : Fragment() {
             }
             layout.addView(bind.root, 0)
             customSnack.setBackgroundTint(
-             getColor(
+                getColor(
                     requireContext(), R.color.white
                 )
             )
@@ -206,15 +206,17 @@ class UserDetailFragment : Fragment() {
         }
         val dialog = builder.create()
         dialog.show()
-        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(getColor(requireContext(), R.color.button_balck))
-        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(getColor(requireContext(),R.color.button_balck))
+        dialog.getButton(DialogInterface.BUTTON_POSITIVE)
+            .setTextColor(getColor(requireContext(), R.color.button_balck))
+        dialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+            .setTextColor(getColor(requireContext(), R.color.button_balck))
     }
 
     @SuppressLint("SetTextI18n")
     private fun add2Block(userId: String) {
         val builder = AlertDialog.Builder(requireContext())
         val inflater = requireActivity().layoutInflater
-        val view = inflater.inflate(com.beva.bornmeme.R.layout.dialog_custom_delete, null)
+        val view = inflater.inflate(R.layout.dialog_custom_delete, null)
         builder.setView(view)
 
         val alertDialog: AlertDialog = builder.create()
@@ -225,18 +227,18 @@ class UserDetailFragment : Fragment() {
 
         val okay = view.findViewById<Button>(R.id.okay_delete_btn)
         okay.setOnClickListener {
-            //先把資料裝進local 再上傳到firebase
             UserManager.user.blockList += userId
-            Firebase.firestore.collection(getString(R.string.user_collection_text))
-                .document(UserManager.user.userId!!)
-                .update("blockList", UserManager.user.blockList)
-                .addOnCompleteListener {
-                    alertDialog.dismiss()
-                    findNavController().navigateUp()
-                }
+            UserManager.user.userId?.let { id ->
+                Firebase.firestore.collection(getString(R.string.user_collection_text))
+                    .document(id)
+                    .update("blockList", UserManager.user.blockList)
+                    .addOnCompleteListener {
+                        alertDialog.dismiss()
+                        findNavController().navigateUp()
+                    }
+            }
         }
         val cancel = view.findViewById<Button>(R.id.cancel_button)
         cancel.setOnClickListener { alertDialog.dismiss() }
     }
-
 }

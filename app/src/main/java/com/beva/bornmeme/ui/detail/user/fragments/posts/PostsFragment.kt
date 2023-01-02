@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.beva.bornmeme.MainApplication
 import com.beva.bornmeme.MobileNavigationDirections
 import com.beva.bornmeme.databinding.FragmentPostsBinding
 import com.beva.bornmeme.ui.detail.user.UserDetailFragment
@@ -35,7 +36,7 @@ class PostsFragment : Fragment() {
         binding = FragmentPostsBinding.inflate(inflater, container, false)
 
         val userId = requireArguments().getString("userIdKey") ?: ""
-        viewModel = PostsViewModel(userId, activity?.application)
+        viewModel = PostsViewModel(userId, MainApplication.instance)
 
         binding.postRecycler.layoutManager = GridLayoutManager(context, 3)
 

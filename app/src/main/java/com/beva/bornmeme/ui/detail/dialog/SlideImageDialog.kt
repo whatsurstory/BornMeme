@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.PagerSnapHelper
+import com.beva.bornmeme.MainApplication
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.DialogSlideCollectionBinding
 import com.beva.bornmeme.model.Folder
@@ -53,7 +54,7 @@ class SlideImageDialog : AppCompatDialogFragment() {
 //            Timber.d("WelCome to FOLDERRR: arg -> $folder")
         }
 
-        viewModel = SlideViewModel(folder, activity?.application)
+        viewModel = SlideViewModel(folder, MainApplication.instance)
         binding = DialogSlideCollectionBinding.inflate(layoutInflater)
         binding.dialog = this
 

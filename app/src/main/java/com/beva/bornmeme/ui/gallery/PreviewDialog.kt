@@ -22,7 +22,7 @@ class PreviewDialog : AppCompatDialogFragment() {
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.PreviewDialog)
         arguments?.let { bundle ->
             bitmapFromEdit = bundle.getParcelable("bitmap")!!
-            Timber.d("get bitmap from edit $bitmapFromEdit")
+//            Timber.d("get bitmap from edit $bitmapFromEdit")
         }
     }
 

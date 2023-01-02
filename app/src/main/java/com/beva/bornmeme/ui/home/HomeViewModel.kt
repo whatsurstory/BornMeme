@@ -21,10 +21,10 @@ import kotlinx.coroutines.flow.callbackFlow
 import org.checkerframework.checker.units.qual.s
 import timber.log.Timber
 
-class HomeViewModel(context: Context) : ViewModel() {
+class HomeViewModel(context: Context?) : ViewModel() {
 
     data class UiState(
-        val getUserImg: (context: Context,userId: String, onUserObtained: ((User) -> Unit)) -> Unit
+        val getUserImg: (context: Context?,userId: String, onUserObtained: ((User) -> Unit)) -> Unit
     )
 
     val liveData = MutableLiveData<List<Post>>()
@@ -41,15 +41,17 @@ class HomeViewModel(context: Context) : ViewModel() {
 
     val uiState = UiState(
         getUserImg = {context ,userId, onUserObtained ->
-            Firebase.firestore
-                .collection(context.getString(R.string.user_collection_text))
-                .document(userId)
-                .get().addOnCompleteListener {
-                    val user = it.result.toObject(User::class.java)
-                    if (user != null) {
-                        return@addOnCompleteListener onUserObtained(user)
+            context?.let { it ->
+                Firebase.firestore
+                    .collection(it.getString(R.string.user_collection_text))
+                    .document(userId)
+                    .get().addOnCompleteListener {
+                        val user = it.result.toObject(User::class.java)
+                        if (user != null) {
+                            return@addOnCompleteListener onUserObtained(user)
+                        }
                     }
-                }
+            }
         }
     )
 
@@ -70,12 +72,14 @@ class HomeViewModel(context: Context) : ViewModel() {
         cells
     }
 
-    private fun getData(context: Context): MutableLiveData<List<Post>> {
-        val postData = FirebaseFirestore.getInstance()
-            .collection(context.getString(R.string.post_collection_text))
-            .orderBy("createdTime", Query.Direction.DESCENDING)
-        postData.addSnapshotListener { snapshot, exception ->
-            Timber.d("You are in HomeViewModel")
+    private fun getData(context: Context?): MutableLiveData<List<Post>> {
+        val postData = context?.let {
+            FirebaseFirestore.getInstance()
+                .collection(it.getString(R.string.post_collection_text))
+                .orderBy("createdTime", Query.Direction.DESCENDING)
+        }
+        postData?.addSnapshotListener { snapshot, exception ->
+    //            Timber.d("You are in HomeViewModel")
             exception?.let {
                 Timber.d("Exception ${it.message}")
             }
@@ -138,7 +142,7 @@ class HomeViewModel(context: Context) : ViewModel() {
         _navigateToDetail.value = null
     }
 }
-//Todo
+
 //Extension function of block
 fun List<Post>.filterBlock(): List<Post> {
     return this.filter { !UserManager.user.blockList.contains(it.ownerId) }

@@ -92,6 +92,7 @@
             android:visibility="gone"
             app:elevation="6dp"
             app:fabCustomSize="52dp"
+            app:borderWidth="0dp"
             app:layout_constraintBottom_toTopOf="@+id/fab_camera_edit"
             app:layout_constraintStart_toStartOf="@+id/fab"
             app:tint="@color/tr_black" />
@@ -106,6 +107,7 @@
             android:visibility="gone"
             app:elevation="6dp"
             app:fabCustomSize="52dp"
+            app:borderWidth="0dp"
             app:layout_constraintBottom_toTopOf="@+id/fab_gallery_edit"
             app:layout_constraintStart_toStartOf="@+id/fab"
             app:tint="@color/tr_black" />
@@ -120,6 +122,7 @@
             android:visibility="gone"
             app:elevation="6dp"
             app:fabCustomSize="52dp"
+            app:borderWidth="0dp"
             app:layout_constraintBottom_toTopOf="@+id/fab"
             app:layout_constraintStart_toStartOf="@+id/fab"
             app:tint="@color/tr_black" />

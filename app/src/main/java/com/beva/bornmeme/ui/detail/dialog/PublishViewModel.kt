@@ -2,6 +2,7 @@ package com.beva.bornmeme.ui.detail.dialog
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.beva.bornmeme.R
 import com.beva.bornmeme.databinding.DialogCommentBinding
@@ -21,15 +22,14 @@ class PublishViewModel : ViewModel() {
         postId: String,
         parentId: String,
         binding: DialogCommentBinding,
-        application: Application?
+        application: Context
     ) {
-        val fireStore = application?.let {
+        val fireStore =
             FirebaseFirestore.getInstance()
-                .collection(it.getString(R.string.comment_collection_text))
-        }
-        val document = fireStore?.document()
+                .collection(application.getString(R.string.comment_collection_text))
+        val document = fireStore.document()
         val publish = Comment(
-            commentId = document?.id,
+            commentId = document.id,
             userId = UserManager.user.userId.toString(),
             postId = postId,
             time = Timestamp.now(),
@@ -37,32 +37,30 @@ class PublishViewModel : ViewModel() {
             parentId = parentId
         )
 
-        document?.set(publish)?.addOnSuccessListener {
-            //                Timber.d("Publish Done")
+        document.set(publish).addOnSuccessListener {
+            //Timber.d("Publish Done")
             UserManager.user.userId?.let { id ->
                 FirebaseFirestore.getInstance()
                     .collection(application.getString(R.string.user_collection_text))
                     .document(id)
                     .update("commentsId", FieldValue.arrayUnion(document.id))
             }
-        }?.addOnFailureListener { e ->
+        }.addOnFailureListener { e ->
             Timber.d("Error $e")
         }
     }
 
     @SuppressLint("SetTextI18n")
-    fun getUserName(parentId: String, binding: DialogCommentBinding, application: Application?) {
-        application?.getString(R.string.user_collection_text)?.let { user ->
-            Firebase.firestore.collection(user)
+    fun getUserName(parentId: String, binding: DialogCommentBinding, application: Context) {
+            Firebase.firestore.collection(application.getString(R.string.user_collection_text))
                 .whereArrayContains("commentsId", parentId)
                 .get()
                 .addOnCompleteListener {
                     for (item in it.result) {
-                        //                    Timber.d("user name -> ${item.contains("userName")}")
+                        //Timber.d("user name -> ${item.contains("userName")}")
                         binding.replyWhoText.text = "Reply to : ${item.data["userName"]}"
                     }
                 }
         }
     }
-}
 

@@ -1,6 +1,7 @@
 package com.beva.bornmeme.ui.detail.dialog
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,7 +10,7 @@ import com.beva.bornmeme.model.User
 import com.google.firebase.firestore.FirebaseFirestore
 import timber.log.Timber
 
-class EditProfileViewModel(userId: String, application: Application?) : ViewModel() {
+class EditProfileViewModel(userId: String, application: Context) : ViewModel() {
 
     private val _userData = MutableLiveData<User>()
     val userData: LiveData<User>
@@ -23,10 +24,9 @@ class EditProfileViewModel(userId: String, application: Application?) : ViewMode
         getData(userId, application)
     }
 
-    private fun getData(userId: String, application: Application?) {
-        application?.getString(R.string.user_collection_text)?.let {
+    private fun getData(userId: String, application: Context) {
             FirebaseFirestore.getInstance()
-                .collection(it)
+                .collection(application.getString(R.string.user_collection_text))
                 .document(userId)
                 .addSnapshotListener { snapshot, exception ->
                     val user = snapshot?.toObject(User::class.java)
@@ -35,7 +35,8 @@ class EditProfileViewModel(userId: String, application: Application?) : ViewMode
                     }
                     _userData.value = user
                 }
-        }
     }
+
+
 
 }
