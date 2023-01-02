@@ -16,7 +16,7 @@ android {
         applicationId "com.beva.bornmeme"
         minSdk 28
         targetSdk 32
-        versionCode 18
+        versionCode 19
         versionName "2.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
