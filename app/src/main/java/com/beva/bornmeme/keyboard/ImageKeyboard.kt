@@ -197,6 +197,7 @@ class ImageKeyboard : InputMethodService() {
 
     /** When leaving some input field update the caches */
     override fun onFinishInput() {
+
         Timber.e("beva \n onFinishInput running")
         val editor = this.sharedPreferences.edit()
         editor.putString("recentCache", this.recentCache.toSharedPref())

@@ -23,7 +23,7 @@
 
     <string name="snack_default_text">資料未完成將填入預設值，免客氣</string>
     <string name="snack_default_check">感謝有你</string>
-    <string name="silly_usual">傻逼日常</string>
+    <string name="silly_usual">梗圖日常</string>
     <string name="edit_no_input">不想填寫內容可以輸入空格唷~(･8･)</string>
 
     <string name="file_text">Files</string>
@@ -133,7 +133,7 @@
     <string name="over_text_error">格子放不下，勸施主也放下</string>
     <string name="not_tinder_text">我是梗圖APP 不是Tinder</string>
     <string name="register_time_text">Register Time: </string>
-    <string name="intro_blank_text">天很藍，雲很白，不寫簡介，我就爛</string>
+    <string name="intro_blank_text">簡介目前空白，待有靈感補上</string>
     <string name="name_blank_text">熬夜小心肝</string>
     <string name="leave_text">離開</string>
     <string name="who_follow_me_text">誰追蹤我</string>
