@@ -59,7 +59,6 @@ class StickerImporter(
 	 * Copies stickers from source to internal storage
 	 *
 	 * @param sticker sticker to copy over
-	 *
 	 * @return 1 if sticker imported successfully else 0
 	 */
 	private fun importSticker(sticker: DocumentFile) {

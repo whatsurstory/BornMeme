@@ -139,6 +139,7 @@ class EditFragment : Fragment() {
 
                 binding.lottiePublishLoading.visibility = View.VISIBLE
                 binding.lottiePublishLoading.setAnimation(R.raw.dancing_pallbearers)
+                binding.lottiePublishLoading.isEnabled = false
 
                 val ref = FirebaseStorage.getInstance().reference
                 uri?.let { uri ->
@@ -182,9 +183,10 @@ class EditFragment : Fragment() {
                                     publishBitmap.width,
                                     publishBitmap.height
                                 )
+
+                            }?.addOnSuccessListener {
                                 findNavController()
                                     .navigate(MobileNavigationDirections.navigateToHomeFragment())
-
                             }?.addOnFailureListener { e ->
                                 Timber.d("upload uri Error => $e")
                             }

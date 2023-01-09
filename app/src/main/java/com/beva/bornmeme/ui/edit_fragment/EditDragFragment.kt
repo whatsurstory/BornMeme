@@ -186,6 +186,7 @@ class EditDragFragment : Fragment() {
 
                 binding.lottiePublishLoading.visibility = View.VISIBLE
                 binding.lottiePublishLoading.setAnimation(R.raw.dancing_pallbearers)
+                binding.lottiePublishLoading.isEnabled = false
 
                 val document = FirebaseFirestore.getInstance()
                     .collection(getString(R.string.post_collection_text)).document()
@@ -226,9 +227,10 @@ class EditDragFragment : Fragment() {
                                     bitmap.width,
                                     bitmap.height
                                 )
+
+                            }?.addOnSuccessListener {
                                 findNavController()
                                     .navigate(MobileNavigationDirections.navigateToHomeFragment())
-
                             }?.addOnFailureListener { e ->
                                 Timber.d("upload uri Error => $e")
                             }

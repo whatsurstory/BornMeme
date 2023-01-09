@@ -191,6 +191,7 @@ class SplashFragment : Fragment() {
                     userId = user.uid,
                     profilePhoto = user.photoUrl.toString(),
                     userName = user.displayName.toString(),
+                    introduce = getString(R.string.introduce_text),
                     email = user.email.toString(),
                     registerTime = Timestamp.now(),
                     agreement = false
