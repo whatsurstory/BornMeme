@@ -161,7 +161,8 @@ class EditDragFragment : Fragment() {
         binding.dragPreviewBtn.setOnClickListener {
             binding.stickerView.destroyDrawingCache()
             binding.stickerView.buildDrawingCache()
-            val stickerBitmap = binding.stickerView.drawingCache.copy(Bitmap.Config.ARGB_8888, false)
+            val stickerBitmap =
+                binding.stickerView.drawingCache.copy(Bitmap.Config.ARGB_8888, false)
             findNavController().navigate(
                 MobileNavigationDirections.navigateToPreviewDialog(
                     stickerBitmap

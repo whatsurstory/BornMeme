@@ -109,8 +109,8 @@ class EditFragment : Fragment() {
                 val upperBitmap = upperText.drawingCache
                 bottomText.buildDrawingCache()
                 val bottomBitmap = bottomText.drawingCache
-                val previewBitmap = viewModel
-                    .mergeBitmap(baseBitmap, upperBitmap, bottomBitmap)
+                val previewBitmap =
+                    viewModel.mergeBitmap(baseBitmap, upperBitmap, bottomBitmap)
 
                 upperText.destroyDrawingCache()
                 bottomText.destroyDrawingCache()

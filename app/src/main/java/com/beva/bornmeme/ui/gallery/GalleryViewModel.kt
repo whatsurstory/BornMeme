@@ -24,9 +24,11 @@ class GalleryViewModel : ViewModel() {
                 }
 
                 val image = mutableListOf<Image>()
-                for (document in snapshot!!) {
-                    val img = document.toObject(Image::class.java)
-                    image.add(img)
+                if (snapshot != null) {
+                    for (document in snapshot) {
+                        val img = document.toObject(Image::class.java)
+                        image.add(img)
+                    }
                 }
                 imageData.value = image
             }

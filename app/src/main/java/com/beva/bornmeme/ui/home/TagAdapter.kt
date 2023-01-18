@@ -14,7 +14,7 @@ import timber.log.Timber
 import java.util.*
 
 
-//
+
 class TagAdapter(private val onClickListener: OnClickListener) :
     ListAdapter<String, TagAdapter.ViewHolder>(DiffCallback) {
 
@@ -29,13 +29,7 @@ class TagAdapter(private val onClickListener: OnClickListener) :
             binding.chipCard.text = item.replaceFirstChar {
                 if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
             }
-            if (adapterPosition == selectedItem) {
-                //recycler reuse if else condition
-                Timber.d("adapterPosition $adapterPosition")
-                binding.chipCard.isChecked = true
-            } else {
-                binding.chipCard.isChecked = false
-            }
+            binding.chipCard.isChecked = adapterPosition == selectedItem
         }
     }
 

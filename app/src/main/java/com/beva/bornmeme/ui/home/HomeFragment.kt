@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager.GAP_HANDLING_LAZY
+import androidx.recyclerview.widget.StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
 import androidx.recyclerview.widget.StaggeredGridLayoutManager.GAP_HANDLING_NONE
 import com.beva.bornmeme.MainApplication
 import com.beva.bornmeme.MobileNavigationDirections
@@ -16,11 +18,10 @@ import com.beva.bornmeme.databinding.FragmentHomeBinding
 
 
 class HomeFragment : Fragment() {
+
     private lateinit var viewModel: HomeViewModel
     private lateinit var binding: FragmentHomeBinding
     private lateinit var adapter: HomeAdapter
-
-
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
@@ -31,12 +32,13 @@ class HomeFragment : Fragment() {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        //The Logic of Tag clicked
+        //The Logic of "All Tag" can clicked or not is decided by others tags clicked
         setAllTagEnabled(false)
 
         viewModel = HomeViewModel(MainApplication.instance)
 
-        val layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
+        val layoutManager =
+            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
         binding.recyclerHome.layoutManager = layoutManager
 
@@ -49,7 +51,7 @@ class HomeFragment : Fragment() {
 
         binding.recyclerHome.adapter = adapter
 
-        layoutManager.gapStrategy = GAP_HANDLING_NONE
+        layoutManager.gapStrategy = GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
 
         viewModel.postData.observe(viewLifecycleOwner, Observer {
             it?.let {

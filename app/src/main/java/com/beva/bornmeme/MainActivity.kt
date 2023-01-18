@@ -51,7 +51,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
 
-    //Animation of fab
     private lateinit var fabOpen: Animation
     private lateinit var fabClose: Animation
     private lateinit var fabRotate: Animation
@@ -154,7 +153,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        binding.fab.setOnClickListener { view ->
+        binding.fab.setOnClickListener {
 
             if (isOpen) closeFab() else openFab()
 
@@ -219,6 +218,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //Due to the action bar will display different view in every fragment setting the default value directly
     private fun setToolbarUi(
         isShowFab: Boolean = true,
         isShowEditMode: Boolean = false,
@@ -305,13 +305,13 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        if (cameraUri != null) {
-            val uriString = cameraUri.toString()
-            outState.putString("saveUri", uriString)
-        }
-    }
+//    override fun onSaveInstanceState(outState: Bundle) {
+//        super.onSaveInstanceState(outState)
+//        if (cameraUri != null) {
+//            val uriString = cameraUri.toString()
+//            outState.putString("saveUri", uriString)
+//        }
+//    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -356,23 +356,21 @@ class MainActivity : AppCompatActivity() {
     private fun navigateToDrag(uri: Uri?) {
         uri?.let {
             findNavController(R.id.nav_host_fragment_content_main)
-                .navigate(
-                    MobileNavigationDirections
-                        .navigateToDragEditFragment(it)
+                .navigate(MobileNavigationDirections.navigateToDragEditFragment(it)
                 )
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle presses on the action bar menu items
-        when (item.itemId) {
-            android.R.id.home -> {
-                this.onBackPressed()
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        // Handle presses on the action bar menu items
+//        when (item.itemId) {
+//            android.R.id.home -> {
+//                this.onBackPressed()
+//                return true
+//            }
+//        }
+//        return super.onOptionsItemSelected(item)
+//    }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
@@ -401,7 +399,6 @@ class MainActivity : AppCompatActivity() {
             }.show()
     }
 
-    //TODO
     private fun closeFab() {
         binding.fabCameraEdit.startAnimation(fabClose)
         binding.fabModuleEdit.startAnimation(fabClose)
